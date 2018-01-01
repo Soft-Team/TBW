@@ -1,0 +1,19 @@
+extends ../../../templates/master-error.pug
+
+block content
+  .container.container-errorpage
+    .row
+      .col
+      .col-sm-8.col-md-7.col-lg-5.col-errorpage
+        .container.text-center
+          br
+          img(src='/assets/images/psm-ico.png')
+          hr
+          h1 Page does not exist.
+          hr
+          .btn-group.special(role='group')
+            a.btn.btn-primary.btn-md(href='/login' role='button' aria-pressed='true') Sign-in
+            a.btn.btn-secondary.btn-md(href='/home' role='button' aria-pressed='true') Home
+          br
+      .col
+        

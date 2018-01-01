@@ -3,9 +3,13 @@ var router = express.Router();
 var db = require('../../lib/database')();
 
 function render(req,res){
-  res.render('home/views/index');
+  res.render('register/views/index');
 }
 
 router.get('/', render);
 
-exports.home = router;
+router.post('/', (req, res) => {
+  res.redirect('/login');
+});
+
+exports.register = router;

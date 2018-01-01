@@ -1,0 +1,55 @@
+extends ../../../templates/master.pug
+
+block content
+  .jumbotron.jumbotron-login.jumbotron-fluid
+    .container.text-center
+      img(src='/assets/images/psm-ico-desc.png' onContextMenu='return false')
+  .container.container-login
+    .row
+      .col-sm
+      .col-sm-8.col-md-7.col-lg-5.col-login
+        h1.text-center Register
+        .col-sm-12
+          hr
+          .alert.alert-info.text-primary(role='alert')
+            i All fields are required in order to successfully register, unless stated optional
+          form(method='POST' action='/register')
+            .form-group
+              label(for='name')
+                b Full Name
+              input#name.form-control(type='text' name='name' aria-describedby='nameHelp' placeholder='ex. John S. Doe' minlength='5' maxlength='100' required)
+              small#nameHelp.form-text.text-muted Use only your real name.
+            .form-group
+              label(for='userName')
+                b Username
+              input#userName.form-control(type='text' name='username' aria-describedby='userNameHelp' placeholder='Pick a Username' minlength='8' maxlength='50' required)
+              small#userNameHelp.form-text.text-muted Minimum of 8 characters.
+            .form-group
+              label(for='password1')
+                b Password
+              input#password1.form-control(type='password' name='password' aria-describedby='passwordHelp' placeholder='Create a Password' minlength='8' maxlength='100' required)
+              small#passwordHelp.form-text.text-muted Minimum of 8 characters.
+            .form-group
+              label(for='password2')
+                b Confirm Password
+              input#password2.form-control(type='password' name='confirm' placeholder='Retype Password' required)
+            .form-group
+              label(for='email')
+                b Email
+              input#email.form-control(type='email' name='email' aria-describedby='emailHelp' placeholder='ex. johndoe@email.com' maxlength='320' required)
+              small#emailHelp.form-text.text-muted Email will be displayed publicly.
+            .form-group
+              label(for='contact')
+                b Contact Number
+              input#contact.form-control(type='number' name='contact' aria-describedby='contactHelp' placeholder='09236835707' max='99999999999' required)
+              small#contactHelp.form-text.text-muted Contact Number will be displayed publicly.
+            button.btn.btn-primary.btn-md.btn-block(type='submit') Submit
+            hr
+            p
+              small
+                b
+                  | Already have an account? 
+                  a(href='/login') Sign-in Here
+      .col-sm
+    br
+    br

@@ -1,0 +1,105 @@
+/*declarations*/
+
+/*global customization*/
+img{
+    /*Select Disabled*/
+    -khtml-user-select: none;
+    -o-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+
+    /*Drag Disabled*/
+    -khtml-user-drag: none;
+    -o-user-drag: none;
+    -moz-user-drag: none;
+    -ms-user-drag: none;
+    -webkit-user-drag: none;
+    user-drag: none;
+}
+body{
+    background-color: #EBECEE;
+}
+
+/*special ids*/
+#errorpage{
+    background: url('/assets/images/jumbo-login.jpg') no-repeat fixed;
+    background-size: 100% 200%;
+}
+
+/*general customization*/
+.btn-space{
+    margin-right: 10px;
+}
+.alert-blue {
+    color: white;
+    background-color: #6AB5EF;
+    border-color: #4ca4e8;
+}
+.alert-blue hr {
+    border-top-color: #4389A2;
+}
+.alert-blue .alert-link {
+    color: #062c33;
+}
+.margin-7 {
+    margin: 7px;
+ }
+.padding-5{
+    padding-top: 5px;
+ }
+
+/*btn-group btn-block*/
+.btn-group.special {
+    display: flex;
+}
+.special .btn {
+    flex: 1;
+}
+
+/*login + register*/
+.jumbotron-login{
+    background: url('/assets/images/jumbo-login.jpg') no-repeat fixed;
+    background-size: 100% 200%;
+    box-shadow: 0px 0px 10px black;
+    padding: 2rem 2rem 6rem;
+}
+.col-login{
+    background: white;
+    border: 2px solid #4389A2;
+    border-radius: 10px;
+    box-shadow: 0px 0px 3px black;
+    padding: 10px;
+}
+.container-login{
+    position: absolute;
+    top: 250px;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/*errorpage*/
+.col-errorpage{
+    background: rgba(255,255,255,0.7);
+    border: 2px solid #4389A2;
+    border-radius: 10px;
+    box-shadow: 0px 0px 3px black;
+    padding: 10px;
+}
+.container-errorpage{
+    position: absolute;
+    top: 100px;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/*custom colors*/
+.customcolor-gray{
+    color: #EBECEE;
+    border-color: #EBECEE;
+}

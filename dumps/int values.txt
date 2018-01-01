@@ -1,0 +1,29 @@
+
+Type
+	1  admin
+	2  normal
+	3  business
+
+Status
+	1  unregistered
+	2  registered
+	3  banned
+
+Report Category
+	1  scam/fraud
+	2  harass/threat
+	3  other
+	
+Service Status
+	0  unavailable
+	1  available
+
+Response
+	0  no response
+	1  denied
+	
+Transaction Status
+	1  Ongoing
+	2  Finished
+	3  Cancelled
+
