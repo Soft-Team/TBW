@@ -1,4 +1,4 @@
-extends ../../../templates/master.pug
+extends ../../../../templates/master.pug
 
 block content
   .jumbotron.jumbotron-login.jumbotron-fluid
@@ -11,8 +11,8 @@ block content
         h1.text-center Register
         .col-sm-12
           hr
-          .alert.alert-info.text-primary(role='alert')
-            i All fields are required in order to successfully register
+          .alert.alert-danger.text-danger(role='alert')
+            i Username already taken
           form(method='POST' action='/register')
             .form-group
               label(for='name')

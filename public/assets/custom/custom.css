@@ -27,6 +27,10 @@ body{
     background: url('/assets/images/jumbo-login.jpg') no-repeat fixed;
     background-size: 100% 200%;
 }
+#successpage{
+    background: url('/assets/images/test-page.jpg') no-repeat fixed;
+    background-size: 100% 100%;
+}
 
 /*general customization*/
 .btn-space{
@@ -79,6 +83,15 @@ body{
     right: 0;
     margin-left: auto;
     margin-right: auto;
+}
+#password2{
+    margin-top: 5px;
+}
+#agreement{
+    margin-left: 1px;
+}
+#agreement + label{
+    font-size: 0.8em;
 }
 
 /*errorpage*/
