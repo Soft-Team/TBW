@@ -3,12 +3,13 @@ extends ../../../templates/master.pug
 block content
   .jumbotron.jumbotron-login.jumbotron-fluid
     .container.text-center
-      img(src='/assets/images/psm-ico-desc.png' onContextMenu='return false')
+      img(src='/assets/images/tbw-indent.ico' onContextMenu='return false')
+      h1.text-white TrabaWHO
   .container.container-login
     .row
       .col-sm
       .col-sm-8.col-md-7.col-lg-5.col-login
-        h1.text-center Sign-in
+        h2.text-center Sign-in
         .col-sm-12
           hr
           form(method='POST' action='/login')
