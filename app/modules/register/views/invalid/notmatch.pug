@@ -51,13 +51,28 @@ block content
                 b Contact Number
               input#contact.form-control(type='number' name='contact' aria-describedby='contactHelp' placeholder='09236835707' max='99999999999' required)
               small#contactHelp.form-text.text-muted Contact Number will be displayed publicly.
-            
             .form-group
               .form-check
                 input#agreement.form-check-input(type='checkbox' required)
                 label.form-check-label(for='agreement')
                   | I agree to the 
-                  a(href='') terms and conditions.
+                  a(href='' data-toggle='modal' data-target='#agreementModal') terms and conditions.
+              #agreementModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='agreementModalTitle' aria-hidden='true')
+                .modal-dialog(role='document')
+                  .modal-content
+                    .modal-header
+                      h5#agreementModalTitle.modal-title Terms and Conditions
+                      button.close(type='button' data-dismiss='modal' aria-label='Close')
+                        span(aria-hidden='true') ×
+                    .modal-body
+                      ul.no-bullet
+                        li Raindrop (drip), drop top (drop top)
+                        li Smokin' on cookie in the hotbox (cookie)
+                        li Fuckin' on your bitch, she a thot, thot (thot)
+                        li Cookin' up dope in the crockpot (pot)
+                    .modal-footer
+                      button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+            
             button.btn.btn-primary.btn-md.btn-block(type='submit') Submit
             hr
             p

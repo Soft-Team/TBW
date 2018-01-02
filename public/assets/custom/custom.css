@@ -50,6 +50,9 @@ body{
 .margin-7 {
     margin: 7px;
  }
+.no-bullet{
+    list-style: none;
+}
 .padding-5{
     padding-top: 5px;
  }
