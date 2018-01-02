@@ -1,0 +1,23 @@
+extends master.pug
+
+block content
+  nav.navbar.navbar-expand-md.navbar-dark(style='background-color: #3498db;')
+    .container
+      a.navbar-brand(href='/home/page/1')
+        img(src='/assets/images/psm-ico.png', width='80', height='40', alt='PSM')
+      button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarNav', aria-controls='navbarNav', aria-expanded='false', aria-label='Toggle navigation')
+        span.navbar-toggler-icon
+      #navbarNav.collapse.navbar-collapse
+        a.nav-link.nav-text(href='/categories') Categories
+        a.nav-link.nav-text(href='#y') Profile
+        a.nav-link.nav-text(href='#z') Sell Item
+        ul.mr-end(style='list-style: none;')
+          li.nav-item.dropdown
+            a#navbarDropdown.nav-link.nav-text.dropdown-toggle(href='#', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+              | Settings&nbsp
+            .dropdown-menu(aria-labelledby='navbarDropdown')
+              a.dropdown-item(href='/help') Help
+              a.dropdown-item(href='/rules') Rules
+              .dropdown-divider
+              a.dropdown-item(href='/login') Sign-out
+  append content

@@ -21,8 +21,12 @@ img{
 body{
     background-color: #EBECEE;
 }
+/*no scrollbars*/
+    /*body::-webkit-scrollbar {
+        display: none;
+    }*/
 
-/*special ids*/
+/*wrappers*/
 #errorpage{
     background: url('/assets/images/jumbo-login.jpg') no-repeat fixed;
     background-size: 100% 200%;
@@ -33,29 +37,9 @@ body{
 }
 
 /*general customization*/
-.btn-space{
-    margin-right: 10px;
-}
-.alert-blue {
-    color: white;
-    background-color: #6AB5EF;
-    border-color: #4ca4e8;
-}
-.alert-blue hr {
-    border-top-color: #4389A2;
-}
-.alert-blue .alert-link {
-    color: #062c33;
-}
-.margin-7 {
-    margin: 7px;
- }
 .no-bullet{
     list-style: none;
 }
-.padding-5{
-    padding-top: 5px;
- }
 
 /*btn-group btn-block*/
 .btn-group.special {
@@ -122,8 +106,29 @@ body{
     margin-right: auto;
 }
 
-/*custom colors*/
-.customcolor-gray{
+/*navbar*/
+.nav-text{
+    color: white;
+    font-size: 1.1em;
+}
+.nav-text:hover{
     color: #EBECEE;
-    border-color: #EBECEE;
+}
+.mr-end{
+    margin-top: 2px !important;
+    margin-bottom: 0px !important;
+    margin-right: 0px !important;
+    margin-left: auto !important;
+}
+
+/*dashboard*/
+.dashboard > .row > .col-3{
+    background: lightblue;
+    height:100vh;
+    min-width: 300px;
+    max-width: 300px;
+}
+.dashboard > .row > .col{
+    background: pink;
+    height:100vh;
 }
