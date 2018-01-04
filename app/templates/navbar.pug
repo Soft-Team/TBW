@@ -1,23 +1,26 @@
 extends master.pug
 
 block content
-  nav.navbar.navbar-expand-md.navbar-dark(style='background-color: #3498db;')
-    .container
+  nav.navbar.navbar-expand-md.navbar-dark.sticky-top(style='background-color: #3498db;')
+    .container-fluid
       a.navbar-brand(href='/home/page/1')
-        img(src='/assets/images/psm-ico.png', width='80', height='40', alt='PSM')
+        img(src='/assets/images/psm-ico.png', width='80', height='40', alt='Trabawho')
+        span TrabaWHO
       button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarNav', aria-controls='navbarNav', aria-expanded='false', aria-label='Toggle navigation')
         span.navbar-toggler-icon
-      #navbarNav.collapse.navbar-collapse
-        a.nav-link.nav-text(href='/categories') Categories
-        a.nav-link.nav-text(href='#y') Profile
-        a.nav-link.nav-text(href='#z') Sell Item
-        ul.mr-end(style='list-style: none;')
-          li.nav-item.dropdown
+      #navbarNav.collapse.navbar-collapse.navbarNavDropdown.justify-content-end
+        ul.navbar-nav
+          li.nav-item.active
+            a.nav-link.nav-text(href='#Messages') Messages &nbsp&nbsp
+          li.nav-item.active
+            a.nav-link.nav-text(href='#Profile') Profile &nbsp&nbsp
+          li.nav-item.dropdown.active
             a#navbarDropdown.nav-link.nav-text.dropdown-toggle(href='#', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
               | Settings&nbsp
             .dropdown-menu(aria-labelledby='navbarDropdown')
-              a.dropdown-item(href='/help') Help
-              a.dropdown-item(href='/rules') Rules
+              a.dropdown-item(href='#help') Help
+              a.dropdown-item(href='#rules') Guide
               .dropdown-divider
               a.dropdown-item(href='/login') Sign-out
-  append content
+  .dash
+    block dash

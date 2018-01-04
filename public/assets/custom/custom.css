@@ -107,6 +107,9 @@ body{
 }
 
 /*navbar*/
+.navbar-brand > span{
+    margin-left: 20px;
+}
 .nav-text{
     color: white;
     font-size: 1.1em;
@@ -122,13 +125,37 @@ body{
 }
 
 /*dashboard*/
-.dashboard > .row > .col-3{
-    background: lightblue;
-    height:100vh;
+.dashboard > .row > .col:first-of-type{
+    background: #282B30;
+    position: fixed;
+    height: 100vh;
     min-width: 300px;
     max-width: 300px;
 }
-.dashboard > .row > .col{
-    background: pink;
-    height:100vh;
+.dashboard > .row > .col:last-of-type{
+    margin-left: 300px;
 }
+.subcategory{
+    margin-left: 30px;
+}
+.dashboard > .row > .col:first-of-type > .container{
+    margin-top: 10px;
+    background: gray;
+    border-radius: 5px;
+    padding: 20px 15px 20px 0px;
+    height: 85vh;
+}
+.dashboard > .row > .col:first-of-type > .container > .row{
+    margin-left: 0px;
+    padding-left: 20px;
+}
+.dashboard > .row > .col:first-of-type > .container > .row:nth-child(2){
+    background: white;
+}
+/*dashboard-footer*/
+  /*.dash-foot{
+      position: absolute;
+      bottom: 80px;
+      top: auto;
+      margin-left: 20px;
+  }*/

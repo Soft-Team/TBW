@@ -1,14 +1,28 @@
 extends navbar.pug
 
-append content
-  .dashboard
+block dash
+  .container-fluid.dashboard
     .row
-      .col-3
-        .container
-          h1 Hello There
       .col
         .container
           .row
-            .col-sm-12.col-md-12.col-lg-12
-              h1 Hello There Hello There Hello There Hello There Hello There Hello There 
-  append content
+            h3 Services
+          .row
+            h3 My Services
+          .row
+            h3 Transactions
+            .subcategory
+              .row
+              h4 Ongoing
+              .row
+              h4 Finished
+            h3 Transaction Log
+        //-
+          .dash-foot
+            h3 Help
+            h3 Guide
+      .col
+        .container-fluid
+          .row
+            .col-sm-11.col-md-11.col-lg-11.main
+              block main
