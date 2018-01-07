@@ -2,12 +2,14 @@
 Type
 	1  admin
 	2  normal
-	3  business
+	?  business
 
 Status
 	1  unregistered
-	2  registered
-	3  banned
+	2  unverified
+	3  verified
+	4  licensed 
+	5  banned
 
 Report Category
 	1  scam/fraud

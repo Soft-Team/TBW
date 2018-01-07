@@ -155,9 +155,9 @@ body{
     background: #3498DB;
 }
 
-
 .dashboard > .row > .col:last-of-type{
     margin-left: 250px;
+    padding: 15px;
 }
 /*dashboard-footer*/
   /*.dash-foot{
