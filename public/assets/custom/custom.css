@@ -117,12 +117,12 @@ body{
 .nav-text:hover{
     color: #EBECEE;
 }
-.mr-end{
+/*.mr-end{
     margin-top: 2px !important;
     margin-bottom: 0px !important;
     margin-right: 0px !important;
     margin-left: auto !important;
-}
+}*/
 
 /*dashboard*/
 .dashboard > .row > .col:first-of-type{
@@ -131,31 +131,27 @@ body{
     height: 100vh;
     min-width: 300px;
     max-width: 300px;
+    padding: 20px 15px 20px 0px;
 }
+.dashboard > .row > .col:first-of-type > .row{
+    margin-left: 0px;
+    margin-top: 5px;
+    padding-left: 20px;
+}
+.dashboard > .row > .col:first-of-type > a.row:hover{
+    background: #4862A3;
+}
+.dashboard > .row > .col:first-of-type > .row:nth-child(1){
+    background: #3498DB;
+}
+
 .dashboard > .row > .col:last-of-type{
     margin-left: 300px;
 }
-.subcategory{
-    margin-left: 30px;
-}
-.dashboard > .row > .col:first-of-type > .container{
-    margin-top: 10px;
-    background: gray;
-    border-radius: 5px;
-    padding: 20px 15px 20px 0px;
-    height: 85vh;
-}
-.dashboard > .row > .col:first-of-type > .container > .row{
-    margin-left: 0px;
-    padding-left: 20px;
-}
-.dashboard > .row > .col:first-of-type > .container > .row:nth-child(2){
-    background: white;
-}
 /*dashboard-footer*/
   /*.dash-foot{
-      position: absolute;
-      bottom: 80px;
-      top: auto;
-      margin-left: 20px;
-  }*/
+    position: absolute;
+    bottom: 80px;
+    top: auto;
+    margin-left: 20px;
+}*/

@@ -4,18 +4,17 @@ block dash
   .container-fluid.dashboard
     .row
       .col
-        .container
-          .row
+        a.row.text-white(href='#Services')
             h3 Services
-          .row
+        a.row.text-white(href='#MyServices')
             h3 My Services
-          .row
+        .row.text-white
             h3 Transactions
-            .subcategory
-              .row
-              h4 Ongoing
-              .row
-              h4 Finished
+        a.row.pl-5.text-white(href='#Ongoing')
+            h4 Ongoing
+        a.row.pl-5.text-white(href='#Finished')
+            h4 Finished
+        a.row.text-white(href='#TransLog')
             h3 Transaction Log
         //-
           .dash-foot

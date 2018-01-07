@@ -1,0 +1,22 @@
+Features:
+
+* Find and Offer Services
+* Change Availability of Services
+* Create and Set Transaction
+  > Service Slip
+    > Pricing
+  > Schedule
+* Manage Ongoing Transactions
+* Transaction History
+* Rate and Report System
+* Categorized Messaging System
+* Request New Service Category
+* SMS and E-mail Notificattion
+
+Admin Features:
+
+* Add, Edit, Delete Service Tags
+* Ban and Reinstate
+* Report Log and Reported Users
+* View System Statistics
+* View Requested Services
