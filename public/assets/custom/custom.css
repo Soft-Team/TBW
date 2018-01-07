@@ -82,9 +82,6 @@ body{
 #password2{
     margin-top: 5px;
 }
-#agreement{
-    margin-left: 1px;
-}
 #agreement + label{
     font-size: 0.8em;
 }
@@ -139,14 +136,17 @@ body{
     background: #282B30;
     position: fixed;
     height: 100vh;
-    min-width: 300px;
-    max-width: 300px;
+    min-width: 250px;
+    max-width: 250px;
     padding: 20px 15px 20px 0px;
 }
 .dashboard > .row > .col:first-of-type > .row{
     margin-left: 0px;
     margin-top: 5px;
     padding-left: 20px;
+}
+.dashboard > .row > .col:first-of-type > a{
+    text-decoration:  none;
 }
 .dashboard > .row > .col:first-of-type > a.row:hover{
     background: #4862A3;
@@ -155,8 +155,9 @@ body{
     background: #3498DB;
 }
 
+
 .dashboard > .row > .col:last-of-type{
-    margin-left: 300px;
+    margin-left: 250px;
 }
 /*dashboard-footer*/
   /*.dash-foot{
