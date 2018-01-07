@@ -107,8 +107,18 @@ body{
 }
 
 /*navbar*/
+.navbar{
+    padding: 0px 16px;
+}
+/*.navbar-brand > img{
+    position: absolute;
+    top: 4px;
+    left: 27px;
+    margin-right: auto;
+    margin-bottom: auto;
+}*/
 .navbar-brand > span{
-    margin-left: 20px;
+    margin-left: 10px;
 }
 .nav-text{
     color: white;
