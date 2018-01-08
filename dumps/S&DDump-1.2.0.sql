@@ -26,14 +26,21 @@ CREATE TABLE `tblchat` (
   `intChatID` int(11) NOT NULL AUTO_INCREMENT,
   `intUser1` int(9) NOT NULL COMMENT 'FK',
   `intUser2` int(9) NOT NULL COMMENT 'FK',
-  `intChatServTag` int(1) NOT NULL COMMENT 'FK',
+  `intChatServTag` int(3) NOT NULL COMMENT 'FK',
   PRIMARY KEY (`intChatID`),
   KEY `intUser1_idx` (`intUser1`),
   KEY `intUser2_idx` (`intUser2`),
+  KEY `intChatServTag_idx` (`intChatServTag`),
+  CONSTRAINT `intChatServTag` FOREIGN KEY (`intChatServTag`) REFERENCES `tblservicetag` (`intServTagID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `intUser1` FOREIGN KEY (`intUser1`) REFERENCES `tbluser` (`intAccNo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `intUser2` FOREIGN KEY (`intUser2`) REFERENCES `tbluser` (`intAccNo`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tblchat`
+--
+
 
 --
 -- Table structure for table `tblmessage`
@@ -51,6 +58,11 @@ CREATE TABLE `tblmessage` (
   CONSTRAINT `intMessChatID` FOREIGN KEY (`intMessChatID`) REFERENCES `tblchat` (`intChatID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tblmessage`
+--
+
 
 --
 -- Table structure for table `tblrating`
@@ -71,6 +83,11 @@ CREATE TABLE `tblrating` (
   CONSTRAINT `intRatedAccNo` FOREIGN KEY (`intRatedAccNo`) REFERENCES `tbluser` (`intAccNo`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tblrating`
+--
+
 
 --
 -- Table structure for table `tblreport`
@@ -94,6 +111,11 @@ CREATE TABLE `tblreport` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `tblreport`
+--
+
+
+--
 -- Table structure for table `tblrequest`
 --
 
@@ -112,6 +134,11 @@ CREATE TABLE `tblrequest` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `tblrequest`
+--
+
+
+--
 -- Table structure for table `tblservice`
 --
 
@@ -120,17 +147,23 @@ DROP TABLE IF EXISTS `tblservice`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tblservice` (
   `intServID` int(11) NOT NULL AUTO_INCREMENT,
-  `intServTag` int(1) NOT NULL COMMENT 'FK',
+  `intServTag` int(3) NOT NULL COMMENT 'FK',
   `intServAccNo` int(9) NOT NULL COMMENT 'FK',
   `intServStatus` int(1) NOT NULL,
   `fltPrice` float DEFAULT NULL,
   PRIMARY KEY (`intServID`),
-  KEY `intServTag_idx` (`intServTag`),
   KEY `intServAccNo_idx` (`intServAccNo`),
+  KEY `intServTag_idx` (`intServTag`),
   CONSTRAINT `intServAccNo` FOREIGN KEY (`intServAccNo`) REFERENCES `tbluser` (`intAccNo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `intServTag` FOREIGN KEY (`intServTag`) REFERENCES `tblservicetag` (`intServTagID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tblservice`
+--
+
+INSERT INTO `tblservice` VALUES (1,1,1,1,70),(2,1,3,1,64),(3,1,4,1,NULL),(4,1,2,0,80),(5,3,5,1,72);
 
 --
 -- Table structure for table `tblservicetag`
@@ -140,11 +173,17 @@ DROP TABLE IF EXISTS `tblservicetag`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tblservicetag` (
-  `intServTagID` int(1) NOT NULL,
+  `intServTagID` int(3) NOT NULL AUTO_INCREMENT,
   `strServName` varchar(45) NOT NULL,
   PRIMARY KEY (`intServTagID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tblservicetag`
+--
+
+INSERT INTO `tblservicetag` VALUES (1,'Plumbing'),(2,'Electrician'),(3,'Technician');
 
 --
 -- Table structure for table `tbltransaction`
@@ -170,6 +209,11 @@ CREATE TABLE `tbltransaction` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `tbltransaction`
+--
+
+
+--
 -- Table structure for table `tbluser`
 --
 
@@ -191,8 +235,14 @@ CREATE TABLE `tbluser` (
   `strProfilePic` varchar(45) DEFAULT NULL,
   `strValidID` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`intAccNo`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbluser`
+--
+
+INSERT INTO `tbluser` VALUES (1,'Jon Ervin Balmaceda','Jon-Ervin','0424',2,1,'Pasig','Rosario','balmacedajonervin@gmail.com','09236835707',NULL,NULL,NULL),(2,'Ralf Milan','9Weissss','ralfralf',2,1,'Quezon','Tandang Sora','ralf@milan.com','09234545672',NULL,NULL,NULL),(3,'Piolo Sales','Sno-weak','piolopiolo',2,1,'Manila','Espana','Piolo@mahina.com','0923893482',NULL,NULL,NULL),(4,'Vince Oreta','VinceIRL','vincevince',2,1,'Pasig','San Joaquin','vince@dead.com','09236754551',NULL,NULL,NULL),(5,'Carlo Doronila','CarloDoronichan','carlocarlo',2,1,'Manila','Sta. Mesa','carlo@anime.com','09234545676',NULL,NULL,NULL),(6,'admin','admin','admin',1,1,'Manila','Tondo','admin@admin.com','09236835707',NULL,NULL,NULL);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
