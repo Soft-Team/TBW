@@ -154,10 +154,13 @@ body{
 .dashboard > .row > .col:first-of-type > .row:nth-child(1){
     background: #3498DB;
 }
-
 .dashboard > .row > .col:last-of-type{
     margin-left: 250px;
     padding: 15px;
+}
+
+.admin > .row > .col:first-of-type > .row:nth-child(1){
+    background: #EC9B00;
 }
 /*dashboard-footer*/
   /*.dash-foot{

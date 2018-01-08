@@ -1,0 +1,17 @@
+extends master.pug
+
+block content
+  nav.navbar.navbar-expand-md.navbar-dark.sticky-top(style='background-color: #EC9B00;')
+    .container-fluid
+      a.navbar-brand(href='/admin')
+        img(src='/assets/images/tbw.ico', width='50', height='50', alt='Trabawho')
+        span
+          b TrabaWHO
+      button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarNav', aria-controls='navbarNav', aria-expanded='false', aria-label='Toggle navigation')
+        span.navbar-toggler-icon
+      #navbarNav.collapse.navbar-collapse.navbarNavDropdown.justify-content-end
+        ul.navbar-nav
+          li.nav-item.active
+            a.nav-link.nav-text(href='/login') Sign-out &nbsp&nbsp
+  .dash
+    block dash

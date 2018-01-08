@@ -1,0 +1,26 @@
+extends navbar-admin.pug
+
+block dash
+  .container-fluid.dashboard.admin
+    .row
+      .col
+        .row.text-white
+            h3 Accounts
+        a.row.pl-5.mt-0.text-white(href='#Active')
+            h4 Active
+        a.row.pl-5.mt-0.text-white(href='#Banned')
+            h4 Banned
+        .row.text-white
+            h3 Reports
+        a.row.pl-5.mt-0.text-white(href='#ReportedUsers')
+            h4 Reported Users
+        a.row.pl-5.mt-0.text-white(href='#Report Log')
+            h4 Report Log
+        a.row.text-white(href='#IDRequests')
+            h3 ID Requests
+            
+      .col
+        .container-fluid
+          .row
+            .col-sm-11.col-md-11.col-lg-11.main
+              block main
