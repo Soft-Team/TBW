@@ -9,7 +9,7 @@ Instruction:
     run
       > nodemon index.js OR node index.js
       
-Starting Pages
+Starting Pages:
 
     login: http://localhost:3000/login
     home: http://localhost:3000/home

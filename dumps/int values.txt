@@ -24,6 +24,14 @@ Response
 	0  no response
 	1  denied
 	
+SReqResponse
+	0  no response
+	1  declined
+	
+SReqSeen
+	0  no
+	1  yes
+	
 Transaction Status
 	1  Ongoing
 	2  Finished

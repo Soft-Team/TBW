@@ -166,6 +166,32 @@ CREATE TABLE `tblservice` (
 INSERT INTO `tblservice` VALUES (1,1,1,1,70),(2,1,3,1,64),(3,1,4,1,NULL),(4,1,2,0,80),(5,3,5,1,72);
 
 --
+-- Table structure for table `tblservicereq`
+--
+
+DROP TABLE IF EXISTS `tblservicereq`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tblservicereq` (
+  `intServReqID` int(11) NOT NULL AUTO_INCREMENT,
+  `intSReqServID` int(11) NOT NULL,
+  `intSReqAccNo` int(9) NOT NULL,
+  `intSReqSeen` int(1) NOT NULL,
+  `intSReqResponse` int(1) NOT NULL,
+  PRIMARY KEY (`intServReqID`),
+  KEY `intSReqServID_idx` (`intSReqServID`),
+  KEY `intSReqAccNo_idx` (`intSReqAccNo`),
+  CONSTRAINT `intSReqAccNo` FOREIGN KEY (`intSReqAccNo`) REFERENCES `tbluser` (`intAccNo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `intSReqServID` FOREIGN KEY (`intSReqServID`) REFERENCES `tblservice` (`intServID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tblservicereq`
+--
+
+
+--
 -- Table structure for table `tblservicetag`
 --
 

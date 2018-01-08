@@ -38,5 +38,9 @@ block main
               button.btn.btn-secondary(type='button', data-dismiss='modal') Close
   br
   each serv in searchServ
-    p #{serv.intServAccNo} - #{serv.strName} - #{serv.fltPrice}
+    p 
+      | #{serv.intServAccNo} - #{serv.strName} - #{serv.fltPrice} - &nbsp
+      a(href='') Request
+      | &nbsp-&nbsp
+      a(href='') Message
       
