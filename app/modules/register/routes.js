@@ -3,6 +3,8 @@ var router = express.Router();
 var db = require('../../lib/database')();
 
 function auth(req,res,next){
+  /*Entered UserName, Match
+  *(tbluser)*/
   db.query("SELECT * FROM tbluser WHERE strUserName= ?",[req.body.username], (err, results, fields) => {
       if (err) console.log(err);
       if(!results[0])
