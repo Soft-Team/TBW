@@ -32,9 +32,11 @@ block main
             .modal-footer
               button.btn.btn-primary(type='submit') Submit
               button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+  p 
+    i #{servTag} has already been added to your services
   p    
     b Your services:
   each serv in myServices 
     p 
-      | #{serv.strServName} - #{serv.fltPrice} - #{serv.intPriceType} &nbsp
+      | #{serv.strServName} - #{serv.fltPrice} - &nbsp
       a(href='') Edit Service

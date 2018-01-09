@@ -12,14 +12,14 @@ function servTags(req, res, next){
   });
 }
 function searchServTag(req, res, next){
-  db.query("SELECT * FROM tblservicetag WHERE strServName= ?",[req.params.servName], (err, results, fields) => {
+  db.query("SELECT * FROM tblservicetag WHERE strServName= ?",[req.body.searchtag], (err, results, fields) => {
       if (err) return res.send(err);
       req.searchServTag = results;
       return next();
   });
 }
 function searchServAcc(req, res, next){
-  db.query("SELECT * FROM tblservicetag INNER JOIN tblservice ON intServTagID= intServTag WHERE strServName= ? AND intServAccNo= ?",[req.params.servName, req.session.user], (err, results, fields) => {
+  db.query("SELECT * FROM tblservicetag INNER JOIN tblservice ON intServTagID= intServTag WHERE strServName= ? AND intServAccNo= ?",[req.body.searchtag, req.session.user], (err, results, fields) => {
       if (err) return res.send(err);
       req.searchServAcc = results;
       return next();
@@ -41,10 +41,40 @@ function render(req,res){
 
 router.get('/', myServices, render);
 
-router.post('/', (req, res) => {
-  console.log(req.body.searchtag);
-  res.redirect('/myservices');
-  /*res.redirect('/myservices/'+ req.body.searchtag);*/
+router.post('/', myServices, searchServTag, searchServAcc, (req, res) => {
+  if(!req.searchServTag[0]){
+    res.render('myservices/views/notag', {servTag: req.body.searchtag, myServices: req.myServices});
+  }
+  else{
+    if(!req.searchServAcc[0]){
+      var stringquery1="INSERT INTO tblservice (intServTag, intServAccNo, intServStatus, intPriceType) VALUES (?,?,'1',?)" ;
+      var stringquery2="INSERT INTO tblservice (intServTag, intServAccNo, intServStatus, fltPrice, intPriceType) VALUES (?,?,'1',?,?)" ;
+      var paramsarray= [];
+      if(req.body.pricetype=='0'){
+        paramsarray.push(req.body.pricetype);
+      }
+      else{
+        paramsarray.push(req.body.price);
+        paramsarray.push(req.body.pricetype);
+      }
+      if(paramsarray.length==1){
+        db.query(stringquery1,[req.searchServTag[0].intServTagID, req.session.user, paramsarray[0]], (err, results, fields) => {
+            if (err) return res.send(err);
+            res.render('myservices/views/success', {servTag: req.searchServTag[0].strServName, myServices: req.myServices});
+          });
+      }
+      else{
+        db.query(stringquery2,[req.searchServTag[0].intServTagID, req.session.user, paramsarray[0], paramsarray[1]], (err, results, fields) => {
+            if (err) return res.send(err);
+            res.render('myservices/views/success', {servTag: req.searchServTag[0].strServName, myServices: req.myServices});
+        });
+      }
+
+    }
+    else{
+      res.render('myservices/views/alreadyadded', {servTag: req.searchServTag[0].strServName, myServices: req.myServices});
+    }
+  }
 });
 
 exports.myservices = router;

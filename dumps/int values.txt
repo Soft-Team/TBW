@@ -20,6 +20,11 @@ Service Status
 	0  unavailable
 	1  available
 
+PriceType
+	0  open
+	1  rate
+	2  fixed
+	
 Response
 	0  no response
 	1  denied

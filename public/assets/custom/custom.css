@@ -105,6 +105,23 @@ body{
 
 /*navbar*/
 .navbar{
+
+    /*Select Disabled*/
+    -khtml-user-select: none;
+    -o-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+
+    /*Drag Disabled*/
+    -khtml-user-drag: none;
+    -o-user-drag: none;
+    -moz-user-drag: none;
+    -ms-user-drag: none;
+    -webkit-user-drag: none;
+    user-drag: none;
+
     padding: 0px 16px;
 }
 /*.navbar-brand > img{
@@ -133,6 +150,23 @@ body{
 
 /*dashboard*/
 .dashboard > .row > .col:first-of-type{
+
+    /*Select Disabled*/
+    -khtml-user-select: none;
+    -o-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+
+    /*Drag Disabled*/
+    -khtml-user-drag: none;
+    -o-user-drag: none;
+    -moz-user-drag: none;
+    -ms-user-drag: none;
+    -webkit-user-drag: none;
+    user-drag: none;
+
     background: #282B30;
     position: fixed;
     height: 100vh;

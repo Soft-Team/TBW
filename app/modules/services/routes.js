@@ -34,11 +34,11 @@ function servRender(req,res){
     var paramsarray= [];
     if(req.params.city!='any'){
       stringquery = stringquery.concat("AND strCity= ? ");
-      paramsarray.push(req.params.city)
+      paramsarray.push(req.params.city);
     }
     if(req.params.brngy!='any'){
       stringquery = stringquery.concat("AND strBarangay= ? ");
-      paramsarray.push(req.params.brngy)
+      paramsarray.push(req.params.brngy);
     }
     if(req.params.pricing=='rate'){
       stringquery = stringquery.concat("AND fltPrice IS NOT NULL ");
