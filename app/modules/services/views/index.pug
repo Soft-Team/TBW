@@ -36,4 +36,8 @@ block main
             .modal-footer
               button.btn.btn-primary(type='submit') Submit
               button.btn.btn-secondary(type='button', data-dismiss='modal') Close
-      
+  
+  p
+    b Service Tags:
+  each tag in servTags
+    p #{tag.strServName}

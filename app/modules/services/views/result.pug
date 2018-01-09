@@ -40,7 +40,7 @@ block main
     b Showing Results for "#{servName}"
   each serv in searchServ
     p 
-      | #{serv.intServAccNo} - #{serv.strName} - #{serv.fltPrice} - &nbsp
+      | #{serv.prepend} - #{serv.strName} - #{serv.fltPrice} - &nbsp
       a(href='') Request
       | &nbsp-&nbsp
       a(href='') Message

@@ -25,16 +25,26 @@ function searchServAcc(req, res, next){
       return next();
   });
 }
-
-function render(req,res){
-  console.log(req.session.user);
-  res.render('myservices/views/index');
+function myServices(req, res, next){
+  db.query("SELECT * FROM tbluser INNER JOIN tblservice ON intAccNo= intServAccNo INNER JOIN tblservicetag ON intServTag= intServTagID WHERE intAccNo= ?",[req.session.user], (err, results, fields) => {
+      if (err) return res.send(err);
+      req.myServices = results;
+      return next();
+  });
 }
 
-router.get('/', render);
+function render(req,res){
+  req.session.user= '1';
+  console.log(req.session.user);
+  res.render('myservices/views/index', {myServices: req.myServices});
+}
+
+router.get('/', myServices, render);
 
 router.post('/', (req, res) => {
-  res.redirect('/services/'+ req.body.searchtag);
+  console.log(req.body.searchtag);
+  res.redirect('/myservices');
+  /*res.redirect('/myservices/'+ req.body.searchtag);*/
 });
 
 exports.myservices = router;

@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var db = require('../../lib/database')();
+var prepend = require('../welcome/prepend');
 
 function servTags(req, res, next){
   /*All Service Tags
@@ -22,7 +23,7 @@ function searchServTag(req, res, next){
 }
 
 function render(req,res){
-  res.render('services/views/index');
+  res.render('services/views/index', {servTags: req.servTags});
 }
 function servRender(req,res){
   if(!req.searchServTag[0]){
@@ -56,8 +57,12 @@ function servRender(req,res){
           if (err) return res.send(err);
           if(!results[0])
             res.render('services/views/noresult', {servName: req.params.servName});
-          else
+          else{
+            for(count=0;count<results.length;count++){
+              results[count].prepend = prepend(results[count].intServAccNo);
+            }
             res.render('services/views/result', {servName: req.params.servName, searchServ: results});
+          }
       });
     }
     else if(paramsarray.length==2){
@@ -65,8 +70,12 @@ function servRender(req,res){
           if (err) return res.send(err);
           if(!results[0])
             res.render('services/views/noresult', {servName: req.params.servName});
-          else
+          else{
+            for(count=0;count<results.length;count++){
+              results[count].prepend = prepend(results[count].intServAccNo);
+            }
             res.render('services/views/result', {servName: req.params.servName, searchServ: results});
+          }
       });
     }
     else{
@@ -74,14 +83,18 @@ function servRender(req,res){
           if (err) return res.send(err);
           if(!results[0])
             res.render('services/views/noresult', {servName: req.params.servName});
-          else
+          else{
+            for(count=0;count<results.length;count++){
+              results[count].prepend = prepend(results[count].intServAccNo);
+            }
             res.render('services/views/result', {servName: req.params.servName, searchServ: results});
+          }
       });
     }
   }
 }
 
-router.get('/', render);
+router.get('/', servTags, render);
 router.get('/:servName/:city/:brngy/:pricing/:sorting', searchServTag, servRender);
 
 router.post('/', (req, res) => {
