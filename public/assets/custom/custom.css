@@ -185,7 +185,7 @@ body{
 .dashboard > .row > .col:first-of-type > a.row:hover{
     background: #4862A3;
 }
-.dashboard > .row > .col:first-of-type > .row:nth-child(1){
+.dashboard > .row > .col:first-of-type > .user:nth-child(1){
     background: #3498DB;
 }
 .dashboard > .row > .col:last-of-type{
@@ -193,7 +193,7 @@ body{
     padding: 15px;
 }
 
-.admin > .row > .col:first-of-type > .row:nth-child(1){
+.dashboard > .row > .col:first-of-type > .admin:nth-child(1){
     background: #EC9B00;
 }
 /*dashboard-footer*/

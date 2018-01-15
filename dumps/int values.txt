@@ -8,8 +8,9 @@ Status
 	1  unregistered
 	2  unverified
 	3  verified
-	4  licensed 
-	5  banned
+	4  certified
+	5  licensed 
+	6  banned
 
 Report Category
 	1  scam/fraud

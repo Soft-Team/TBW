@@ -18,8 +18,12 @@ function auth(req,res,next){
 function render(req,res){
   res.render('register/views/index');
 }
+function businessRender(req,res){
+  res.render('register/views/business');
+}
 
 router.get('/', render);
+router.get('/business', businessRender);
 
 router.post('/', auth, (req, res) => {
   if(req.body.password === req.body.confirm){

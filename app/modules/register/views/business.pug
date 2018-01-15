@@ -17,13 +17,17 @@ block content
           p
             small
               b
-                a(href='/register/business') Register as Business Account instead
+                a(href='/register') Register as Regular Account instead
           form(method='POST' action='/register')
             .form-group
               label(for='name')
-                b Full Name
-              input#name.form-control(type='text' name='name' aria-describedby='nameHelp' placeholder='eg. John S. Doe' minlength='5' maxlength='100' required)
-              small#nameHelp.form-text.text-muted Use only your real name.
+                b Business Name
+              input#name.form-control(type='text' name='name' aria-describedby='nameHelp' placeholder='' minlength='5' maxlength='100' required)
+              small#nameHelp.form-text.text-muted 
+            .form-group
+              label(for='exampleFormControlFile1') 
+                b Business Permit
+              input#exampleFormControlFile1.form-control-file(type='file')
             .form-group
               label(for='userName')
                 b Username
@@ -35,6 +39,16 @@ block content
               input#password1.form-control(type='password' name='password' placeholder='Create a Password' minlength='8' maxlength='100' required)
               input#password2.form-control(type='password' name='confirm' aria-describedby='password2Help' placeholder='Retype Password' required)
               small#password2Help.form-text.text-muted Minimum of 8 characters.
+            .form-group
+              label(for='name')
+                b Owner Name
+              input#name.form-control(type='text' name='name' aria-describedby='nameHelp' placeholder='' minlength='5' maxlength='100' required)
+              small#nameHelp.form-text.text-muted 
+            .form-group
+              label(for='name')
+                b Workers
+              textarea#name.form-control(name='name' aria-describedby='nameHelp' placeholder='' minlength='5' maxlength='100' required)
+              small#nameHelp.form-text.text-muted 
             .form-group  
               .row
                 .col

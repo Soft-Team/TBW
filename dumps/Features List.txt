@@ -8,7 +8,7 @@ Features:
   > Schedule
 * Manage Ongoing Transactions
 * Transaction History
-* Rate and Report System
+* Rate, Review, and Report System
 * Categorized Messaging System
 * Request New Service Category
 * SMS and E-mail Notificattion
