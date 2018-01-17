@@ -26,6 +26,7 @@ CREATE TABLE `tblbusiness` (
   `intBusinessID` int(11) NOT NULL AUTO_INCREMENT,
   `intBusAccNo` int(9) NOT NULL,
   `strBusOwner` varchar(45) NOT NULL,
+  `intBusAdSeen` int(1) NOT NULL,
   PRIMARY KEY (`intBusinessID`),
   KEY `intBusAccNo_idx` (`intBusAccNo`),
   CONSTRAINT `intBusAccNo` FOREIGN KEY (`intBusAccNo`) REFERENCES `tbluser` (`intAccNo`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -46,21 +47,41 @@ DROP TABLE IF EXISTS `tblchat`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tblchat` (
   `intChatID` int(11) NOT NULL AUTO_INCREMENT,
-  `intChatUser1` int(9) NOT NULL COMMENT 'FK',
-  `intChatUser2` int(9) NOT NULL COMMENT 'FK',
-  `intChatServTag` int(3) NOT NULL COMMENT 'FK',
+  `intChatSeeker` int(9) NOT NULL COMMENT 'FK',
+  `intChatServ` int(11) NOT NULL,
+  `intChatStatus` int(1) NOT NULL,
   PRIMARY KEY (`intChatID`),
-  KEY `intUser1_idx` (`intChatUser1`),
-  KEY `intUser2_idx` (`intChatUser2`),
-  KEY `intChatServTag_idx` (`intChatServTag`),
-  CONSTRAINT `intChatServTag` FOREIGN KEY (`intChatServTag`) REFERENCES `tblservicetag` (`intServTagID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `intUser1` FOREIGN KEY (`intChatUser1`) REFERENCES `tbluser` (`intAccNo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `intUser2` FOREIGN KEY (`intChatUser2`) REFERENCES `tbluser` (`intAccNo`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `intUser1_idx` (`intChatSeeker`),
+  KEY `intChatServ_idx` (`intChatServ`),
+  CONSTRAINT `intChatServ` FOREIGN KEY (`intChatServ`) REFERENCES `tblservice` (`intServID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `intUser1` FOREIGN KEY (`intChatSeeker`) REFERENCES `tbluser` (`intAccNo`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `tblchat`
+--
+
+
+--
+-- Table structure for table `tbldocument`
+--
+
+DROP TABLE IF EXISTS `tbldocument`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tbldocument` (
+  `intDocID` int(11) NOT NULL AUTO_INCREMENT,
+  `intDocAccNo` int(9) NOT NULL,
+  `intDocument` varchar(45) NOT NULL,
+  PRIMARY KEY (`intDocID`),
+  KEY `intDocAccNo_idx` (`intDocAccNo`),
+  CONSTRAINT `intDocAccNo` FOREIGN KEY (`intDocAccNo`) REFERENCES `tbluser` (`intAccNo`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbldocument`
 --
 
 
@@ -76,6 +97,7 @@ CREATE TABLE `tblmessage` (
   `intMessChatID` int(11) NOT NULL COMMENT 'FK',
   `txtMessage` text NOT NULL,
   `dtmDateSent` datetime NOT NULL,
+  `intMessSeen` int(1) NOT NULL,
   PRIMARY KEY (`intMessID`),
   KEY `intMessChatID_idx` (`intMessChatID`),
   CONSTRAINT `intMessChatID` FOREIGN KEY (`intMessChatID`) REFERENCES `tblchat` (`intChatID`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -99,6 +121,8 @@ CREATE TABLE `tblrating` (
   `intRatedAccNo` int(9) NOT NULL COMMENT 'FK',
   `intRateTransID` int(11) NOT NULL COMMENT 'FK',
   `intRating` int(1) NOT NULL,
+  `datRateDate` date NOT NULL,
+  `txtRateReview` text,
   PRIMARY KEY (`intRateID`),
   KEY `intRatedAccNo_idx` (`intRatedAccNo`),
   KEY `intRateTransID_idx` (`intRateTransID`),
@@ -126,6 +150,7 @@ CREATE TABLE `tblreport` (
   `intRepCategory` int(1) NOT NULL,
   `txtRepDesc` text,
   `datRepDate` date NOT NULL,
+  `intRepAdSeen` int(1) NOT NULL,
   PRIMARY KEY (`intRepID`),
   KEY `intRepedAccNo_idx` (`intRepedAccNo`),
   KEY `intRepTransID_idx` (`intRepTransID`),
@@ -136,30 +161,6 @@ CREATE TABLE `tblreport` (
 
 --
 -- Dumping data for table `tblreport`
---
-
-
---
--- Table structure for table `tblrequest`
---
-
-DROP TABLE IF EXISTS `tblrequest`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tblrequest` (
-  `intReqID` int(11) NOT NULL AUTO_INCREMENT,
-  `intReqAccNo` int(9) NOT NULL COMMENT 'FK',
-  `strReqValidID` varchar(45) NOT NULL,
-  `datReqDate` date NOT NULL,
-  `intReqResponse` int(1) NOT NULL,
-  PRIMARY KEY (`intReqID`),
-  KEY `intReqAccNo_idx` (`intReqAccNo`),
-  CONSTRAINT `intReqAccNo` FOREIGN KEY (`intReqAccNo`) REFERENCES `tbluser` (`intAccNo`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tblrequest`
 --
 
 
@@ -176,7 +177,7 @@ CREATE TABLE `tblservice` (
   `intServAccNo` int(9) NOT NULL COMMENT 'FK',
   `intServStatus` int(1) NOT NULL,
   `intPriceType` int(1) NOT NULL,
-  `fltPrice` float DEFAULT NULL,
+  `fltPrice` float NOT NULL,
   PRIMARY KEY (`intServID`),
   KEY `intServAccNo_idx` (`intServAccNo`),
   KEY `intServTag_idx` (`intServTag`),
@@ -189,34 +190,7 @@ CREATE TABLE `tblservice` (
 -- Dumping data for table `tblservice`
 --
 
-INSERT INTO `tblservice` VALUES (1,1,1,1,1,70),(2,1,3,1,1,64),(3,1,4,1,0,NULL),(4,1,2,0,2,80),(5,3,5,1,2,72),(6,3,1,1,1,50),(7,3,2,1,0,NULL),(17,4,1,1,0,NULL),(18,5,1,1,2,100);
-
---
--- Table structure for table `tblservicereq`
---
-
-DROP TABLE IF EXISTS `tblservicereq`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tblservicereq` (
-  `intServReqID` int(11) NOT NULL AUTO_INCREMENT,
-  `intSReqServID` int(11) NOT NULL,
-  `intSReqAccNo` int(9) NOT NULL,
-  `datSReqDate` date NOT NULL,
-  `intSReqSeen` int(1) NOT NULL,
-  `intSReqResponse` int(1) NOT NULL,
-  PRIMARY KEY (`intServReqID`),
-  KEY `intSReqServID_idx` (`intSReqServID`),
-  KEY `intSReqAccNo_idx` (`intSReqAccNo`),
-  CONSTRAINT `intSReqAccNo` FOREIGN KEY (`intSReqAccNo`) REFERENCES `tbluser` (`intAccNo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `intSReqServID` FOREIGN KEY (`intSReqServID`) REFERENCES `tblservice` (`intServID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tblservicereq`
---
-
+INSERT INTO `tblservice` VALUES (1,1,1,1,1,70),(2,1,3,1,1,64),(3,1,4,1,1,32),(4,1,2,0,2,80),(5,3,5,1,2,72),(6,3,1,1,1,50),(7,3,2,1,1,23),(17,4,1,1,1,32),(18,5,1,1,2,100);
 
 --
 -- Table structure for table `tblservicetag`
@@ -239,55 +213,6 @@ CREATE TABLE `tblservicetag` (
 INSERT INTO `tblservicetag` VALUES (1,'Plumbing'),(2,'Electrician'),(3,'Technician'),(4,'Laundry'),(5,'Carpenter');
 
 --
--- Table structure for table `tblservidreq`
---
-
-DROP TABLE IF EXISTS `tblservidreq`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tblservidreq` (
-  `intSIRID` int(11) NOT NULL AUTO_INCREMENT,
-  `intSIRServID` int(11) NOT NULL,
-  `strSIRLicense` varchar(45) DEFAULT NULL,
-  `strSIRCertificate` varchar(45) DEFAULT NULL,
-  `datSIRDate` date NOT NULL,
-  `intSIRResponse` int(11) NOT NULL,
-  PRIMARY KEY (`intSIRID`),
-  KEY `intSIRServID_idx` (`intSIRServID`),
-  CONSTRAINT `intSIRServID` FOREIGN KEY (`intSIRServID`) REFERENCES `tblservice` (`intServID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tblservidreq`
---
-
-
---
--- Table structure for table `tblservlicense`
---
-
-DROP TABLE IF EXISTS `tblservlicense`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tblservlicense` (
-  `intServLicenseID` int(11) NOT NULL AUTO_INCREMENT,
-  `intSLServID` int(11) NOT NULL,
-  `strSLCertificate` varchar(45) DEFAULT NULL,
-  `strSLLicense` varchar(45) DEFAULT NULL,
-  `datSLExpiration` date DEFAULT NULL,
-  PRIMARY KEY (`intServLicenseID`),
-  KEY `intSLServID_idx` (`intSLServID`),
-  CONSTRAINT `intSLServID` FOREIGN KEY (`intSLServID`) REFERENCES `tblservice` (`intServID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tblservlicense`
---
-
-
---
 -- Table structure for table `tbltransaction`
 --
 
@@ -299,9 +224,11 @@ CREATE TABLE `tbltransaction` (
   `intFinderAccNo` int(9) NOT NULL COMMENT 'FK',
   `intTransServID` int(11) NOT NULL COMMENT 'FK',
   `intTransStatus` int(1) NOT NULL,
-  `datTransStarted` date NOT NULL,
-  `datTransScheduled` date NOT NULL,
-  `datTransEnded` date DEFAULT NULL,
+  `dtmTransStarted` datetime NOT NULL,
+  `dtmTransScheduled` datetime NOT NULL,
+  `dtmTransEnded` datetime DEFAULT NULL,
+  `txtTransCancelDesc` text,
+  `intTransSeen` int(1) NOT NULL,
   PRIMARY KEY (`intTransID`),
   KEY `intFinderAccNo_idx` (`intFinderAccNo`),
   KEY `intTransServID_idx` (`intTransServID`),
@@ -333,7 +260,6 @@ CREATE TABLE `tbluser` (
   `strBarangay` varchar(45) NOT NULL,
   `strEmail` varchar(320) NOT NULL,
   `strContactNo` varchar(11) NOT NULL,
-  `txtUserDesc` text,
   `strProfilePic` varchar(45) DEFAULT NULL,
   `strValidID` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`intAccNo`)
@@ -344,7 +270,32 @@ CREATE TABLE `tbluser` (
 -- Dumping data for table `tbluser`
 --
 
-INSERT INTO `tbluser` VALUES (1,'Jon Ervin Balmaceda','Jon-Ervin','0424',2,1,'Pasig','Rosario','balmacedajonervin@gmail.com','09236835707',NULL,NULL,NULL),(2,'Ralf Milan','9Weissss','ralfralf',2,1,'Quezon','Tandang Sora','ralf@milan.com','09234545672',NULL,NULL,NULL),(3,'Piolo Sales','Sno-weak','piolopiolo',2,1,'Manila','Espana','Piolo@mahina.com','0923893482',NULL,NULL,NULL),(4,'Vince Oreta','VinceIRL','vincevince',2,1,'Pasig','San Joaquin','vince@dead.com','09236754551',NULL,NULL,NULL),(5,'Carlo Doronila','CarloDoronichan','carlocarlo',2,1,'Manila','Sta. Mesa','carlo@anime.com','09234545676',NULL,NULL,NULL),(6,'admin','admin','admin',1,1,'Manila','Tondo','admin@admin.com','09236835707',NULL,NULL,NULL);
+INSERT INTO `tbluser` VALUES (1,'Jon Ervin Balmaceda','Jon-Ervin','0424',2,1,'Pasig','Rosario','balmacedajonervin@gmail.com','09236835707',NULL,NULL),(2,'Ralf Milan','9Weissss','ralfralf',2,1,'Quezon','Tandang Sora','ralf@milan.com','09234545672',NULL,NULL),(3,'Piolo Sales','Sno-weak','piolopiolo',2,1,'Manila','Espana','Piolo@mahina.com','0923893482',NULL,NULL),(4,'Vince Oreta','VinceIRL','vincevince',2,1,'Pasig','San Joaquin','vince@dead.com','09236754551',NULL,NULL),(5,'Carlo Doronila','CarloDoronichan','carlocarlo',2,1,'Manila','Sta. Mesa','carlo@anime.com','09234545676',NULL,NULL),(6,'admin','admin','admin',1,1,'Manila','Tondo','admin@admin.com','09236835707',NULL,NULL);
+
+--
+-- Table structure for table `tblverification`
+--
+
+DROP TABLE IF EXISTS `tblverification`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tblverification` (
+  `intVerifID` int(11) NOT NULL AUTO_INCREMENT,
+  `intVerifAccNo` int(9) NOT NULL,
+  `strVerifValidID` varchar(45) NOT NULL,
+  `datVerifReqDate` date NOT NULL,
+  `intVerifResponse` int(1) NOT NULL,
+  `intVerifAdSeen` int(1) NOT NULL,
+  PRIMARY KEY (`intVerifID`),
+  KEY `intVerifAccNo_idx` (`intVerifAccNo`),
+  CONSTRAINT `intVerifAccNo` FOREIGN KEY (`intVerifAccNo`) REFERENCES `tbluser` (`intAccNo`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tblverification`
+--
+
 
 --
 -- Table structure for table `tblworker`
