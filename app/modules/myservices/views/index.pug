@@ -21,21 +21,18 @@ block main
                     .col
                       label(for='priceType') Price Type
                       select#priceType.form-control(name='pricetype')
-                        option(value='0' selected='') Open
-                        option(value='1') Rate per Hour
-                        option(value='2') Fixed
+                        option(value='1') Fixed
+                        option(value='2') Rate per Hour
                     .col
                       label(for='priceType') Price
                       #priceType.input-group.mb-3
                         .input-group-prepend
                           span.input-group-text Php
-                        input.form-control(type='text' name='price' aria-describedby='priceHelp' placeholder='00.00')
-                      small#priceHelp.form-text.text-muted Leave blank if Open Price.
-                    
+                        input.form-control(type='text' name='price' placeholder='00.00' required)
                 .modal-footer
                   button.btn.btn-primary(type='submit') Submit
                   button.btn.btn-secondary(type='button', data-dismiss='modal') Close
-  p    
+  p  
   center
     .container
       p.font
@@ -53,31 +50,32 @@ block main
                 td #{serv.fltPrice}
                 td #{serv.intPriceType}
                 td 
-                  a(data-toggle='tooltip', data-placement='bottom', title='Edit')
-                    img.size(src='/assets/images/icons/settings.png', alt='Edit' data-toggle='modal' data-target='#searchServModal')
-      #searchServModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='searchServModalTitle' aria-hidden='true')
-        .modal-dialog(role='document')
-          .modal-content
-            .modal-header
-              h5#searchServModalTitle.modal-title Add Service
-              button.close(type='button' data-dismiss='modal' aria-label='Close')
-                span(aria-hidden='true') ×
-            .modal-body
-              input.form-control(type='text' name='searchtag' placeholder='Service Tag' required)
-              br
-              .row
-                .col
-                  label(for='priceType') Price Type
-                  select#priceType.form-control(name='pricetype')
-                    option(value='1' selected='') Fixed
-                    option(value='2') Rate per Hour
-                .col
-                  label(for='priceType') Price
-                  #priceType.input-group.mb-3
-                    .input-group-prepend
-                      span.input-group-text Php
-                    input.form-control(type='text' name='price' placeholder='00.00' required)
-                
-            .modal-footer
-              button.btn.btn-primary(type='submit') Submit
-              button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+                  form(method='POST' action='/myservices')
+                    .form-group
+                      a(data-toggle='tooltip', data-placement='bottom', title='Edit')
+                        img.size(src='/assets/images/icons/settings.png', alt='Edit' data-toggle='modal' data-target='#searchServModal')
+                      #searchServModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='searchServModalTitle' aria-hidden='true')
+                        .modal-dialog(role='document')
+                          .modal-content
+                            .modal-header
+                              h5#searchServModalTitle.modal-title Add Service
+                              button.close(type='button' data-dismiss='modal' aria-label='Close')
+                                span(aria-hidden='true') ×
+                            .modal-body
+                              input.form-control(type='text' name='searchtag' placeholder='Service Tag' required)
+                              br
+                              .row
+                                .col
+                                  label(for='priceType') Price Type
+                                  select#priceType.form-control(name='pricetype')
+                                    option(value='1' selected='') Fixed
+                                    option(value='2') Rate per Hour
+                                .col
+                                  label(for='priceType') Price
+                                  #priceType.input-group.mb-3
+                                    .input-group-prepend
+                                      span.input-group-text Php
+                                    input.form-control(type='text' name='price' placeholder='00.00' required)
+                            .modal-footer
+                              button.btn.btn-primary(type='submit') Submit
+                              button.btn.btn-secondary(type='button', data-dismiss='modal') Close

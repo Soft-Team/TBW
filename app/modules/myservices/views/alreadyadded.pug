@@ -1,40 +1,89 @@
 extends ../../../templates/dash.pug
 
 block main
-  form(method='POST' action='/myservices')
-    .form-group
-      button.btn.btn-primary.btn-md.btn(type='button' data-toggle='modal' data-target='#searchServModal') + Add Service
-      #searchServModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='searchServModalTitle' aria-hidden='true')
-        .modal-dialog(role='document')
-          .modal-content
-            .modal-header
-              h5#searchServModalTitle.modal-title Add Service
-              button.close(type='button' data-dismiss='modal' aria-label='Close')
-                span(aria-hidden='true') ×
-            .modal-body
-              input.form-control(type='text' name='searchtag' placeholder='Service Tag' required)
-              br
-              .row
-                .col
-                  label(for='priceType') Price Type
-                  select#priceType.form-control(name='pricetype')
-                    option(value='1' selected='') Fixed
-                    option(value='2') Rate per Hour
-                .col
-                  label(for='priceType') Price
-                  #priceType.input-group.mb-3
-                    .input-group-prepend
-                      span.input-group-text Php
-                    input.form-control(type='text' name='price' placeholder='00.00' required)
-                
-            .modal-footer
-              button.btn.btn-primary(type='submit') Submit
-              button.btn.btn-secondary(type='button', data-dismiss='modal') Close
-  p 
-    i #{servTag} has already been added to your services
+  center
+    .jumbotron-banner
+      h1.text-white My Services
+      form(method='POST' action='/myservices')
+        .form-group
+          button.btn.btn-primary.btn-md.btn(type='button' data-toggle='modal' data-target='#searchServModal') + Add Service
+          #searchServModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='searchServModalTitle' aria-hidden='true')
+            .modal-dialog(role='document')
+              .modal-content
+                .modal-header
+                  h5#searchServModalTitle.modal-title Add Service
+                  button.close(type='button' data-dismiss='modal' aria-label='Close')
+                    span(aria-hidden='true') ×
+                .modal-body
+                  input.form-control(type='text' name='searchtag' placeholder='Service Tag' required)
+                  br
+                  .row
+                    .col
+                      label(for='priceType') Price Type
+                      select#priceType.form-control(name='pricetype')
+                        option(value='1') Fixed
+                        option(value='2') Rate per Hour
+                    .col
+                      label(for='priceType') Price
+                      #priceType.input-group.mb-3
+                        .input-group-prepend
+                          span.input-group-text Php
+                        input.form-control(type='text' name='price' placeholder='00.00' required)
+                .modal-footer
+                  button.btn.btn-primary(type='submit') Submit
+                  button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+                  
+  center
+    .alert.alert-danger(role='alert')
+      i #{servTag} has already been added
+
   p    
-    b Your services:
-  each serv in myServices 
-    p 
-      | #{serv.strServName} - #{serv.fltPrice} - &nbsp
-      a(href='') Edit Service
+  center
+    .container
+      p.font
+        table.table.table-striped.font1
+          thead
+            tr.text-white
+              th(scope='col') Service
+              th(scope='col') Finish
+              th(scope='col') Status
+              th(scope='col') &nbsp
+          each serv in myServices
+            tbody
+              tr
+                td #{serv.strServName}
+                td #{serv.fltPrice}
+                td #{serv.intPriceType}
+                td 
+                  form(method='POST' action='/myservices')
+                    .form-group
+                      a(data-toggle='tooltip', data-placement='bottom', title='Edit')
+                        img.size(src='/assets/images/icons/settings.png', alt='Edit' data-toggle='modal' data-target='#searchServModal')
+                      #searchServModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='searchServModalTitle' aria-hidden='true')
+                        .modal-dialog(role='document')
+                          .modal-content
+                            .modal-header
+                              h5#searchServModalTitle.modal-title Add Service
+                              button.close(type='button' data-dismiss='modal' aria-label='Close')
+                                span(aria-hidden='true') ×
+                            .modal-body
+                              input.form-control(type='text' name='searchtag' placeholder='Service Tag' required)
+                              br
+                              .row
+                                .col
+                                  label(for='priceType') Price Type
+                                  select#priceType.form-control(name='pricetype')
+                                    option(value='1' selected='') Fixed
+                                    option(value='2') Rate per Hour
+                                .col
+                                  label(for='priceType') Price
+                                  #priceType.input-group.mb-3
+                                    .input-group-prepend
+                                      span.input-group-text Php
+                                    input.form-control(type='text' name='price' placeholder='00.00' required)
+                            .modal-footer
+                              button.btn.btn-primary(type='submit') Submit
+                              button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+
+
+  

@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var db = require('../../lib/database')();
+var swal = require('sweetalert');
 
 function servTags(req, res, next){
   /*All Service Tags
@@ -43,8 +44,10 @@ function render(req,res){
 function successRender(req,res){
   if(!req.myServices[0])
     res.render('myservices/views/noservice');
-  else
+  else{
+    swal("Hello world!");
     res.render('myservices/views/success', {myServices: req.myServices});
+  }
 }
 
 router.get('/', myServices, render);
