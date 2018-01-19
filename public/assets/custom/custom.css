@@ -129,7 +129,7 @@ body{
     position: fixed;
     top: 0;
     width: 100%;
-    z-index: 10000;
+    z-index: 10;
 }
 .navbar-brand > span{
     margin-left: 10px;
@@ -171,7 +171,7 @@ body{
     min-width: 250px;
     max-width: 250px;
     padding: 20px 15px 20px 0px;
-    z-index: 1000;
+    z-index: 5;
 }
 .dashboard > .row > .col:first-of-type > .row{
     margin-left: 0px;

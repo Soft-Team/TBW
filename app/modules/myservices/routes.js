@@ -38,8 +38,17 @@ function render(req,res){
   console.log(req.session.user);
   res.render('myservices/views/index', {myServices: req.myServices});
 }
+function successRender(req,res){
+  if(!req.searchServTag[0]){
+    res.render('myservices/views/notag', {servTag: req.body.searchtag, myServices: req.myServices});
+  }
+  else{
+  res.render('myservices/views/success', {servTag: req.searchServTag[0].strServName, myServices: req.myServices});
+  }
+}
 
 router.get('/', myServices, render);
+router.get('/success', myServices, searchServTag, searchServAcc, successRender);
 
 router.post('/', myServices, searchServTag, searchServAcc, (req, res) => {
   if(!req.searchServTag[0]){
@@ -47,29 +56,10 @@ router.post('/', myServices, searchServTag, searchServAcc, (req, res) => {
   }
   else{
     if(!req.searchServAcc[0]){
-      var stringquery1="INSERT INTO tblservice (intServTag, intServAccNo, intServStatus, intPriceType) VALUES (?,?,'1',?)" ;
-      var stringquery2="INSERT INTO tblservice (intServTag, intServAccNo, intServStatus, fltPrice, intPriceType) VALUES (?,?,'1',?,?)" ;
-      var paramsarray= [];
-      if(req.body.pricetype=='0'){
-        paramsarray.push(req.body.pricetype);
-      }
-      else{
-        paramsarray.push(req.body.price);
-        paramsarray.push(req.body.pricetype);
-      }
-      if(paramsarray.length==1){
-        db.query(stringquery1,[req.searchServTag[0].intServTagID, req.session.user, paramsarray[0]], (err, results, fields) => {
-            if (err) return res.send(err);
-            res.render('myservices/views/success', {servTag: req.searchServTag[0].strServName, myServices: req.myServices});
-          });
-      }
-      else{
-        db.query(stringquery2,[req.searchServTag[0].intServTagID, req.session.user, paramsarray[0], paramsarray[1]], (err, results, fields) => {
-            if (err) return res.send(err);
-            res.render('myservices/views/success', {servTag: req.searchServTag[0].strServName, myServices: req.myServices});
-        });
-      }
-
+      db.query("INSERT INTO tblservice (intServTag, intServAccNo, intServStatus, fltPrice, intPriceType) VALUES (?,?,'1',?,?)",[req.searchServTag[0].intServTagID, req.session.user, req.body.price, req.body.pricetype], (err, results, fields) => {
+          if (err) return res.send(err);
+          res.redirect('/myservices/success');
+      });
     }
     else{
       res.render('myservices/views/alreadyadded', {servTag: req.searchServTag[0].strServName, myServices: req.myServices});
