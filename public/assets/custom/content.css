@@ -123,17 +123,16 @@ body{
     user-drag: none;
 
     padding: 0px 16px;
-
-    height: 3.5em;
-    left: 0;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 10;
 }
+/*.navbar-brand > img{
+    position: absolute;
+    top: 4px;
+    left: 27px;
+    margin-right: auto;
+    margin-bottom: auto;
+}*/
 .navbar-brand > span{
     margin-left: 10px;
-    color: white;
 }
 .nav-text{
     color: white;
@@ -142,11 +141,14 @@ body{
 .nav-text:hover{
     color: #EBECEE;
 }
+/*.mr-end{
+    margin-top: 2px !important;
+    margin-bottom: 0px !important;
+    margin-right: 0px !important;
+    margin-left: auto !important;
+}*/
 
 /*dashboard*/
-.dash{
-    margin-top: 3.5em;
-}
 .dashboard > .row > .col:first-of-type{
 
     /*Select Disabled*/
@@ -171,7 +173,6 @@ body{
     min-width: 250px;
     max-width: 250px;
     padding: 20px 15px 20px 0px;
-    z-index: 5;
 }
 .dashboard > .row > .col:first-of-type > .row{
     margin-left: 0px;
@@ -187,18 +188,9 @@ body{
 .dashboard > .row > .col:first-of-type > .user:nth-child(1){
     background: #3498DB;
 }
-/*.dashboard > .row > .col:last-of-type{
-    margin-left: 250px;
-<<<<<<< HEAD
-    padding: 0px;
-=======
-    padding: 15px;
-}*/
 .dashboard > .row > .col:last-of-type{
     margin-left: 250px;
     padding: 0px;
-    word-wrap: break-word;
->>>>>>> 8edf360e305f5efec6f4df3294f33745b591d243
 }
 .main{
     padding: 0px;
@@ -207,3 +199,10 @@ body{
 .dashboard > .row > .col:first-of-type > .admin:nth-child(1){
     background: #EC9B00;
 }
+/*dashboard-footer*/
+  /*.dash-foot{
+    position: absolute;
+    bottom: 80px;
+    top: auto;
+    margin-left: 20px;
+}*/
