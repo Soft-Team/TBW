@@ -190,7 +190,10 @@ body{
 }
 .dashboard > .row > .col:last-of-type{
     margin-left: 250px;
-    padding: 15px;
+    padding: 0px;
+}
+.main{
+    padding: 0px;
 }
 
 .dashboard > .row > .col:first-of-type > .admin:nth-child(1){
