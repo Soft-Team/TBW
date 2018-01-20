@@ -34,7 +34,7 @@ function myServices(req, res, next){
 }
 
 function render(req,res){
-  req.session.user= '1';
+  req.session.user= '2';
   if(!req.myServices[0])
     res.render('myservices/views/noservice');
   else
