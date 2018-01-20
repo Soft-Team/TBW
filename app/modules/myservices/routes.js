@@ -35,20 +35,21 @@ function myServices(req, res, next){
 
 function render(req,res){
   req.session.user= '1';
-  console.log(req.session.user);
-  res.render('myservices/views/index', {myServices: req.myServices});
+  if(!req.myServices[0])
+    res.render('myservices/views/noservice');
+  else
+    res.render('myservices/views/index', {myServices: req.myServices});
 }
 function successRender(req,res){
-  if(!req.searchServTag[0]){
-    res.render('myservices/views/notag', {servTag: req.body.searchtag, myServices: req.myServices});
-  }
+  if(!req.myServices[0])
+    res.render('myservices/views/noservice');
   else{
-  res.render('myservices/views/success', {servTag: req.searchServTag[0].strServName, myServices: req.myServices});
+    res.render('myservices/views/success', {myServices: req.myServices});
   }
 }
 
 router.get('/', myServices, render);
-router.get('/success', myServices, searchServTag, searchServAcc, successRender);
+router.get('/success', myServices, successRender);
 
 router.post('/', myServices, searchServTag, searchServAcc, (req, res) => {
   if(!req.searchServTag[0]){

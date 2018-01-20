@@ -30,11 +30,5 @@ block main
             .modal-footer
               button.btn.btn-primary(type='submit') Submit
               button.btn.btn-secondary(type='button', data-dismiss='modal') Close
-  p 
-    i Service tag "#{servTag}" does not exist
   p    
-    b Your services:
-  each serv in myServices 
-    p 
-      | #{serv.strServName} - #{serv.fltPrice} - &nbsp
-      a(href='') Edit Service
+    i You have not yet added a service

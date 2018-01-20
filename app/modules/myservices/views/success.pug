@@ -18,21 +18,20 @@ block main
                 .col
                   label(for='priceType') Price Type
                   select#priceType.form-control(name='pricetype')
-                    option(value='0' selected='') Open
-                    option(value='1') Rate per Hour
-                    option(value='2') Fixed
+                    option(value='1' selected='') Fixed
+                    option(value='2') Rate per Hour
                 .col
                   label(for='priceType') Price
                   #priceType.input-group.mb-3
                     .input-group-prepend
                       span.input-group-text Php
-                    input.form-control(type='text' name='price' aria-describedby='priceHelp' placeholder='00.00')
-                  small#priceHelp.form-text.text-muted Leave blank if Open Price.
+                    input.form-control(type='text' name='price' placeholder='00.00' required)
                 
             .modal-footer
               button.btn.btn-primary(type='submit') Submit
               button.btn.btn-secondary(type='button', data-dismiss='modal') Close
-  p #{servTag} has been added to your services!
+              
+  p Service successfully added
   p    
     b Your services:
   each serv in myServices 
