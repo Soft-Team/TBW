@@ -12,6 +12,8 @@ function servTags(req, res, next){
   });
 }
 function searchServTag(req, res, next){
+  /*Searched Service Tag, Match;
+  *(tblservicetag)*/
   db.query("SELECT * FROM tblservicetag WHERE strServName= ?",[req.body.searchtag], (err, results, fields) => {
       if (err) return res.send(err);
       req.searchServTag = results;
@@ -19,6 +21,7 @@ function searchServTag(req, res, next){
   });
 }
 function searchServAcc(req, res, next){
+
   db.query("SELECT * FROM tblservicetag INNER JOIN tblservice ON intServTagID= intServTag WHERE strServName= ? AND intServAccNo= ?",[req.body.searchtag, req.session.user], (err, results, fields) => {
       if (err) return res.send(err);
       req.searchServAcc = results;
@@ -26,6 +29,8 @@ function searchServAcc(req, res, next){
   });
 }
 function myServices(req, res, next){
+  /*Current User's Services, Match;
+  *(tbluser)*(tblservice)*(tblservicetag)*/
   db.query("SELECT * FROM tbluser INNER JOIN tblservice ON intAccNo= intServAccNo INNER JOIN tblservicetag ON intServTag= intServTagID WHERE intAccNo= ?",[req.session.user], (err, results, fields) => {
       if (err) return res.send(err);
       req.myServices = results;
