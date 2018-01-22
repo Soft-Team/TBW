@@ -39,3 +39,12 @@ td, th{
 thead{
     background-color: #3498DB;
 }
+
+.card-img-top{
+    border-right: 1px solid #007BFF;
+    border-bottom: 1px solid #007BFF;
+}
+
+.card-body{
+    padding: 0px;
+}

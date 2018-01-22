@@ -1,47 +1,62 @@
 extends ../../../templates/dash.pug
 
 block main
-  form(method='POST' action='/services')
-    .form-group
-      button.btn.btn-primary.btn-md.btn(type='button' data-toggle='modal' data-target='#searchServModal') Search Services
-      #searchServModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='searchServModalTitle' aria-hidden='true')
-        .modal-dialog(role='document')
-          .modal-content
-            .modal-header
-              h5#searchServModalTitle.modal-title Search and Filters
-              button.close(type='button' data-dismiss='modal' aria-label='Close')
-                span(aria-hidden='true') ×
-            .modal-body
-              input.form-control(type='text' name='searchtag' placeholder='Service Tag' required)
-              br
-              .row
-                .col
-                  input.form-control(type='text' name='city' placeholder='City')
-                .col
-                  input.form-control(type='text' name='brngy' placeholder='Barangay')
-              br
-              .row
-                .col
-                  label(for='pricing') Pricing
-                  select#pricing.form-control(name='pricing')
-                    option(value='any' selected='') Any
-                    option(value='rate') Rate
-                    option(value='notS') Not Specified
-                .col
-                  label(for='sorting') Sorting
-                  select#sorting.form-control(name='sorting')
-                    option(value='rating' selected='') Rating
-                    option(value='finished') Finished Transaction
-                
-            .modal-footer
-              button.btn.btn-primary(type='submit') Submit
-              button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+  .jumbotron-banner
+    center
+      h1.text-white Search For Services
+      form(method='POST' action='/services')
+        .form-group
+          button.btn.btn-primary.btn-md.btn(type='button' data-toggle='modal' data-target='#searchServModal') Search Services
+          #searchServModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='searchServModalTitle' aria-hidden='true')
+            .modal-dialog(role='document')
+              .modal-content
+                .modal-header
+                  h5#searchServModalTitle.modal-title Search and Filters
+                  button.close(type='button' data-dismiss='modal' aria-label='Close')
+                    span(aria-hidden='true') ×
+                .modal-body
+                  input.form-control(type='text' name='searchtag' placeholder='Service Tag' required)
+                  br
+                  .row
+                    .col
+                      input.form-control(type='text' name='city' placeholder='City')
+                    .col
+                      input.form-control(type='text' name='brngy' placeholder='Barangay')
+                  br
+                  .row
+                    .col
+                      label(for='pricing') Pricing
+                      select#pricing.form-control(name='pricing')
+                        option(value='any' selected='') Any
+                        option(value='rate') Rate
+                        option(value='notS') Not Specified
+                    .col
+                      label(for='sorting') Sorting
+                      select#sorting.form-control(name='sorting')
+                        option(value='rating' selected='') Rating
+                        option(value='finished') Finished Transaction
+                    
+                .modal-footer
+                  button.btn.btn-primary(type='submit') Submit
+                  button.btn.btn-secondary(type='button', data-dismiss='modal') Close
   p
     b Showing Results for "#{servName}"
-  each serv in searchServ
-    p 
-      | #{serv.prepend} - #{serv.strName} - #{serv.fltPrice} - &nbsp
-      a(href='') Request
-      | &nbsp-&nbsp
-      a(href='') Message
-      
+  .card-deck(style='width: 800px').ml-3
+    each serv in searchServ
+      span.card(style= 'height: 18rem').border.border-primary
+        table
+          tbody
+            tr
+              td(rowspan='2') 
+                img(src='/assets/images/Tyler.jpg', alt='Card image cap', style='height: 8rem; width: 8rem; ')
+              td Rating
+            tr
+              td Finished
+
+        //-img.card-img-top(src='/assets/images/Tyler.jpg', alt='Card image cap', style='height: 8rem; width: 8rem; ')
+        .card-body
+          .card-text
+          | #{serv.prepend} - #{serv.strName} - #{serv.fltPrice} - &nbsp
+          a(href='') Request
+          button.btn.btn-primary.btn-block(href='' style='width: 14.7rem') Request
+
