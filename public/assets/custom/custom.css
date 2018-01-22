@@ -192,8 +192,7 @@ body{
     padding: 15px;
 }*/
 .dashboard > .row > .col:last-of-type{
-    margin-left: 265px;
-    padding: 0px;
+    margin-left: 250px;
     word-wrap: break-word;
 }
 .main{
@@ -293,4 +292,3 @@ body{
 #search-btn {
     background-color: #374850;
 }
-
