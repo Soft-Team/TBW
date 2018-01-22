@@ -7,6 +7,7 @@
     margin-bottom: 3rem;
 }
 
+/*Main Banner*/
 .jumbotron-banner{
     background: url('/assets/images/jumbo-login.jpg') no-repeat fixed;
     background-size: 100% 200%;
@@ -34,11 +35,20 @@ label{
     font-size: 1rem;
 }
 
-
+/*table*/
 td, th{
     text-align: center;
 }
 
 thead{
     background-color: #3498DB;
+}
+/*card*/
+.card-img-top{
+    border-right: 1px solid #007BFF;
+    border-bottom: 1px solid #007BFF;
+}
+
+.card-body{
+    padding: 0px;
 }
