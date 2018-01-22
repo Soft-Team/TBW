@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var db = require('../../lib/database')();
-var swal = require('sweetalert');
 
 function servTags(req, res, next){
   /*All Service Tags
@@ -40,7 +39,7 @@ function myServices(req, res, next){
 }
 
 function render(req,res){
-  req.session.user= '1';
+  req.session.user= '2';
   if(!req.myServices[0])
     res.render('myservices/views/noservice');
   else
@@ -50,7 +49,6 @@ function successRender(req,res){
   if(!req.myServices[0])
     res.render('myservices/views/noservice');
   else{
-    swal("Hello world!");
     res.render('myservices/views/success', {myServices: req.myServices});
   }
 }

@@ -4,6 +4,20 @@ block dash
   .container-fluid.dashboard
     .row
       .col
+        .user-panel
+            .pull-left.image
+                img.img-circle(src='/assets/images/profile.png', alt='User Image')
+            .pull-right.info
+                p.text-white Alexander Pierce
+                a(href='#')
+                i.fa.fa-circle.text-success Online
+            // search form
+            form.sidebar-form(action='#', method='get')
+            .input-group
+                input.form-control(type='text', name='q', placeholder='Search...')
+                span.input-group-btn
+                button#search-btn.btn.btn-flat(type='submit', name='search')
+                    i.fas.fa-search
         a.row.user.text-white(href='/services')
             h3 Services
         a.row.user.text-white(href='/myservices')
@@ -19,8 +33,7 @@ block dash
         a.row.user.text-white(href='#TransLog')
             h3 Transaction Log
       .col
-        .container
-          .row
+        .row
             .col-sm-12.main
               link(rel='stylesheet', type='text/css', href='/assets/custom/contentstyles.css')
               block main
