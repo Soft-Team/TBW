@@ -30,6 +30,9 @@
     height: 30px;
     weight: 30px;
 }
+label{
+    font-size: 1rem;
+}
 
 
 td, th{
