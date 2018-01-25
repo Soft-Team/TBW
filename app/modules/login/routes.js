@@ -4,6 +4,7 @@ var db = require('../../lib/database')();
 
 function render(req,res){
   req.session.user = '';
+  req.session.username = '';
   res.render('login/views/index');
 }
 
@@ -18,6 +19,7 @@ router.post('/', (req, res) => {
       res.render('login/views/invalid/banned');
     else if(req.body.password === results[0].strPassword){
       req.session.user = results[0].intAccNo;
+      req.session.username = results[0].strUserName;
       if(results[0].intType == '1')
         res.redirect('/admin');
       else
