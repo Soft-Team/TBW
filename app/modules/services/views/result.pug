@@ -40,23 +40,31 @@ block main
                   button.btn.btn-primary(type='submit') Submit
                   button.btn.btn-secondary(type='button', data-dismiss='modal') Close
   p
-    b Showing Results for "#{servName}"
+  h3.margin-L Showing Results for "#{servName}"
   .card-deck(style='width: 800px').ml-3
     each serv in searchServ
-      span.card(style= 'height: 18rem').border.border-primary
+      span.card(style= 'height: 15.1rem').border.border-primary
         table
           tbody
             tr
               td(rowspan='2') 
                 img(src='/assets/images/Tyler.jpg', alt='Card image cap', style='height: 8rem; width: 8rem; ')
-              td &nbsp Rating
+              td
+                img(src='/assets/images/Icons/star.png', alt='star', style='height: 1.5rem; width: 1.5rem; ')
+                p.cenR(style='margin-bottom: 0rem') Rating
             tr
-              td Finished
+              td
+                img(src='/assets/images/Icons/case.png', alt='star', style='height: 1.5rem; width: 1.5rem; ')
+                p.cenF(style='margin-bottom: 0rem') Finished
 
         //-img.card-img-top(src='/assets/images/Tyler.jpg', alt='Card image cap', style='height: 8rem; width: 8rem; ')
         .card-body
           .card-text
-          | #{serv.prepend} - #{serv.strName} - #{serv.fltPrice} - &nbsp
-          a(href='') Request
-          button.btn.btn-primary.btn-block(href='' style='width: 14.7rem') Request
+            .f(style='text-align:center; border-top: 1px solid #007BFF') #{serv.prepend}
+            .f(style='text-align:center') #{serv.strName}
+            .f(style='text-align:center') ₱#{serv.fltPrice}/hr 
+
+          .btn-group.special(role='group')
+            button.btn.btn-primary(href='' style='width: 14.7rem') Request
+            button.btn.btn-secondary(href='' style='width: 14.7rem') Portfolio
 
