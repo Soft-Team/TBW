@@ -4,8 +4,6 @@ block main
   .jumbotron-banner
     center
       h1.text-white Search For Services
-       button#search-btn.btn.btn-flat(type='submit', name='search', href="")
-        i.fa.fa-search(aria-hidden='true')
       form(method='POST' action='/services')
         .form-group
           button.btn.btn-primary.btn-md.btn(type='button' data-toggle='modal' data-target='#searchServModal') Search Services
