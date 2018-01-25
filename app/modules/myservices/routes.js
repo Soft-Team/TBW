@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var db = require('../../lib/database')();
+var numberFormat = require('../welcome/numberFormat');
 
 function servTags(req, res, next){
   /*All Service Tags
@@ -12,7 +13,7 @@ function servTags(req, res, next){
   });
 }
 function searchServTag(req, res, next){
-  /*Searched Service Tag, Match;
+  /*Searched Service Tag, Match(body);
   *(tblservicetag)*/
   db.query("SELECT * FROM tblservicetag WHERE strServName= ?",[req.body.searchtag], (err, results, fields) => {
       if (err) return res.send(err);
@@ -21,7 +22,8 @@ function searchServTag(req, res, next){
   });
 }
 function searchServAcc(req, res, next){
-
+  /*Selected Service of Current User, Match(body,session);
+  *(tblservicetag)*(tblservice)*/
   db.query("SELECT * FROM tblservicetag INNER JOIN tblservice ON intServTagID= intServTag WHERE strServName= ? AND intServAccNo= ?",[req.body.searchtag, req.session.user], (err, results, fields) => {
       if (err) return res.send(err);
       req.searchServAcc = results;
@@ -29,11 +31,23 @@ function searchServAcc(req, res, next){
   });
 }
 function myServices(req, res, next){
-  /*Current User's Services, Match;
+  /*Current User's Services, Match(session);
   *(tbluser)*(tblservice)*(tblservicetag)*/
   db.query("SELECT * FROM tbluser INNER JOIN tblservice ON intAccNo= intServAccNo INNER JOIN tblservicetag ON intServTag= intServTagID WHERE intAccNo= ?",[req.session.user], (err, results, fields) => {
       if (err) return res.send(err);
+      for(count=0;count<results.length;count++){
+        results[count].formatPrice = numberFormat(results[count].fltPrice.toFixed(2));
+      }
       req.myServices = results;
+      return next();
+  });
+}
+function servValidation(req, res, next){
+  /*Service selected by current user + servtag, Match(session,params);
+  *(tblservice)*/
+  db.query("SELECT * FROM tblservice INNER JOIN tblservicetag ON intServTag= intServTagID WHERE intServAccNo= ? AND intServID= ?",[req.session.user, req.params.servid], (err, results, fields) => {
+      if (err) return res.send(err);
+      req.servValidation = results;
       return next();
   });
 }
@@ -52,13 +66,24 @@ function successRender(req,res){
     res.render('myservices/views/success', {myServices: req.myServices});
   }
 }
+function editRender(req,res){
+  if(!req.myServices[0])
+    res.render('myservices/views/noservice');
+  else{
+    if(!req.servValidation[0])
+      res.render('myservices/views/invalid/noaccess', {myServices: req.myServices});
+    else
+      res.render('myservices/views/edit', {myServices: req.myServices, servValidation: req.servValidation});
+  }
+}
 
 router.get('/', myServices, render);
 router.get('/success', myServices, successRender);
+router.get('/:servid', myServices, servValidation, editRender);
 
 router.post('/', myServices, searchServTag, searchServAcc, (req, res) => {
   if(!req.searchServTag[0]){
-    res.render('myservices/views/notag', {servTag: req.body.searchtag, myServices: req.myServices});
+    res.render('myservices/views/invalid/notag', {servTag: req.body.searchtag, myServices: req.myServices});
   }
   else{
     if(!req.searchServAcc[0]){
@@ -68,9 +93,15 @@ router.post('/', myServices, searchServTag, searchServAcc, (req, res) => {
       });
     }
     else{
-      res.render('myservices/views/alreadyadded', {servTag: req.searchServTag[0].strServName, myServices: req.myServices});
+      res.render('myservices/views/invalid/alreadyadded', {servTag: req.searchServTag[0].strServName, myServices: req.myServices});
     }
   }
+});
+router.post('/:servid', (req, res) => {
+  db.query("UPDATE tblservice SET intServStatus= ?, intPriceType= ?, fltPrice= ? WHERE intServID= ?",[req.body.status, req.body.pricetype, req.body.price, req.params.servid], (err, results, fields) => {
+      if (err) return res.send(err);
+      res.redirect('/myservices');
+  });
 });
 
 exports.myservices = router;

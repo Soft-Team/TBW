@@ -1,0 +1,47 @@
+extends index.pug
+
+block myserv
+  block append scripts
+    script.
+      $(window).on('load',function(){
+        $('#editServModal').modal('show');
+      });
+      
+  #editServModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='editServModalTitle' aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        each service in servValidation
+          .modal-header
+            h5#editServModalTitle.modal-title Edit #{service.strServName}
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+              span(aria-hidden='true') ×
+          form(method='POST' action='/myservices/'+service.intServID)
+            .modal-body
+              label(for='editStatus') Status
+              select#editStatus.form-control(name='status')
+                if service.intServStatus == '1'
+                  option(value='1' selected='') Available
+                  option(value='2') Unavailable
+                else
+                  option(value='1') Available
+                  option(value='2' selected='') Unavailable
+              br
+              .row
+                .col
+                  label(for='priceType') Price Type
+                  select#editPriceType.form-control(name='pricetype')
+                    if service.intPriceType == '1'
+                      option(value='1' selected='') Fixed
+                      option(value='2') Rate per Hour
+                    else
+                      option(value='1') Fixed
+                      option(value='2' selected='') Rate per Hour
+                .col
+                  label(for='price') Price
+                  #editPrice.input-group.mb-3
+                    .input-group-prepend
+                      span.input-group-text Php
+                    input.form-control(type='text' name='price' placeholder='00.00' value=service.fltPrice required)
+            .modal-footer
+              button.btn.btn-primary(type='submit') Submit
+              button.btn.btn-secondary(type='button', data-dismiss='modal') Close

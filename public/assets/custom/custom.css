@@ -124,12 +124,16 @@ body{
 
     padding: 0px 16px;
 
-    height: 3.5em;
+    /*height: 3.5em;
     left: 0;
     position: fixed;
     top: 0;
     width: 100%;
+    z-index: 10;*/
     z-index: 10;
+    width: 100%;
+    top: 0;
+    position: fixed;
 }
 .navbar-brand > span{
     margin-left: 10px;
@@ -187,10 +191,6 @@ body{
 .dashboard > .row > .col:first-of-type > .user:nth-child(1){
     background: #3498DB;
 }
-/*.dashboard > .row > .col:last-of-type{
-    margin-left: 250px;
-    padding: 15px;
-}*/
 .dashboard > .row > .col:last-of-type{
     margin-left: 250px;
     word-wrap: break-word;
@@ -198,11 +198,11 @@ body{
 .main{
     padding: 0px;
 }
-
 .dashboard > .row > .col:first-of-type > .admin:nth-child(1){
     background: #EC9B00;
 }
 
+/*user-panel*/
 .user-panel {
     position: relative;
     width: 250px;
@@ -256,6 +256,7 @@ body{
     margin-top: -50px
 }
 
+/*sidebar-form*/
 .sidebar-form + .input-group > input {
     box-shadow: none;
     background-color: #374850;

@@ -4,8 +4,6 @@ block main
   .jumbotron-banner
     center
       h1.text-white Search For Services
-       button#search-btn.btn.btn-flat(type='submit', name='search', href="")
-        i.fa.fa-search(aria-hidden='true')
       form(method='POST' action='/services')
         .form-group
           button.btn.btn-primary.btn-md.btn(type='button' data-toggle='modal' data-target='#searchServModal') Search Services
@@ -26,18 +24,18 @@ block main
                       input.form-control(type='text' name='brngy' placeholder='Barangay')
                   br
                   .row
-                  .col
-                    label(for='pricing') Pricing
-                    select#pricing.form-control(name='pricing')
-                      option(value='any' selected='') Any
-                      option(value='rate') Rate
-                      option(value='notS') Not Specified
-                  .col
-                    label(for='sorting') Sorting
-                    select#sorting.form-control(name='sorting')
-                      option(value='rating' selected='') Rating
-                      option(value='finished') Finished Transaction
-                
+                    .col
+                      label(for='pricing') Pricing
+                      select#pricing.form-control(name='pricing')
+                        option(value='any' selected='') Any
+                        option(value='rate') Rate
+                        option(value='notS') Not Specified
+                    .col
+                      label(for='sorting') Sorting
+                      select#sorting.form-control(name='sorting')
+                        option(value='rating' selected='') Rating
+                        option(value='finished') Finished Transaction
+                  
                   .modal-footer
                     button.btn.btn-primary(type='submit') Submit
                     button.btn.btn-secondary(type='button', data-dismiss='modal') Close
