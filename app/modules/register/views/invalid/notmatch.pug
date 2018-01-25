@@ -1,85 +1,19 @@
-extends ../../../../templates/master.pug
+extends ../index.pug
 
-block content
-  .jumbotron.jumbotron-login.jumbotron-fluid
-    .container.text-center
-      img(src='/assets/images/tbw-indent.ico' onContextMenu='return false')
-      h1.text-white TrabaWHO
-  .container.container-login
-    .row
-      .col-sm
-      .col-sm-8.col-md-7.col-lg-5.col-login
-        h2.text-center Sign-up
-        .col-sm-12
-          hr
-          .alert.alert-danger.text-danger(role='alert')
-            i Password must match
-          form(method='POST' action='/register')
-            .form-group
-              label(for='name')
-                b Full Name
-              input#name.form-control(type='text' name='name' aria-describedby='nameHelp' placeholder='eg. John S. Doe' minlength='5' maxlength='100' required)
-              small#nameHelp.form-text.text-muted Use only your real name.
-            .form-group
-              label(for='userName')
-                b Username
-              input#userName.form-control(type='text' name='username' aria-describedby='userNameHelp' placeholder='Pick a Username' minlength='8' maxlength='50' required)
-              small#userNameHelp.form-text.text-muted Minimum of 8 characters.
-            .form-group
-              label(for='password1')
-                b Password
-              input#password1.form-control(type='password' name='password' placeholder='Create a Password' minlength='8' maxlength='100' required)
-              input#password2.form-control(type='password' name='confirm' aria-describedby='password2Help' placeholder='Retype Password' required)
-              small#password2Help.form-text.text-muted Minimum of 8 characters.
-            .form-group  
-              .row
-                .col
-                  label(for='city')
-                    b City
-                  input#city.form-control(type='text' name='city' placeholder='eg. Manila' maxlength='45' required)
-                .col
-                  label(for='barangay')
-                    b Barangay
-                  input#barangay.form-control(type='text' name='brngy' placeholder='eg. Tondo' maxlength='45' required)
-            .form-group
-              label(for='email')
-                b Email
-              input#email.form-control(type='email' name='email' aria-describedby='emailHelp' placeholder='eg. johndoe@email.com' maxlength='320' required)
-              small#emailHelp.form-text.text-muted Email will be displayed publicly.
-            .form-group
-              label(for='contact')
-                b Contact Number
-              input#contact.form-control(type='number' name='contact' aria-describedby='contactHelp' placeholder='09236835707' max='99999999999' required)
-              small#contactHelp.form-text.text-muted Contact Number will be displayed publicly.
-            .form-group
-              .form-check
-                input#agreement.form-check-input(type='checkbox' required)
-                label.form-check-label(for='agreement')
-                  | I agree to the 
-                  a(href='' data-toggle='modal' data-target='#agreementModal') terms and conditions.
-              #agreementModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='agreementModalTitle' aria-hidden='true')
-                .modal-dialog(role='document')
-                  .modal-content
-                    .modal-header
-                      h5#agreementModalTitle.modal-title Terms and Conditions
-                      button.close(type='button' data-dismiss='modal' aria-label='Close')
-                        span(aria-hidden='true') ×
-                    .modal-body
-                      ul.no-bullet
-                        li Raindrop (drip), drop top (drop top)
-                        li Smokin' on cookie in the hotbox (cookie)
-                        li Fuckin' on your bitch, she a thot, thot (thot)
-                        li Cookin' up dope in the crockpot (pot)
-                    .modal-footer
-                      button.btn.btn-secondary(type='button', data-dismiss='modal') Close
-            
-            button.btn.btn-primary.btn-md.btn-block(type='submit') Submit
-            hr
-            p
-              small
-                b
-                  | Already have an account? 
-                  a(href='/login') Sign-in Here
-      .col-sm
-    br
-    br
+block message
+  block append scripts
+    script.
+      $(window).on('load',function(){
+        $('#passNotMatch').modal('show');
+      });
+  #passNotMatch.modal.fade(tabindex='-1' role='dialog' aria-labelledby='passNotMatchTitle' aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+          h5#passNotMatchTitle.modal-title Submission Failed
+          button.close(type='button' data-dismiss='modal' aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+          p Password did not match.
+        .modal-footer
+          button.btn.btn-secondary(type='button', data-dismiss='modal') Close

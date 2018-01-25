@@ -1,6 +1,10 @@
 extends ../../../templates/master.pug
 
 block content
+  block append scripts
+    script(type='text/javascript', src='/assets/scripts/bootstrap-filestyle.min.js')
+    script.
+      $(":file").filestyle();
   .jumbotron.jumbotron-login.jumbotron-fluid
     .container.text-center
       img(src='/assets/images/tbw-indent.ico' onContextMenu='return false')
@@ -18,16 +22,17 @@ block content
             small
               b
                 a(href='/register') Register as Regular Account instead
-          form(method='POST' action='/register')
+          form(method='POST' action='/register' enctype='multipart/form-data')
             .form-group
               label(for='name')
                 b Business Name
               input#name.form-control(type='text' name='name' aria-describedby='nameHelp' placeholder='' minlength='5' maxlength='100' required)
               small#nameHelp.form-text.text-muted 
             .form-group
-              label(for='exampleFormControlFile1') 
+              label(for='bpermit') 
                 b Business Permit
-              input#exampleFormControlFile1.form-control-file(type='file')
+              br
+              input#bpermit.filestyle(type='file' name='bpermit' data-classbutton='btn btn-primary' data-input='false' data-classicon='icon-plus' required)
             .form-group
               label(for='userName')
                 b Username
@@ -43,11 +48,6 @@ block content
               label(for='name')
                 b Owner Name
               input#name.form-control(type='text' name='name' aria-describedby='nameHelp' placeholder='' minlength='5' maxlength='100' required)
-              small#nameHelp.form-text.text-muted 
-            .form-group
-              label(for='name')
-                b Workers
-              textarea#name.form-control(name='name' aria-describedby='nameHelp' placeholder='' minlength='5' maxlength='100' required)
               small#nameHelp.form-text.text-muted 
             .form-group  
               .row
