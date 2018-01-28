@@ -53,7 +53,7 @@ function servValidation(req, res, next){
 }
 
 function render(req,res){
-  req.session.user= '2';
+  req.session.user= '7';
   if(!req.myServices[0])
     res.render('myservices/views/noservice');
   else

@@ -38,6 +38,7 @@ label{
 /*table*/
 td, th{
     text-align: center;
+    padding: 0px;
 }
 
 thead{
@@ -55,4 +56,27 @@ thead{
 
 #price{
   padding-top: 0px;
+}
+
+.btn-block + .btn-block{
+    margin-top: 0px;
+}
+
+/* Center Rating & Center Finished */
+.cenR{
+    padding: 2px 24px 5px 24px;
+    border-bottom: 1px solid #007BFF;
+}
+
+.cenF{
+    padding: 0px 24px 0px 24px;
+}
+
+.f{
+    padding: 0px;
+    border-bottom: 1px solid #007BFF;
+}
+
+.card{
+    width: 236px;
 }
