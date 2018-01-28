@@ -16,9 +16,10 @@ io.on('connection', (socket) => {
 
     // Handle chat event
     socket.on('chat', function(data){
-        io.sockets.emit('chat', data);
+        console.log(data);
+        io.emit('chat', data);
         var db = require('./app/lib/database')();
-        db.query("INSERT INTO tblmessage ( message_chatid, message_sender, message_text ) VALUES ( 1, 1, ? )",[data.message], (err, results, fields) => {
+        db.query("INSERT INTO tblmessage ( intMessChatID, txtMessage, dtmDateSent, intMessSeen, intSender ) VALUES ( ?, ?, NOW(), 0, ?)",[data.chatid, data.message, data.sender], (err, results, fields) => {
             if (err) console.log(err);
           });
     });
