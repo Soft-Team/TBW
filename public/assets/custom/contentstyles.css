@@ -60,6 +60,10 @@ thead{
     padding: 0px;
 }
 
+#price{
+  padding-top: 0px;
+}
+
 .btn-block + .btn-block{
     margin-top: 0px;
 }
@@ -79,6 +83,7 @@ thead{
     border-bottom: 1px solid #007BFF;
 }
 
+<<<<<<< HEAD
 /*Messages*/
 .li{
     overflow: initial;
@@ -350,3 +355,8 @@ thead{
     white-space: pre-wrap;
 
 }
+=======
+.card{
+    width: 236px;
+}
+>>>>>>> ed4be47feef24c5829008276518eee1e13efa159

@@ -43,8 +43,8 @@ block main
               th(scope='col') Price
               th(scope='col') Status
               th(scope='col') &nbsp
-          each serv in myServices
-            tbody
+          tbody
+            each serv in myServices
               tr
                 td #{serv.strServName}
                 if serv.intPriceType == '1'

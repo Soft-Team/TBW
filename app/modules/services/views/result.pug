@@ -41,30 +41,33 @@ block main
                   button.btn.btn-secondary(type='button', data-dismiss='modal') Close
   p
   h3.margin-L Showing Results for "#{servName}"
-  .card-deck(style='width: 800px').ml-3
-    each serv in searchServ
-      span.card(style= 'height: 15.1rem').border.border-primary
-        table
-          tbody
-            tr
-              td(rowspan='2') 
-                img(src='/assets/images/Tyler.jpg', alt='Card image cap', style='height: 8rem; width: 8rem; ')
-              td
-                img(src='/assets/images/Icons/star.png', alt='star', style='height: 1.5rem; width: 1.5rem; ')
-                p.cenR(style='margin-bottom: 0rem') Rating
-            tr
-              td
-                img(src='/assets/images/Icons/case.png', alt='star', style='height: 1.5rem; width: 1.5rem; ')
-                p.cenF(style='margin-bottom: 0rem') Finished
+  .container
+    .card-deck.ml-1
+      .row
+        each serv in searchServ
+          .col-lg-3.col-md-5.col-xl-3(style='margin-left: -10px;')
+            span.card(style= 'height: 15.2rem').border.border-primary.mb-3
+              table
+                tbody
+                  tr
+                    td(rowspan='2') 
+                      img(src='/assets/images/Tyler.jpg', alt='Card image cap', style='height: 8rem; width: 8rem; ')
+                    td
+                      img(src='/assets/images/Icons/star.png', alt='star', style='height: 1.5rem; width: 1.5rem; ')
+                      p.cenR(style='margin-bottom: 0rem') Rating
+                  tr
+                    td
+                      img(src='/assets/images/Icons/case.png', alt='star', style='height: 1.5rem; width: 1.5rem; ')
+                      p.cenF(style='margin-bottom: 0rem') Finished
 
-        //-img.card-img-top(src='/assets/images/Tyler.jpg', alt='Card image cap', style='height: 8rem; width: 8rem; ')
-        .card-body
-          .card-text
-            .f(style='text-align:center; border-top: 1px solid #007BFF') #{serv.prepend}
-            .f(style='text-align:center') #{serv.strName}
-            .f(style='text-align:center') ₱#{serv.fltPrice}/hr 
+              //-img.card-img-top(src='/assets/images/Tyler.jpg', alt='Card image cap', style='height: 8rem; width: 8rem; ')
+              .card-body
+                .card-text
+                  .f(style='text-align:center; border-top: 1px solid #007BFF') #{serv.prepend}
+                  .f(style='text-align:center') #{serv.strName}
+                  .f(style='text-align:center') ₱#{serv.fltPrice}/hr 
 
-          .btn-group.special(role='group')
-            button.btn.btn-primary(href='' style='width: 14.7rem') Request
-            button.btn.btn-secondary(href='' style='width: 14.7rem') Portfolio
-
+                .btn-group.special(role='group')
+                  button.btn.btn-primary(href='' style='width: 14.7rem; border-radius: 0px;') Request
+                  button.btn.btn-secondary(href='' style='width: 14.7rem; border-radius: 0px;') Portfolio
+        .col          
