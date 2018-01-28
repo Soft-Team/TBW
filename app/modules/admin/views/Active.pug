@@ -1,0 +1,34 @@
+extends ../../../templates/dash-admin.pug
+
+block main
+
+    h1 Active Users
+        table.table-bordered.table-hover(style="margin-top: 50px; width: 100%;")
+            thead
+                tr  
+                    th #
+                    th Username
+                    th Name
+                    th Barangay
+                    th City
+                    th Email
+                    th Contact No.
+                    th User Type
+
+            tbody
+            each user in resultspug
+                tr
+                    td(style="padding-right: 20px; padding-bottom: 20px;") #{user.intAccNo}
+                    td 
+                        a(href=`/profile/${user.strUserName}`) #{user.strUserName}
+                    td #{user.strName}
+                    td #{user.strBarangay}
+                    td #{user.strCity}
+                    td #{user.strEmail}
+                    td #{user.strContactNo}
+                    if user.intType =='2'
+                        td Normal
+                    else if user.intType =='3'
+                        td Business
+                    else
+                        td Admin

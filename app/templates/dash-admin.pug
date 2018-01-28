@@ -5,22 +5,24 @@ block dash
     .row
       .col
         .row.admin.text-white
-            h3 Accounts
-        a.row.admin.pl-5.mt-0.text-white(href='#Active')
+            h3 Regular Accounts
+        a.row.admin.pl-5.mt-0.text-white(href='/admin/Active')
             h4 Active
-        a.row.admin.pl-5.mt-0.text-white(href='#Unregistered')
-            h4 Unregistered
-        a.row.admin.pl-5.mt-0.text-white(href='#Banned')
+        a.row.admin.pl-5.mt-0.text-white(href='/admin/Banned')
             h4 Banned
         .row.admin.text-white
+            h3 Business Accounts
+        a.row.admin.pl-5.mt-0.text-white(href='/admin/Unregistered')
+            h4 Unregistered
+        .row.admin.text-white
             h3 Reports
-        a.row.admin.pl-5.mt-0.text-white(href='#ReportedUsers')
+        a.row.admin.pl-5.mt-0.text-white(href='/admin/ReportedUsers')
             h4 Reported Users
-        a.row.admin.pl-5.mt-0.text-white(href='#Report Log')
+        a.row.admin.pl-5.mt-0.text-white(href='/admin/ReportLog')
             h4 Report Log
-        a.row.admin.text-white(href='#IDRequests')
+        a.row.admin.text-white(href='/admin/IDRequests')
             h3 ID Requests
-        a.row.admin.text-white(href='#IDRequests')
+        a.row.admin.text-white(href='/admin/TransactionLog')
             h3 Transaction Log
             
       .col
