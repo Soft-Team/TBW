@@ -52,3 +52,7 @@ thead{
 .card-body{
     padding: 0px;
 }
+
+#price{
+  padding-top: 0px;
+}
