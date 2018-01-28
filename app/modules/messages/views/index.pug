@@ -1,4 +1,18 @@
 extends ../../../templates/dash.pug
 
 block main
+  block append scripts
+    script(src='assets/scripts/chat.js',type='text/javascript')
   h1 Messages
+  #mario-chat
+    #chat-window
+      #output
+        each chat in chattab
+          p
+            strong #{chat.intSender} :
+            | &nbsp#{chat.txtMessage}
+    //-        
+      input#handle(type='text', name='handle', value= sender.user_name , readonly)
+    input#message(type='text', name='message', placeholder='Message')
+    button#send Send
+        
