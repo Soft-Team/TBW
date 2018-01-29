@@ -304,3 +304,151 @@ body{
 #price{
     padding-top: 0px;
 }
+/* WELCOME PAGE*/
+
+/*Body*/
+.welcome-body {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin-bottom: -55px;
+}
+
+/*Header*/
+.main-head {
+    background: url('/assets/images/jumbo-login.jpg') no-repeat fixed;
+    position: relative;
+    padding: 50px 0px 190px;
+    height: 590px;
+    background-position: 50% 0;
+    background-size: auto, auto 100%;
+    background-repeat: no-repeat, repeat;
+}
+/*Top-Bar*/
+.top-bar {
+    text-align: left;
+    padding: 5px 0;
+    background-color: #282B30;
+    color: #efeae1;
+    font-size: 14px;
+    height: 43px;
+}
+
+.wrapper {
+    margin: 0 auto;
+    padding-left: 40px;
+    padding-right: 40px;
+    overflow: hidden;
+}
+
+.wrapper .no-pad {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.wrapper-calloums {
+    width: 860px;
+    margin: 0 auto;
+    padding-left: 40px;
+    padding-right: 40px;
+    overflow: hidden;
+}
+
+.top-bar .top-bar-right {
+    float: right;
+    line-height: 33px;
+}
+
+.top-bar a {
+    color: #efeae1;
+    text-decoration: none;
+}
+a {
+    color: #3b9b6d;
+    text-decoration: none;
+}
+
+/*Header Body*/
+
+.calloums {
+    overflow: hidden;
+    width: 100%;
+}
+
+.calloums .caloum:first-child {
+    padding-left: 0;
+    padding-right: 20px;
+}
+.call-to-action .caloum {
+    vertical-align: middle;
+}
+.calloums .left, .caloum .right {
+    width: 50%;
+}
+.calloums .caloum {
+    float: left;
+    padding-left: 20px;
+    padding-right: 20px;
+    vertical-align: top;
+}
+
+header.heads {
+    padding: 10px 0;
+    background-color: none;
+}
+.heads {
+    width: 100%;
+    text-align: center;
+}
+
+.header .logoTB {
+    display: block;
+    width: 290px;
+    height: 60px;
+    line-height: 0;
+    color: #574c4f;
+    text-decoration: none;
+    text-indent: 230px;
+    white-space: nowrap;
+    overflow: hidden;
+    background: url('/assets/images/tbw-small.ico');
+}
+/* Main Welcome Page*/
+.sector{
+    background-color: #ffffff;
+    padding-top: 5em;
+    padding-bottom: 6em;
+    margin-top: 8em;
+}
+
+.sector-container {
+    height: 600px;
+    width: 1170px;
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+
+}
+
+.text-headline {
+    text-align: center;
+    margin-bottom: 2em;
+    color: #282B30;
+}
+
+.boat {
+    margin-left: -15px;
+    margin-right: -15px;
+}
+.col-sm-4{
+    float: left;
+}
+/*Font Size & Font Color*/
+.size{
+    font-size: 3em;
+}
+
+.faust{
+    color: #282B30
+}

@@ -1,22 +1,27 @@
 extends ../../../templates/dash-admin.pug
 
 block main
-
-    h1 Banned Users
-        table.table-bordered.table-hover(style="margin-top: 50px; width: 100%; border-width: 1px;")
-            thead
-                tr  
-                    th #
-                    th Name
-                    th Email
-                    th Contact No.
-                    th
-            tbody
-            each user in resultspug
-                tr
-                    td(style="padding-right: 20px; padding-bottom: 10px;") #{user.intAccNo}
-                    td #{user.strName}
-                    td #{user.strEmail}
-                    td #{user.strContactNo}
-                    td 
-                        a.btn.btn-outline-info(href=`/admin/Unbanned/${user.strUserName}`) Unban      
+    .jumbotron-admin
+        center
+            h1 Banned Users
+    p  
+    center
+    .container
+        p.font
+            table.table.table-striped.table-hover
+                thead
+                    tr  
+                        th(scope='col') #
+                        th(scope='col') Name
+                        th(scope='col') Email
+                        th(scope='col') Contact No.
+                        th(scope='col') &nbsp
+                tbody
+                each user in resultspug
+                    tr
+                        td(style="padding-right: 20px; padding-bottom: 10px;") #{user.intAccNo}
+                        td #{user.strName}
+                        td #{user.strEmail}
+                        td #{user.strContactNo}
+                        td 
+                            a.btn.btn-outline-info(href=`/admin/Unbanned/${user.strUserName}`) Unban      

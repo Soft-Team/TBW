@@ -1,0 +1,21 @@
+.jumbotron-admin{
+    background: url('/assets/images/jumbo-login-orange.jpg') no-repeat fixed;
+    background-size: 100% 200%;
+    box-shadow: 0px 0px 10px black;
+    padding: 2rem 2rem 1rem;
+}
+
+/*table*/
+td, th{
+    text-align: center;
+    padding: 0px;
+}
+
+thead{
+    background-color: #EC9B00;
+}
+
+a{
+    text-decoration: none;
+    color: #000000;
+}

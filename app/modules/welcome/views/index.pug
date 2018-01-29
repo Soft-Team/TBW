@@ -1,8 +1,38 @@
 extends ../../../templates/master.pug
 
 block content
-  h1 Welcome to TrabaWHO
-  br
-  a(href='/login') Sign-in
-  br
-  a(href='/register') Sign-up
+  .welcome-body
+    .top-bar
+      .wrapper.no-pad
+        .top-bar-right
+          a(href='/login')
+            i.fa.fa-sign-in(aria-hidden='true')
+            |&nbsp Sign In
+          a(href='/register' style='margin-left:13px')
+            i.fa.fa-user-plus(aria-hidden='true')
+            |&nbsp Sign Up
+      .main-head(style='margin-top:5px')
+        .wrapper-calloums
+          .calloums
+              header.head
+                center
+                  img(src='/assets/images/tbw-indent.ico' onContextMenu='return false')
+                  h1(style='font-weight: bold') Welcome to TrabaWHO!
+                  br
+                  h2 Find the nearest service providers in your area for almost any service you need
+        .sector
+          .sector-container
+            h2.text-headline How It Works
+            .boat
+              .col-sm-4
+                center
+                  i.fa.fa-search.fa-4x.faust(aria-hidden='true')
+                  span.size.faust &nbsp Find a Service that you need
+              .col-sm-4
+                center
+                  i.fa.fa-comments-o.fa-4x.faust(aria-hidden='true')
+                  span.size.faust &nbsp Request the service provider and talk about the job
+              .col-sm-4
+                center
+                  i.fa.fa-money.fa-4x.faust(aria-hidden='true')
+                  span.size.faust &nbsp Pay directly to the provider when the job is done
