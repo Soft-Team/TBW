@@ -15,6 +15,9 @@ router.post('/', (req, res) => {
     if (err) console.log(err);
     if (!results[0])
       res.render('login/views/invalid/incorrect');
+    else if (results[0].boolIsBanned =='1'){
+        res.render('login/views/invalid/banned');
+      } 
     else if (results[0].intStatus == '2')
       res.render('login/views/invalid/banned');
     else if(req.body.password === results[0].strPassword){
