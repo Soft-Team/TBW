@@ -285,29 +285,4 @@ block main
                 h5.media-heading Walter White
                 small.pull-left.time
                   i Invited
-// Walk it like I talk it
-  h1 Messages
-  each user in usertab
-    #mario-chat
-      #chat-window
-        #output
-          each mess in messtab
-            if mess.sendType == mess.intSender
-              p.right
-                strong #{user.strName} :
-                | &nbsp#{mess.txtMessage}
-            else
-              if user.intAccNo == mess.SAccNo
-                p.left
-                  strong #{mess.strName} :
-                  | &nbsp#{mess.txtMessage}
-              else
-                p.left
-                  strong #{mess.Seeker} :
-                  | &nbsp#{mess.txtMessage}
-      input#chatid(type='text', name='chatid', value= messOne.intChatID, hidden)
-      input#handle(type='text', name='handle', value= user.strName, hidden)
-      input#sender(type='text', name='handle', value= messOne.sendType, hidden)
-      input#message(type='text', name='message', placeholder='Message')
-      button#send Send
-        
+  

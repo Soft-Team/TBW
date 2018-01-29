@@ -1,6 +1,5 @@
 html, body {
     font-family: 'Open Sans', serif;
-    background-color: blanchedalmond;
 
 }
 .fill {
@@ -20,6 +19,10 @@ html, body {
 
 .input-group {
     padding-top: 20px;
+}
+
+.container{
+    margin: 0px;
 }
 
 /******************** MAIN WRAPPERS *******************/
