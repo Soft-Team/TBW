@@ -1,7 +1,6 @@
 extends ../../../templates/dash.pug
 
 block main
-  .container.fill
     .row.chat-wrap
       // Contacts & Conversations
       .col-sm-3.panel-wrap
@@ -44,14 +43,14 @@ block main
               h4(style='color:gold') #Plumbing TakeOff
           // Messages
           .row.content-wrap.messages
-            .msg
+            .col.msg
               .media-body
                 small.pull-right.time
                   i.fa.fa-clock-o
                   |  12:10am
                 h5.media-heading Walter White
                 small.col-sm-11
-                  | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eu pulvinar magna. Phasellus semper scelerisque purus, et semper nisl lacinia sit amet. Praesent venenatis turpis vitae purus semper, eget sagittis velit venenatis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos...
+                  | Lorem ipsum
           // Message box & Send Button
           .row.send-wrap
             .send-message
