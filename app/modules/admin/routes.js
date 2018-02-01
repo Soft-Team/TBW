@@ -37,4 +37,20 @@ adminRouter.get('/Unbanned/:username', (req, res)=>{
   })
 })
 
+adminRouter.get('/ReportedUsers', (req,res) => {
+  res.render('admin/views/ReportedUsers');
+});
+
+adminRouter.get('/ReportLog', (req,res) => {
+  res.render('admin/views/ReportLog');
+});
+
+adminRouter.get('/IDVerification', (req,res) => {
+  res.render('admin/views/IDVerification');
+});
+
+adminRouter.get('/TransactionLog', (req,res) => {
+  res.render('admin/views/TransacLog');
+});
+
 exports.admin = adminRouter;
