@@ -1,6 +1,7 @@
 extends ../../../templates/dash.pug
 
 block main
+  .container.fill(style='padding:0px')
     .row.chat-wrap
       // Contacts & Conversations
       .col-sm-3.panel-wrap
@@ -33,30 +34,107 @@ block main
                       .chat5.chatL-3 
                         span TakeOff
                         small.pull-right.time(style='margin-left: 110px') 02:10am
+            .conversation.btn
+              .media-body
+                .display.chat-part(role="gridcell")
+                  a.chat-part.display
+                    .chat-pick.display(data-tooltip-content='Soft', data-hover='tooltip', data-tooltip-position='right', data-tooltip-alignh='center', data-tooltip-root-class='_33g_', aria-hidden='true', style=' margin-right:9px')
+                      .chat-pad(style="height: 50px, width: 50px")
+                        .chat-img(style="height: 50px, width: 50px")
+                          i(style='height: 50px; background-image: url("/assets/images/Tyler.jpg"); background-position: 50% 50%; background-repeat: no-repeat; background-size: cover; width: 50px;')
+                    chat4.chatL-m
+                      .chat5.chatL-3 
+                        h5 #Plumber (STYLE 2)
+                      .chat5.chatL-3 
+                        span TakeOff
+                        small.pull-right.time(style='margin-left: 110px') 02:10am
+            .conversation.btn
+              .media-body
+                .display.chat-part(role="gridcell")
+                  a.chat-part.display
+                    .chat-pick.display(data-tooltip-content='Soft', data-hover='tooltip', data-tooltip-position='right', data-tooltip-alignh='center', data-tooltip-root-class='_33g_', aria-hidden='true', style=' margin-right:9px')
+                      .chat-pad(style="height: 50px, width: 50px")
+                        .chat-img(style="height: 50px, width: 50px")
+                          i(style='height: 50px; background-image: url("/assets/images/Tyler.jpg"); background-position: 50% 50%; background-repeat: no-repeat; background-size: cover; width: 50px;')
+                    chat4.chatL-m
+                      .chat5.chatL-3 
+                        h5 #Plumber (STYLE 2)
+                      .chat5.chatL-3 
+                        span TakeOff
+                        small.pull-right.time(style='margin-left: 110px') 02:10am
+            .conversation.btn
+              .media-body
+                .display.chat-part(role="gridcell")
+                  a.chat-part.display
+                    .chat-pick.display(data-tooltip-content='Soft', data-hover='tooltip', data-tooltip-position='right', data-tooltip-alignh='center', data-tooltip-root-class='_33g_', aria-hidden='true', style=' margin-right:9px')
+                      .chat-pad(style="height: 50px, width: 50px")
+                        .chat-img(style="height: 50px, width: 50px")
+                          i(style='height: 50px; background-image: url("/assets/images/Tyler.jpg"); background-position: 50% 50%; background-repeat: no-repeat; background-size: cover; width: 50px;')
+                    chat4.chatL-m
+                      .chat5.chatL-3 
+                        h5 #Plumber (STYLE 2)
+                      .chat5.chatL-3 
+                        span TakeOff
+                        small.pull-right.time(style='margin-left: 110px') 02:10am       n
       // Messages & Info
       .col-sm-9.panel-wrap
         // Main Content / Message List
         #Messages.col-sm-9.section-wrap
           // Header
-          .row.header-wrap
-            .chat-header.col-sm-12
-              h4(style='color:gold') #Plumbing TakeOff
-          // Messages
-          .row.content-wrap.messages
-            .col.msg
-              .media-body
-                small.pull-right.time
-                  i.fa.fa-clock-o
-                  |  12:10am
-                h5.media-heading Walter White
-                small.col-sm-11
-                  | Lorem ipsum
-          // Message box & Send Button
-          .row.send-wrap
-            .send-message
-              .message-text
-                textarea.no-resize-bar.form-control(rows='2', placeholder='Write a message...')
-              .send-button
-                a.btn
-                  | Send 
-                  i.fa.fa-send
+          each user in usertab
+            .row.header-wrap
+              .chat-header.col-sm-12
+                if messOne.sendType == 1
+                  h4(style='color:gold') ##{messOne.strServName} #{messOne.Seeker}
+                else
+                  h4(style='color:gold') ##{messOne.strServName} #{messOne.strName}
+            // Messages
+            .row.content-wrap.messages
+              .col
+                each mess in messtab
+                  .msg
+                    .media-body
+                      small.pull-right.time
+                        i.fa.fa-clock-o
+                        |  12:10am
+                      if mess.sendType == mess.intSender
+                          h5.right.media-heading #{user.strName}
+                      else
+                        if user.intAccNo == mess.SAccNo
+                            h5.left.media-heading #{mess.strName}
+                        else
+                            h5.left.media-heading #{mess.Seeker}
+                      small.col-sm-11
+                        |  #{mess.txtMessage}
+            // Message box & Send Button
+            .row.send-wrap
+              .send-message
+                .message-text
+                  textarea.no-resize-bar.form-control(rows='2', placeholder='Write a message...')
+                .send-button
+                  a.btn
+                    | Send 
+                    i.fa.fa-send
+  each user in usertab
+    #mario-chat
+      #chat-window
+        #output
+          each mess in messtab
+            if mess.sendType == mess.intSender
+              p.right
+                strong #{user.strName} :
+                | &nbsp#{mess.txtMessage}
+            else
+              if user.intAccNo == mess.SAccNo
+                p.left
+                  strong #{mess.strName} :
+                  | &nbsp#{mess.txtMessage}
+              else
+                p.left
+                  strong #{mess.Seeker} :
+                  | &nbsp#{mess.txtMessage}
+      input#chatid(type='text', name='chatid', value= messOne.intChatID, hidden)
+      input#handle(type='text', name='handle', value= user.strName, hidden)
+      input#sender(type='text', name='handle', value= messOne.sendType, hidden)
+      input#message(type='text', name='message', placeholder='Message')
+      button#send Send
