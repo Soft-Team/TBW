@@ -22,7 +22,8 @@ btn.addEventListener('click', function(){
 
 // Listen for events
 socket.on('chat', function(data){
-    output.innerHTML += '<p><strong>' + data.handle + ' : </strong>' + data.message + '</p>';
+    var d = new Date();
+    output.innerHTML += '<div class="msg"><div class="media-body"><small class="pull-right time"><i class="fa fa-clock-o"> ' + d.getHours()+ ':' +d.getMinutes() + '</i></small><h5 class="media-heading">' + data.handle + '</h5><small class="col-sm-11">' + data.message + '</small></div></div>';
 });
 
 // post
