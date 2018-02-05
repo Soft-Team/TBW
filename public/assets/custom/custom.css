@@ -364,7 +364,6 @@ body{
     text-decoration: none;
 }
 a {
-    color: #3b9b6d;
     text-decoration: none;
 }
 
@@ -451,4 +450,68 @@ header.heads {
 
 .faust{
     color: #282B30
+}
+
+/*Profile*/
+.sector-container-profile {
+    height: 201px;
+    /*width: 1300px;*/
+    margin-right: auto;
+    margin-left: auto;
+    padding: 20px;
+}
+
+.profile-container{
+    height: 161.5px;
+    /*width: 1300px;*/
+    margin-right: auto;
+    margin-left: auto;
+    border: 1px solid;
+}
+.col-sm-3{
+    float: left;
+    max-width: 100%;
+    padding: 0px;
+}
+
+.text-headline-profile {
+    text-align: center;
+    margin-bottom: 1em;
+    color: #282B30;
+}
+
+/* Center Rating & Center Finished */
+.profileA{
+    padding: .5px 60px 5px 60px;
+    border-bottom: 1px solid;
+}
+
+.profileB{
+    padding: 0px 0px 60px;
+}
+
+.f{
+    padding: 0px;
+    border-bottom: 1px solid #007BFF;
+}
+
+.size-ico{
+    height: 24px;
+    weight: 24px;
+}
+
+.sector-container-footer {
+    height: 201px;
+    /*width: 1300px;*/
+    margin-right: auto;
+    margin-left: auto;
+    padding: 20px;
+}
+
+.footer-container{
+    height: 110px;
+    /*width: 1300px;*/
+    margin-right: auto;
+    margin-left: auto;
+    border-bottom: 1px solid;
 }
