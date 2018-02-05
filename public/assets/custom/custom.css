@@ -294,6 +294,10 @@ body{
 }
 #search-btn {
     background-color: #374850;
+    border-radius: 0px;
+    border-top-right-radius: .25rem;
+    border-bottom-right-radius: .25rem;
+    border: 0px;
 }
 
 .input-group{
