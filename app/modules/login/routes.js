@@ -6,8 +6,13 @@ function render(req,res){
   req.session.user = '';
   res.render('login/views/index');
 }
+function blankRender(req,res){
+  req.session.user = '';
+  res.render('login/views/invalid/nouser');
+}
 
 router.get('/', render);
+router.get('/blank', blankRender);
 
 router.post('/', (req, res) => {
   db.query("SELECT * FROM tbluser WHERE strUserName= ?",[req.body.username], (err, results, fields) => {

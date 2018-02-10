@@ -85,6 +85,13 @@ body{
 #agreement + label{
     font-size: 0.8em;
 }
+#agreement + label > a{
+    color: #007BFF;
+}
+#agreement + label > a:hover{
+    color: #0056B3;
+    text-decoration: underline;
+}
 
 /*errorpage*/
 .col-errorpage{
