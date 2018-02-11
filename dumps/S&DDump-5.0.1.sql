@@ -80,14 +80,14 @@ CREATE TABLE `tblmessage` (
   PRIMARY KEY (`intMessID`),
   KEY `intMessChatID_idx` (`intMessChatID`),
   CONSTRAINT `intMessChatID` FOREIGN KEY (`intMessChatID`) REFERENCES `tblchat` (`intChatID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `tblmessage`
 --
 
-INSERT INTO `tblmessage` VALUES (1,1,'MessOne','2018-01-28 00:00:00',1,1),(2,1,'MessTwo','2018-01-28 00:00:00',1,2),(3,1,'Skkr','2018-02-02 01:28:25',0,1),(4,1,'Motorsport','2018-02-02 01:30:22',0,1),(5,1,'AP\n','2018-02-02 01:32:24',0,1),(6,1,'Ice\nTray\nThe\nGang','2018-02-02 01:33:24',0,2),(7,1,'Ice','2018-02-02 01:33:31',0,1),(8,1,'','2018-02-02 01:37:27',0,1),(9,1,'','2018-02-02 01:39:17',0,1),(10,1,'Yeah','2018-02-02 02:16:28',0,1),(11,1,'Rain Drop','2018-02-02 02:19:44',0,1),(12,2,'AAA','2018-02-02 02:19:44',0,1);
+INSERT INTO `tblmessage` VALUES (1,1,'MessOne','2018-01-28 00:00:00',1,1),(2,1,'MessTwo','2018-01-28 00:00:00',1,2),(3,1,'Skkr','2018-02-02 01:28:25',0,1),(4,1,'Motorsport','2018-02-02 01:30:22',0,1),(5,1,'AP\n','2018-02-02 01:32:24',0,1),(6,1,'Ice\nTray\nThe\nGang','2018-02-02 01:33:24',0,2),(7,1,'Ice','2018-02-02 01:33:31',0,1),(8,1,'','2018-02-02 01:37:27',0,1),(9,1,'','2018-02-02 01:39:17',0,1),(10,1,'Yeah','2018-02-02 02:16:28',0,1),(11,1,'Rain Drop','2018-02-02 02:19:44',0,1),(12,2,'AAA','2018-02-02 02:19:44',0,1),(13,1,'x','2018-02-11 15:48:28',0,1);
 
 --
 -- Table structure for table `tblrating`
@@ -193,7 +193,7 @@ CREATE TABLE `tblservice` (
 -- Dumping data for table `tblservice`
 --
 
-INSERT INTO `tblservice` VALUES (1,1,1,1,2,70),(3,1,1,1,1,32),(4,1,2,1,1,78),(5,3,5,1,2,72),(6,3,1,0,2,50),(7,3,2,2,2,60),(29,5,1,1,1,213),(30,4,1,1,2,45),(31,2,1,1,1,665),(32,4,2,1,1,1245),(33,2,2,1,2,55),(34,5,2,1,2,120),(35,1,3,1,1,123),(36,1,7,1,1,113);
+INSERT INTO `tblservice` VALUES (1,1,1,1,2,72.5),(3,1,2,1,1,32),(5,3,5,1,2,72),(6,3,1,0,2,50),(7,3,2,2,2,60),(29,5,1,1,1,213),(30,4,1,1,2,45),(31,2,1,1,1,665),(32,4,2,1,1,1245),(33,2,2,1,2,55),(34,5,2,1,2,120),(35,1,3,1,1,123),(36,1,7,1,1,113);
 
 --
 -- Table structure for table `tblservicereq`
@@ -301,7 +301,7 @@ CREATE TABLE `tbluser` (
 -- Dumping data for table `tbluser`
 --
 
-INSERT INTO `tbluser` VALUES (1,'Jon Ervin Balmaceda','Jon-Ervin','0424',2,1,'Pasig','Rosario','balmacedajonervin@gmail.com','09236835707',0,NULL,NULL,NULL),(2,'Ralf Milan','9Weissss','ralfralf',2,1,'Quezon','Tandang Sora','ralf@milan.com','09234545672',0,NULL,NULL,NULL),(3,'Piolo Sales','Sno-weak','piolopiolo',2,1,'Manila','Espana','Piolo@mahina.com','0923893482',1,NULL,NULL,NULL),(4,'Vince Oreta','VinceIRL','vincevince',2,1,'Pasig','San Joaquin','vince@dead.com','09236754551',0,NULL,NULL,NULL),(5,'Carlo Doronila','CarloDoronichan','carlocarlo',2,1,'Manila','Sta. Mesa','carlo@anime.com','09234545676',0,NULL,NULL,NULL),(6,'admin','admin','admin',1,1,'Manila','Tondo','admin@admin.com','09236835707',0,NULL,NULL,NULL),(7,'Homer Cadena','ricknmorty','homerhomer',2,1,'Quezon','Tandang Sora','homer@gmail.com','09235458097',0,NULL,NULL,NULL),(8,'John Carlos Pagaduan','Elitebuild','pagapaga',2,1,'Manila','Sta. Mesa','jc@gmail.com','09236545346',0,NULL,NULL,NULL),(9,'21 Construction','21construction','21construction',3,1,'Manila','Sta. Mesa','jeth@gmail.com','09235645238',0,'Jethro Samson',NULL,'BP-000000000.jpg'),(10,'Plumbing Corporation','PlumCorp','PlumCorp',3,1,'Quezon','Tandang Sora','lance@gmail.com','09235647389',0,'Lance San Pablo',NULL,'BP-PlumCorp.jpg');
+INSERT INTO `tbluser` VALUES (1,'Jon Ervin Balmaceda','Jon-Ervin','0424',2,1,'Pasig','Rosario','balmacedajonervin@gmail.com','09236835707',0,NULL,NULL,NULL),(2,'Ralf Milan','9Weissss','ralfralf',2,1,'Quezon','Tandang Sora','ralf@milan.com','09234545672',0,NULL,NULL,NULL),(3,'Piolo Sales','Sno-weak','piolopiolo',2,1,'Manila','Espana','Piolo@mahina.com','0923893482',1,NULL,NULL,NULL),(4,'Vince Oreta','VinceIRL','vincevince',2,1,'Pasig','San Joaquin','vince@dead.com','09236754551',1,NULL,NULL,NULL),(5,'Carlo Doronila','CarloDoronichan','carlocarlo',2,1,'Manila','Sta. Mesa','carlo@anime.com','09234545676',0,NULL,NULL,NULL),(6,'admin','admin','admin',1,1,'Manila','Tondo','admin@admin.com','09236835707',0,NULL,NULL,NULL),(7,'Homer Cadena','ricknmorty','homerhomer',2,1,'Quezon','Tandang Sora','homer@gmail.com','09235458097',0,NULL,NULL,NULL),(8,'John Carlos Pagaduan','Elitebuild','pagapaga',2,1,'Manila','Sta. Mesa','jc@gmail.com','09236545346',0,NULL,NULL,NULL),(9,'21 Construction','21construction','21construction',3,2,'Manila','Sta. Mesa','jeth@gmail.com','09235645238',0,'Jethro Samson',NULL,'BP-000000000.jpg'),(10,'Plumbing Corporation','PlumCorp','PlumCorp',3,1,'Quezon','Tandang Sora','lance@gmail.com','09235647389',0,'Lance San Pablo',NULL,'BP-PlumCorp.jpg');
 
 --
 -- Table structure for table `tblworker`
