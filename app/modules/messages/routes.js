@@ -1,16 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var db = require('../../lib/database')();
+var flog = require('../welcome/loggedin');
 
-function fuser(req,res,next){
-  /*Current User, Match(session);
-  *(tbluser)*/
-  db.query("SELECT * FROM tbluser WHERE intAccNo= ?",[req.session.user], (err, results, fields) => {
-      if (err) console.log(err);
-      req.user= results;
-      return next();
-    });
-}
 function fchat(req,res,next){
   /*All Chats of Current User, Match(session);
   *(tblservice)*(tblchat)*/
@@ -44,21 +36,37 @@ function fmess(req,res,next){
 }
 
 function render(req,res){
-  res.render('messages/views/index', {chattab: req.chat});
+  switch (req.valid) {
+    case 1:
+      res.render('welcome/views/invalid/adm-restrict');
+      break;
+    case 2:
+    case 3:
+      res.render('messages/views/index', {chattab: req.chat});
+      break;
+  }
 }
 function messRender(req,res){
-  if(!req.mess[0]){
-    res.redirect('/noroute');
-  }
-  else if(req.mess[0].sendType == 0){
-    res.redirect('/restrict');
-  }
-  else{
-    res.render('messages/views/index', { usertab: req.user , messtab: req.mess, messOne: req.mess[0], chattab: req.chat });
+  switch (req.valid) {
+    case 1:
+      res.render('welcome/views/invalid/adm-restrict');
+      break;
+    case 2:
+    case 3:
+      if(!req.mess[0]){
+        res.redirect('/noroute');
+      }
+      else if(req.mess[0].sendType == 0){
+        res.redirect('/restrict');
+      }
+      else{
+        res.render('messages/views/index', { usertab: req.user , messtab: req.mess, messOne: req.mess[0], chattab: req.chat });
+      }
+      break;
   }
 }
 
-router.get('/', fchat, render);
-router.get('/:chatid', fuser, fmess, fchat, messRender);
+router.get('/', flog, fchat, render);
+router.get('/:chatid', flog, fmess, fchat, messRender);
 
 exports.messages = router;

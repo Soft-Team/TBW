@@ -1,0 +1,16 @@
+extends ../../../../templates/master-error.pug
+
+block content
+  .container.container-errorpage
+    .row
+      .col
+      .col-sm-8.col-md-7.col-lg-5.col-errorpage
+        .container.text-center
+          br
+          img(src='/assets/images/tbw.ico' onContextMenu='return false')
+          h1 Oops! You cannot go there! 
+          hr
+          .btn-group.special(role='group')
+            a.btn.btn-primary.btn-md(href='/admin' role='button' aria-pressed='true') Admin Home
+          br
+      .col
