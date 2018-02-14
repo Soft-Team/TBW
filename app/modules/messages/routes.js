@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var db = require('../../lib/database')();
 var flog = require('../welcome/loggedin');
+var timeFormat = require('../welcome/timeFormat');
 
 function fchat(req,res,next){
   /*All Chats of Current User, Match(session);
@@ -29,6 +30,10 @@ function fmess(req,res,next){
         else{
           results[count].sendType = 0;
         }
+        results[count].formatdate = [results[count].dtmDateSent.getMonth()+1,
+             results[count].dtmDateSent.getDate(),
+             results[count].dtmDateSent.getFullYear()].join('/')+' '+
+             timeFormat(results[count].dtmDateSent);
       }
       req.mess= results;
       return next();

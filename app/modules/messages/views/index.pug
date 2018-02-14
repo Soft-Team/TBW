@@ -59,7 +59,7 @@ block main
                       .media-body
                           small.pull-right.time
                             i.fa.fa-clock-o
-                            | #{mess.dtmDateSent}
+                            | &nbsp#{mess.formatdate}
                           if mess.sendType == mess.intSender
                               h5.right.media-heading #{user.strName}
                           else
