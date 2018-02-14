@@ -8,7 +8,7 @@ function fchat(req,res,next){
   /*All Chats of Current User, Match(session);
   *(tblservice)*(tblchat)*/
   var stringquery = "SELECT C.*, txtMessage, dtmDateSent FROM(SELECT B.*, MAX(intMessID) as MX FROM(SELECT A.* , strName, intAccNo FROM(SELECT * FROM tblservice INNER JOIN tblchat ON intServID= intChatServ WHERE intServAccNo= ? OR intChatSeeker= ?)A INNER JOIN tbluser ON intAccNo= intServAccNo OR intAccNo= intChatSeeker WHERE intAccNo!= ?)"
-  stringquery = stringquery.concat("B INNER JOIN tblmessage ON intChatID= intMessChatID GROUP BY intChatID)C INNER JOIN tblmessage ON intMessID= C.MX");
+  stringquery = stringquery.concat("B INNER JOIN tblmessage ON intChatID= intMessChatID GROUP BY intChatID)C INNER JOIN tblmessage ON intMessID= C.MX ORDER BY dtmDateSent DESC;");
   db.query(stringquery,[req.session.user, req.session.user, req.session.user], (err, results, fields) => {
       if (err) console.log(err);
       req.chat= results;
@@ -47,7 +47,7 @@ function render(req,res){
       break;
     case 2:
     case 3:
-      res.render('messages/views/index', {chattab: req.chat});
+      res.redirect('/messages/'+req.chat[0].intChatID);
       break;
   }
 }
