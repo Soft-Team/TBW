@@ -61,9 +61,9 @@ function render(req,res){
     case 2:
     case 3:
       if(!req.myServices[0])
-        res.render('myservices/views/noservice');
+        res.render('myservices/views/noservice', {thisUserTab: req.user});
       else
-        res.render('myservices/views/index', {myServices: req.myServices});
+        res.render('myservices/views/index', {thisUserTab: req.user, myServices: req.myServices});
       break;
   }
 }
@@ -75,9 +75,9 @@ function successRender(req,res){
     case 2:
     case 3:
       if(!req.myServices[0])
-        res.render('myservices/views/noservice');
+        res.render('myservices/views/noservice', {thisUserTab: req.user});
       else{
-        res.render('myservices/views/success', {myServices: req.myServices});
+        res.render('myservices/views/success', {thisUserTab: req.user, myServices: req.myServices});
       }
       break;
   }
@@ -90,12 +90,12 @@ function editRender(req,res){
     case 2:
     case 3:
       if(!req.myServices[0])
-        res.render('myservices/views/noservice');
+        res.render('myservices/views/noservice', {thisUserTab: req.user});
       else{
         if(!req.servValidation[0])
-          res.render('myservices/views/invalid/noaccess', {myServices: req.myServices});
+          res.render('myservices/views/invalid/noaccess', {thisUserTab: req.user, myServices: req.myServices});
         else
-          res.render('myservices/views/edit', {myServices: req.myServices, servValidation: req.servValidation});
+          res.render('myservices/views/edit', {thisUserTab: req.user, myServices: req.myServices, servValidation: req.servValidation});
       }
       break;
   }

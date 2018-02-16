@@ -8,9 +8,10 @@ block dash
             .pull-left.image
                 img.img-circle(src='/assets/images/profile.png', alt='User Image')
             .pull-right.info
-                p.text-white Alexander Pierce
-                a(href='#')
-                i.fa.fa-circle.text-success &nbsp Online
+                each thisuser in thisUserTab
+                  p.text-white #{thisuser.strName}
+                  a(href='/profile/'+thisuser.intAccNo)
+                  i.fa.fa-circle.text-success &nbsp Online
             // search form
             form.sidebar-form(action='#', method='get')
             .input-group
@@ -25,11 +26,11 @@ block dash
             h3 My Services
         .row.user.text-white
             h3 Transactions
-        a.row.user.pl-5.mt-0.text-white(href='/ongoing')
+        a.row.user.pl-5.mt-0.text-white(href='/transactions/ongoing')
             h4 Ongoing
-        a.row.user.pl-5.mt-0.text-white(href='/finished')
+        a.row.user.pl-5.mt-0.text-white(href='/transactions/finished')
             h4 Finished
-        a.row.user.pl-5.mt-0.text-white(href='/translog')
+        a.row.user.pl-5.mt-0.text-white(href='/transactions/log')
             h4 Log
       .col
         .row

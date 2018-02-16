@@ -10,7 +10,7 @@ function render(req,res){
       break;
     case 2:
     case 3:
-      res.render('home/views/index');
+      res.render('home/views/index', {thisUserTab: req.user});
       break;
   }
 }

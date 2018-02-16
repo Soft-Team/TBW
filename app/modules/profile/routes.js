@@ -8,7 +8,7 @@ function render(req,res){
 }
 
 function profileRender(req,res){
-  res.render('profile/views/index');
+  res.render('profile/views/index', {thisUserTab: req.user});
 }
 
 router.get('/', flog, render);

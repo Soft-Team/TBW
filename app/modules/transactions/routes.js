@@ -3,7 +3,29 @@ var router = express.Router();
 var db = require('../../lib/database')();
 var flog = require('../welcome/loggedin');
 
-function render(req,res){
+function ongoingRender(req,res){
+  switch (req.valid) {
+    case 1:
+      res.render('welcome/views/invalid/adm-restrict');
+      break;
+    case 2:
+    case 3:
+      res.render('transactions/views/index');
+      break;
+  }
+}
+function finishedRender(req,res){
+  switch (req.valid) {
+    case 1:
+      res.render('welcome/views/invalid/adm-restrict');
+      break;
+    case 2:
+    case 3:
+      res.render('transactions/views/index');
+      break;
+  }
+}
+function logRender(req,res){
   switch (req.valid) {
     case 1:
       res.render('welcome/views/invalid/adm-restrict');
@@ -15,6 +37,8 @@ function render(req,res){
   }
 }
 
-router.get('/', flog, render);
+router.get('/ongoing', flog, ongoingRender);
+router.get('/finished', flog, finishedRender);
+router.get('/log', flog, logRender);
 
 exports.transactions = router;

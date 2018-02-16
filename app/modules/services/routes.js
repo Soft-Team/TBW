@@ -30,7 +30,7 @@ function render(req,res){
       break;
     case 2:
     case 3:
-      res.render('services/views/index', {servTags: req.servTags});
+      res.render('services/views/index', {thisUserTab: req.user, servTags: req.servTags});
       break;
   }
 }
@@ -42,7 +42,7 @@ function servRender(req,res){
     case 2:
     case 3:
       if(!req.searchServTag[0]){
-        res.render('services/views/notag', {servName: req.params.servName});
+        res.render('services/views/notag', {thisUserTab: req.user, servName: req.params.servName});
       }
       else{
         var stringquery="SELECT * FROM tblservice INNER JOIN tblservicetag ON intServTag= intServTagID INNER JOIN tbluser ON intServAccNo= intAccNo WHERE strServName= ? ";
@@ -71,12 +71,12 @@ function servRender(req,res){
           db.query(stringquery,[req.params.servName,paramsarray[0]], function (err, results, fields) {
               if (err) return res.send(err);
               if(!results[0])
-                res.render('services/views/noresult', {servName: req.params.servName});
+                res.render('services/views/noresult', {thisUserTab: req.user, servName: req.params.servName});
               else{
                 for(count=0;count<results.length;count++){
                   results[count].prepend = prepend(results[count].intServAccNo);
                 }
-                res.render('services/views/result', {servName: req.params.servName, searchServ: results});
+                res.render('services/views/result', {thisUserTab: req.user, servName: req.params.servName, searchServ: results});
               }
           });
         }
@@ -84,12 +84,12 @@ function servRender(req,res){
           db.query(stringquery,[req.params.servName,paramsarray[0],paramsarray[1]], function (err, results, fields) {
               if (err) return res.send(err);
               if(!results[0])
-                res.render('services/views/noresult', {servName: req.params.servName});
+                res.render('services/views/noresult', {thisUserTab: req.user, servName: req.params.servName});
               else{
                 for(count=0;count<results.length;count++){
                   results[count].prepend = prepend(results[count].intServAccNo);
                 }
-                res.render('services/views/result', {servName: req.params.servName, searchServ: results});
+                res.render('services/views/result', {thisUserTab: req.user, servName: req.params.servName, searchServ: results});
               }
           });
         }
@@ -97,12 +97,12 @@ function servRender(req,res){
           db.query(stringquery,[req.params.servName], function (err, results, fields) {
               if (err) return res.send(err);
               if(!results[0])
-                res.render('services/views/noresult', {servName: req.params.servName});
+                res.render('services/views/noresult', {thisUserTab: req.user, servName: req.params.servName});
               else{
                 for(count=0;count<results.length;count++){
                   results[count].prepend = prepend(results[count].intServAccNo);
                 }
-                res.render('services/views/result', {servName: req.params.servName, searchServ: results});
+                res.render('services/views/result', {thisUserTab: req.user, servName: req.params.servName, searchServ: results});
               }
           });
         }

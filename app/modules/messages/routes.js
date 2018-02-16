@@ -65,7 +65,7 @@ function messRender(req,res){
         res.redirect('/restrict');
       }
       else{
-        res.render('messages/views/index', { usertab: req.user , messtab: req.mess, messOne: req.mess[0], chattab: req.chat });
+        res.render('messages/views/index', { thisUserTab: req.user , messtab: req.mess, messOne: req.mess[0], chattab: req.chat });
       }
       break;
   }
