@@ -16,7 +16,7 @@ module.exports = app => {
             });
         });
         app.get('*', function(req, res){
-          res.render('login/views/noroute');
+          res.render('welcome/views/noroute');
         });
     });
 }

@@ -16,32 +16,40 @@ block main
                     i.fa(aria-hidden='true')
           // Conversations
           .row.content-wrap
-            .conversation.btn
-              .media-body
-                .display.chat-part(role="gridcell")
-                  a.chat-part.display
-                    .chat-pick.display(data-tooltip-content='Soft', data-hover='tooltip', data-tooltip-position='right', data-tooltip-alignh='center', data-tooltip-root-class='_33g_', aria-hidden='true', style=' margin-right:9px')
-                      .chat-pad(style="height: 50px, width: 50px")
-                        .chat-img(style="height: 50px, width: 50px")
-                          i(style='height: 50px; background-image: url("/assets/images/Tyler.jpg"); background-position: 50% 50%; background-repeat: no-repeat; background-size: cover; width: 50px;')
-                    chat4.chatL-m
-                      .chat5.chatL-3 
-                        h5 #Plumber (STYLE 2)
-                      .chat5.chatL-3 
-                        span TakeOff
-                        small.pull-right.time(style='margin-left: 110px') 02:10am
+          
+            each chat in chattab
+              .conversation.btn.pt-3.pb-1
+                .media-body
+                  .display.chat-part.mb-4(role="gridcell")
+                    a.chat-part.display
+                      .chat-pick.display(data-tooltip-content='Soft', data-hover='tooltip', data-tooltip-position='right', data-tooltip-alignh='center', data-tooltip-root-class='_33g_', aria-hidden='true', style=' margin-right:9px')
+                        .chat-pad(style="height: 50px, width: 50px")
+                          .chat-img(style="height: 50px, width: 50px")
+                            i(style='height: 50px; background-image: url("/assets/images/Tyler.jpg"); background-position: 50% 50%; background-repeat: no-repeat; background-size: cover; width: 50px;')
+                      chat4.chatL-m
+                        .chat5.chatL-3 
+                          h5
+                            if chat.intAccNo == chat.intServAccNo
+                              span.tag.provider #Plumber 
+                            else 
+                              span.tag.seeker #Plumber 
+                            span(style='color: black;') TakeOff
+                        .chat5.chatL-3 
+                          span TakeOff
+                          small.pull-right.time(style='margin-left: 110px') 02:10am
       // Messages & Info
       .col-sm-9.panel-wrap
         // Main Content / Message List
         #Messages.col-sm-9.section-wrap
           // Header
-          each user in usertab
+          each user in thisUserTab
             .row.header-wrap
               .chat-header.col-sm-12
-                if messOne.sendType == 1
-                  h4(style='color:gold') ##{messOne.strServName} #{messOne.Seeker}
-                else
-                  h4(style='color:gold') ##{messOne.strServName} #{messOne.strName}
+                h4(style='color:gold') ##{messOne.strServName}
+                  if messOne.sendType == 1
+                      span(style='color: white;') &nbsp#{messOne.Seeker}
+                  else
+                      span(style='color: white;') &nbsp#{messOne.strName}
             // Messages
             .row.content-wrap.messages
               .col
@@ -51,7 +59,7 @@ block main
                       .media-body
                           small.pull-right.time
                             i.fa.fa-clock-o
-                            | #{mess.dtmDateSent}
+                            | &nbsp#{mess.formatdate}
                           if mess.sendType == mess.intSender
                               h5.right.media-heading #{user.strName}
                           else

@@ -1,15 +1,17 @@
 var express = require('express');
 var router = express.Router();
 var db = require('../../lib/database')();
+var flog = require('../welcome/loggedin');
 
 function render(req,res){
-  res.render('profile/views/index');
+  res.redirect('/profile/'+req.session.user);
 }
 
-function render(req,res){
-  res.render('profile/views/services');
+function profileRender(req,res){
+  res.render('profile/views/index', {thisUserTab: req.user});
 }
 
-router.get('/:username', render);
+router.get('/', flog, render);
+router.get('/:accno', flog, profileRender);
 
 exports.profile = router;

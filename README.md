@@ -11,7 +11,5 @@ Instruction:
       
 Starting Pages:
 
-    login: http://localhost:3000/login
-    home: http://localhost:3000/home
-    admin: home: http://localhost:3000/admin
+    welcome: http://localhost:3000/welcome
       

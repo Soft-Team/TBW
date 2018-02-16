@@ -10,11 +10,11 @@ function render(req,res){
       break;
     case 2:
     case 3:
-      res.render('home/views/index', {thisUserTab: req.user});
+      res.render('scheduler/views/index', {thisUserTab: req.user});
       break;
   }
 }
 
 router.get('/', flog, render);
 
-exports.home = router;
+exports.scheduler = router;

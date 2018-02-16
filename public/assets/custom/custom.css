@@ -87,6 +87,13 @@ body{
 #agreement + label{
     font-size: 0.8em;
 }
+#agreement + label > a{
+    color: #007BFF;
+}
+#agreement + label > a:hover{
+    color: #0056B3;
+    text-decoration: underline;
+}
 
 /*errorpage*/
 .col-errorpage{
@@ -187,12 +194,16 @@ body{
 .dashboard > .row > .col:first-of-type > a{
     text-decoration:  none;
 }
-.dashboard > .row > .col:first-of-type > a.row:hover{
-    background: #4862A3;
-}
-.dashboard > .row > .col:first-of-type > .user:nth-child(1){
+.dashboard > .row > .col:first-of-type > a.row.user:hover{
+    /*background: #4862A3;*/
     background: #3498DB;
 }
+.dashboard > .row > .col:first-of-type > a.row.admin:hover{
+    background: #EC9B00;
+}
+/*.dashboard > .row > .col:first-of-type > .user:nth-child(1){
+    background: #3498DB;
+}*/
 .dashboard > .row > .col:last-of-type{
     margin-left: 250px;
     word-wrap: break-word;
@@ -200,9 +211,9 @@ body{
 .main{
     padding: 0px;
 }
-.dashboard > .row > .col:first-of-type > .admin:nth-child(1){
+/*.dashboard > .row > .col:first-of-type > .admin:nth-child(1){
     background: #EC9B00;
-}
+}*/
 
 /*user-panel*/
 .user-panel {
@@ -296,6 +307,10 @@ body{
 }
 #search-btn {
     background-color: #374850;
+    border-radius: 0px;
+    border-top-right-radius: .25rem;
+    border-bottom-right-radius: .25rem;
+    border: 0px;
 }
 
 .input-group{

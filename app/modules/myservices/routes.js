@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var db = require('../../lib/database')();
+var flog = require('../welcome/loggedin');
 var numberFormat = require('../welcome/numberFormat');
 
 function servTags(req, res, next){
@@ -53,34 +54,58 @@ function servValidation(req, res, next){
 }
 
 function render(req,res){
-  if(!req.myServices[0])
-    res.render('myservices/views/noservice');
-  else
-    res.render('myservices/views/index', {myServices: req.myServices});
+  switch (req.valid) {
+    case 1:
+      res.render('welcome/views/invalid/adm-restrict');
+      break;
+    case 2:
+    case 3:
+      if(!req.myServices[0])
+        res.render('myservices/views/noservice', {thisUserTab: req.user});
+      else
+        res.render('myservices/views/index', {thisUserTab: req.user, myServices: req.myServices});
+      break;
+  }
 }
 function successRender(req,res){
-  if(!req.myServices[0])
-    res.render('myservices/views/noservice');
-  else{
-    res.render('myservices/views/success', {myServices: req.myServices});
+  switch (req.valid) {
+    case 1:
+      res.render('welcome/views/invalid/adm-restrict');
+      break;
+    case 2:
+    case 3:
+      if(!req.myServices[0])
+        res.render('myservices/views/noservice', {thisUserTab: req.user});
+      else{
+        res.render('myservices/views/success', {thisUserTab: req.user, myServices: req.myServices});
+      }
+      break;
   }
 }
 function editRender(req,res){
-  if(!req.myServices[0])
-    res.render('myservices/views/noservice');
-  else{
-    if(!req.servValidation[0])
-      res.render('myservices/views/invalid/noaccess', {myServices: req.myServices});
-    else
-      res.render('myservices/views/edit', {myServices: req.myServices, servValidation: req.servValidation});
+  switch (req.valid) {
+    case 1:
+      res.render('welcome/views/invalid/adm-restrict');
+      break;
+    case 2:
+    case 3:
+      if(!req.myServices[0])
+        res.render('myservices/views/noservice', {thisUserTab: req.user});
+      else{
+        if(!req.servValidation[0])
+          res.render('myservices/views/invalid/noaccess', {thisUserTab: req.user, myServices: req.myServices});
+        else
+          res.render('myservices/views/edit', {thisUserTab: req.user, myServices: req.myServices, servValidation: req.servValidation});
+      }
+      break;
   }
 }
 
-router.get('/', myServices, render);
-router.get('/success', myServices, successRender);
-router.get('/:servid', myServices, servValidation, editRender);
+router.get('/', flog, myServices, render);
+router.get('/success', flog, myServices, successRender);
+router.get('/:servid', flog, myServices, servValidation, editRender);
 
-router.post('/', myServices, searchServTag, searchServAcc, (req, res) => {
+router.post('/', flog, myServices, searchServTag, searchServAcc, (req, res) => {
   if(!req.searchServTag[0]){
     res.render('myservices/views/invalid/notag', {servTag: req.body.searchtag, myServices: req.myServices});
   }
@@ -96,7 +121,7 @@ router.post('/', myServices, searchServTag, searchServAcc, (req, res) => {
     }
   }
 });
-router.post('/:servid', (req, res) => {
+router.post('/:servid', flog, (req, res) => {
   db.query("UPDATE tblservice SET intServStatus= ?, intPriceType= ?, fltPrice= ? WHERE intServID= ?",[req.body.status, req.body.pricetype, req.body.price, req.params.servid], (err, results, fields) => {
       if (err) return res.send(err);
       res.redirect('/myservices');
