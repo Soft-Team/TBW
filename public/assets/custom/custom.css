@@ -29,10 +29,12 @@ body{
 /*wrappers*/
 #errorpage{
     background: url('/assets/images/jumbo-login.jpg') no-repeat fixed;
+    box-shadow: 0px 0px 10px black;
     background-size: 100% 200%;
 }
 #successpage{
     background: url('/assets/images/success-page.jpg') no-repeat fixed;
+    box-shadow: 0px 0px 10px black;
     background-size: 100% 100%;
 }
 
@@ -317,6 +319,7 @@ body{
 /*Header*/
 .main-head {
     background: url('/assets/images/jumbo-login.jpg') no-repeat fixed;
+    box-shadow: 0px 0px 10px black;
     position: relative;
     padding: 50px 0px 190px;
     height: 590px;
