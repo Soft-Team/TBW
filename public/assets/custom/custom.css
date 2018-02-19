@@ -42,6 +42,15 @@ body{
 .no-bullet{
     list-style: none;
 }
+.align-left {
+    text-align: left;
+}
+.align-center {
+    text-align: center;
+}
+.align-right {
+    text-align: right;
+}
 
 /*btn-group btn-block*/
 .btn-group.special {
