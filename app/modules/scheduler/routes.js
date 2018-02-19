@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var db = require('../../lib/database')();
 var flog = require('../welcome/loggedin');
-var timeFormat = require('../welcome/timeFormat');
+var formatAMPM = require('../welcome/formatAMPM');
 
 function regularSched(req, res, next){
   /*Regular Schedule of Current User
@@ -15,9 +15,8 @@ function regularSched(req, res, next){
       else{
         var empty = 0;
         for(count=0;count<results.length;count++){
-          results[count].formatstart = results[count].tmSchedStart.toString().substring(0, results[count].tmSchedStart.length - 3).concat((parseFloat(results[count].tmSchedStart).toString()) < 12 ? "AM": "PM");
-          results[count].formatend = results[count].tmSchedEnd.toString().substring(0, results[count].tmSchedEnd.length - 3).concat((parseFloat(results[count].tmSchedEnd).toString()) < 12 ? "AM": "PM");
-          console.log(("12:00:00").Parse);
+          results[count].formatstart = formatAMPM(results[count].tmSchedStart);
+          results[count].formatend = formatAMPM(results[count].tmSchedEnd);
           switch (results[count].strSchedDay){
             case "Sunday":
               for(count1=0;count1<results.length;count1++){
