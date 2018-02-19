@@ -1,27 +1,57 @@
 extends navbar-admin.pug
 
 block dash
+  block append scripts
+    script.
+      function dropdown1(){
+        if(document.getElementById('sub1').style.display=='block'){
+        document.getElementById('sub1').style.display='none';
+        document.getElementById('drop1').style.background='#282B30';
+        }
+        else{
+          document.getElementById('sub1').style.display='block';
+          document.getElementById('drop1').style.background='#EC9B00';
+        }
+      };
+      function dropdown2(){
+        if(document.getElementById('sub2').style.display=='block'){
+        document.getElementById('sub2').style.display='none';
+        document.getElementById('drop2').style.background='#282B30';
+        }
+        else{
+          document.getElementById('sub2').style.display='block';
+          document.getElementById('drop2').style.background='#EC9B00';
+        }
+      };
   .container-fluid.dashboard.admin
     .row
       .col
-        .row.admin.text-white
-            h3 Accounts
-        a.row.admin.pl-5.mt-0.text-white(href='/admin/Active')
-            h4 Active
-        a.row.admin.pl-5.mt-0.text-white(href='/admin/Banned')
-            h4 Banned
-        a.row.admin.pl-5.mt-0.text-white(href='/admin/Banned')
-            h4 Unregistered
-        .row.admin.text-white
-            h3 Reports
-        a.row.admin.pl-5.mt-0.text-white(href='/admin/ReportedUsers')
-            h4 Reported Users
-        a.row.admin.pl-5.mt-0.text-white(href='/admin/ReportLog')
-            h4 Report Log
-        a.row.admin.text-white(href='/admin/IDVerification')
-            h4 ID Verifications
-        a.row.admin.text-white(href='/admin/TransactionLog')
-            h4 Transaction Log
+        #sidebar
+          .row
+            .col
+              #drop1.row.main-row.text-white.admin(onclick='dropdown1()')
+                h4
+                  a Accounts
+              #sub1.row
+                a.row(href='/admin/Active')
+                  h4 Active
+                a.row(href='/admin/Banned')
+                  h4 Banned
+                a.row(href='/admin/Unregistered')
+                  h4 Unregistered
+              #drop2.row.main-row.text-white.admin(onclick='dropdown2()')
+                h4
+                  a Reports
+              #sub2.row
+                a.row(href='/admin/ReportedUser')
+                  h4 Reported Users
+                a.row(href='/admin/ReportLog')
+                  h4 Report Log
+              a.row.main-row.admin(href='/admin/IDVerification')
+                h4 ID Verifications
+              a.row.main-row.admin(href='/admin/TransactionLog')
+                h4 Transaction Log
+            .col
             
       .col
           .row

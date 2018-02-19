@@ -10,16 +10,16 @@ block main
         table.table.table-striped
           thead.text-white
             tr
-              th.align-left(scope='col' colspan="4" style="align: left;") Today's Working Hours
+              th.align-left(scope='col' colspan="2") Today's Working Hours
           tbody
             tr
               th(scope='row') Feb 19, 2018
-              td(colspan="3") 11AM - 2PM
+              td 11AM - 2PM
       .col
         table.table.table-striped
           thead.text-white
             tr
-              th.align-left(scope='col' colspan="4") Current Transaction Schedule
+              th.align-left(scope='col' colspan="3") Current Transaction Schedule
           tbody
             tr
               th(scope='row') Feb 20, 2018
@@ -30,36 +30,24 @@ block main
         table.table.table-striped
           thead.text-white
             tr
-              th.align-left(scope='col' colspan="3") Regular Working Hours
-              th.align-right
+              th.align-left(scope='col') Regular Working Hours
+              th.align-right(scope='col')
                 button.btn.btn-outline-light.btn-tab-sm(type='button') *
           tbody
             tr
-              th(scope='row') Monday
-              td(colspan="3") 10AM - 7PM
-            tr
-              th(scope='row') Tuesday
-              td(colspan="3") 9AM - 7PM
-            tr
-              th(scope='row') Wednesday
-              td(colspan="3") 12PM - 10PM
+              th(scope="row") Monday
+              td 10AM - 7PM
       .col
         table.table.table-striped
           thead.text-white
             tr
-              th.align-left(scope='col' colspan="3") Special Working Hours
+              th.align-left(scope='col') Special Working Hours
               th.align-right
                 button.btn.btn-outline-light.btn-tab-sm.mr-2(type='button') +
                 button.btn.btn-outline-light.btn-tab-sm(type='button') *
           tbody
             tr
-              th(scope='row') Feb 24, 2018
-              td(colspan="3") 11AM - 2PM
-            tr
-              th(scope='row') Mar 7, 2018
-              td(colspan="3") 6AM - 12PM
-            tr
-              th(scope='row') Apr 1, 2018
-              td(colspan="3") Unavailable
+              td(scope='col') Feb 24, 2018
+              td 11AM - 2PM
 
     
