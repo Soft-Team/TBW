@@ -13,3 +13,6 @@ Starting Pages:
 
     welcome: http://localhost:3000/welcome
       
+Dev Notes:
+
+	res.render('scheduler/views/index', {thisUserTab: req.user});
