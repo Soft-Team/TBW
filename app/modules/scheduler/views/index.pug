@@ -34,9 +34,75 @@ block main
               th.align-right(scope='col')
                 button.btn.btn-outline-light.btn-tab-sm(type='button') *
           tbody
-            tr
-              th(scope="row") Monday
-              td 10AM - 7PM
+            if empty == 1
+              tr
+                td(colspan="2")
+                  i No Schedule Detected
+            else
+              each sched in regSchedTab
+                if sched.sunday == 2
+                  tr
+                    th(scope="row") Sunday
+                    td None
+                else if sched.strSchedDay == "Sunday"
+                  tr
+                    th(scope="row") Sunday
+                    td #{sched.formatstart} - #{sched.formatend}
+              each sched in regSchedTab
+                if sched.monday == 2
+                  tr
+                    th(scope="row") Monday
+                    td None
+                else if sched.strSchedDay == "Monday"
+                  tr
+                    th(scope="row") Monday
+                    td #{sched.formatstart} - #{sched.formatend}
+              each sched in regSchedTab
+                if sched.tuesday == 2
+                  tr
+                    th(scope="row") Tuesday
+                    td None
+                else if sched.strSchedDay == "Tuesday"
+                  tr
+                    th(scope="row") Tuesday
+                    td #{sched.formatstart} - #{sched.formatend}
+              each sched in regSchedTab
+                if sched.wednesday == 2
+                  tr
+                    th(scope="row") Wednesday
+                    td None
+                else if sched.strSchedDay == "Wednesday"
+                  tr
+                    th(scope="row") Wednesday
+                    td #{sched.formatstart} - #{sched.formatend}
+              each sched in regSchedTab
+                if sched.thursday == 2
+                  tr
+                    th(scope="row") Thursday
+                    td None
+                else if sched.strSchedDay == "Thursday"
+                  tr
+                    th(scope="row") Thursday
+                    td #{sched.formatstart} - #{sched.formatend}
+              each sched in regSchedTab
+                if sched.friday == 2
+                  tr
+                    th(scope="row") Friday
+                    td None
+                else if sched.strSchedDay == "Friday"
+                  tr
+                    th(scope="row") Friday
+                    td #{sched.formatstart} - #{sched.formatend}
+              each sched in regSchedTab
+                if sched.saturday == 2
+                  tr
+                    th(scope="row") Saturday
+                    td None
+                else if sched.strSchedDay == "Saturday"
+                  tr
+                    th(scope="row") Saturday
+                    td #{sched.formatstart} - #{sched.formatend}
+                
       .col
         table.table.table-striped
           thead.text-white
@@ -47,7 +113,6 @@ block main
                 button.btn.btn-outline-light.btn-tab-sm(type='button') *
           tbody
             tr
-              td(scope='col') Feb 24, 2018
+              th(scope='row') Feb 24, 2018
               td 11AM - 2PM
-
     
