@@ -118,8 +118,51 @@ function regularDay(req, res, next){
   db.query("SELECT * FROM tblschedule WHERE intSchedAccNo= ? AND intSchedID= ?",[req.session.user, req.params.schedid], function (err, results, fields) {
       if (err) return res.send(err);
       if(!(!results[0])){
-        results[0].Hstart = results[0].tmSchedStart.charAt(0).concat(results[0].tmSchedStart.charAt(1));
-        results[0].Hend = results[0].tmSchedEnd.charAt(0).concat(results[0].tmSchedEnd.charAt(1));
+        var zero = "0";
+        var Hstart = results[0].tmSchedStart.charAt(0).concat(results[0].tmSchedStart.charAt(1));
+        var Hend = results[0].tmSchedEnd.charAt(0).concat(results[0].tmSchedEnd.charAt(1));
+        var Sampm, Eampm;
+
+        if (parseFloat(Hstart) > 11){
+            Sampm = 'PM';
+        }
+        else {
+            Sampm = 'AM';
+        }
+        if (parseFloat(Hstart) > 12){
+            Hstart = (parseFloat(Hstart) - 12).toString();
+        }
+        if (parseFloat(Hstart) == 0){
+            Hstart = '12';
+            Sampm = 'AM';
+        }
+        if (Hstart.length == 1){
+            Hstart = zero.concat(Hstart);
+        }
+
+        if (parseFloat(Hend) > 11){
+            Eampm = 'PM';
+        }
+        else {
+            Eampm = 'AM';
+        }
+        if (parseFloat(Hend) > 12){
+            Hend = (parseFloat(Hend) - 12).toString();
+        }
+        if (parseFloat(Hend) == 0){
+            Hend = '12';
+            Eampm = 'AM';
+        }
+        if (Hend.length == 1){
+            Hend = zero.concat(Hend);
+        }
+
+        results[0].Hstart = Hstart;
+        results[0].Hend = Hend;
+        results[0].Mstart = results[0].tmSchedStart.charAt(3).concat(results[0].tmSchedStart.charAt(4));
+        results[0].Mend = results[0].tmSchedEnd.charAt(3).concat(results[0].tmSchedEnd.charAt(4));
+        results[0].Sampm = Sampm;
+        results[0].Eampm = Eampm;
       }
       req.regularDay = results;
       return next();
