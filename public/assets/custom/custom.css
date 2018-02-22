@@ -43,13 +43,13 @@ body{
     list-style: none;
 }
 .align-left {
-    text-align: left;
+    text-align: left !important;
 }
 .align-center {
-    text-align: center;
+    text-align: center !important;
 }
 .align-right {
-    text-align: right;
+    text-align: right !important;
 }
 
 /*btn-group btn-block*/

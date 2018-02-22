@@ -1,4 +1,20 @@
 extends ../index.pug
 
 block scheduler
-  h1 x
+  block append scripts
+    script.
+      $(window).on('load',function(){
+        $('#noSched').modal('show');
+      });
+      
+  #noSched.modal.fade(tabindex='-1' role='dialog' aria-labelledby='noSchedTitle' aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+          h5#noSchedTitle.modal-title Page Restricted
+          button.close(type='button' data-dismiss='modal' aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+          p Schedule does not exist.
+        .modal-footer
+          button.btn.btn-secondary(type='button', data-dismiss='modal') Close

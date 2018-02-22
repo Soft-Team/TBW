@@ -194,7 +194,7 @@ block scheduler
     else
       option(value='AM') AM
       option(value='PM' selected='') PM
-    
+  
   #editRWHModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='editRWHModalTitle' aria-hidden='true')
     .modal-dialog(role='document')
       .modal-content
@@ -203,7 +203,7 @@ block scheduler
             h5#editRWHModalTitle.modal-title #{day.strSchedDay} Regular Working Hours
             button.close(type='button' data-dismiss='modal' aria-label='Close')
               span(aria-hidden='true') ×
-          form(method='POST' action='/myservices/'+day.intSchedID)
+          form(method='POST' action='/scheduler/'+day.intSchedID)
             .modal-body
               .row
                 .col
@@ -229,9 +229,7 @@ block scheduler
                 .col
                   select#EEampm.form-control(name='EEampm')
                     +ampmsel(day.Eampm)
-              .row
-                .col.align-right
-                    button.btn.btn-danger(href='') Remove
             .modal-footer
+              a.button.btn.btn-danger(href='/scheduler/'+day.intSchedID+'/remove') Remove
               button.btn.btn-primary(type='submit') Submit
               button.btn.btn-secondary(type='button', data-dismiss='modal') Close

@@ -196,9 +196,17 @@ function editRender(req,res){
       break;
   }
 }
+function delRender(req,res){
+  db.query("DELETE FROM tblschedule WHERE intSchedID= ?",[req.params.schedid], (err, results, fields) => {
+    if (err) console.log(err);
+    console.log('deleted');
+    res.redirect('/scheduler');
+  });
+}
 
 router.get('/', flog, regularSched, render);
 router.get('/:schedid', flog, regularSched, regularDay, editRender);
+router.get('/:schedid/remove', flog, delRender);
 
 router.post('/', (req, res) => {
   if (req.body.Sampm == 'AM' && req.body.Shours == '12'){
@@ -216,6 +224,26 @@ router.post('/', (req, res) => {
   var start = req.body.Shours.concat(':'+req.body.Sminutes);
   var end = req.body.Ehours.concat(':'+req.body.Eminutes);
   db.query("INSERT INTO tblschedule (intSchedAccNo, strSchedDay, tmSchedStart, tmSchedEnd) VALUES (?,?,?,?)",[req.session.user, req.body.addDay, start, end], (err, results, fields) => {
+    if (err) console.log(err);
+    res.redirect('/scheduler');
+  });
+});
+router.post('/:schedid', (req, res) => {
+  if (req.body.ESampm == 'AM' && req.body.EShours == '12'){
+      req.body.EShours = '00';
+  }
+  if (req.body.EEampm == 'AM' && req.body.EEhours == '12'){
+      req.body.EEhours = '00';
+  }
+  if (req.body.ESampm == 'PM' && req.body.EShours != '12'){
+      req.body.EShours = (parseFloat(req.body.EShours) + 12).toString();
+  }
+  if (req.body.EEampm == 'PM' && req.body.EEhours != '12'){
+      req.body.EEhours = (parseFloat(req.body.EEhours) + 12).toString();
+  }
+  var start = req.body.EShours.concat(':'+req.body.ESminutes);
+  var end = req.body.EEhours.concat(':'+req.body.EEminutes);
+  db.query("UPDATE tblschedule SET tmSchedStart= ?, tmSchedEnd= ? WHERE intSchedID= ?",[start, end, req.params.schedid], (err, results, fields) => {
     if (err) console.log(err);
     res.redirect('/scheduler');
   });
