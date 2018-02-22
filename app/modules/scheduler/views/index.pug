@@ -45,6 +45,14 @@ block main
                             .row
                               .col
                                   select#addDay.form-control(name='addDay' required)
+                                    if empty == 1
+                                      option(value='Sunday' selected='') Sunday
+                                      option(value='Monday') Monday
+                                      option(value='Tuesday') Tuesday
+                                      option(value='Wednesday') Wednesday
+                                      option(value='Thursday') Thursday
+                                      option(value='Friday') Friday
+                                      option(value='Saturday') Saturday
                                     each sched in regSchedTab
                                       if sched.sunday == 2 
                                         option(value='Sunday' selected='') Sunday
@@ -140,7 +148,7 @@ block main
                     th(scope="row") Sunday
                     td #{sched.formatstart} - #{sched.formatend}
                     td 
-                      a(href='/scheduler/'+ sched.intSchedID, data-toggle='tooltip', data-placement='bottom', title='Edit')
+                      a(href='/scheduler/rwh/'+ sched.intSchedID, data-toggle='tooltip', data-placement='bottom', title='Edit')
                         img.size(src='/assets/images/icons/settings.png', alt='Edit')
               each sched in regSchedTab
                 if sched.monday == 2
@@ -153,7 +161,7 @@ block main
                     th(scope="row") Monday
                     td #{sched.formatstart} - #{sched.formatend}
                     td 
-                      a(href='/scheduler/'+ sched.intSchedID, data-toggle='tooltip', data-placement='bottom', title='Edit')
+                      a(href='/scheduler/rwh/'+ sched.intSchedID, data-toggle='tooltip', data-placement='bottom', title='Edit')
                         img.size(src='/assets/images/icons/settings.png', alt='Edit')
               each sched in regSchedTab
                 if sched.tuesday == 2
@@ -166,7 +174,7 @@ block main
                     th(scope="row") Tuesday
                     td #{sched.formatstart} - #{sched.formatend}
                     td 
-                      a(href='/scheduler/'+ sched.intSchedID, data-toggle='tooltip', data-placement='bottom', title='Edit')
+                      a(href='/scheduler/rwh/'+ sched.intSchedID, data-toggle='tooltip', data-placement='bottom', title='Edit')
                         img.size(src='/assets/images/icons/settings.png', alt='Edit')
               each sched in regSchedTab
                 if sched.wednesday == 2
@@ -179,7 +187,7 @@ block main
                     th(scope="row") Wednesday
                     td #{sched.formatstart} - #{sched.formatend}
                     td 
-                      a(href='/scheduler/'+ sched.intSchedID, data-toggle='tooltip', data-placement='bottom', title='Edit')
+                      a(href='/scheduler/rwh/'+ sched.intSchedID, data-toggle='tooltip', data-placement='bottom', title='Edit')
                         img.size(src='/assets/images/icons/settings.png', alt='Edit')
               each sched in regSchedTab
                 if sched.thursday == 2
@@ -192,7 +200,7 @@ block main
                     th(scope="row") Thursday
                     td #{sched.formatstart} - #{sched.formatend}
                     td 
-                      a(href='/scheduler/'+ sched.intSchedID, data-toggle='tooltip', data-placement='bottom', title='Edit')
+                      a(href='/scheduler/rwh/'+ sched.intSchedID, data-toggle='tooltip', data-placement='bottom', title='Edit')
                         img.size(src='/assets/images/icons/settings.png', alt='Edit')
               each sched in regSchedTab
                 if sched.friday == 2
@@ -205,7 +213,7 @@ block main
                     th(scope="row") Friday
                     td #{sched.formatstart} - #{sched.formatend}
                     td 
-                      a(href='/scheduler/'+ sched.intSchedID, data-toggle='tooltip', data-placement='bottom', title='Edit')
+                      a(href='/scheduler/rwh/'+ sched.intSchedID, data-toggle='tooltip', data-placement='bottom', title='Edit')
                         img.size(src='/assets/images/icons/settings.png', alt='Edit')
               each sched in regSchedTab
                 if sched.saturday == 2
@@ -218,7 +226,7 @@ block main
                     th(scope="row") Saturday
                     td #{sched.formatstart} - #{sched.formatend}
                     td 
-                      a(href='/scheduler/'+ sched.intSchedID, data-toggle='tooltip', data-placement='bottom', title='Edit')
+                      a(href='/scheduler/rwh/'+ sched.intSchedID, data-toggle='tooltip', data-placement='bottom', title='Edit')
                         img.size(src='/assets/images/icons/settings.png', alt='Edit')
                 
       .col

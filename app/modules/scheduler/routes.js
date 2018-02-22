@@ -6,7 +6,7 @@ var formatAMPM = require('../welcome/formatAMPM');
 
 function regularSched(req, res, next){
   /*Regular Schedule of Current User, Match(session)
-  *(tblservicetag)*/
+  *(tblschedule)*/
   db.query("SELECT * FROM tblschedule WHERE intSchedAccNo= ?",[req.session.user], function (err, results, fields) {
       if (err) return res.send(err);
       if(!results[0]){
@@ -103,15 +103,6 @@ function regularSched(req, res, next){
       return next();
   });
 }
-function regDayExist(req, res, next){
-  /*Selected Schedule Day of Current User, Match(session,body)
-  *(tblschedule)*/
-  db.query("SELECT * FROM tblschedule WHERE intSchedAccNo= ? AND strSchedDay= ?",[req.session.user, req.body.addDay], function (err, results, fields) {
-      if (err) return res.send(err);
-      req.regDayExist = results;
-      return next();
-  });
-}
 function regularDay(req, res, next){
   /*Selected Schedule Day of Current User, Match(session,params)
   *(tblschedule)*/
@@ -168,6 +159,20 @@ function regularDay(req, res, next){
       return next();
   });
 }
+function specialSched(req, res, next){
+  /*Special Schedule of Current User, Match(session)
+  *(tblspecialschedule)*/
+  db.query("SELECT * FROM tblspecialschedule WHERE intSpecialAccNo= ? AND datSpecialDate > NOW() ORDER BY datSpecialDate ASC",[req.session.user], function (err, results, fields) {
+      if (err) return res.send(err);
+      for(count=0;count<results.length;count++){
+        results[count].formatstart = formatAMPM(results[count].tmSpecialStart);
+        results[count].formatend = formatAMPM(results[count].tmSpecialEnd);
+        results[count].date= results[count].datSpecialDate.toDateString("en-US").slice(4, 15);
+      }
+      req.specialSched = results;
+      return next();
+  });
+}
 
 function render(req,res){
   switch (req.valid) {
@@ -180,7 +185,7 @@ function render(req,res){
       break;
   }
 }
-function editRender(req,res){
+function editRWHRender(req,res){
   switch (req.valid) {
     case 1:
       res.render('welcome/views/invalid/adm-restrict');
@@ -191,12 +196,12 @@ function editRender(req,res){
         res.render('scheduler/views/invalid/nosched', {thisUserTab: req.user, regSchedTab: req.regularSched, empty: req.empty})
       }
       else{
-        res.render('scheduler/views/edit', {thisUserTab: req.user, regSchedTab: req.regularSched, regDayTab: req.regularDay, empty: req.empty});
+        res.render('scheduler/views/editRWH', {thisUserTab: req.user, regSchedTab: req.regularSched, regDayTab: req.regularDay, empty: req.empty});
       }
       break;
   }
 }
-function delRender(req,res){
+function delRWHRender(req,res){
   db.query("DELETE FROM tblschedule WHERE intSchedID= ?",[req.params.schedid], (err, results, fields) => {
     if (err) console.log(err);
     console.log('deleted');
@@ -205,8 +210,8 @@ function delRender(req,res){
 }
 
 router.get('/', flog, regularSched, render);
-router.get('/:schedid', flog, regularSched, regularDay, editRender);
-router.get('/:schedid/remove', flog, delRender);
+router.get('/rwh/:schedid', flog, regularSched, regularDay, editRWHRender);
+router.get('/rwh/:schedid/remove', flog, delRWHRender);
 
 router.post('/', (req, res) => {
   if (req.body.Sampm == 'AM' && req.body.Shours == '12'){
@@ -228,7 +233,7 @@ router.post('/', (req, res) => {
     res.redirect('/scheduler');
   });
 });
-router.post('/:schedid', (req, res) => {
+router.post('/rwh/:schedid', (req, res) => {
   if (req.body.ESampm == 'AM' && req.body.EShours == '12'){
       req.body.EShours = '00';
   }

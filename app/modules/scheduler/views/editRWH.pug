@@ -203,7 +203,7 @@ block scheduler
             h5#editRWHModalTitle.modal-title #{day.strSchedDay} Regular Working Hours
             button.close(type='button' data-dismiss='modal' aria-label='Close')
               span(aria-hidden='true') ×
-          form(method='POST' action='/scheduler/'+day.intSchedID)
+          form(method='POST' action='/scheduler/rwh/'+day.intSchedID)
             .modal-body
               .row
                 .col
@@ -230,6 +230,6 @@ block scheduler
                   select#EEampm.form-control(name='EEampm')
                     +ampmsel(day.Eampm)
             .modal-footer
-              a.button.btn.btn-danger(href='/scheduler/'+day.intSchedID+'/remove') Remove
+              a.button.btn.btn-danger(href='/scheduler/rwh/'+day.intSchedID+'/remove') Remove
               button.btn.btn-primary(type='submit') Submit
               button.btn.btn-secondary(type='button', data-dismiss='modal') Close
