@@ -219,7 +219,7 @@ body{
 #sub2 > .row:hover {
   padding-left: 10px;
 }
-.admin:hover {
+.adminside:hover {
     background: #EC9B00 !important;
 }
 /*dashboard*/

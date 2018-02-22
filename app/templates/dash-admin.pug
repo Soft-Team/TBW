@@ -29,7 +29,7 @@ block dash
         #sidebar
           .row
             .col
-              #drop1.row.main-row.text-white.admin(onclick='dropdown1()')
+              #drop1.row.main-row.text-white.adminside(onclick='dropdown1()')
                 h4
                   a Accounts
               #sub1.row
@@ -39,7 +39,7 @@ block dash
                   h4 Banned
                 a.row(href='/admin/Unregistered')
                   h4 Unregistered
-              #drop2.row.main-row.text-white.admin(onclick='dropdown2()')
+              #drop2.row.main-row.text-white.adminside(onclick='dropdown2()')
                 h4
                   a Reports
               #sub2.row
@@ -47,9 +47,9 @@ block dash
                   h4 Reported Users
                 a.row(href='/admin/ReportLog')
                   h4 Report Log
-              a.row.main-row.admin(href='/admin/IDVerification')
+              a.row.main-row.adminside(href='/admin/IDVerification')
                 h4 ID Verifications
-              a.row.main-row.admin(href='/admin/TransactionLog')
+              a.row.main-row.adminside(href='/admin/TransactionLog')
                 h4 Transaction Log
             .col
             
