@@ -6,7 +6,195 @@ block scheduler
       $(window).on('load',function(){
         $('#editRWHModal').modal('show');
       });
-      
+  
+  mixin hoursel(hour)
+    case hour
+      when '01'
+        option(value='01' selected='') 01
+        option(value='02') 02
+        option(value='03') 03
+        option(value='04') 04
+        option(value='05') 05
+        option(value='06') 06
+        option(value='07') 07
+        option(value='08') 08
+        option(value='09') 09
+        option(value='10') 10
+        option(value='11') 11
+        option(value='12') 12
+      when '02'
+        option(value='01') 01
+        option(value='02' selected='') 02
+        option(value='03') 03
+        option(value='04') 04
+        option(value='05') 05
+        option(value='06') 06
+        option(value='07') 07
+        option(value='08') 08
+        option(value='09') 09
+        option(value='10') 10
+        option(value='11') 11
+        option(value='12') 12
+      when '03'
+        option(value='01') 01
+        option(value='02') 02
+        option(value='03' selected='') 03
+        option(value='04') 04
+        option(value='05') 05
+        option(value='06') 06
+        option(value='07') 07
+        option(value='08') 08
+        option(value='09') 09
+        option(value='10') 10
+        option(value='11') 11
+        option(value='12') 12
+      when '04'
+        option(value='01') 01
+        option(value='02') 02
+        option(value='03') 03
+        option(value='04' selected='') 04
+        option(value='05') 05
+        option(value='06') 06
+        option(value='07') 07
+        option(value='08') 08
+        option(value='09') 09
+        option(value='10') 10
+        option(value='11') 11
+        option(value='12') 12
+      when '05'
+        option(value='01') 01
+        option(value='02') 02
+        option(value='03') 03
+        option(value='04') 04
+        option(value='05' selected='') 05
+        option(value='06') 06
+        option(value='07') 07
+        option(value='08') 08
+        option(value='09') 09
+        option(value='10') 10
+        option(value='11') 11
+        option(value='12') 12
+      when '06'
+        option(value='01') 01
+        option(value='02') 02
+        option(value='03') 03
+        option(value='04') 04
+        option(value='05') 05
+        option(value='06' selected='') 06
+        option(value='07') 07
+        option(value='08') 08
+        option(value='09') 09
+        option(value='10') 10
+        option(value='11') 11
+        option(value='12') 12
+      when '07'
+        option(value='01') 01
+        option(value='02') 02
+        option(value='03') 03
+        option(value='04') 04
+        option(value='05') 05
+        option(value='06') 06
+        option(value='07' selected='') 07
+        option(value='08') 08
+        option(value='09') 09
+        option(value='10') 10
+        option(value='11') 11
+        option(value='12') 12
+      when '08'
+        option(value='01') 01
+        option(value='02') 02
+        option(value='03') 03
+        option(value='04') 04
+        option(value='05') 05
+        option(value='06') 06
+        option(value='07') 07
+        option(value='08' selected='') 08
+        option(value='09') 09
+        option(value='10') 10
+        option(value='11') 11
+        option(value='12') 12
+      when '09'
+        option(value='01') 01
+        option(value='02') 02
+        option(value='03') 03
+        option(value='04') 04
+        option(value='05') 05
+        option(value='06') 06
+        option(value='07') 07
+        option(value='08') 08
+        option(value='09' selected='') 09
+        option(value='10') 10
+        option(value='11') 11
+        option(value='12') 12
+      when '10'
+        option(value='01') 01
+        option(value='02') 02
+        option(value='03') 03
+        option(value='04') 04
+        option(value='05') 05
+        option(value='06') 06
+        option(value='07') 07
+        option(value='08') 08
+        option(value='09') 09
+        option(value='10' selected='') 10
+        option(value='11') 11
+        option(value='12') 12
+      when '11'
+        option(value='01') 01
+        option(value='02') 02
+        option(value='03') 03
+        option(value='04') 04
+        option(value='05') 05
+        option(value='06') 06
+        option(value='07') 07
+        option(value='08') 08
+        option(value='09') 09
+        option(value='10') 10
+        option(value='11' selected='') 11
+        option(value='12') 12
+      when '12'
+        option(value='01') 01
+        option(value='02') 02
+        option(value='03') 03
+        option(value='04') 04
+        option(value='05') 05
+        option(value='06') 06
+        option(value='07') 07
+        option(value='08') 08
+        option(value='09') 09
+        option(value='10') 10
+        option(value='11') 11
+        option(value='12' selected='') 12
+  mixin minsel(min)
+    case min
+      when '00'
+        option(value='00' selected='') 00
+        option(value='15') 15
+        option(value='30') 30
+        option(value='45') 45
+      when '15'
+        option(value='00') 00
+        option(value='15' selected='') 15
+        option(value='30') 30
+        option(value='45') 45
+      when '30'
+        option(value='00') 00
+        option(value='15') 15
+        option(value='30' selected='') 30
+        option(value='45') 45
+      when '45'
+        option(value='00') 00
+        option(value='15') 15
+        option(value='30') 30
+        option(value='45' selected='') 45
+  mixin ampmsel(ampm)
+    if ampm == 'AM'
+      option(value='AM' selected='') AM
+      option(value='PM') PM
+    else
+      option(value='AM') AM
+      option(value='PM' selected='') PM
+    
   #editRWHModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='editRWHModalTitle' aria-hidden='true')
     .modal-dialog(role='document')
       .modal-content
@@ -22,387 +210,25 @@ block scheduler
                   p.mt-1.text-center Start
                 .col
                   select#EShours.form-control(name='EShours')
-                    case day.Hstart
-                      when '01'
-                        option(value='01' selected='') 01
-                        option(value='02') 02
-                        option(value='03') 03
-                        option(value='04') 04
-                        option(value='05') 05
-                        option(value='06') 06
-                        option(value='07') 07
-                        option(value='08') 08
-                        option(value='09') 09
-                        option(value='10') 10
-                        option(value='11') 11
-                        option(value='12') 12
-                      when '02'
-                        option(value='01') 01
-                        option(value='02' selected='') 02
-                        option(value='03') 03
-                        option(value='04') 04
-                        option(value='05') 05
-                        option(value='06') 06
-                        option(value='07') 07
-                        option(value='08') 08
-                        option(value='09') 09
-                        option(value='10') 10
-                        option(value='11') 11
-                        option(value='12') 12
-                      when '03'
-                        option(value='01') 01
-                        option(value='02') 02
-                        option(value='03' selected='') 03
-                        option(value='04') 04
-                        option(value='05') 05
-                        option(value='06') 06
-                        option(value='07') 07
-                        option(value='08') 08
-                        option(value='09') 09
-                        option(value='10') 10
-                        option(value='11') 11
-                        option(value='12') 12
-                      when '04'
-                        option(value='01') 01
-                        option(value='02') 02
-                        option(value='03') 03
-                        option(value='04' selected='') 04
-                        option(value='05') 05
-                        option(value='06') 06
-                        option(value='07') 07
-                        option(value='08') 08
-                        option(value='09') 09
-                        option(value='10') 10
-                        option(value='11') 11
-                        option(value='12') 12
-                      when '05'
-                        option(value='01') 01
-                        option(value='02') 02
-                        option(value='03') 03
-                        option(value='04') 04
-                        option(value='05' selected='') 05
-                        option(value='06') 06
-                        option(value='07') 07
-                        option(value='08') 08
-                        option(value='09') 09
-                        option(value='10') 10
-                        option(value='11') 11
-                        option(value='12') 12
-                      when '06'
-                        option(value='01') 01
-                        option(value='02') 02
-                        option(value='03') 03
-                        option(value='04') 04
-                        option(value='05') 05
-                        option(value='06' selected='') 06
-                        option(value='07') 07
-                        option(value='08') 08
-                        option(value='09') 09
-                        option(value='10') 10
-                        option(value='11') 11
-                        option(value='12') 12
-                      when '07'
-                        option(value='01') 01
-                        option(value='02') 02
-                        option(value='03') 03
-                        option(value='04') 04
-                        option(value='05') 05
-                        option(value='06') 06
-                        option(value='07' selected='') 07
-                        option(value='08') 08
-                        option(value='09') 09
-                        option(value='10') 10
-                        option(value='11') 11
-                        option(value='12') 12
-                      when '08'
-                        option(value='01') 01
-                        option(value='02') 02
-                        option(value='03') 03
-                        option(value='04') 04
-                        option(value='05') 05
-                        option(value='06') 06
-                        option(value='07') 07
-                        option(value='08' selected='') 08
-                        option(value='09') 09
-                        option(value='10') 10
-                        option(value='11') 11
-                        option(value='12') 12
-                      when '09'
-                        option(value='01') 01
-                        option(value='02') 02
-                        option(value='03') 03
-                        option(value='04') 04
-                        option(value='05') 05
-                        option(value='06') 06
-                        option(value='07') 07
-                        option(value='08') 08
-                        option(value='09' selected='') 09
-                        option(value='10') 10
-                        option(value='11') 11
-                        option(value='12') 12
-                      when '10'
-                        option(value='01') 01
-                        option(value='02') 02
-                        option(value='03') 03
-                        option(value='04') 04
-                        option(value='05') 05
-                        option(value='06') 06
-                        option(value='07') 07
-                        option(value='08') 08
-                        option(value='09') 09
-                        option(value='10' selected='') 10
-                        option(value='11') 11
-                        option(value='12') 12
-                      when '11'
-                        option(value='01') 01
-                        option(value='02') 02
-                        option(value='03') 03
-                        option(value='04') 04
-                        option(value='05') 05
-                        option(value='06') 06
-                        option(value='07') 07
-                        option(value='08') 08
-                        option(value='09') 09
-                        option(value='10') 10
-                        option(value='11' selected='') 11
-                        option(value='12') 12
-                      when '12'
-                        option(value='01') 01
-                        option(value='02') 02
-                        option(value='03') 03
-                        option(value='04') 04
-                        option(value='05') 05
-                        option(value='06') 06
-                        option(value='07') 07
-                        option(value='08') 08
-                        option(value='09') 09
-                        option(value='10') 10
-                        option(value='11') 11
-                        option(value='12' selected='') 12
+                    +hoursel(day.Hstart)
                 .col
                   select#ESminutes.form-control(name='ESminutes')
-                    case day.Mstart
-                      when '00'
-                        option(value='00' selected='') 00
-                        option(value='15') 15
-                        option(value='30') 30
-                        option(value='45') 45
-                      when '15'
-                        option(value='00') 00
-                        option(value='15' selected='') 15
-                        option(value='30') 30
-                        option(value='45') 45
-                      when '30'
-                        option(value='00') 00
-                        option(value='15') 15
-                        option(value='30' selected='') 30
-                        option(value='45') 45
-                      when '45'
-                        option(value='00') 00
-                        option(value='15') 15
-                        option(value='30') 30
-                        option(value='45' selected='') 45
+                    +minsel(day.Mstart)
                 .col
                   select#ESampm.form-control(name='ESampm')
-                    if day.Sampm == 'AM'
-                      option(value='AM' selected='') AM
-                      option(value='PM') PM
-                    else
-                      option(value='AM') AM
-                      option(value='PM' selected='') PM
+                    +ampmsel(day.Sampm)
               .row
                 .col
                   p.mt-1.text-center End
                 .col
                   select#EEhours.form-control(name='EEhours')
-                    case day.Hend
-                      when '01'
-                        option(value='01' selected='') 01
-                        option(value='02') 02
-                        option(value='03') 03
-                        option(value='04') 04
-                        option(value='05') 05
-                        option(value='06') 06
-                        option(value='07') 07
-                        option(value='08') 08
-                        option(value='09') 09
-                        option(value='10') 10
-                        option(value='11') 11
-                        option(value='12') 12
-                      when '02'
-                        option(value='01') 01
-                        option(value='02' selected='') 02
-                        option(value='03') 03
-                        option(value='04') 04
-                        option(value='05') 05
-                        option(value='06') 06
-                        option(value='07') 07
-                        option(value='08') 08
-                        option(value='09') 09
-                        option(value='10') 10
-                        option(value='11') 11
-                        option(value='12') 12
-                      when '03'
-                        option(value='01') 01
-                        option(value='02') 02
-                        option(value='03' selected='') 03
-                        option(value='04') 04
-                        option(value='05') 05
-                        option(value='06') 06
-                        option(value='07') 07
-                        option(value='08') 08
-                        option(value='09') 09
-                        option(value='10') 10
-                        option(value='11') 11
-                        option(value='12') 12
-                      when '04'
-                        option(value='01') 01
-                        option(value='02') 02
-                        option(value='03') 03
-                        option(value='04' selected='') 04
-                        option(value='05') 05
-                        option(value='06') 06
-                        option(value='07') 07
-                        option(value='08') 08
-                        option(value='09') 09
-                        option(value='10') 10
-                        option(value='11') 11
-                        option(value='12') 12
-                      when '05'
-                        option(value='01') 01
-                        option(value='02') 02
-                        option(value='03') 03
-                        option(value='04') 04
-                        option(value='05' selected='') 05
-                        option(value='06') 06
-                        option(value='07') 07
-                        option(value='08') 08
-                        option(value='09') 09
-                        option(value='10') 10
-                        option(value='11') 11
-                        option(value='12') 12
-                      when '06'
-                        option(value='01') 01
-                        option(value='02') 02
-                        option(value='03') 03
-                        option(value='04') 04
-                        option(value='05') 05
-                        option(value='06' selected='') 06
-                        option(value='07') 07
-                        option(value='08') 08
-                        option(value='09') 09
-                        option(value='10') 10
-                        option(value='11') 11
-                        option(value='12') 12
-                      when '07'
-                        option(value='01') 01
-                        option(value='02') 02
-                        option(value='03') 03
-                        option(value='04') 04
-                        option(value='05') 05
-                        option(value='06') 06
-                        option(value='07' selected='') 07
-                        option(value='08') 08
-                        option(value='09') 09
-                        option(value='10') 10
-                        option(value='11') 11
-                        option(value='12') 12
-                      when '08'
-                        option(value='01') 01
-                        option(value='02') 02
-                        option(value='03') 03
-                        option(value='04') 04
-                        option(value='05') 05
-                        option(value='06') 06
-                        option(value='07') 07
-                        option(value='08' selected='') 08
-                        option(value='09') 09
-                        option(value='10') 10
-                        option(value='11') 11
-                        option(value='12') 12
-                      when '09'
-                        option(value='01') 01
-                        option(value='02') 02
-                        option(value='03') 03
-                        option(value='04') 04
-                        option(value='05') 05
-                        option(value='06') 06
-                        option(value='07') 07
-                        option(value='08') 08
-                        option(value='09' selected='') 09
-                        option(value='10') 10
-                        option(value='11') 11
-                        option(value='12') 12
-                      when '10'
-                        option(value='01') 01
-                        option(value='02') 02
-                        option(value='03') 03
-                        option(value='04') 04
-                        option(value='05') 05
-                        option(value='06') 06
-                        option(value='07') 07
-                        option(value='08') 08
-                        option(value='09') 09
-                        option(value='10' selected='') 10
-                        option(value='11') 11
-                        option(value='12') 12
-                      when '11'
-                        option(value='01') 01
-                        option(value='02') 02
-                        option(value='03') 03
-                        option(value='04') 04
-                        option(value='05') 05
-                        option(value='06') 06
-                        option(value='07') 07
-                        option(value='08') 08
-                        option(value='09') 09
-                        option(value='10') 10
-                        option(value='11' selected='') 11
-                        option(value='12') 12
-                      when '12'
-                        option(value='01') 01
-                        option(value='02') 02
-                        option(value='03') 03
-                        option(value='04') 04
-                        option(value='05') 05
-                        option(value='06') 06
-                        option(value='07') 07
-                        option(value='08') 08
-                        option(value='09') 09
-                        option(value='10') 10
-                        option(value='11') 11
-                        option(value='12' selected='') 12
+                    +hoursel(day.Hend)
                 .col
                   select#EEminutes.form-control(name='EEminutes')
-                    case day.Mend
-                      when '00'
-                        option(value='00' selected='') 00
-                        option(value='15') 15
-                        option(value='30') 30
-                        option(value='45') 45
-                      when '15'
-                        option(value='00') 00
-                        option(value='15' selected='') 15
-                        option(value='30') 30
-                        option(value='45') 45
-                      when '30'
-                        option(value='00') 00
-                        option(value='15') 15
-                        option(value='30' selected='') 30
-                        option(value='45') 45
-                      when '45'
-                        option(value='00') 00
-                        option(value='15') 15
-                        option(value='30') 30
-                        option(value='45' selected='') 45
+                    +minsel(day.Mend)
                 .col
                   select#EEampm.form-control(name='EEampm')
-                    if day.Eampm == 'AM'
-                      option(value='AM' selected='') AM
-                      option(value='PM') PM
-                    else
-                      option(value='AM') AM
-                      option(value='PM' selected='') PM
+                    +ampmsel(day.Eampm)
               .row
                 .col.align-right
                     button.btn.btn-danger(href='') Remove
