@@ -16,6 +16,30 @@ USE `dbtrabawho`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `tblcancellation`
+--
+
+DROP TABLE IF EXISTS `tblcancellation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tblcancellation` (
+  `intCancelID` int(11) NOT NULL AUTO_INCREMENT,
+  `intCancelChatID` int(11) NOT NULL,
+  `dtmCancelDate` datetime NOT NULL,
+  `txtCancelReason` text NOT NULL,
+  `intHidden` int(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`intCancelID`),
+  KEY `intCancelChatID_idx` (`intCancelChatID`),
+  CONSTRAINT `intCancelChatID` FOREIGN KEY (`intCancelChatID`) REFERENCES `tblchat` (`intChatID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tblcancellation`
+--
+
+
+--
 -- Table structure for table `tblchat`
 --
 
@@ -80,14 +104,14 @@ CREATE TABLE `tblmessage` (
   PRIMARY KEY (`intMessID`),
   KEY `intMessChatID_idx` (`intMessChatID`),
   CONSTRAINT `intMessChatID` FOREIGN KEY (`intMessChatID`) REFERENCES `tblchat` (`intChatID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `tblmessage`
 --
 
-INSERT INTO `tblmessage` VALUES (1,1,'MessOne','2018-01-28 00:00:00',1,1),(2,1,'MessTwo','2018-01-28 00:00:00',1,2),(3,1,'Skkr','2018-02-02 01:28:25',0,1),(4,1,'Motorsport','2018-02-02 01:30:22',0,1),(5,1,'AP\n','2018-02-02 01:32:24',0,1),(6,1,'Ice\nTray\nThe\nGang','2018-02-02 01:33:24',0,2),(7,1,'Ice','2018-02-02 01:33:31',0,1),(8,1,'','2018-02-02 01:37:27',0,1),(9,1,'','2018-02-02 01:39:17',0,1),(10,1,'Yeah','2018-02-02 02:16:28',0,1),(11,1,'Rain Drop','2018-02-02 02:19:44',0,1),(12,2,'AAA','2018-02-02 02:19:44',0,1),(13,1,'x','2018-02-11 15:48:28',0,1);
+INSERT INTO `tblmessage` VALUES (1,1,'MessOne','2018-01-28 00:00:00',1,1),(2,1,'MessTwo','2018-01-28 00:00:00',1,2),(3,1,'Skkr','2018-02-02 01:28:25',0,1),(4,1,'Motorsport','2018-02-02 01:30:22',0,1),(5,1,'AP\n','2018-02-02 01:32:24',0,1),(6,1,'Ice\nTray\nThe\nGang','2018-02-02 01:33:24',0,2),(7,1,'Ice','2018-02-02 01:33:31',0,1),(8,1,'','2018-02-02 01:37:27',0,1),(9,1,'','2018-02-02 01:39:17',0,1),(10,1,'Yeah','2018-02-02 02:16:28',0,1),(11,1,'Rain Drop','2018-02-02 02:19:44',0,1),(12,2,'AAA','2018-02-02 02:19:44',0,1),(13,1,'x','2018-02-11 15:48:28',0,1),(14,1,'s','2018-02-14 10:40:03',0,1),(15,1,'ss','2018-02-14 10:40:08',0,1),(16,1,'x','2018-02-14 10:41:13',0,1),(17,1,'s','2018-02-14 10:49:03',0,1),(18,1,'opps','2018-02-14 10:59:44',0,1),(19,1,'x','2018-02-14 11:06:12',0,1),(20,1,'j','2018-02-14 11:10:47',0,1),(21,1,'bad things','2018-02-14 11:11:51',0,2);
 
 --
 -- Table structure for table `tblrating`
@@ -126,14 +150,17 @@ DROP TABLE IF EXISTS `tblreport`;
 CREATE TABLE `tblreport` (
   `intRepID` int(11) NOT NULL AUTO_INCREMENT,
   `intRepedAccNo` int(9) NOT NULL COMMENT 'FK',
-  `intRepTransID` int(11) NOT NULL COMMENT 'FK',
+  `intRepTransID` int(11) DEFAULT NULL COMMENT 'FK',
+  `intRepChatID` int(11) DEFAULT NULL,
   `intRepCategory` int(1) NOT NULL,
   `txtRepDesc` text,
   `datRepDate` date NOT NULL,
-  `intRepAdSeen` int(1) NOT NULL,
+  `intRepHidden` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`intRepID`),
   KEY `intRepedAccNo_idx` (`intRepedAccNo`),
   KEY `intRepTransID_idx` (`intRepTransID`),
+  KEY `intRepChatID_idx` (`intRepChatID`),
+  CONSTRAINT `intRepChatID` FOREIGN KEY (`intRepChatID`) REFERENCES `tblchat` (`intChatID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `intRepTransID` FOREIGN KEY (`intRepTransID`) REFERENCES `tbltransaction` (`intTransID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `intRepedAccNo` FOREIGN KEY (`intRepedAccNo`) REFERENCES `tbluser` (`intAccNo`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -145,27 +172,29 @@ CREATE TABLE `tblreport` (
 
 
 --
--- Table structure for table `tblrequest`
+-- Table structure for table `tblschedule`
 --
 
-DROP TABLE IF EXISTS `tblrequest`;
+DROP TABLE IF EXISTS `tblschedule`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tblrequest` (
-  `intReqID` int(11) NOT NULL AUTO_INCREMENT,
-  `intReqAccNo` int(9) NOT NULL COMMENT 'FK',
-  `strReqValidID` varchar(45) NOT NULL,
-  `intResponse` int(1) NOT NULL,
-  PRIMARY KEY (`intReqID`),
-  KEY `intReqAccNo_idx` (`intReqAccNo`),
-  CONSTRAINT `intReqAccNo` FOREIGN KEY (`intReqAccNo`) REFERENCES `tbluser` (`intAccNo`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `tblschedule` (
+  `intSchedID` int(11) NOT NULL AUTO_INCREMENT,
+  `intSchedAccNo` int(9) NOT NULL,
+  `strSchedDay` varchar(10) NOT NULL,
+  `tmSchedStart` time NOT NULL,
+  `tmSchedEnd` time NOT NULL,
+  PRIMARY KEY (`intSchedID`),
+  KEY `intSchedAccNo_idx` (`intSchedAccNo`),
+  CONSTRAINT `intSchedAccNo` FOREIGN KEY (`intSchedAccNo`) REFERENCES `tbluser` (`intAccNo`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tblrequest`
+-- Dumping data for table `tblschedule`
 --
 
+INSERT INTO `tblschedule` VALUES (1,1,'Friday','10:00:00','19:00:00'),(3,1,'Thursday','06:15:00','09:00:00'),(4,1,'Saturday','12:15:00','12:00:00'),(7,1,'Wednesday','12:00:00','20:45:00'),(8,1,'Tuesday','14:00:00','21:30:00');
 
 --
 -- Table structure for table `tblservice`
@@ -193,7 +222,7 @@ CREATE TABLE `tblservice` (
 -- Dumping data for table `tblservice`
 --
 
-INSERT INTO `tblservice` VALUES (1,1,1,1,2,72.5),(3,1,2,1,1,32),(5,3,5,1,2,72),(6,3,1,0,2,50),(7,3,2,2,2,60),(29,5,1,1,1,213),(30,4,1,1,2,45),(31,2,1,1,1,665),(32,4,2,1,1,1245),(33,2,2,1,2,55),(34,5,2,1,2,120),(35,1,3,1,1,123),(36,1,7,1,1,113);
+INSERT INTO `tblservice` VALUES (1,1,1,1,2,72.5),(3,2,1,1,1,32),(5,3,5,1,2,72),(6,3,1,0,2,50),(7,3,2,1,2,60),(29,5,1,1,1,213),(30,4,1,1,2,45),(32,4,2,1,1,1245),(33,2,2,1,2,55),(34,5,2,1,2,120),(35,1,3,1,1,123),(36,1,7,1,1,113);
 
 --
 -- Table structure for table `tblservicereq`
@@ -240,6 +269,55 @@ CREATE TABLE `tblservicetag` (
 --
 
 INSERT INTO `tblservicetag` VALUES (1,'Plumbing'),(2,'Electrician'),(3,'Technician'),(4,'Laundry'),(5,'Carpenter');
+
+--
+-- Table structure for table `tblspecialsched`
+--
+
+DROP TABLE IF EXISTS `tblspecialsched`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tblspecialsched` (
+  `intSpecialID` int(11) NOT NULL AUTO_INCREMENT,
+  `intSpecialAccNo` int(9) NOT NULL,
+  `datSpecialDate` date NOT NULL,
+  `tmSpecialStart` time NOT NULL,
+  `tmSpecialEnd` time NOT NULL,
+  PRIMARY KEY (`intSpecialID`),
+  KEY `intSpecialAccNo_idx` (`intSpecialAccNo`),
+  CONSTRAINT `intSpecialAccNo` FOREIGN KEY (`intSpecialAccNo`) REFERENCES `tbluser` (`intAccNo`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tblspecialsched`
+--
+
+
+--
+-- Table structure for table `tblsuspension`
+--
+
+DROP TABLE IF EXISTS `tblsuspension`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tblsuspension` (
+  `intSuspendID` int(11) NOT NULL AUTO_INCREMENT,
+  `intSuspendAccNo` int(9) NOT NULL,
+  `intSuspendCancelID` int(11) NOT NULL,
+  `datSuspendDate` date NOT NULL,
+  PRIMARY KEY (`intSuspendID`),
+  KEY `intSuspendAccNo_idx` (`intSuspendAccNo`),
+  KEY `intSuspendCancelID_idx` (`intSuspendCancelID`),
+  CONSTRAINT `intSuspendAccNo` FOREIGN KEY (`intSuspendAccNo`) REFERENCES `tbluser` (`intAccNo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `intSuspendCancelID` FOREIGN KEY (`intSuspendCancelID`) REFERENCES `tblcancellation` (`intCancelID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tblsuspension`
+--
+
 
 --
 -- Table structure for table `tbltransaction`
