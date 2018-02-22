@@ -5,7 +5,7 @@ var flog = require('../welcome/loggedin');
 var formatAMPM = require('../welcome/formatAMPM');
 
 function regularSched(req, res, next){
-  /*Regular Schedule of Current User
+  /*Regular Schedule of Current User, Match(session)
   *(tblservicetag)*/
   db.query("SELECT * FROM tblschedule WHERE intSchedAccNo= ?",[req.session.user], function (err, results, fields) {
       if (err) return res.send(err);
@@ -103,6 +103,28 @@ function regularSched(req, res, next){
       return next();
   });
 }
+function regDayExist(req, res, next){
+  /*Selected Schedule Day of Current User, Match(session,body)
+  *(tblschedule)*/
+  db.query("SELECT * FROM tblschedule WHERE intSchedAccNo= ? AND strSchedDay= ?",[req.session.user, req.body.addDay], function (err, results, fields) {
+      if (err) return res.send(err);
+      req.regDayExist = results;
+      return next();
+  });
+}
+function regularDay(req, res, next){
+  /*Selected Schedule Day of Current User, Match(session,params)
+  *(tblschedule)*/
+  db.query("SELECT * FROM tblschedule WHERE intSchedAccNo= ? AND intSchedID= ?",[req.session.user, req.params.schedid], function (err, results, fields) {
+      if (err) return res.send(err);
+      if(!(!results[0])){
+        results[0].Hstart = results[0].tmSchedStart.charAt(0).concat(results[0].tmSchedStart.charAt(1));
+        results[0].Hend = results[0].tmSchedEnd.charAt(0).concat(results[0].tmSchedEnd.charAt(1));
+      }
+      req.regularDay = results;
+      return next();
+  });
+}
 
 function render(req,res){
   switch (req.valid) {
@@ -115,7 +137,45 @@ function render(req,res){
       break;
   }
 }
+function editRender(req,res){
+  switch (req.valid) {
+    case 1:
+      res.render('welcome/views/invalid/adm-restrict');
+      break;
+    case 2:
+    case 3:
+      if (!req.regularDay[0]){
+        res.render('scheduler/views/invalid/nosched', {thisUserTab: req.user, regSchedTab: req.regularSched, empty: req.empty})
+      }
+      else{
+        res.render('scheduler/views/edit', {thisUserTab: req.user, regSchedTab: req.regularSched, regDayTab: req.regularDay, empty: req.empty});
+      }
+      break;
+  }
+}
 
 router.get('/', flog, regularSched, render);
+router.get('/:schedid', flog, regularSched, regularDay, editRender);
+
+router.post('/', (req, res) => {
+  if (req.body.Sampm == 'AM' && req.body.Shours == '12'){
+      req.body.Shours = '00';
+  }
+  if (req.body.Eampm == 'AM' && req.body.Ehours == '12'){
+      req.body.Ehours = '00';
+  }
+  if (req.body.Sampm == 'PM' && req.body.Shours != '12'){
+    req.body.Shours = (parseFloat(req.body.Shours) + 12).toString();
+  }
+  if (req.body.Eampm == 'PM' && req.body.Ehours != '12'){
+    req.body.Ehours = (parseFloat(req.body.Ehours) + 12).toString();
+  }
+  var start = req.body.Shours.concat(':'+req.body.Sminutes);
+  var end = req.body.Ehours.concat(':'+req.body.Eminutes);
+  db.query("INSERT INTO tblschedule (intSchedAccNo, strSchedDay, tmSchedStart, tmSchedEnd) VALUES (?,?,?,?)",[req.session.user, req.body.addDay, start, end], (err, results, fields) => {
+    if (err) console.log(err);
+    res.redirect('/scheduler');
+  });
+});
 
 exports.scheduler = router;

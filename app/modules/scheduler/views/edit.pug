@@ -1,0 +1,108 @@
+extends index.pug
+
+block scheduler
+  block append scripts
+    script.
+      $(window).on('load',function(){
+        $('#editRWHModal').modal('show');
+      });
+      
+  #editRWHModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='editRWHModalTitle' aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        each day in regDayTab
+          .modal-header
+            h5#editRWHModalTitle.modal-title #{day.strSchedDay} Regular Working Hours
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+              span(aria-hidden='true') ×
+          form(method='POST' action='/myservices/'+day.intSchedID)
+            .modal-body
+              .row
+                .col
+                  p.mt-1.text-center Start
+                .col
+                  select#Shours.form-control(name='Shours')
+                    case Hstart
+                      when 01
+                        option(value='01' selected='') 01
+                        option(value='02') 02
+                        option(value='03') 03
+                        option(value='04') 04
+                        option(value='05') 05
+                        option(value='06') 06
+                        option(value='07') 07
+                        option(value='08') 08
+                        option(value='09') 09
+                        option(value='10') 10
+                        option(value='11') 11
+                        option(value='12') 12
+                      when 02
+                        option(value='01') 01
+                        option(value='02' selected='') 02
+                        option(value='03') 03
+                        option(value='04') 04
+                        option(value='05') 05
+                        option(value='06') 06
+                        option(value='07') 07
+                        option(value='08') 08
+                        option(value='09') 09
+                        option(value='10') 10
+                        option(value='11') 11
+                        option(value='12') 12
+                        
+                      default
+                    option(value='01') 01
+                    option(value='02') 02
+                    option(value='03') 03
+                    option(value='04') 04
+                    option(value='05') 05
+                    option(value='06') 06
+                    option(value='07') 07
+                    option(value='08') 08
+                    option(value='09') 09
+                    option(value='10') 10
+                    option(value='11') 11
+                    option(value='12') 12
+                .col
+                  select#Sminutes.form-control(name='Sminutes')
+                    option(value='00' selected='') 00
+                    option(value='15') 15
+                    option(value='30') 30
+                    option(value='45') 45
+                .col
+                  select#Sampm.form-control(name='Sampm')
+                    option(value='AM' selected='') AM
+                    option(value='PM') PM
+              .row
+                .col
+                  p.mt-1.text-center End
+                .col
+                  select#Ehours.form-control(name='Ehours')
+                    option(value='01') 01
+                    option(value='02') 02
+                    option(value='03') 03
+                    option(value='04') 04
+                    option(value='05') 05
+                    option(value='06') 06
+                    option(value='07') 07
+                    option(value='08') 08
+                    option(value='09') 09
+                    option(value='10') 10
+                    option(value='11') 11
+                    option(value='12' selected='') 12
+                .col
+                  select#Eminutes.form-control(name='Eminutes')
+                    option(value='00' selected='') 00
+                    option(value='15') 15
+                    option(value='30') 30
+                    option(value='45') 45
+                .col
+                  select#Eampm.form-control(name='Eampm')
+                    option(value='AM' selected='') AM
+                    option(value='PM') PM
+              .row
+                .col.align-right
+                    button.btn.btn-danger(href='') Remove
+            .modal-footer
+              button.btn.btn-primary(type='submit') Submit
+              button.btn.btn-secondary(type='button', data-dismiss='modal') Close

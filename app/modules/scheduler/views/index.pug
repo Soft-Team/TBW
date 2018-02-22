@@ -28,11 +28,101 @@ block main
     .row
       .col
         table.table.table-striped
-          thead.text-white
+          thead
             tr
-              th.align-left(scope='col') Regular Working Hours
-              th.align-right(scope='col' colspan="2")
-                button.btn.btn-outline-light.btn-tab-sm(type='button' data-toggle='modal' data-target='#RWHModal') +
+              th.align-left.text-white(scope='col') Regular Working Hours
+              form(method='POST' action='/scheduler')
+                th.align-right(scope='col' colspan="2")
+                    button.btn.btn-outline-light.btn-tab-sm(type='button' data-toggle='modal' data-target='#RWHModal') +
+                    #RWHModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='RWHModal' aria-hidden='true')
+                      .modal-dialog(role='document')
+                        .modal-content
+                          .modal-header
+                            h5#RWHModalTitle.modal-title Regular Working Hours
+                            button.close(type='button' data-dismiss='modal' aria-label='Close')
+                              span(aria-hidden='true') ×
+                          .modal-body
+                            .row
+                              .col
+                                  select#addDay.form-control(name='addDay' required)
+                                    each sched in regSchedTab
+                                      if sched.sunday == 2 
+                                        option(value='Sunday' selected='') Sunday
+                                      if sched.monday == 2 
+                                        option(value='Monday') Monday
+                                      if sched.tuesday == 2 
+                                        option(value='Tuesday') Tuesday
+                                      if sched.wednesday == 2 
+                                        option(value='Wednesday') Wednesday
+                                      if sched.thursday == 2
+                                        option(value='Thursday') Thursday
+                                      if sched.friday == 2
+                                        option(value='Friday') Friday
+                                      if sched.saturday == 2
+                                        option(value='Saturday') Saturday
+                            br
+                            .row
+                              .col
+                                p.mt-1.text-center Start
+                              .col
+                                select#Shours.form-control(name='Shours')
+                                  option(value='01') 01
+                                  option(value='02') 02
+                                  option(value='03') 03
+                                  option(value='04') 04
+                                  option(value='05') 05
+                                  option(value='06') 06
+                                  option(value='07') 07
+                                  option(value='08') 08
+                                  option(value='09') 09
+                                  option(value='10') 10
+                                  option(value='11') 11
+                                  option(value='12' selected='') 12
+                              .col
+                                select#Sminutes.form-control(name='Sminutes')
+                                  option(value='00' selected='') 00
+                                  option(value='15') 15
+                                  option(value='30') 30
+                                  option(value='45') 45
+                              .col
+                                select#Sampm.form-control(name='Sampm')
+                                  option(value='AM' selected='') AM
+                                  option(value='PM') PM
+                            .row
+                              .col
+                                p.mt-1.text-center End
+                              .col
+                                select#Ehours.form-control(name='Ehours')
+                                  option(value='01') 01
+                                  option(value='02') 02
+                                  option(value='03') 03
+                                  option(value='04') 04
+                                  option(value='05') 05
+                                  option(value='06') 06
+                                  option(value='07') 07
+                                  option(value='08') 08
+                                  option(value='09') 09
+                                  option(value='10') 10
+                                  option(value='11') 11
+                                  option(value='12' selected='') 12
+                              .col
+                                select#Eminutes.form-control(name='Eminutes')
+                                  option(value='00' selected='') 00
+                                  option(value='15') 15
+                                  option(value='30') 30
+                                  option(value='45') 45
+                              .col
+                                select#Eampm.form-control(name='Eampm')
+                                  option(value='AM' selected='') AM
+                                  option(value='PM') PM
+                            br
+                              
+                            .modal-footer
+                              button.btn.btn-primary(type='submit') Submit
+                              button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+                              
+                      
+
           tbody
             if empty == 1
               tr
@@ -143,93 +233,4 @@ block main
             tr
               th(scope='row') Feb 24, 2018
               td 11AM - 2PM
-  #RWHModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='RWHModal' aria-hidden='true')
-    .modal-dialog(role='document')
-      .modal-content
-        .modal-header
-          h5#RWHModalTitle.modal-title Regular Working Hours
-          button.close(type='button' data-dismiss='modal' aria-label='Close')
-            span(aria-hidden='true') ×
-        .modal-body
-          .row
-            .col
-                select#Sampm.form-control(name='Sampm')
-                  each sched in regSchedTab
-                    if sched.sunday == 2 
-                      option(value='Sunday' selected='') Sunday
-                    if sched.monday == 2 
-                      option(value='Monday') Monday
-                    if sched.tuesday == 2 
-                      option(value='Tuesday') Tuesday
-                    if sched.wednesday == 2 
-                      option(value='Wednesday') Wednesday
-                    if sched.thursday == 2
-                      option(value='Thursday') Thursday
-                    if sched.friday == 2
-                      option(value='Friday') Friday
-                    if sched.saturday == 2
-                      option(value='Saturday') Saturday
-          br
-          .row
-            .col
-              p.mt-1.text-center Start
-            .col
-              select#Shours.form-control(name='Shours')
-                option(value='none' selected='') -
-                option(value='01') 01
-                option(value='02') 02
-                option(value='03') 03
-                option(value='04') 04
-                option(value='05') 05
-                option(value='06') 06
-                option(value='07') 07
-                option(value='08') 08
-                option(value='09') 09
-                option(value='10') 10
-                option(value='11') 11
-                option(value='12') 12
-            .col
-              select#Sminutes.form-control(name='Sminutes')
-                option(value='00' selected='') 00
-                option(value='15') 15
-                option(value='30') 30
-                option(value='45') 45
-            .col
-              select#Sampm.form-control(name='Sampm')
-                option(value='AM' selected='') AM
-                option(value='PM') PM
-          .row
-            .col
-              p.mt-1.text-center End
-            .col
-              select#Ehours.form-control(name='Ehours')
-                option(value='none' selected='') -
-                option(value='01') 01
-                option(value='02') 02
-                option(value='03') 03
-                option(value='04') 04
-                option(value='05') 05
-                option(value='06') 06
-                option(value='07') 07
-                option(value='08') 08
-                option(value='09') 09
-                option(value='10') 10
-                option(value='11') 11
-                option(value='12') 12
-            .col
-              select#Eminutes.form-control(name='Eminutes')
-                option(value='00' selected='') 00
-                option(value='15') 15
-                option(value='30') 30
-                option(value='45') 45
-            .col
-              select#Eampm.form-control(name='Eampm')
-                option(value='AM' selected='') AM
-                option(value='PM') PM
-          br
-            
-          .modal-footer
-            button.btn.btn-primary(type='submit') Submit
-            button.btn.btn-secondary(type='button', data-dismiss='modal') Close
-            
-    
+  block scheduler
