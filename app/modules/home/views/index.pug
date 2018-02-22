@@ -3,4 +3,45 @@ extends ../../../templates/dash.pug
 block main
   .jumbotron-banner
     center
-      h1.text-white Hello User! Welcome to TrabaWHO
+      each thisuser in thisUserTab
+        h1.text-white Hello #{thisuser.strName} Welcome to TrabaWHO
+  .container.mt-3.con
+    .row
+      .col
+        center
+          .card.box.b-mf.box-shadow-mini
+            .card-header.text-white
+              | Sample
+            .card-body.box-body
+              h5.card-title Special title treatment
+              p.card-text With supporting text below as a natural lead-in to additional content.
+              a(href='#') Go somewhere>>
+      .col
+        center
+          .card.box.b-mf.box-shadow-mini
+            .card-header.text-white
+              h4(style="text-align: left") Sample
+            .card-body.box-body
+              h5.card-title Special title treatment
+              p.card-text With supporting text below as a natural lead-in to additional content.
+            .card-footer.box-ft
+              a.btn.btn-primary(href='#') Go somewhere
+    .row
+      .col
+        center
+          .card.box.b-mg.box-shadow-mini
+            .card-header.text-white
+              h2 Sample
+            .card-body.box-body
+              h5.card-title Special title treatment
+              p.card-text With supporting text below as a natural lead-in to additional content.
+              a.btn.btn-primary(href='#') Go somewhere
+      .col
+        center
+          .card.box.b-mg.box-shadow-mini
+            .card-body.box-body
+              h1 Sample
+              h5.card-title Special title treatment
+              p.card-text With supporting text below as a natural lead-in to additional content.
+              a(href='#') Go somewhere
+          
