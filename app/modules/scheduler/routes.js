@@ -162,14 +162,21 @@ function regularDay(req, res, next){
 function specialSched(req, res, next){
   /*Special Schedule of Current User, Match(session)
   *(tblspecialschedule)*/
-  db.query("SELECT * FROM tblspecialschedule WHERE intSpecialAccNo= ? AND datSpecialDate > NOW() ORDER BY datSpecialDate ASC",[req.session.user], function (err, results, fields) {
+  db.query("SELECT * FROM tblspecialsched WHERE intSpecialAccNo= ? AND datSpecialDate > NOW() ORDER BY datSpecialDate ASC",[req.session.user], function (err, results, fields) {
       if (err) return res.send(err);
-      for(count=0;count<results.length;count++){
-        results[count].formatstart = formatAMPM(results[count].tmSpecialStart);
-        results[count].formatend = formatAMPM(results[count].tmSpecialEnd);
-        results[count].date= results[count].datSpecialDate.toDateString("en-US").slice(4, 15);
+      if(!results[0]){
+        var empty = 1;
+      }
+      else{
+        var empty = 0;
+        for(count=0;count<results.length;count++){
+          results[count].formatstart = formatAMPM(results[count].tmSpecialStart);
+          results[count].formatend = formatAMPM(results[count].tmSpecialEnd);
+          results[count].date = results[count].datSpecialDate.toDateString("en-US").slice(4, 15);
+        }
       }
       req.specialSched = results;
+      req.emptyspecial = empty;
       return next();
   });
 }
@@ -181,7 +188,7 @@ function render(req,res){
       break;
     case 2:
     case 3:
-      res.render('scheduler/views/index', {thisUserTab: req.user, regSchedTab: req.regularSched, empty: req.empty});
+      res.render('scheduler/views/index', {thisUserTab: req.user, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial});
       break;
   }
 }
@@ -193,10 +200,10 @@ function editRWHRender(req,res){
     case 2:
     case 3:
       if (!req.regularDay[0]){
-        res.render('scheduler/views/invalid/nosched', {thisUserTab: req.user, regSchedTab: req.regularSched, empty: req.empty})
+        res.render('scheduler/views/invalid/nosched', {thisUserTab: req.user, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial})
       }
       else{
-        res.render('scheduler/views/editRWH', {thisUserTab: req.user, regSchedTab: req.regularSched, regDayTab: req.regularDay, empty: req.empty});
+        res.render('scheduler/views/editRWH', {thisUserTab: req.user, regSchedTab: req.regularSched, regDayTab: req.regularDay, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial});
       }
       break;
   }
@@ -204,16 +211,15 @@ function editRWHRender(req,res){
 function delRWHRender(req,res){
   db.query("DELETE FROM tblschedule WHERE intSchedID= ?",[req.params.schedid], (err, results, fields) => {
     if (err) console.log(err);
-    console.log('deleted');
     res.redirect('/scheduler');
   });
 }
 
-router.get('/', flog, regularSched, render);
-router.get('/rwh/:schedid', flog, regularSched, regularDay, editRWHRender);
+router.get('/', flog, regularSched, specialSched, render);
+router.get('/rwh/:schedid', flog, regularSched, regularDay, specialSched, editRWHRender);
 router.get('/rwh/:schedid/remove', flog, delRWHRender);
 
-router.post('/', (req, res) => {
+router.post('/rwh', (req, res) => {
   if (req.body.Sampm == 'AM' && req.body.Shours == '12'){
       req.body.Shours = '00';
   }
@@ -253,5 +259,27 @@ router.post('/rwh/:schedid', (req, res) => {
     res.redirect('/scheduler');
   });
 });
+router.post('/swh', flog, regularSched, regularDay, specialSched, editRWHRender, (req, res) => {
+  if (req.body.Sampm == 'AM' && req.body.Shours == '12'){
+      req.body.Shours = '00';
+  }
+  if (req.body.Eampm == 'AM' && req.body.Ehours == '12'){
+      req.body.Ehours = '00';
+  }
+  if (req.body.Sampm == 'PM' && req.body.Shours != '12'){
+    req.body.Shours = (parseFloat(req.body.Shours) + 12).toString();
+  }
+  if (req.body.Eampm == 'PM' && req.body.Ehours != '12'){
+    req.body.Ehours = (parseFloat(req.body.Ehours) + 12).toString();
+  }
+  var start = req.body.Shours.concat(':'+req.body.Sminutes);
+  var end = req.body.Ehours.concat(':'+req.body.Eminutes);
+  var date = req.body.addYear.toString()+'-'+req.body.addMonth+'-'+req.body.addDay;
+  db.query("INSERT INTO tblspecialsched (intSpecialAccNo, datSpecialDate, tmSpecialStart, tmSpecialEnd) VALUES (?,?,?,?)",[req.session.user, date, start, end], (err, results, fields) => {
+    if (err) res.render('scheduler/views/invalid/nodate', {thisUserTab: req.user, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial});
+    res.redirect('/scheduler');
+  });
+});
+
 
 exports.scheduler = router;
