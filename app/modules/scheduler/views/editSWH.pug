@@ -7,8 +7,18 @@ block scheduler
         $('#editSWHModal').modal('show');
       });
   
+  mixin unavHoursel
+    each thishour in ['12','01','02','03','04','05','06','07','08','09','10','11']
+      option(value= thishour) #{thishour}
+  mixin unavMinsel
+    each thismin in ['00','15','30','45']
+      option(value= thismin) #{thismin}
+  mixin unavAmpmsel
+    option(value='AM' selected='') AM
+    option(value='PM') PM
+  
   mixin hoursel(hour)
-    each thishour in ['01','02','03','04','05','06','07','08','09','10','11','12']
+    each thishour in ['12','01','02','03','04','05','06','07','08','09','10','11']
       if thishour == hour
         option(value= thishour selected='') #{thishour}
       else
@@ -63,28 +73,56 @@ block scheduler
               br
               .row
                 .col
+                  select#Estatus.form-control(name='status')
+                    if day.unav == 1
+                      option(value='available') Available
+                      option(value='unavailable' selected='') Unavailable(voids time)
+                    else
+                      option(value='available' selected='') Available
+                      option(value='unavailable') Unavailable(voids time)
+              br
+              .row
+                .col
                   p.mt-1.text-center Start
                 .col
                   select#EShours.form-control(name='EShours')
-                    +hoursel(day.Hstart)
+                    if day.unav == 1
+                      +unavHoursel
+                    else
+                      +hoursel(day.Hstart)
                 .col
                   select#ESminutes.form-control(name='ESminutes')
-                    +minsel(day.Mstart)
+                    if day.unav == 1
+                      +unavMinsel
+                    else
+                      +minsel(day.Mstart)
                 .col
                   select#ESampm.form-control(name='ESampm')
-                    +ampmsel(day.Sampm)
+                    if day.unav == 1
+                      +unavAmpmsel
+                    else
+                      +ampmsel(day.Sampm)
               .row
                 .col
                   p.mt-1.text-center End
                 .col
                   select#EEhours.form-control(name='EEhours')
-                    +hoursel(day.Hend)
+                    if day.unav == 1
+                      +unavHoursel
+                    else
+                      +hoursel(day.Hend)
                 .col
                   select#EEminutes.form-control(name='EEminutes')
-                    +minsel(day.Mend)
+                    if day.unav == 1
+                      +unavMinsel
+                    else
+                      +minsel(day.Mend)
                 .col
                   select#EEampm.form-control(name='EEampm')
-                    +ampmsel(day.Eampm)
+                    if day.unav == 1
+                      +unavAmpmsel
+                    else
+                      +ampmsel(day.Eampm)
             .modal-footer
               a.button.btn.btn-danger(href='/scheduler/swh/'+day.intSpecialID+'/remove') Remove
               button.btn.btn-primary(type='submit') Submit

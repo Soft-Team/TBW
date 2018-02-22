@@ -8,7 +8,7 @@ block scheduler
       });
   
   mixin hoursel(hour)
-    each thishour in ['01','02','03','04','05','06','07','08','09','10','11','12']
+    each thishour in ['12','01','02','03','04','05','06','07','08','09','10','11']
       if thishour == hour
         option(value= thishour selected='') #{thishour}
       else

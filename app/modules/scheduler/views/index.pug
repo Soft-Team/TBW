@@ -2,9 +2,8 @@ extends ../../../templates/dash.pug
 
 block main
   mixin hsel
-    each hour in ['01','02','03','04','05','06','07','08','09','10','11']
+    each hour in ['12','01','02','03','04','05','06','07','08','09','10','11']
       option(value=hour) #{hour}
-    option(value='12' selected='') 12
   mixin msel
     option(value='00' selected='') 00
     each min in ['15','30','45']
@@ -167,7 +166,10 @@ block main
               each spec in specSchedTab
                 tr
                   th(scope='row') #{spec.date}
-                  td #{spec.formatstart} - #{spec.formatend}
+                  if spec.unav == 1
+                    td Unavailable
+                  else
+                    td #{spec.formatstart} - #{spec.formatend}
                   td 
                     a(href='/scheduler/swh/'+ spec.intSpecialID, data-toggle='tooltip', data-placement='bottom', title='Edit')
                       img.size(src='/assets/images/icons/settings.png', alt='Edit')
@@ -258,6 +260,12 @@ block main
                   +ddsel
               .col
                 input.form-control(type='number' name='addYear' placeholder='Year(eg.2018)' max='9999' required)
+            br
+            .row
+              .col
+                select#status.form-control(name='status')
+                  option(value='available' selected='') Available
+                  option(value='unavailable') Unavailable(voids time)
             br
             .row
               .col
