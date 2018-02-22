@@ -2,23 +2,13 @@ extends ../../../templates/dash.pug
 
 block main
   mixin hsel
-    option(value='01') 01
-    option(value='02') 02
-    option(value='03') 03
-    option(value='04') 04
-    option(value='05') 05
-    option(value='06') 06
-    option(value='07') 07
-    option(value='08') 08
-    option(value='09') 09
-    option(value='10') 10
-    option(value='11') 11
+    each hour in ['01','02','03','04','05','06','07','08','09','10','11']
+      option(value=hour) #{hour}
     option(value='12' selected='') 12
   mixin msel
     option(value='00' selected='') 00
-    option(value='15') 15
-    option(value='30') 30
-    option(value='45') 45
+    each min in ['15','30','45']
+      option(value=min) #{min}
   
   mixin dmsel
     option(value='01' selected='') January
@@ -28,8 +18,8 @@ block main
           option(value= count) #{month}
   mixin ddsel
     option(value='01' selected='') 01
-    each month in ['02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31']
-      option(value= month) #{month}
+    each day in ['02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31']
+      option(value= day) #{day}
   
   .jumbotron-banner
     center
@@ -261,10 +251,10 @@ block main
           .modal-body
             .row
               .col
-                select#S-addMonth.form-control(name='addMonth' required)
+                select#S-addMonth.form-control(name='addMonth')
                   +dmsel
               .col
-                select#S-addDay.form-control(name='addDay' required)
+                select#S-addDay.form-control(name='addDay')
                   +ddsel
               .col
                 input.form-control(type='number' name='addYear' placeholder='Year(eg.2018)' max='9999' required)

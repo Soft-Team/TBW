@@ -65,8 +65,10 @@ block main
                 .card-text
                   .f(style='text-align:center; border-top: 1px solid #007BFF') #{serv.prepend}
                   .f(style='text-align:center') #{serv.strName}
-                  .f(style='text-align:center') ₱#{serv.fltPrice}/hr 
-
+                  if serv.intPriceType == 1
+                    .f(style='text-align:center') ₱#{serv.fltPrice}
+                  else
+                    .f(style='text-align:center') ₱#{serv.fltPrice}/hr
                 .btn-group.special(role='group')
                   button.btn.btn-primary(href='' style='width: 14.7rem; border-radius: 0px;') Request
                   button.btn.btn-secondary(href='' style='width: 14.7rem; border-radius: 0px;') Portfolio

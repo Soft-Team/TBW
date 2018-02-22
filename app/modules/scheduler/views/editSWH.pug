@@ -1,0 +1,91 @@
+extends index.pug
+
+block scheduler
+  block append scripts
+    script.
+      $(window).on('load',function(){
+        $('#editSWHModal').modal('show');
+      });
+  
+  mixin hoursel(hour)
+    each thishour in ['01','02','03','04','05','06','07','08','09','10','11','12']
+      if thishour == hour
+        option(value= thishour selected='') #{thishour}
+      else
+        option(value= thishour) #{thishour}
+  mixin minsel(min)
+    each thismin in ['00','15','30','45']
+      if thismin == min
+        option(value= thismin selected='') #{thismin}
+      else
+        option(value= thismin) #{thismin}
+  mixin ampmsel(ampm)
+    if ampm == 'AM'
+      option(value='AM' selected='') AM
+      option(value='PM') PM
+    else
+      option(value='AM') AM
+      option(value='PM' selected='') PM
+      
+  mixin monthsel(thismonth)
+    each count in ['01','02','03','04','05','06','07','08','09','10','11','12']
+      each month, index in ['January','February','March','April','May','June','July','August','September','October','November','December']
+        if index+1 == thismonth
+          option(value= thismonth selected='') #{month}
+        else if index+1 == count
+          option(value= count) #{month}
+  mixin daysel(thisday)
+    each day in ['01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31']
+      if day == thisday
+        option(value= day selected='') #{day}
+      else
+        option(value= day) #{day}
+  
+  #editSWHModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='editSWHModalTitle' aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        each day in specDayTab
+          .modal-header
+            h5#editSWHModalTitle.modal-title Special Working Hours
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+              span(aria-hidden='true') ×
+          form(method='POST' action='/scheduler/swh/'+day.intSpecialID)
+            .modal-body
+              .row
+                .col
+                  select#ES-addMonth.form-control(name='addMonth')
+                    +monthsel(day.month)
+                .col
+                  select#ES-addDay.form-control(name='addDay')
+                    +daysel(day.day)
+                .col
+                  input.form-control(type='number' name='addYear' placeholder='Year(eg.2018)' max='9999' value=day.year required)
+              br
+              .row
+                .col
+                  p.mt-1.text-center Start
+                .col
+                  select#EShours.form-control(name='EShours')
+                    +hoursel(day.Hstart)
+                .col
+                  select#ESminutes.form-control(name='ESminutes')
+                    +minsel(day.Mstart)
+                .col
+                  select#ESampm.form-control(name='ESampm')
+                    +ampmsel(day.Sampm)
+              .row
+                .col
+                  p.mt-1.text-center End
+                .col
+                  select#EEhours.form-control(name='EEhours')
+                    +hoursel(day.Hend)
+                .col
+                  select#EEminutes.form-control(name='EEminutes')
+                    +minsel(day.Mend)
+                .col
+                  select#EEampm.form-control(name='EEampm')
+                    +ampmsel(day.Eampm)
+            .modal-footer
+              a.button.btn.btn-danger(href='/scheduler/swh/'+day.intSpecialID+'/remove') Remove
+              button.btn.btn-primary(type='submit') Submit
+              button.btn.btn-secondary(type='button', data-dismiss='modal') Close
