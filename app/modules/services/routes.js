@@ -45,7 +45,7 @@ function servRender(req,res){
         res.render('services/views/notag', {thisUserTab: req.user, servName: req.params.servName});
       }
       else{
-        var stringquery="SELECT * FROM tblservice INNER JOIN tblservicetag ON intServTag= intServTagID INNER JOIN tbluser ON intServAccNo= intAccNo WHERE strServName= ? ";
+        var stringquery="SELECT * FROM tblservice INNER JOIN tblservicetag ON intServTag= intServTagID INNER JOIN tbluser ON intServAccNo= intAccNo WHERE strServName= ? AND intAccNo!= ? AND intServStatus= 1 ";
         var paramsarray= [];
         if(req.params.city!='any'){
           stringquery = stringquery.concat("AND strCity= ? ");
@@ -55,12 +55,11 @@ function servRender(req,res){
           stringquery = stringquery.concat("AND strBarangay= ? ");
           paramsarray.push(req.params.brngy);
         }
-        if(req.params.pricing=='rate'){
-          stringquery = stringquery.concat("AND fltPrice IS NOT NULL ");
+        if(req.params.pricing!='any'){
+          stringquery = stringquery.concat("AND intPriceType= ? ");
+          paramsarray.push(req.params.pricing);
         }
-        if(req.params.pricing=='notS'){
-          stringquery = stringquery.concat("AND fltPrice IS NULL ");
-        }/*
+        /*
         if(req.params.sorting=='rating'){
           stringquery = stringquery.concat("ORDER BY  DESC ");
         }
@@ -68,7 +67,7 @@ function servRender(req,res){
           stringquery = stringquery.concat("ORDER BY  DESC ");
         }*/
         if(paramsarray.length==1){
-          db.query(stringquery,[req.params.servName,paramsarray[0]], function (err, results, fields) {
+          db.query(stringquery,[req.params.servName,req.session.user,paramsarray[0]], function (err, results, fields) {
               if (err) return res.send(err);
               if(!results[0])
                 res.render('services/views/noresult', {thisUserTab: req.user, servName: req.params.servName});
@@ -81,7 +80,20 @@ function servRender(req,res){
           });
         }
         else if(paramsarray.length==2){
-          db.query(stringquery,[req.params.servName,paramsarray[0],paramsarray[1]], function (err, results, fields) {
+          db.query(stringquery,[req.params.servName,req.session.user,paramsarray[0],paramsarray[1]], function (err, results, fields) {
+              if (err) return res.send(err);
+              if(!results[0])
+                res.render('services/views/noresult', {thisUserTab: req.user, servName: req.params.servName});
+              else{
+                for(count=0;count<results.length;count++){
+                  results[count].prepend = prepend(results[count].intServAccNo);
+                }
+                res.render('services/views/result', {thisUserTab: req.user, servName: req.params.servName, searchServ: results});
+              }
+          });
+        }
+        else if(paramsarray.length==3){
+          db.query(stringquery,[req.params.servName,req.session.user,paramsarray[0],paramsarray[1],paramsarray[2]], function (err, results, fields) {
               if (err) return res.send(err);
               if(!results[0])
                 res.render('services/views/noresult', {thisUserTab: req.user, servName: req.params.servName});
@@ -94,7 +106,7 @@ function servRender(req,res){
           });
         }
         else{
-          db.query(stringquery,[req.params.servName], function (err, results, fields) {
+          db.query(stringquery,[req.params.servName, req.session.user], function (err, results, fields) {
               if (err) return res.send(err);
               if(!results[0])
                 res.render('services/views/noresult', {thisUserTab: req.user, servName: req.params.servName});
