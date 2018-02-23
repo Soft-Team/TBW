@@ -10,7 +10,7 @@ function ongoingRender(req,res){
       break;
     case 2:
     case 3:
-      res.render('transactions/views/index');
+      res.render('transactions/views/ongoing', {thisUserTab: req.user});
       break;
   }
 }
@@ -21,7 +21,7 @@ function finishedRender(req,res){
       break;
     case 2:
     case 3:
-      res.render('transactions/views/index');
+      res.render('transactions/views/finished', {thisUserTab: req.user});
       break;
   }
 }
@@ -32,7 +32,7 @@ function logRender(req,res){
       break;
     case 2:
     case 3:
-      res.render('transactions/views/index');
+      res.render('transactions/views/log', {thisUserTab: req.user});
       break;
   }
 }
