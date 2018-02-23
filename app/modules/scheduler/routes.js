@@ -409,7 +409,7 @@ router.post('/swh', flog, regularSched, specialSched, (req, res) => {
   }
   db.query(stringquery, bodyarray, (err, results, fields) => {
     if (err) res.render('scheduler/views/invalid/nodate', {thisUserTab: req.user, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial});
-    res.redirect('/scheduler');
+    else res.redirect('/scheduler');
   });
 });
 router.post('/swh/:schedid', flog, (req, res) => {
