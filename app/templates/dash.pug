@@ -18,12 +18,14 @@ block dash
       .col
         .user-panel
             .pull-left.image
-                img.img-circle(src='/assets/images/profile.png', alt='User Image')
+              .chat-pad(style="height: 50px, width: 50px")
+                .chat-img(style="height: 50px, width: 50px")
+                  i(style='height: 50px; background-image: url("/assets/images/Tyler.jpg"); background-position: 50% 50%; background-repeat: no-repeat; background-size: cover; width: 50px;')
+                //- img(src='/assets/images/Tyler.jpg', alt='User Image', style='height: 50px, width: 50px')
             .pull-right.info
                 each thisuser in thisUserTab
-                  p.text-white #{thisuser.strName}
-                  a(href='/profile/'+thisuser.intAccNo)
-                  i.fa.fa-circle.text-success &nbsp Online
+                  p.text-white(style="margin-top: 10px") #{thisuser.strName}
+                  //- a(href='/profile/'+thisuser.intAccNo)
             // search form
             form.sidebar-form(action='#', method='get')
             .input-group
