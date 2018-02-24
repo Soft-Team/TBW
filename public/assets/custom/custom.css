@@ -608,10 +608,15 @@ header.heads {
     height: 300px;
     width: 580px !important;
 }
-
+/* BG for Home */
 .box-body{
-    padding:15px !important;
-    text-align: left !important;
+    padding:75px 15px 15px 15px !important;
+    /* text-align: left; */
+   
+    height: 100%;
+    left: 0;
+    right: 0;
+    z-index: 1;
 }
 
 .b-mg{
@@ -632,4 +637,13 @@ header.heads {
 
 .card-header{
     background-color: #3498DB;
+}
+
+.text-b{
+    color: black;
+    text-decoration: none;
+}
+
+.tes {
+    text-shadow: 2px 2px 3px gray;
 }

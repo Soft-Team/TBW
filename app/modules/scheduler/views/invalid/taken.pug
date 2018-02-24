@@ -1,20 +1,20 @@
-extends index.pug
+extends ../index.pug
 
-block service
+block scheduler
   block append scripts
     script.
       $(window).on('load',function(){
-        $('#noTag').modal('show');
+        $('#taken').modal('show');
       });
       
-  #noTag.modal.fade(tabindex='-1' role='dialog' aria-labelledby='noTagTitle' aria-hidden='true')
+  #taken.modal.fade(tabindex='-1' role='dialog' aria-labelledby='takenTitle' aria-hidden='true')
     .modal-dialog(role='document')
       .modal-content
         .modal-header
-          h5#noTagTitle.modal-title Invalid Input
+          h5#takenTitle.modal-title Invalid Input
           button.close(type='button' data-dismiss='modal' aria-label='Close')
             span(aria-hidden='true') ×
         .modal-body
-          p Service Tag "#{servName}" does not exist.
+          p Date Already Added.
         .modal-footer
           button.btn.btn-secondary(type='button', data-dismiss='modal') Close

@@ -3,45 +3,50 @@ extends ../../../templates/dash.pug
 block main
   .jumbotron-banner
     center
-      each thisuser in thisUserTab
-        h1.text-white Hello #{thisuser.strName} Welcome to TrabaWHO
+      h1.text-white Welcome to TrabaWHO
   .container.mt-3.con
     .row
       .col
         center
-          .card.box.b-mf.box-shadow-mini
-            .card-header.text-white
-              | Sample
-            .card-body.box-body
-              h5.card-title Special title treatment
-              p.card-text With supporting text below as a natural lead-in to additional content.
-              a(href='#') Go somewhere>>
+          .card.box.b-mg.box-shadow-mini
+            .card-body.box-body(style="background: url('/assets/images/ser3.jpg') no-repeat; background-size: 600px 300px; border-radius: 3px;")
+              h1.tes Services
+              h5.card-text.tes Look for Services near your Area
+              a.btn.btn-primary(href='/services') Go To Services
       .col
         center
-          .card.box.b-mf.box-shadow-mini
-            .card-header.text-white
-              h4(style="text-align: left") Sample
-            .card-body.box-body
-              h5.card-title Special title treatment
-              p.card-text With supporting text below as a natural lead-in to additional content.
-            .card-footer.box-ft
-              a.btn.btn-primary(href='#') Go somewhere
+          .card.box.b-mg.box-shadow-mini
+            .card-body.box-body(style="background: url('/assets/images/myser.jpg') no-repeat; background-size: 600px 300px; border-radius: 3px;")
+              h1.tes My Services
+              h5.card-text.tes Start providing Services Now!
+              a.btn.btn-primary(href='/myservices') Go To My Services
     .row
       .col
         center
           .card.box.b-mg.box-shadow-mini
-            .card-header.text-white
-              h2 Sample
-            .card-body.box-body
-              h5.card-title Special title treatment
-              p.card-text With supporting text below as a natural lead-in to additional content.
-              a.btn.btn-primary(href='#') Go somewhere
+            .card-body.box-body(style="background: url('/assets/images/sched.jpg') no-repeat; background-size: 600px 300px; border-radius: 3px;")
+              h1.tes Scheduler
+              h5.card-text.tes Create and Manage your schedule in out Scheduler!
+              a.btn.btn-primary(href='/scheduler') Go To Scheduler
       .col
         center
           .card.box.b-mg.box-shadow-mini
-            .card-body.box-body
-              h1 Sample
-              h5.card-title Special title treatment
-              p.card-text With supporting text below as a natural lead-in to additional content.
-              a(href='#') Go somewhere
-          
+            .card-body.box-body(style="background: url('/assets/images/prof.jpg') no-repeat; background-size: 600px 300px; border-radius: 3px;")
+              h1.tes Profile
+              h5.card-text.tes Fill up your Profile details here
+              a.btn.btn-primary(href='/profile/2') Go To Profile
+    .row
+      .col
+        center
+          .card.box.b-mg.box-shadow-mini
+            .card-body.box-body(style="background: url('/assets/images/trans.jpg') no-repeat; background-size: 600px 300px; border-radius: 3px;")
+              h1.tes Ongoing Transaction
+              h5.card-text.tes Check your Ongoing Transactions Here
+              a.btn.btn-primary(href='/transactions/ongoing') Go To Ongoing
+      .col
+        center
+          .card.box.b-mg.box-shadow-mini
+            .card-body.box-body(style="background: url('/assets/images/mess.jpg') no-repeat; background-size: 600px 300px; border-radius: 3px;")
+              h1.tes Messages
+              h5.card-text.tes Talk about the Service details through Messages
+              a.btn.btn-primary(href='/messages/1') Go To Messages

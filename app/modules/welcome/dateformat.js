@@ -1,3 +1,5 @@
+/*dateformat for date*/
+
 module.exports= (date) => {
   var mm = date.getMonth() + 1; // getMonth() is zero-based
   var dd = date.getDate();

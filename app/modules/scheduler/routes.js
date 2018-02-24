@@ -163,7 +163,7 @@ function regularDay(req, res, next){
 function specialSched(req, res, next){
   /*Special Schedule of Current User, Match(session)
   *(tblspecialschedule)*/
-  db.query("SELECT * FROM tblspecialsched WHERE intSpecialAccNo= ? AND datSpecialDate > NOW() ORDER BY datSpecialDate ASC",[req.session.user], function (err, results, fields) {
+  db.query("SELECT * FROM tblspecialsched WHERE intSpecialAccNo= ? AND datSpecialDate >= CURDATE() ORDER BY datSpecialDate ASC",[req.session.user], function (err, results, fields) {
       if (err) return res.send(err);
       if(!results[0]){
         var empty = 1;
@@ -256,6 +256,58 @@ function specialDay(req, res, next){
       return next();
   });
 }
+function specialTaken(req, res, next){
+  /*Added date already taken, Match(session,body)
+  *(tblspecialsched)*/
+  var thisdate = req.body.addYear.toString()+'-'+req.body.addMonth+'-'+req.body.addDay;
+  db.query("SELECT * FROM tblspecialsched WHERE intSpecialAccNo= ? AND datSpecialDate= ?",[req.session.user, thisdate], function (err, results, fields) {
+      if (err) return res.send(err);
+      req.specialTaken = results;
+      return next();
+  });
+}
+function todaySpecial(req, res, next){
+  /*Match special day to current day, Match(session)
+  *(tblspecialsched)*/
+  db.query("SELECT * FROM tblspecialsched WHERE intSpecialAccNo= ? AND datSpecialDate= CURDATE()",[req.session.user], function (err, results, fields) {
+      if (err) return res.send(err);
+      if(!(!results[0])){
+        if(!results[0].tmSpecialStart){
+          results[0].unav = 1;
+        }
+        else{
+          results[0].unav = 0;
+          results[0].formatstart = formatAMPM(results[0].tmSpecialStart);
+          results[0].formatend = formatAMPM(results[0].tmSpecialEnd);
+        }
+      }
+      req.todaySpecial = results;
+      return next();
+  });
+}
+function todayRegular(req, res, next){
+  /*Match regular day to current day, Match(session)
+  *(tblspecialsched)*/
+  db.query("SELECT * FROM tblschedule WHERE intSchedAccNo= ? AND strSchedDay= DAYNAME(CURDATE())",[req.session.user], function (err, results, fields) {
+      if (err) return res.send(err);
+      if(!(!results[0])){
+        results[0].unav = 0;
+        results[0].formatstart = formatAMPM(results[0].tmSchedStart);
+        results[0].formatend = formatAMPM(results[0].tmSchedEnd);
+      }
+      req.todayRegular = results;
+      return next();
+  });
+}
+function today(req, res, next){
+  /*Current Date*/
+  db.query("SELECT CURDATE() AS curdate", function (err, results, fields) {
+      if (err) return res.send(err);
+      results[0].date = results[0].curdate.toDateString("en-US").slice(4, 15);
+      req.today = results[0].date;
+      return next();
+  });
+}
 
 function render(req,res){
   switch (req.valid) {
@@ -264,7 +316,18 @@ function render(req,res){
       break;
     case 2:
     case 3:
-      res.render('scheduler/views/index', {thisUserTab: req.user, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial});
+      var emptyToday = 0;
+      if(!(!req.todaySpecial[0])){
+        var today = req.todaySpecial;
+      }
+      else if(!(!req.todayRegular[0])){
+        var today = req.todayRegular;
+      }
+      else{
+        var today = "empty";
+        emptyToday = 1;
+      }
+      res.render('scheduler/views/index', {thisUserTab: req.user, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial, todayTab: today, emptynow: emptyToday, curdate: req.today});
       break;
   }
 }
@@ -275,11 +338,22 @@ function editRWHRender(req,res){
       break;
     case 2:
     case 3:
-      if (!req.regularDay[0]){
-        res.render('scheduler/views/invalid/nosched', {thisUserTab: req.user, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial});
+      var emptyToday = 0;
+      if(!(!req.todaySpecial[0])){
+        var today = req.todaySpecial;
+      }
+      else if(!(!req.todayRegular[0])){
+        var today = req.todayRegular;
       }
       else{
-        res.render('scheduler/views/editRWH', {thisUserTab: req.user, regSchedTab: req.regularSched, regDayTab: req.regularDay, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial});
+        var today = "empty";
+        emptyToday = 1;
+      }
+      if (!req.regularDay[0]){
+        res.render('scheduler/views/invalid/nosched', {thisUserTab: req.user, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial, todayTab: today, emptynow: emptyToday, curdate: req.today});
+      }
+      else{
+        res.render('scheduler/views/editRWH', {thisUserTab: req.user, regSchedTab: req.regularSched, regDayTab: req.regularDay, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial, todayTab: today, emptynow: emptyToday, curdate: req.today});
       }
       break;
   }
@@ -309,11 +383,22 @@ function editSWHRender(req,res){
       break;
     case 2:
     case 3:
-      if (!req.specialDay[0]){
-        res.render('scheduler/views/invalid/nosched', {thisUserTab: req.user, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial})
+      var emptyToday = 0;
+      if(!(!req.todaySpecial[0])){
+        var today = req.todaySpecial;
+      }
+      else if(!(!req.todayRegular[0])){
+        var today = req.todayRegular;
       }
       else{
-        res.render('scheduler/views/editSWH', {thisUserTab: req.user, regSchedTab: req.regularSched, specDayTab: req.specialDay, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial});
+        var today = "empty";
+        emptyToday = 1;
+      }
+      if (!req.specialDay[0]){
+        res.render('scheduler/views/invalid/nosched', {thisUserTab: req.user, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial, todayTab: today, emptynow: emptyToday, curdate: req.today})
+      }
+      else{
+        res.render('scheduler/views/editSWH', {thisUserTab: req.user, regSchedTab: req.regularSched, specDayTab: req.specialDay, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial, todayTab: today, emptynow: emptyToday, curdate: req.today});
       }
       break;
   }
@@ -337,10 +422,10 @@ function delSWHRender(req,res){
   }
 }
 
-router.get('/', flog, regularSched, specialSched, render);
-router.get('/rwh/:schedid', flog, regularSched, regularDay, specialSched, editRWHRender);
+router.get('/', flog, regularSched, specialSched, todaySpecial, todayRegular, today, render);
+router.get('/rwh/:schedid', flog, regularSched, regularDay, specialSched, todaySpecial, todayRegular, today, editRWHRender);
 router.get('/rwh/:schedid/remove', flog, regularSched, regularDay, specialSched, delRWHRender);
-router.get('/swh/:schedid', flog, regularSched, specialDay, specialSched, editSWHRender);
+router.get('/swh/:schedid', flog, regularSched, specialDay, specialSched, todaySpecial, todayRegular, today, editSWHRender);
 router.get('/swh/:schedid/remove', flog, regularSched, specialDay, specialSched, delSWHRender);
 
 router.post('/rwh', flog, (req, res) => {
@@ -383,34 +468,39 @@ router.post('/rwh/:schedid', flog, (req, res) => {
     res.redirect('/scheduler');
   });
 });
-router.post('/swh', flog, regularSched, specialSched, (req, res) => {
-  var date = req.body.addYear.toString()+'-'+req.body.addMonth+'-'+req.body.addDay;
-  if (req.body.status == 'unavailable'){
-    var stringquery = "INSERT INTO tblspecialsched (intSpecialAccNo, datSpecialDate) VALUES (?,?)";
-    var bodyarray = [req.session.user, date];
+router.post('/swh', flog, regularSched, specialSched, specialTaken, (req, res) => {
+  if(!(!req.specialTaken[0])){
+    res.render('scheduler/views/invalid/taken', {thisUserTab: req.user, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial});
   }
   else{
-    if (req.body.Sampm == 'AM' && req.body.Shours == '12'){
-        req.body.Shours = '00';
+    var date = req.body.addYear.toString()+'-'+req.body.addMonth+'-'+req.body.addDay;
+    if (req.body.status == 'unavailable'){
+      var stringquery = "INSERT INTO tblspecialsched (intSpecialAccNo, datSpecialDate) VALUES (?,?)";
+      var bodyarray = [req.session.user, date];
     }
-    if (req.body.Eampm == 'AM' && req.body.Ehours == '12'){
-        req.body.Ehours = '00';
+    else{
+      if (req.body.Sampm == 'AM' && req.body.Shours == '12'){
+          req.body.Shours = '00';
+      }
+      if (req.body.Eampm == 'AM' && req.body.Ehours == '12'){
+          req.body.Ehours = '00';
+      }
+      if (req.body.Sampm == 'PM' && req.body.Shours != '12'){
+        req.body.Shours = (parseFloat(req.body.Shours) + 12).toString();
+      }
+      if (req.body.Eampm == 'PM' && req.body.Ehours != '12'){
+        req.body.Ehours = (parseFloat(req.body.Ehours) + 12).toString();
+      }
+      var start = req.body.Shours.concat(':'+req.body.Sminutes);
+      var end = req.body.Ehours.concat(':'+req.body.Eminutes);
+      var stringquery = "INSERT INTO tblspecialsched (intSpecialAccNo, datSpecialDate, tmSpecialStart, tmSpecialEnd) VALUES (?,?,?,?)";
+      var bodyarray = [req.session.user, date, start, end];
     }
-    if (req.body.Sampm == 'PM' && req.body.Shours != '12'){
-      req.body.Shours = (parseFloat(req.body.Shours) + 12).toString();
-    }
-    if (req.body.Eampm == 'PM' && req.body.Ehours != '12'){
-      req.body.Ehours = (parseFloat(req.body.Ehours) + 12).toString();
-    }
-    var start = req.body.Shours.concat(':'+req.body.Sminutes);
-    var end = req.body.Ehours.concat(':'+req.body.Eminutes);
-    var stringquery = "INSERT INTO tblspecialsched (intSpecialAccNo, datSpecialDate, tmSpecialStart, tmSpecialEnd) VALUES (?,?,?,?)";
-    var bodyarray = [req.session.user, date, start, end];
+    db.query(stringquery, bodyarray, (err, results, fields) => {
+      if (err) res.render('scheduler/views/invalid/nodate', {thisUserTab: req.user, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial});
+      else res.redirect('/scheduler');
+    });
   }
-  db.query(stringquery, bodyarray, (err, results, fields) => {
-    if (err) res.render('scheduler/views/invalid/nodate', {thisUserTab: req.user, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial});
-    res.redirect('/scheduler');
-  });
 });
 router.post('/swh/:schedid', flog, (req, res) => {
   var date = req.body.addYear.toString()+'-'+req.body.addMonth+'-'+req.body.addDay;
@@ -436,7 +526,6 @@ router.post('/swh/:schedid', flog, (req, res) => {
     var stringquery = "UPDATE tblspecialsched SET datSpecialDate= ?, tmSpecialStart= ?, tmSpecialEnd= ? WHERE intSpecialID= ?";
     var bodyarray = [date, start, end, req.params.schedid];
   }
-  console.log(bodyarray);
   db.query(stringquery, bodyarray, (err, results, fields) => {
     if (err) console.log(err);
     res.redirect('/scheduler');
