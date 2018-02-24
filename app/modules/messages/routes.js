@@ -77,8 +77,14 @@ function render(req,res){
       break;
     case 2:
     case 3:
-      res.redirect('/messages/'+req.chat[0].intChatID);
-      break;
+      if(!req.chat[0]){
+        res.render('messages/views/nochat', { thisUserTab: req.user });
+        console.log('EMPTY')
+      }
+      else{
+        res.redirect('/messages/'+req.chat[0].intChatID);
+        break;
+      }
   }
 }
 function messRender(req,res){
@@ -88,7 +94,11 @@ function messRender(req,res){
       break;
     case 2:
     case 3:
-      if(!req.mess[0]){
+      if(!req.chat[0]){
+        res.render('messages/views/nochat', { thisUserTab: req.user });
+        console.log('EMPTY')
+      }
+      else if(!req.mess[0]){
         res.redirect('/noroute');
       }
       else if(req.mess[0].sendType == 0){
