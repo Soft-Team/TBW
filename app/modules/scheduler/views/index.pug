@@ -32,8 +32,15 @@ block main
               th.align-left(scope='col' colspan="2") Today's Working Hours
           tbody
             tr
-              th(scope='row') Feb 19, 2018
-              td 11AM - 2PM
+              th(scope='row') #{curdate}
+              if emptynow == 1
+                td none
+              else
+                each day in todayTab
+                  if day.unav == 1
+                    td Unavailable
+                  else 
+                    td #{day.formatstart} - #{day.formatend}
       .col
         table.table.table-striped.box-shadow-mini
           thead.text-white
