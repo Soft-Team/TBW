@@ -27,12 +27,12 @@ block main
   nav
     .card.text-center(style='width:1286px')
       .card-header(style='padding-bottom:0rem')
-        #nav-tab.nav.nav-tabs(role='tablist')
+        #nav-tab.nav.nav-tabs(role='tablist', style='border:0px')
           a#settings-tab.nav-item.nav-link(href='#Settings', data-toggle='tab', data-placement='bottom', title='Edit',role='tab', aria-controls='settings', aria-selected='true')
             img.size-ico(src='/assets/images/icons/settings.png', alt='Edit')
-          a#personal-info-tab.nav-item.nav-link(data-toggle='tab', href='#Personal-Info', role='tab', aria-controls='Personal-Info', aria-selected='false') Personal Info
-          a#services-tab.nav-item.nav-link(data-toggle='tab', href='#Services', role='tab', aria-controls='Services', aria-selected='false') Services
-          a#reviews-tab.nav-item.nav-link(data-toggle='tab', href='#Reviews', role='tab', aria-controls='Reviews', aria-selected='false') Reviews
+          a#personal-info-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Personal-Info', role='tab', aria-controls='Personal-Info', aria-selected='false') Personal Info
+          a#services-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Services', role='tab', aria-controls='Services', aria-selected='false') Services
+          a#reviews-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Reviews', role='tab', aria-controls='Reviews', aria-selected='false') Reviews
       #nav-tabContent.tab-content
         #Settings.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='settings-tab') Wala pang mailagay ehhh
         #Personal-Info.tab-pane.fade(role='tabpanel', aria-labelledby='personal-info-tab')
