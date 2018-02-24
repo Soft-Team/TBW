@@ -40,7 +40,24 @@ block main
                   button.btn.btn-primary(type='submit') Submit
                   button.btn.btn-secondary(type='button', data-dismiss='modal') Close
   p
-  h3.margin-L Showing Results for "#{servName}"
+  each val, index in servParams
+    if index == 0
+      h3.margin-L(style="display: inline;") Showing Results for "#{val}"
+      - varServName = val
+    else if index == 1
+      h3(style="display: inline;") &nbsp- "#{val}"
+      - varCity = val
+    else if index == 2
+      h3(style="display: inline;") &nbsp- "#{val}"
+      - varBrngy = val
+    else if index == 3
+      h3(style="display: inline;") &nbsp- "#{val}"
+      - varPricing = val
+    else if index == 4
+      h3(style="display: inline;") &nbsp- "#{val}"
+      - varSorting = val
+  br
+  br
   .container
     .card-deck.ml-1
       .row
@@ -70,6 +87,8 @@ block main
                   else
                     .f(style='text-align:center') ₱#{serv.fltPrice}/hr
                 .btn-group.special(role='group')
-                  button.btn.btn-primary(href='' style='width: 14.7rem; border-radius: 0px;') Request
+                  a.button.btn.btn-primary(href='/services/'+varServName+'/'+varCity+'/'+varBrngy+'/'+varPricing+'/'+varSorting+'/request/'+serv.intServID style='width: 14.7rem; border-radius: 0px;') Request
                   button.btn.btn-secondary(href='' style='width: 14.7rem; border-radius: 0px;') Portfolio
         .col          
+
+  block servrequest

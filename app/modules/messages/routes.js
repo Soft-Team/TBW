@@ -79,7 +79,6 @@ function render(req,res){
     case 3:
       if(!req.chat[0]){
         res.render('messages/views/nochat', { thisUserTab: req.user });
-        console.log('EMPTY')
       }
       else{
         res.redirect('/messages/'+req.chat[0].intChatID);
