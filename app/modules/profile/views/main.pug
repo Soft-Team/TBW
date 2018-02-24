@@ -1,18 +1,24 @@
 extends ../../../templates/dash.pug
 
+
 block main
   .jumbotron-banner(style='height:100px')
     center
   .sector(style='margin-top:0px; padding:0px')
     .sector-container-profile
       .profile-container
-          .col-sm-3(style='display: inline-block; width: 160px; padding-left: 0px; padding-right: 0px')
-            img(src='/assets/images/Tyler.jpg', alt='Card image cap', style='height: 10rem; width: 10rem; border-right: 1px solid; ')
-          .col-sm-3(style='display: inline-block; width: 894px ')
-            h2.text-headline-profile(style='border-bottom: 1px solid') Verified
-            h1(style='margin-left:15px') Tyler The Plumber
-          .col-sm-3(style='width: 190px; border-left: 1px solid; height:160px')
-              table(style='width:190px')
+        each thisUser in SelUserTab
+            -console.log(thisUserTab);
+            .col-sm-3(style='display: inline-block; width: 160px; padding-left: 0px; padding-right: 0px')
+                    img(src='/userImages/profile/'+thisUser.strProfilePic alt='Card image cap', style='height: 10rem; width: 10rem; border-right: 1px solid; ')
+            .col-sm-3(style='display: inline-block; width: 894px ')
+                    if (thisUser.intStatus == 1)
+                        h2.text-headline-profile(style='border-bottom: 1px solid') Unverified 
+                    else
+                        h2.text-headline-profile(style='border-bottom: 1px solid') Verified 
+                    h1(style='margin-left:15px') #{thisUser.strName}
+            .col-sm-3(style='width: 190px; border-left: 1px solid; height:160px')
+                table(style='width:190px')
                 tbody
                   tr
                     td(style='padding-top:3px')
@@ -24,34 +30,33 @@ block main
                       img(src='/assets/images/Icons/case.png', alt='star', style='height: 2rem; width: 2rem; margin-top:5px; margin-left:50px ')
                       h2(style='float: right; margin-right: 50px; margin-bottom: 0rem') 300
                       h4.profileB(style='margin-bottom: 0rem; margin-top:0px; display:inline-block') Finished
-  nav
+    nav
     .card.text-center(style='width:1286px')
       .card-header(style='padding-bottom:0rem')
         #nav-tab.nav.nav-tabs(role='tablist')
           a#settings-tab.nav-item.nav-link(href='#Settings', data-toggle='tab', data-placement='bottom', title='Edit',role='tab', aria-controls='settings', aria-selected='true')
             img.size-ico(src='/assets/images/icons/settings.png', alt='Edit')
-          a#personal-info-tab.nav-item.nav-link(data-toggle='tab', href='#Personal-Info', role='tab', aria-controls='Personal-Info', aria-selected='false') Personal Info
-          a#services-tab.nav-item.nav-link(data-toggle='tab', href='#Services', role='tab', aria-controls='Services', aria-selected='false') Services
-          a#reviews-tab.nav-item.nav-link(data-toggle='tab', href='#Reviews', role='tab', aria-controls='Reviews', aria-selected='false') Reviews
         
       #nav-tabContent.tab-content
-        #Settings.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='settings-tab') Wala pang mailagay ehhh
-        #Personal-Info.tab-pane.fade(role='tabpanel', aria-labelledby='personal-info-tab')
+      each thisUser in SelUserTab
           .col-sm-3(style='display: inline-block; width: 642px; padding-top: 40px; padding-left: 50px; text-align:left')
-            h3 City: Manila
+            h3 *Personal Info
             br
-            h3 Contact: 0916754679
-          .col-sm-3(style='display: inline-block; width: 642px; padding-top: 40px; text-align:left')
-            h3 Barangay: Tondo
+            h3 City: #{thisUser.strCity}
             br
-            h3 Email: Flower_Boy@yahoo.com
-          .col-sm-3(style='width: 1284px; padding-top: 50px; padding-left: 50px; text-align:left')
-            h3 User Description:
-            h3 Hello guys welcome to my profile, My lines of proffesion are Plumbing, Rapping and making Beats ayy lmoa
+            h3 Contact: #{thisUser.strContactNo}
+            br
+            h3 Barangay: #{thisUser.strBarangay}
+            br
+            h3 Email: #{thisUser.strEmail}
+            br
+            h3 User Description: Hello guys welcome to my profile, My lines of proffesion are Plumbing, Rapping and making Beats ayy lmoa
             br
             h3 Facebook: TylerTheCreator
-        #Services.tab-pane.fade(role='tabpanel', aria-labelledby='services-tab')
-          center
+            br
+            br
+            h3 *Services
+            #Services.tab-pane.fade(role='tabpanel', aria-labelledby='services-tab')
             .container(style='padding-top: 20px; padding-bottom: 20px')
               p.font
                 table.table.table-striped.font1
@@ -77,8 +82,7 @@ block main
                           td Php 300 / hr
                           td Available
                           td &nbsp
-        #Reviews.tab-pane.fade(role='tabpanel', aria-labelledby='reviews-tab', style='height: 300px')
-          .sector-container-footer
+            .sector-container-footer
             .footer-container
               .col-sm-3(style='display: inline-block; width: 110px; padding-top: 10px; padding-left: 10px; text-align:left')
                 .pull-left.image
@@ -100,4 +104,4 @@ block main
                 h3 Help sample text eksdee
               .col-sm-3(style='width: 140px; display: inline-block; padding-top: 10px; padding-left: 10px')
                 img(src='/assets/images/Icons/star.png', alt='star', style='height: 4rem; width: 4rem; margin-top:5px; float:left')
-                h1(style='float:right; margin-top: 20px') 4.5
+                h1(style='float:right; margin-top: 20px') 4.5              
