@@ -9,7 +9,7 @@ var dateformat = require('../welcome/dateformat');
 function servTags(req, res, next){
   /*All Service Tags
   strServName(tblservicetag)*/
-  db.query("SELECT strServName FROM tblservicetag", function (err, results, fields) {
+  db.query("SELECT strServName FROM tblservicetag LEFT JOIN tblservice ON intServTagID= intServTag GROUP BY strServName ORDER BY COUNT(intServTagID) DESC", function (err, results, fields) {
       if (err) return res.send(err);
       req.servTags = results;
       return next();
