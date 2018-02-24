@@ -43,6 +43,6 @@ block main
   p
     h3.margin-L Popular Service Tags
   each tag in servTags
-      a.button.btn.btn-primary.btn-tag(href='/services/'+tag.strServName) #{tag.strServName}
+      a.button.btn.btn-primary.btn-tag.box-shadow-mini(href='/services/'+tag.strServName) #{tag.strServName}
       
   block service
