@@ -1,3 +1,5 @@
+/*gets time from datetime*/
+
 module.exports= (date) => {
   var hours = date.getHours();
   var minutes = date.getMinutes();

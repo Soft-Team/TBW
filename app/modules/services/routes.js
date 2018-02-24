@@ -34,6 +34,18 @@ function render(req,res){
       break;
   }
 }
+function servNameRender(req,res){
+  switch (req.valid) {
+    case 1:
+      res.render('welcome/views/invalid/adm-restrict');
+      break;
+    case 2:
+    case 3:
+      res.render('services/views/selected', {thisUserTab: req.user, servTags: req.servTags, servName: req.params.servName});
+      break;
+  }
+}
+
 function servRender(req,res){
   switch (req.valid) {
     case 1:
@@ -124,6 +136,7 @@ function servRender(req,res){
 }
 
 router.get('/', flog, servTags, render);
+router.get('/:servName', flog, servTags, servNameRender);
 router.get('/:servName/:city/:brngy/:pricing/:sorting', flog, searchServTag, servRender);
 
 router.post('/', flog, (req, res) => {

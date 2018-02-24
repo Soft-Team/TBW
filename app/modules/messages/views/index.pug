@@ -21,7 +21,7 @@ block main
               .conversation.btn.pt-3.pb-1
                 .media-body
                   .display.chat-part.mb-4(role="gridcell")
-                    a.chat-part.display
+                    a.chat-part.display(href="/messages/"+chat.intChatID)
                       .chat-pick.display(data-tooltip-content='Soft', data-hover='tooltip', data-tooltip-position='right', data-tooltip-alignh='center', data-tooltip-root-class='_33g_', aria-hidden='true', style=' margin-right:9px')
                         .chat-pad(style="height: 50px, width: 50px")
                           .chat-img(style="height: 50px, width: 50px")
@@ -30,13 +30,19 @@ block main
                         .chat5.chatL-3 
                           h5
                             if chat.intAccNo == chat.intServAccNo
-                              span.tag.provider #Plumber 
+                              span.tag.provider ##{chat.servname}
                             else 
-                              span.tag.seeker #Plumber 
-                            span(style='color: black;') TakeOff
+                              span.tag.seeker ##{chat.servname} 
+                            span(style='color: black;') #{chat.name}
                         .chat5.chatL-3 
-                          span TakeOff
-                          small.pull-right.time(style='margin-left: 110px') 02:10am
+                          if chat.intChatID == params
+                            #mess
+                              span #{chat.txtMessage}
+                            #time
+                              small.pull-right.time #{chat.date}
+                          else
+                            span #{chat.txtMessage}
+                            small.pull-right.time #{chat.date}
       // Messages & Info
       .col-sm-9.panel-wrap
         // Main Content / Message List

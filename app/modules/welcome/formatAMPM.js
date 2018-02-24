@@ -1,3 +1,5 @@
+/*timeformat from time*/
+
 module.exports= (time) => {
   var str = time.toString();
   var hours = str.charAt(0).concat(str.charAt(1));
