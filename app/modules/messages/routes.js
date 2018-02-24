@@ -7,10 +7,33 @@ var timeFormat = require('../welcome/timeFormat');
 function fchat(req,res,next){
   /*All Chats of Current User, Match(session);
   *(tblservice)*(tblchat)*/
-  var stringquery = "SELECT C.*, txtMessage, dtmDateSent FROM(SELECT B.*, MAX(intMessID) as MX FROM(SELECT A.* , strName, intAccNo FROM(SELECT * FROM tblservice INNER JOIN tblchat ON intServID= intChatServ WHERE intServAccNo= ? OR intChatSeeker= ?)A INNER JOIN tbluser ON intAccNo= intServAccNo OR intAccNo= intChatSeeker WHERE intAccNo!= ?)"
+  var stringquery = "SELECT C.*, txtMessage, dtmDateSent FROM(SELECT B.*, MAX(intMessID) as MX FROM(SELECT A.* , strName, intAccNo FROM(SELECT * FROM tblservice INNER JOIN tblchat ON intServID= intChatServ INNER JOIN tblservicetag ON intServTagID= intServTag WHERE intServAccNo= ? OR intChatSeeker= ?)A INNER JOIN tbluser ON intAccNo= intServAccNo OR intAccNo= intChatSeeker WHERE intAccNo!= ?)";
   stringquery = stringquery.concat("B INNER JOIN tblmessage ON intChatID= intMessChatID GROUP BY intChatID)C INNER JOIN tblmessage ON intMessID= C.MX ORDER BY dtmDateSent DESC;");
   db.query(stringquery,[req.session.user, req.session.user, req.session.user], (err, results, fields) => {
       if (err) console.log(err);
+      if (!(!results[0])){
+        for(count=0;count<results.length;count++){
+          if (results[count].strName.length > 10){
+            results[count].name = results[count].strName.substring(0,10).concat('...');
+          }
+          else{
+            results[count].name = results[count].strName;
+          }
+          if (results[count].strServName.length > 8){
+            results[count].servname = results[count].strServName.substring(0,8).concat('...');
+          }
+          else{
+            results[count].servname = results[count].strServName;
+          }
+          if (results[count].txtMessage.length > 8){
+            results[count].txtMessage = results[count].txtMessage.substring(0,8).concat('...');
+          }
+          date = results[count].dtmDateSent;
+          date = [date.getMonth()+1,date.getDate(),date.getFullYear()].join('/')+' '+timeFormat(date);
+          results[count].date = date;
+        }
+      }
+      console.log(results);
       req.chat= results;
       return next();
     });
@@ -36,6 +59,13 @@ function fmess(req,res,next){
              timeFormat(results[count].dtmDateSent);
       }
       req.mess= results;
+      return next();
+    });
+}
+function fparams(req,res,next){
+  db.query("SELECT * FROM tblchat WHERE intChatID= ?",[req.params.chatid], (err, results, fields) => {
+      if (err) console.log(err);
+      req.chatparams= results[0].intChatID;
       return next();
     });
 }
@@ -65,13 +95,13 @@ function messRender(req,res){
         res.redirect('/restrict');
       }
       else{
-        res.render('messages/views/index', { thisUserTab: req.user , messtab: req.mess, messOne: req.mess[0], chattab: req.chat });
+        res.render('messages/views/index', { thisUserTab: req.user , messtab: req.mess, messOne: req.mess[0], chattab: req.chat, params: req.chatparams });
       }
       break;
   }
 }
 
 router.get('/', flog, fchat, render);
-router.get('/:chatid', flog, fmess, fchat, messRender);
+router.get('/:chatid', flog, fmess, fchat, fparams, messRender);
 
 exports.messages = router;

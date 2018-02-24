@@ -28,8 +28,15 @@ socket.on('chat', function(data){
          dte.getDate(),
          dte.getFullYear()].join('/')+' '+
          formatAMPM(dte);
-
+    if (data.message.length > 8){
+      data.messdisplay = data.message.substring(0,8).concat('...');
+    }
+    else{
+      data.messdisplay = data.message
+    }
     output.innerHTML += '<div class="msg"><div class="media-body"><small class="pull-right time"><i class="fa fa-clock-o"></i>&nbsp' + d + '</small><h5 class="media-heading">' + data.handle + '</h5><small class="col-sm-11">' + data.message + '</small></div></div>';
+    mess.innerHTML = '<span>' + data.messdisplay + '</span>';
+    time.innerHTML = '<small style="margin-left: 110px" class="pull-right time">' + d + '</small>'
 
     function formatAMPM(date) {
       var hours = date.getHours();
