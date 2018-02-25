@@ -76,13 +76,14 @@ block main
                           small.col-sm-11
                             |  #{mess.txtMessage}
             // Message box & Send Button
-            .row.send-wrap
-              .send-message
-                .message-text
-                  input#chatid(type='text', name='chatid', value= messOne.intChatID, hidden)
-                  input#handle(type='text', name='handle', value= user.strName, hidden)
-                  input#sender(type='text', name='handle', value= messOne.sendType, hidden)
-                  textarea#message.no-resize-bar.form-control(rows='2', name='message', placeholder='Write a message...')
-                a#send.btn.send-button
-                  | Send 
-                  i.fa.fa-send
+            if messOne.intChatStatus == 1
+              .row.send-wrap
+                .send-message
+                  .message-text
+                    input#chatid(type='text', name='chatid', value= messOne.intChatID, hidden)
+                    input#handle(type='text', name='handle', value= user.strName, hidden)
+                    input#sender(type='text', name='handle', value= messOne.sendType, hidden)
+                    textarea#message.no-resize-bar.form-control(rows='2', name='message', placeholder='Write a message...')
+                  a#send.btn.send-button
+                    | Send 
+                    i.fa.fa-send

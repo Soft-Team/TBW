@@ -3,6 +3,7 @@ var router = express.Router();
 var db = require('../../lib/database')();
 var flog = require('../welcome/loggedin');
 var numberFormat = require('../welcome/numberFormat');
+var messCount = require('../welcome/messCount');
 
 function servTags(req, res, next){
   /*All Service Tags
@@ -74,9 +75,9 @@ function render(req,res){
     case 2:
     case 3:
       if(!req.myServices[0])
-        res.render('myservices/views/noservice', {thisUserTab: req.user});
+        res.render('myservices/views/noservice', {thisUserTab: req.user, messCount: req.messCount[0].count});
       else
-        res.render('myservices/views/index', {thisUserTab: req.user, myServices: req.myServices});
+        res.render('myservices/views/index', {thisUserTab: req.user, messCount: req.messCount[0].count, myServices: req.myServices});
       break;
   }
 }
@@ -88,9 +89,9 @@ function successRender(req,res){
     case 2:
     case 3:
       if(!req.myServices[0])
-        res.render('myservices/views/noservice', {thisUserTab: req.user});
+        res.render('myservices/views/noservice', {thisUserTab: req.user, messCount: req.messCount[0].count});
       else{
-        res.render('myservices/views/success', {thisUserTab: req.user, myServices: req.myServices});
+        res.render('myservices/views/success', {thisUserTab: req.user, messCount: req.messCount[0].count, myServices: req.myServices});
       }
       break;
   }
@@ -103,22 +104,22 @@ function editRender(req,res){
     case 2:
     case 3:
       if(!req.myServices[0])
-        res.render('myservices/views/noservice', {thisUserTab: req.user});
+        res.render('myservices/views/noservice', {thisUserTab: req.user, messCount: req.messCount[0].count});
       else{
         if(!req.servValidation[0])
-          res.render('myservices/views/invalid/noaccess', {thisUserTab: req.user, myServices: req.myServices});
+          res.render('myservices/views/invalid/noaccess', {thisUserTab: req.user, messCount: req.messCount[0].count, myServices: req.myServices});
         else
-          res.render('myservices/views/edit', {thisUserTab: req.user, myServices: req.myServices, servValidation: req.servValidation});
+          res.render('myservices/views/edit', {thisUserTab: req.user, messCount: req.messCount[0].count, myServices: req.myServices, servValidation: req.servValidation});
       }
       break;
   }
 }
 
-router.get('/', flog, myServices, render);
-router.get('/success', flog, myServices, successRender);
-router.get('/:servid', flog, myServices, servValidation, editRender);
+router.get('/', flog, messCount, myServices, render);
+router.get('/success', flog, messCount, myServices, successRender);
+router.get('/:servid', flog, messCount, myServices, servValidation, editRender);
 
-router.post('/', flog, myServices, searchServTag, searchServAcc, (req, res) => {
+router.post('/', flog, messCount, myServices, searchServTag, searchServAcc, (req, res) => {
   if(!req.searchServTag[0]){
     res.render('myservices/views/invalid/notag', {servTag: req.body.searchtag, myServices: req.myServices});
   }
@@ -134,7 +135,7 @@ router.post('/', flog, myServices, searchServTag, searchServAcc, (req, res) => {
     }
   }
 });
-router.post('/:servid', flog, (req, res) => {
+router.post('/:servid', flog, messCount, (req, res) => {
   db.query("UPDATE tblservice SET intServStatus= ?, intPriceType= ?, fltPrice= ? WHERE intServID= ?",[req.body.status, req.body.pricetype, req.body.price, req.params.servid], (err, results, fields) => {
       if (err) return res.send(err);
       res.redirect('/myservices');

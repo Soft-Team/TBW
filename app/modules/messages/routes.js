@@ -3,6 +3,7 @@ var router = express.Router();
 var db = require('../../lib/database')();
 var flog = require('../welcome/loggedin');
 var timeFormat = require('../welcome/timeFormat');
+var messCount = require('../welcome/messCount');
 
 function fchat(req,res,next){
   /*All Chats of Current User, Match(session);
@@ -78,7 +79,7 @@ function render(req,res){
     case 2:
     case 3:
       if(!req.chat[0]){
-        res.render('messages/views/nochat', { thisUserTab: req.user });
+        res.render('messages/views/nochat', { thisUserTab: req.user, messCount: req.messCount[0].count });
       }
       else{
         res.redirect('/messages/'+req.chat[0].intChatID);
@@ -94,7 +95,7 @@ function messRender(req,res){
     case 2:
     case 3:
       if(!req.chat[0]){
-        res.render('messages/views/nochat', { thisUserTab: req.user });
+        res.render('messages/views/nochat', { thisUserTab: req.user, messCount: req.messCount[0].count });
         console.log('EMPTY')
       }
       else if(!req.mess[0]){
@@ -104,13 +105,27 @@ function messRender(req,res){
         res.redirect('/restrict');
       }
       else{
-        res.render('messages/views/index', { thisUserTab: req.user , messtab: req.mess, messOne: req.mess[0], chattab: req.chat, params: req.chatparams });
+        db.beginTransaction(function(err) {
+          if (err) console.log(err);
+          db.query("UPDATE tblmessage SET intMessSeen= 1 WHERE intMessChatID= ?",[req.params.chatid], function (err,  results, fields) {
+              if (err) console.log(err);
+              db.query("SELECT COUNT(intMessSeen) AS count FROM tblmessage INNER JOIN tblchat ON intChatID= intMessChatID INNER JOIN tblservice ON intChatServ= intServID WHERE intMessSeen= 0 AND (intServAccNo= ? OR intChatSeeker = ?) ",[req.session.user, req.session.user], function (err,  resultsCount, fields) {
+                  if (err) console.log(err);
+                  console.log(resultsCount[0].count);
+                  db.commit(function(err) {
+                      if (err) console.log(err);
+                      console.log(resultsCount[0].count);
+                      res.render('messages/views/index', { thisUserTab: req.user, messCount: resultsCount[0].count , messtab: req.mess, messOne: req.mess[0], chattab: req.chat, params: req.chatparams });
+                  });
+              });
+          });
+        });
       }
       break;
   }
 }
 
-router.get('/', flog, fchat, render);
-router.get('/:chatid', flog, fmess, fchat, fparams, messRender);
+router.get('/', flog, messCount, fchat, render);
+router.get('/:chatid', flog, messCount, fmess, fchat, fparams, messRender);
 
 exports.messages = router;
