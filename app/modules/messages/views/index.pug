@@ -78,9 +78,18 @@ block main
                         else
                             span(style='color: white;') &nbsp#{messOne.strName}
                   .col.align-right
-                    if messOne.sendType == 1
+                    if messOne.sendType == 1 && transstatus == "none" 
                       button.btn.btn-light.btn-md.btn(type='button' data-toggle='modal' data-target='#invoiceModal') + Invoice
-
+                    else if messOne.sendType == 1 && transstatus == 0
+                      button.btn.btn-light.btn-md.btn(type='button' data-toggle='modal' data-target='#editInvoiceModal') * Edit Invoice
+                    else if messOne.sendType == 2 && transstatus == 0
+                      button.btn.btn-light.btn-md.btn(type='button' data-toggle='modal' data-target='#viewInvoiceModal') View Invoice
+                    else if transstatus == 1
+                      span.tag.provider Ongoing
+                    else if transstatus == 2
+                      span.tag.seeker Finished
+                    else if transstatus == 3
+                      span.tag.dangerbox Cancelled
             // Messages
             .row.content-wrap.messages
               .col
@@ -170,3 +179,5 @@ block main
               .modal-footer
                 button.btn.btn-primary(type='submit') Submit
                 button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+  
+  block chatmess
