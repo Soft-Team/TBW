@@ -50,20 +50,20 @@ CREATE TABLE `tblchat` (
   `intChatID` int(11) NOT NULL AUTO_INCREMENT,
   `intChatSeeker` int(9) NOT NULL COMMENT 'FK',
   `intChatServ` int(11) NOT NULL,
-  `intChatStatus` int(1) NOT NULL,
+  `intChatStatus` int(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`intChatID`),
   KEY `intUser1_idx` (`intChatSeeker`),
   KEY `intChatServ_idx` (`intChatServ`),
   CONSTRAINT `intChatServ` FOREIGN KEY (`intChatServ`) REFERENCES `tblservice` (`intServID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `intUser1` FOREIGN KEY (`intChatSeeker`) REFERENCES `tbluser` (`intAccNo`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `tblchat`
 --
 
-INSERT INTO `tblchat` VALUES (1,2,1,1),(2,3,3,1);
+INSERT INTO `tblchat` VALUES (11,1,35,1),(12,1,36,1);
 
 --
 -- Table structure for table `tbldocument`
@@ -99,19 +99,20 @@ CREATE TABLE `tblmessage` (
   `intMessChatID` int(11) NOT NULL COMMENT 'FK',
   `txtMessage` text NOT NULL,
   `dtmDateSent` datetime NOT NULL,
-  `intMessSeen` int(1) NOT NULL,
+  `intMessPSeen` int(1) NOT NULL DEFAULT '0',
+  `intMessSSeen` int(1) NOT NULL DEFAULT '0',
   `intSender` int(1) NOT NULL,
   PRIMARY KEY (`intMessID`),
   KEY `intMessChatID_idx` (`intMessChatID`),
   CONSTRAINT `intMessChatID` FOREIGN KEY (`intMessChatID`) REFERENCES `tblchat` (`intChatID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=109 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `tblmessage`
 --
 
-INSERT INTO `tblmessage` VALUES (1,1,'MessOne','2018-01-28 00:00:00',1,1),(2,1,'MessTwo','2018-01-28 00:00:00',1,2),(3,1,'Skkr','2018-02-02 01:28:25',0,1),(4,1,'Motorsport','2018-02-02 01:30:22',0,1),(5,1,'AP\n','2018-02-02 01:32:24',0,1),(6,1,'Ice\nTray\nThe\nGang','2018-02-02 01:33:24',0,2),(7,1,'Ice','2018-02-02 01:33:31',0,1),(8,1,'','2018-02-02 01:37:27',0,1),(9,1,'','2018-02-02 01:39:17',0,1),(10,1,'Yeah','2018-02-02 02:16:28',0,1),(11,1,'Rain Drop','2018-02-02 02:19:44',0,1),(12,2,'AAA','2018-02-02 02:19:44',0,1),(13,1,'x','2018-02-11 15:48:28',0,1),(14,1,'s','2018-02-14 10:40:03',0,1),(15,1,'ss','2018-02-14 10:40:08',0,1),(16,1,'x','2018-02-14 10:41:13',0,1),(17,1,'s','2018-02-14 10:49:03',0,1),(18,1,'opps','2018-02-14 10:59:44',0,1),(19,1,'x','2018-02-14 11:06:12',0,1),(20,1,'j','2018-02-14 11:10:47',0,1),(21,1,'bad things','2018-02-14 11:11:51',0,2);
+INSERT INTO `tblmessage` VALUES (97,11,'Help','2018-02-25 17:09:29',1,1,2),(98,12,'heelp','2018-02-25 17:11:08',1,1,2),(99,12,'heelp me','2018-02-25 17:11:08',1,1,1),(100,12,'x','2018-02-25 17:52:33',1,1,2),(101,12,'help meeeeeeee','2018-02-25 17:53:23',1,1,2),(102,12,'serve\n','2018-02-25 17:53:27',1,1,2),(103,12,'serve now','2018-02-25 17:53:30',1,1,2),(104,12,'no','2018-02-25 17:53:45',1,1,1),(105,12,'no no no','2018-02-25 17:53:49',1,1,1),(106,11,'yes','2018-02-25 17:54:17',1,1,1),(107,11,'okay\n','2018-02-25 17:54:20',1,1,1),(108,11,'yes yes','2018-02-25 17:54:24',1,1,1);
 
 --
 -- Table structure for table `tblrating`
@@ -187,14 +188,14 @@ CREATE TABLE `tblschedule` (
   PRIMARY KEY (`intSchedID`),
   KEY `intSchedAccNo_idx` (`intSchedAccNo`),
   CONSTRAINT `intSchedAccNo` FOREIGN KEY (`intSchedAccNo`) REFERENCES `tbluser` (`intAccNo`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `tblschedule`
 --
 
-INSERT INTO `tblschedule` VALUES (1,1,'Friday','10:00:00','19:00:00'),(3,1,'Thursday','06:15:00','09:00:00'),(4,1,'Saturday','12:15:00','12:00:00'),(7,1,'Wednesday','12:00:00','20:45:00'),(8,1,'Tuesday','14:00:00','21:30:00');
+INSERT INTO `tblschedule` VALUES (1,1,'Friday','10:00:00','19:00:00'),(3,1,'Thursday','06:15:00','09:00:00'),(7,1,'Wednesday','12:00:00','20:45:00'),(14,1,'Tuesday','00:00:00','13:45:00'),(15,1,'Saturday','00:15:00','00:00:00'),(17,1,'Sunday','03:00:00','05:15:00'),(19,7,'Sunday','10:30:00','18:30:00'),(20,7,'Monday','07:00:00','18:30:00'),(21,7,'Tuesday','06:00:00','15:45:00');
 
 --
 -- Table structure for table `tblservice`
@@ -215,14 +216,14 @@ CREATE TABLE `tblservice` (
   KEY `intServTag_idx` (`intServTag`),
   CONSTRAINT `intServAccNo` FOREIGN KEY (`intServAccNo`) REFERENCES `tbluser` (`intAccNo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `intServTag` FOREIGN KEY (`intServTag`) REFERENCES `tblservicetag` (`intServTagID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `tblservice`
 --
 
-INSERT INTO `tblservice` VALUES (1,1,1,1,2,72.5),(3,2,1,1,1,32),(5,3,5,1,2,72),(6,3,1,0,2,50),(7,3,2,1,2,60),(29,5,1,1,1,213),(30,4,1,1,2,45),(32,4,2,1,1,1245),(33,2,2,1,2,55),(34,5,2,1,2,120),(35,1,3,1,1,123),(36,1,7,1,1,113);
+INSERT INTO `tblservice` VALUES (1,1,1,1,2,72.5),(3,2,1,1,1,32),(5,3,5,1,2,72),(6,3,1,1,2,50),(7,3,2,1,1,60),(29,5,1,1,1,213),(30,4,1,1,2,45),(32,4,2,1,1,1245),(33,2,2,1,2,55),(34,5,2,1,2,120),(35,1,3,0,1,123),(36,1,7,0,1,113),(37,1,4,1,1,200);
 
 --
 -- Table structure for table `tblservicereq`
@@ -261,14 +262,14 @@ CREATE TABLE `tblservicetag` (
   `intServTagID` int(3) NOT NULL AUTO_INCREMENT,
   `strServName` varchar(45) NOT NULL,
   PRIMARY KEY (`intServTagID`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `tblservicetag`
 --
 
-INSERT INTO `tblservicetag` VALUES (1,'Plumbing'),(2,'Electrician'),(3,'Technician'),(4,'Laundry'),(5,'Carpenter');
+INSERT INTO `tblservicetag` VALUES (1,'Plumbing'),(2,'Electrician'),(3,'Technician'),(4,'Laundry'),(5,'Carpenter'),(6,'Tutor');
 
 --
 -- Table structure for table `tblspecialsched`
@@ -281,18 +282,19 @@ CREATE TABLE `tblspecialsched` (
   `intSpecialID` int(11) NOT NULL AUTO_INCREMENT,
   `intSpecialAccNo` int(9) NOT NULL,
   `datSpecialDate` date NOT NULL,
-  `tmSpecialStart` time NOT NULL,
-  `tmSpecialEnd` time NOT NULL,
+  `tmSpecialStart` time DEFAULT NULL,
+  `tmSpecialEnd` time DEFAULT NULL,
   PRIMARY KEY (`intSpecialID`),
   KEY `intSpecialAccNo_idx` (`intSpecialAccNo`),
   CONSTRAINT `intSpecialAccNo` FOREIGN KEY (`intSpecialAccNo`) REFERENCES `tbluser` (`intAccNo`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `tblspecialsched`
 --
 
+INSERT INTO `tblspecialsched` VALUES (2,1,'2018-03-02','02:30:00','14:45:00'),(3,1,'2017-01-01','10:00:00','10:00:00'),(4,1,'2018-01-01','00:00:00','00:00:00'),(9,1,'2018-06-13',NULL,NULL),(10,1,'2018-08-02','00:00:00','00:00:00'),(11,1,'2018-09-01','13:15:00','00:30:00'),(13,1,'2018-02-23','00:00:00','00:00:00'),(17,1,'2018-02-24','12:00:00','00:00:00'),(19,1,'2018-02-26',NULL,NULL),(20,4,'2018-02-25','12:30:00','20:00:00');
 
 --
 -- Table structure for table `tblsuspension`
@@ -379,7 +381,7 @@ CREATE TABLE `tbluser` (
 -- Dumping data for table `tbluser`
 --
 
-INSERT INTO `tbluser` VALUES (1,'Jon Ervin Balmaceda','Jon-Ervin','0424',2,1,'Pasig','Rosario','balmacedajonervin@gmail.com','09236835707',0,NULL,NULL,NULL),(2,'Ralf Milan','9Weissss','ralfralf',2,1,'Quezon','Tandang Sora','ralf@milan.com','09234545672',0,NULL,NULL,NULL),(3,'Piolo Sales','Sno-weak','piolopiolo',2,1,'Manila','Espana','Piolo@mahina.com','0923893482',1,NULL,NULL,NULL),(4,'Vince Oreta','VinceIRL','vincevince',2,1,'Pasig','San Joaquin','vince@dead.com','09236754551',1,NULL,NULL,NULL),(5,'Carlo Doronila','CarloDoronichan','carlocarlo',2,1,'Manila','Sta. Mesa','carlo@anime.com','09234545676',0,NULL,NULL,NULL),(6,'admin','admin','admin',1,1,'Manila','Tondo','admin@admin.com','09236835707',0,NULL,NULL,NULL),(7,'Homer Cadena','ricknmorty','homerhomer',2,1,'Quezon','Tandang Sora','homer@gmail.com','09235458097',0,NULL,NULL,NULL),(8,'John Carlos Pagaduan','Elitebuild','pagapaga',2,1,'Manila','Sta. Mesa','jc@gmail.com','09236545346',0,NULL,NULL,NULL),(9,'21 Construction','21construction','21construction',3,2,'Manila','Sta. Mesa','jeth@gmail.com','09235645238',0,'Jethro Samson',NULL,'BP-000000000.jpg'),(10,'Plumbing Corporation','PlumCorp','PlumCorp',3,1,'Quezon','Tandang Sora','lance@gmail.com','09235647389',0,'Lance San Pablo',NULL,'BP-PlumCorp.jpg');
+INSERT INTO `tbluser` VALUES (1,'Jon Ervin Balmaceda','Jon-Ervin','0424',2,1,'Pasig','Rosario','balmacedajonervin@gmail.com','09236835707',0,NULL,NULL,NULL),(2,'Ralf Milan','9Weissss','ralfralf',2,1,'Quezon','Tandang Sora','ralf@milan.com','09234545672',0,NULL,NULL,NULL),(3,'Piolo Sales','Sno-weak','piolopiolo',2,1,'Manila','Espana','Piolo@mahina.com','0923893482',0,NULL,NULL,NULL),(4,'Vince Oreta','VinceIRL','vincevince',2,1,'Pasig','San Joaquin','vince@dead.com','09236754551',0,NULL,NULL,NULL),(5,'Carlo Doronila','CarloDoronichan','carlocarlo',2,1,'Manila','Sta. Mesa','carlo@anime.com','09234545676',1,NULL,NULL,NULL),(6,'admin','admin','admin',1,1,'Manila','Tondo','admin@admin.com','09236835707',0,NULL,NULL,NULL),(7,'Homer Cadena','ricknmorty','homerhomer',2,1,'Quezon','Tandang Sora','homer@gmail.com','09235458097',0,NULL,NULL,NULL),(8,'John Carlos Pagaduan','Elitebuild','pagapaga',2,1,'Manila','Sta. Mesa','jc@gmail.com','09236545346',0,NULL,NULL,NULL),(9,'21 Construction','21construction','21construction',3,2,'Manila','Sta. Mesa','jeth@gmail.com','09235645238',0,'Jethro Samson',NULL,'BP-000000000.jpg'),(10,'Plumbing Corporation','PlumCorp','PlumCorp',3,1,'Quezon','Tandang Sora','lance@gmail.com','09235647389',0,'Lance San Pablo',NULL,'BP-PlumCorp.jpg');
 
 --
 -- Table structure for table `tblworker`
