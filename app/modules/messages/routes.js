@@ -44,20 +44,22 @@ function fmess(req,res,next){
   *(tbluser)*(tblchat)*(tblmessage)*(tblservice)*(tblservicetag)*/
   db.query("SELECT A.* , (tbluser.strName)Seeker, (tbluser.intAccNo)SAccNo FROM (SELECT * FROM tblchat INNER JOIN tblmessage ON intChatID= intMessChatID INNER JOIN tblservice ON intChatServ= intServID INNER JOIN tbluser ON intAccNo= intServAccNo INNER JOIN tblservicetag ON intServTagID= intServTag)AS A INNER JOIN tbluser ON tbluser.intAccNo= A.intChatSeeker WHERE A.intChatID= ?",[req.params.chatid], (err, results, fields) => {
       if (err) console.log(err);
-      for(count=0;count<results.length;count++){
-        if(req.session.user == results[count].intAccNo){
-          results[count].sendType = 1;
+      if(!(!results[0])){
+        for(count=0;count<results.length;count++){
+          if(req.session.user == results[count].intAccNo){
+            results[count].sendType = 1;
+          }
+          else if(req.session.user == results[count].SAccNo){
+            results[count].sendType = 2;
+          }
+          else{
+            results[count].sendType = 0;
+          }
+          results[count].formatdate = [results[count].dtmDateSent.getMonth()+1,
+               results[count].dtmDateSent.getDate(),
+               results[count].dtmDateSent.getFullYear()].join('/')+' '+
+               timeFormat(results[count].dtmDateSent);
         }
-        else if(req.session.user == results[count].SAccNo){
-          results[count].sendType = 2;
-        }
-        else{
-          results[count].sendType = 0;
-        }
-        results[count].formatdate = [results[count].dtmDateSent.getMonth()+1,
-             results[count].dtmDateSent.getDate(),
-             results[count].dtmDateSent.getFullYear()].join('/')+' '+
-             timeFormat(results[count].dtmDateSent);
       }
       req.mess= results;
       return next();
@@ -66,7 +68,9 @@ function fmess(req,res,next){
 function fparams(req,res,next){
   db.query("SELECT * FROM tblchat WHERE intChatID= ?",[req.params.chatid], (err, results, fields) => {
       if (err) console.log(err);
-      req.chatparams= results[0].intChatID;
+      if(!(!results[0])){
+        req.chatparams= results[0].intChatID;
+      }
       return next();
     });
 }
@@ -105,11 +109,15 @@ function messRender(req,res){
         res.redirect('/restrict');
       }
       else{
+        var stringquery = "UPDATE tblmessage SET intMessSSeen= 1 WHERE intMessChatID= ?";
+        if(req.mess[0].sendType == 1){
+          stringquery = "UPDATE tblmessage SET intMessPSeen= 1 WHERE intMessChatID= ?";
+        }
         db.beginTransaction(function(err) {
           if (err) console.log(err);
-          db.query("UPDATE tblmessage SET intMessSeen= 1 WHERE intMessChatID= ?",[req.params.chatid], function (err,  results, fields) {
+          db.query(stringquery,[req.params.chatid], function (err,  results, fields) {
               if (err) console.log(err);
-              db.query("SELECT COUNT(intMessSeen) AS count FROM tblmessage INNER JOIN tblchat ON intChatID= intMessChatID INNER JOIN tblservice ON intChatServ= intServID WHERE intMessSeen= 0 AND (intServAccNo= ? OR intChatSeeker = ?) ",[req.session.user, req.session.user], function (err,  resultsCount, fields) {
+              db.query("SELECT COUNT(intMessID) AS count FROM tblmessage INNER JOIN tblchat ON intChatID= intMessChatID INNER JOIN tblservice ON intChatServ= intServID WHERE (intChatSeeker= '1' AND intSender= 1 AND intMessSSeen= 0) OR (intServAccNo= '1' AND intSender= 2 AND intMessPSeen= 0)",[req.session.user, req.session.user], function (err,  resultsCount, fields) {
                   if (err) console.log(err);
                   console.log(resultsCount[0].count);
                   db.commit(function(err) {

@@ -83,6 +83,8 @@ block main
                     input#chatid(type='text', name='chatid', value= messOne.intChatID, hidden)
                     input#handle(type='text', name='handle', value= user.strName, hidden)
                     input#sender(type='text', name='handle', value= messOne.sendType, hidden)
+                    each thisuser in thisUserTab
+                      input#thisuser(type='text', name='handle', value=thisuser.intAccNo , hidden)
                     textarea#message.no-resize-bar.form-control(rows='2', name='message', placeholder='Write a message...')
                   a#send.btn.send-button
                     | Send 

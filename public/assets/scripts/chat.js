@@ -8,6 +8,7 @@ var message = document.getElementById('message'),
     sender = document.getElementById('sender'),
     btn = document.getElementById('send'),
     output = document.getElementById('output');
+    user = document.getElementById('thisuser');
 
 // Emit events
 btn.addEventListener('click', function(){
@@ -15,7 +16,8 @@ btn.addEventListener('click', function(){
         message: message.value,
         handle: handle.value,
         chatid: chatid.value,
-        sender: sender.value
+        sender: sender.value,
+        user: user.value,
     });
     message.value = "";
 });
