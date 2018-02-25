@@ -30,16 +30,10 @@ block main
         #nav-tab.nav.nav-tabs(role='tablist', style='border:0px')
           a#settings-tab.nav-item.nav-link(href='#Settings', data-toggle='tab', data-placement='bottom', title='Edit',role='tab', aria-controls='settings', aria-selected='true')
             img.size-ico(src='/assets/images/icons/settings.png', alt='Edit')
-<<<<<<< HEAD
           a#personal-info-tab.nav-item.nav-link(data-toggle='tab', href='#Personal-Info', role='tab', aria-controls='Personal-Info', aria-selected='false') Personal Info
           a#services-tab.nav-item.nav-link(data-toggle='tab', href='#Services', role='tab', aria-controls='Services', aria-selected='false') Services
           a#reviews-tab.nav-item.nav-link(data-toggle='tab', href='#Reviews', role='tab', aria-controls='Reviews', aria-selected='false') Reviews
-        
-=======
-          a#personal-info-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Personal-Info', role='tab', aria-controls='Personal-Info', aria-selected='false') Personal Info
-          a#services-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Services', role='tab', aria-controls='Services', aria-selected='false') Services
-          a#reviews-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Reviews', role='tab', aria-controls='Reviews', aria-selected='false') Reviews
->>>>>>> 0480088577bedc13498dd92cf21d6d196d801480
+  
       #nav-tabContent.tab-content
         #Settings.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='settings-tab', type='button', data-toggle='modal', data-target='settingsServModal')
         #settingsServModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='searchServModalTitle' aria-hidden='true')
@@ -75,6 +69,7 @@ block main
                   button.btn.btn-primary(type='submit') Submit
                   button.btn.btn-secondary(type='button', data-dismiss='modal') Close
         #Personal-Info.tab-pane.fade(role='tabpanel', aria-labelledby='personal-info-tab')
+          
           .col-sm-3(style='display: inline-block; width: 642px; padding-top: 40px; padding-left: 50px; text-align:left')
             h3 City: Manila
             br

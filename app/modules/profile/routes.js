@@ -45,6 +45,16 @@ router.get('/main/:accno/personalinfo', flog, (req,res) => {
   }
 });
 
+function query1(results){
+  db.query(`SELECT * FROM tbluser WHERE tbluser.intAccNo=?`,[req.params.accno], (err, results, fields) => {
+    if(err) return console.log(err);
+    console.log(results[0]);
+  });
+}
+
+function query2(results){
+  
+}
 
 
 
