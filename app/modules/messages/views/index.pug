@@ -79,11 +79,11 @@ block main
                             span(style='color: white;') &nbsp#{messOne.strName}
                   .col.align-right
                     if messOne.sendType == 1 && transstatus == "none" 
-                      button.btn.btn-light.btn-md.btn(type='button' data-toggle='modal' data-target='#invoiceModal') + Invoice
+                      button.btn.btn-light.btn-md.btn(type='button' data-toggle='modal' data-target='#TOModal') + Transaction Offer
                     else if messOne.sendType == 1 && transstatus == 0
-                      button.btn.btn-light.btn-md.btn(type='button' data-toggle='modal' data-target='#editInvoiceModal') * Edit Invoice
+                      button.btn.btn-light.btn-md.btn(type='button' data-toggle='modal' data-target='#editTOModal') * Edit Offer
                     else if messOne.sendType == 2 && transstatus == 0
-                      button.btn.btn-light.btn-md.btn(type='button' data-toggle='modal' data-target='#viewInvoiceModal') View Invoice
+                      button.btn.btn-light.btn-md.btn(type='button' data-toggle='modal' data-target='#viewTOModal') View Offer
                     else if transstatus == 1
                       span.tag.provider Ongoing
                     else if transstatus == 2
@@ -124,12 +124,12 @@ block main
                     | Send 
                     i.fa.fa-send
                       
-  #invoiceModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='invoiceModalTitle' aria-hidden='true')
+  #TOModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='TOModalTitle' aria-hidden='true')
     .modal-dialog(role='document')
       .modal-content
         form(method='POST' action='/messages/invoice/'+messOne.intChatID)
           .modal-header
-            h5#invoiceModalTitle.modal-title Create Invoice
+            h5#TOModalTitle.modal-title Create Invoice
             button.close(type='button' data-dismiss='modal' aria-label='Close')
               span(aria-hidden='true') ×
           .modal-body
@@ -180,12 +180,12 @@ block main
             button.btn.btn-primary(type='submit') Submit
             button.btn.btn-secondary(type='button', data-dismiss='modal') Close
             
-  #editInvoiceModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='editInvoiceModalTitle' aria-hidden='true')
+  #editTOModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='editTOModalTitle' aria-hidden='true')
     .modal-dialog(role='document')
       .modal-content
           form(method='POST' action='/messages/invoice/edit/'+messOne.intChatID)
             .modal-header
-              h5#editInvoiceModalTitle.modal-title Edit Invoice
+              h5#editTOModalTitle.modal-title Edit Invoice
               button.close(type='button' data-dismiss='modal' aria-label='Close')
                 span(aria-hidden='true') ×
             .modal-body
@@ -236,22 +236,34 @@ block main
               button.btn.btn-primary(type='submit') Submit
               button.btn.btn-secondary(type='button', data-dismiss='modal') Close
 
-  #viewInvoiceModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='viewInvoiceModalTitle' aria-hidden='true')
+  #viewTOModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='viewTOModalTitle' aria-hidden='true')
     .modal-dialog(role='document')
       .modal-content
-        .modal-header 
-          h5#viewInvoiceModalTitle.modal-title View Invoice
-          button.close(type='button' data-dismiss='modal' aria-label='Close')
-            span(aria-hidden='true') ×
-        .modal-body
-          .row
-            .col
-              each trans in transtab
-                a.button.btn.btn-primary.btn-block(type='button' href='/invoice/'+trans.intTransID) View Invoice
-            .col
-              form(method='POST' action='/messages/invoice/accept/'+messOne.intChatID)
-                button.btn.btn-primary.btn-block(type='submit') Accept Offer
-        .modal-footer
-          button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+        form(method='POST' action='/messages/invoice/accept/'+messOne.intChatID)
+          .modal-header 
+            h5#viewTOModalTitle.modal-title View Transaction Offer
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+              span(aria-hidden='true') ×
+          .modal-body
+            .row
+              .col
+                each trans in transtab
+                  if trans.intTransPriceType == 1
+                    p
+                      b Price: 
+                      | Php #{trans.formatPrice}
+                  else
+                    p
+                      b Price: 
+                      | Php #{trans.formatPrice}/hr
+                  p
+                    b Date Scheduled: 
+                    | #{trans.date}
+                    
+              .col
+                  
+          .modal-footer
+            button.btn.btn-primary.btn-block(type='submit') Accept Offer
+            button.btn.btn-secondary(type='button', data-dismiss='modal') Close
 
   block chatmess

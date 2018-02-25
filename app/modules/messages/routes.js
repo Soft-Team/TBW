@@ -4,6 +4,8 @@ var db = require('../../lib/database')();
 var flog = require('../welcome/loggedin');
 var timeFormat = require('../welcome/timeFormat');
 var messCount = require('../welcome/messCount');
+var prepend = require('../welcome/prepend');
+var numberFormat = require('../welcome/numberFormat');
 
 function fchat(req,res,next){
   /*All Chats of Current User, Match(session);
@@ -80,6 +82,13 @@ function ftrans(req,res,next){
       if (err) console.log(err);
       if(!(!results[0])){
         req.transstatus = results[0].intTransStatus;
+        date = results[0].dtmTransScheduled;
+        for(count=0;count<results.length;count++){
+          results[count].date = [date.getMonth()+1,date.getDate(),date.getFullYear()].join('/');
+          results[count].prepAccNo = prepend(results[count].intAccNo);
+          results[count].prepTransID = prepend(results[count].intTransID);
+          results[count].formatPrice = numberFormat(results[count].fltTransPrice.toFixed(2));
+        }
       }
       else{
         req.transstatus = "none";
