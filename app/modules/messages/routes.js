@@ -76,7 +76,7 @@ function fparams(req,res,next){
 function ftrans(req,res,next){
   /*Current Chat, Match(params);
   *(tblchat)*/
-  db.query("SELECT * FROM tblchat INNER JOIN tblservice ON intChatServ= intServID INNER JOIN tbltransaction ON intServID= intTransServID WHERE intChatID= ?",[req.params.chatid], (err, results, fields) => {
+  db.query("SELECT * FROM tblchat INNER JOIN tblservice ON intChatServ= intServID INNER JOIN tbltransaction ON intChatID= intTransChatID WHERE intChatID= ?",[req.params.chatid], (err, results, fields) => {
       if (err) console.log(err);
       if(!(!results[0])){
         req.transstatus = results[0].intTransStatus;
@@ -130,11 +130,13 @@ function messRender(req,res){
           if (err) console.log(err);
           db.query(stringquery,[req.params.chatid], function (err,  results, fields) {
               if (err) console.log(err);
-              db.query("SELECT COUNT(intMessID) AS count FROM tblmessage INNER JOIN tblchat ON intChatID= intMessChatID INNER JOIN tblservice ON intChatServ= intServID WHERE (intChatSeeker= '1' AND intSender= 1 AND intMessSSeen= 0) OR (intServAccNo= '1' AND intSender= 2 AND intMessPSeen= 0)",[req.session.user, req.session.user], function (err,  resultsCount, fields) {
+              db.query("SELECT COUNT(intMessID) AS count FROM tblmessage INNER JOIN tblchat ON intChatID= intMessChatID INNER JOIN tblservice ON intChatServ= intServID WHERE (intChatSeeker= ? AND intSender= 1 AND intMessSSeen= 0) OR (intServAccNo= ? AND intSender= 2 AND intMessPSeen= 0)",[req.session.user, req.session.user], function (err,  results, fields) {
                   if (err) console.log(err);
+                  var count = results[0].count
                   db.commit(function(err) {
                       if (err) console.log(err);
-                      res.render('messages/views/index', { thisUserTab: req.user, messCount: resultsCount[0].count , messtab: req.mess, messOne: req.mess[0], chattab: req.chat, params: req.params.chatid, transstatus: req.transstatus});
+                      console.log(count);
+                      res.render('messages/views/index', { thisUserTab: req.user, messCount: count, messtab: req.mess, messOne: req.mess[0], chattab: req.chat, params: req.params.chatid, transstatus: req.transstatus, transtab: req.ftrans});
                   });
               });
           });
@@ -161,14 +163,14 @@ router.post('/invoice/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, 
     }
     var start = req.body.Shours.concat(':'+req.body.Sminutes);
     var dtm = date.concat(' '+start);
-    var stringquery1 = "INSERT INTO tbltransaction (intFinderAccNo, intTransServID, intTransPriceType, fltTransPrice, dtmTransScheduled) VALUES (?,?,?,?,?)";
-    var bodyarray1 = [req.session.user, req.fparams[0].intChatServ, req.body.pricetype, req.body.price, dtm];
+    var stringquery1 = "INSERT INTO tbltransaction (intTransChatID, intTransPriceType, fltTransPrice, dtmTransScheduled) VALUES (?,?,?,?)";
+    var bodyarray1 = [req.params.chatid, req.body.pricetype, req.body.price, dtm];
     var stringquery2 = "INSERT INTO tblmessage ( intMessChatID, txtMessage, dtmDateSent, intMessPSeen, intSender ) VALUES ( ?, ?, NOW(), 1, 1)";
-    var bodyarray2 = [req.params.chatid, "-- I have created an invoice, reload the page and check it out on the upper right corner!"];
+    var bodyarray2 = [req.params.chatid, "-- I have created an invoice, check it out on the upper right corner!"];
     db.beginTransaction(function(err) {
       if (err) console.log(err);
       db.query(stringquery1, bodyarray1, (err, results, fields) => {
-        if (err) res.render('messages/views/invalid/nodate', { thisUserTab: req.user, messCount: resultsCount[0].count , messtab: req.mess, messOne: req.mess[0], chattab: req.chat, params: req.params.chatid });
+        if (err) res.render('messages/views/invalid/nodate', { thisUserTab: req.user, messCount: req.messCount[0].count, messtab: req.mess, messOne: req.mess[0], chattab: req.chat, params: req.params.chatid });
         else
           db.query(stringquery2, bodyarray2, function (err,  resultsCount, fields) {
               if (err) console.log(err);

@@ -225,7 +225,7 @@ function servRender(req,res){
         res.render('services/views/notag', {thisUserTab: req.user, messCount: req.messCount[0].count, servName: req.params.servName, servTags: req.servTags });
       }
       else{
-        var stringquery="SELECT * FROM tblservice INNER JOIN tblservicetag ON intServTag= intServTagID INNER JOIN tbluser ON intServAccNo= intAccNo WHERE strServName= ? AND intAccNo!= ? AND intServStatus= 1 ";
+        var stringquery="SELECT * FROM tblservice INNER JOIN tblservicetag ON intServTag= intServTagID INNER JOIN tbluser ON intServAccNo= intAccNo WHERE strServName= ? AND intAccNo!= ? AND intServStatus= 1 AND boolIsBanned= 0 ";
         var paramsarray= [];
         if(req.params.city!='any'){
           stringquery = stringquery.concat("AND strCity= ? ");
@@ -436,7 +436,7 @@ router.post('/request/:servid', flog, messCount, servStatus, requestServ, (req, 
     var stringquery4= "INSERT INTO tblmessage (intMessChatID, txtMessage, dtmDateSent, intSender) VALUES (@A,?,NOW(),2)";
     db.beginTransaction(function(err) {
       if (err) console.log(err);
-      db.query(stringquery1,[req.params.servid], function (err,  results, fields) {
+      db.query(stringquery1,[req.requestServ[0].intAccNo], function (err,  results, fields) {
           if (err) console.log(err);
           db.query(stringquery2,[req.session.user, req.params.servid], function (err,  results, fields) {
               if (err) console.log(err);
