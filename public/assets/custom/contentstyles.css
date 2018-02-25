@@ -27,9 +27,13 @@
     font-size: .9em
 }
 
+.font2{
+    font-size: 1.5em;
+    padding-left:5px;
+}
 .size{
     height: 30px;
-    weight: 30px;
+    width: 30px;
 }
 label{
     font-size: 1rem;
@@ -142,8 +146,7 @@ thead{
 .display {
     display: flex;
 }
-/*_2il3*/
-}
+
 /*._1ht1 ._1qt3*/
 .chat-pick {
     align-items: center;
@@ -292,10 +295,7 @@ thead{
 .chat-mg {
     margin-top: 8px;
 }
-/*_3oh-*/
-.chat-use {
-    -moz-user-select: text;
-}
+
 /*._5rp7*/
 .chat-text-M {
     position: relative;

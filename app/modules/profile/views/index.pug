@@ -30,69 +30,79 @@ block main
         #nav-tab.nav.nav-tabs(role='tablist', style='border:0px')
           a#settings-tab.nav-item.nav-link(href='#Settings', data-toggle='tab', data-placement='bottom', title='Edit',role='tab', aria-controls='settings', aria-selected='true')
             img.size-ico(src='/assets/images/icons/settings.png', alt='Edit')
-<<<<<<< HEAD
-          a#personal-info-tab.nav-item.nav-link(data-toggle='tab', href='#Personal-Info', role='tab', aria-controls='Personal-Info', aria-selected='false') Personal Info
-          a#services-tab.nav-item.nav-link(data-toggle='tab', href='#Services', role='tab', aria-controls='Services', aria-selected='false') Services
-          a#reviews-tab.nav-item.nav-link(data-toggle='tab', href='#Reviews', role='tab', aria-controls='Reviews', aria-selected='false') Reviews
-        
-=======
           a#personal-info-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Personal-Info', role='tab', aria-controls='Personal-Info', aria-selected='false') Personal Info
           a#services-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Services', role='tab', aria-controls='Services', aria-selected='false') Services
           a#reviews-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Reviews', role='tab', aria-controls='Reviews', aria-selected='false') Reviews
->>>>>>> 0480088577bedc13498dd92cf21d6d196d801480
       #nav-tabContent.tab-content
-        #Settings.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='settings-tab', type='button', data-toggle='modal', data-target='settingsServModal')
-        #settingsServModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='searchServModalTitle' aria-hidden='true')
-          .modal-dialog(role='document')
-            .modal-content
-              .modal-header
-                h5#searchServModalTitle.modal-title Search and Filters
-                button.close(type='button' data-dismiss='modal' aria-label='Close')
-                  span(aria-hidden='true') ×
-              .modal-body
-                input.form-control(type='text' name='searchtag' placeholder='Service Tag' required)
-                br
-                .row
-                  .col
-                    input.form-control(type='text' name='city' placeholder='City')
-                  .col
-                    input.form-control(type='text' name='brngy' placeholder='Barangay')
-                br
-                .row
-                  .col
-                    label(for='pricing') Pricing
-                    select#pricing.form-control(name='pricing')
-                      option(value='any' selected='') Any
-                      option(value='1') Ave Fixed
-                      option(value='2') Ave Rate
-                  .col
-                    label(for='sorting') Sorting
-                    select#sorting.form-control(name='sorting')
-                      option(value='rating' selected='') Rating
-                      option(value='finished') Finished Transaction
-                
-                .modal-footer
-                  button.btn.btn-primary(type='submit') Submit
-                  button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+        #Settings.tab-pane.fade(role='tabpanel', aria-labelledby='settings-tab')
+          .col-sm-3(style='display: inline-block; width: 642px; padding-top: 40px; padding-left: 50px; text-align:left')
+            .form-group.col-md-6.noP
+              label(for='displayname') Change Email
+                input#email.form-control(type='email' name='email' aria-describedby='emailHelp' placeholder='eg. johndoe@email.com' maxlength='320' required='', style='width: 23rem;')
+            .form-group.col-md-6.noP
+              label(for='changenumber') Change Contact Number
+                input#contact.form-control(type='number' name='contact' aria-describedby='contactHelp' placeholder='09236835707' max='99999999999' required='', style='width: 23rem;')
+            .form-group.col-md-6.noP
+              label(for='changepassword') Change Password
+                input#password1.form-control(type='password' name='password' placeholder='Create a Password' minlength='8' maxlength='100' required='', style='width: 23rem;')
+                input#password2.form-control(type='password' name='confirm' aria-describedby='password2Help' placeholder='Retype Password' required='', style='width: 23rem;')
+                small#password2Help.form-text.text-muted Minimum of 8 characters.
+            .form-row
+              .form-group.col-md-6
+                label(for='changepassword') Upload Picture
+                  .custom-file
+                    input#customFile.custom-file-input(type='file')
+                    label.custom-file-label(for='customFile') Choose file
+              .form-group
+                button.btn.btn-primary(style='float:right; margin-top:24px;') Submit
+
+          .col-sm-3(style='display: inline-block; width: 642px; padding-top: 40px; text-align:left')
+            .form-group
+              label.col-md-4.noP.control-label(for='userdesc') User Description
+              .col-md-6.noP
+                textarea#userdesc.form-control(name='userdesc', type='text', placeholder='Say something about yourself..', required='', rows='3', style='width: 23rem;')
+            .form-row
+              .form-group.col-md-6
+                label(for='inputCity') City
+                input#inputCity.form-control(type='text')
+              .form-group.col-md-4
+                label(for='inputState') Barangay
+                input#inputBarangay.form-control(type='text')
+            .form-group
+              label.col-md-4.noP.control-label(for='userdesc') Also Available At
+              .col-md-6.noP
+                textarea#userdesc.form-control(name='userdesc', type='text', placeholder='Social media links go here..', required='', rows='3', style='width: 23rem;')
+
         #Personal-Info.tab-pane.fade(role='tabpanel', aria-labelledby='personal-info-tab')
           .col-sm-3(style='display: inline-block; width: 642px; padding-top: 40px; padding-left: 50px; text-align:left')
-            h3 City: Manila
-            br
-            h3 Contact: 0916754679
-          .col-sm-3(style='display: inline-block; width: 642px; padding-top: 40px; text-align:left')
-            h3 Barangay: Tondo
-            br
-            h3 Email: Flower_Boy@yahoo.com
-          .col-sm-3(style='width: 1284px; padding-top: 50px; padding-left: 50px; text-align:left')
-            h3 User Description:
-            h3 Hello guys welcome to my profile, My lines of proffesion are Plumbing, Rapping and making Beats ayy lmoa
-            br
-            h3 Facebook: TylerTheCreator
+            i.fa.fa-building.fa-2x
+            span.font2 City: Manila
+            hr
+            i.fa.fa-address-book.fa-2x
+            span.font2 Contact: 0916754679
+            hr
+          .col-sm-3(style='display: inline-block; width: 642px; padding-top: 40px; padding-right: 50px; text-align:left')
+            i.fa.fa-home.fa-2x
+            span.font2 Barangay: Tondo
+            hr
+            i.fa.fa-envelope.fa-2x
+            span.font2 Email: Flower_Boy@yahoo.com
+            hr
+          .col-sm-3(style='width: 1284px; padding-top: 10px; padding-left: 50px; padding-right: 50px; text-align:left')
+            i.fa.fa-user.fa-2x
+            span.font2 User Description:
+              .container(style='padding-top:20px;')
+                h4 Hello guys welcome to my profile, My lines of proffesion are Plumbing, Rapping and making Beats ayy lmoa
+            hr
+            i.fa.fa-users.fa-2x
+            span.font2 Also Available At
+              .container(style='padding-top:20px;')
+                h4 Facebook: TylerThePlumber
         #Services.tab-pane.fade(role='tabpanel', aria-labelledby='services-tab')
           center
             .container(style='padding-top: 20px; padding-bottom: 20px')
               p.font
-                table.table.table-striped.font1
+                table.table.table-striped.font1.box-shadow-mini
                   thead
                     tr.text-white
                       th(scope='col') Service

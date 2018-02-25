@@ -64,32 +64,40 @@ block main
       .row
         each serv in searchServ
           .col(style='margin-left: -5px;')
-            span.card(style= 'height: 15.1.5rem; width: 15rem').border.border-primary.mb-3
+            span.card(style= 'height: 15.1.5rem; width: 15rem').border.border-primary.mb-3.box-shadow-mini
               table
                 tbody
                   tr
                     td(rowspan='2') 
-                      img(src='/assets/images/Tyler.jpg', alt='Card image cap', style='height: 8rem; width: 8rem; ')
+                      img(src='/assets/images/Tyler.jpg', alt='Card image cap', style='height: 8rem; width: 8rem; border-radius: 3px 0px 0px 0px; border-right: 1px solid #007BFF;')
                     td
-                      img(src='/assets/images/Icons/star.png', alt='star', style='height: 1.5rem; width: 1.5rem; ')
+                      img(src='/assets/images/Icons/star.png', alt='star', style='height: 1.5rem; width: 1.5rem; margin-left:20px;')
+                      p(style='float: right; margin-right: 30px; margin-bottom: 0rem') 4.8
                       p.cenR(style='margin-bottom: 0rem') Rating
                   tr
                     td
-                      img(src='/assets/images/Icons/case.png', alt='star', style='height: 1.5rem; width: 1.5rem; ')
+                      img(src='/assets/images/Icons/case.png', alt='star', style='height: 1.5rem; width: 1.5rem; margin-left:20px;')
+                      p(style='float: right; margin-right: 30px; margin-bottom: 0rem') 100  
                       p.cenF(style='margin-bottom: 0rem') Finished
 
               //-img.card-img-top(src='/assets/images/Tyler.jpg', alt='Card image cap', style='height: 8rem; width: 8rem; ')
               .card-body
                 .card-text
-                  .f(style='text-align:center; border-top: 1px solid #007BFF') #{serv.prepend}
+                  .f(style='text-align:center; border-top: 1px solid #007BFF; color: green;') Verified
+                  .f(style='text-align:center;') #{serv.prepend}
                   .f(style='text-align:center') #{serv.strName}
+                  .row
+                    .col(style='padding-right:0px; text-align:center; border-right: 1px solid #007BFF;')
+                      .f Quezon City
+                    .col(style='padding-left:0px; text-align:center;')
+                      .f Tandang Sora
                   if serv.intPriceType == 1
                     .f(style='text-align:center') ₱#{serv.fltPrice}
                   else
                     .f(style='text-align:center') ₱#{serv.fltPrice}/hr
                 .btn-group.special(role='group')
-                  a.button.btn.btn-primary(href='/services/'+varServName+'/'+varCity+'/'+varBrngy+'/'+varPricing+'/'+varSorting+'/request/'+serv.intServID style='width: 14.7rem; border-radius: 0px;') Request
-                  button.btn.btn-secondary(href='' style='width: 14.7rem; border-radius: 0px;') Portfolio
+                  a.button.btn.btn-primary(href='/services/'+varServName+'/'+varCity+'/'+varBrngy+'/'+varPricing+'/'+varSorting+'/request/'+serv.intServID style='width: 14.7rem; border-radius: 0px; border-radius: 0px 0px 0px 3px;') Request
+                  button.btn.btn-secondary(href='' style='width: 14.7rem; border-radius: 0px 0px 3px 0px;') Portfolio
         .col          
 
   block servrequest

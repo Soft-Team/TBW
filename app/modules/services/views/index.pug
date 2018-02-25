@@ -43,7 +43,17 @@ block main
   
   p
     h3.margin-L Popular Service Tags
-  each tag in servTags
-      a.button.btn.btn-primary.btn-tag.box-shadow-mini(href='/services/'+tag.strServName) #{tag.strServName}
+    br
+    .container(style='max-width: 1254px !important')
+      .card-deck.ml-1
+        .row(style='padding-left: 60px;')
+          each tag in servTags
+            .col(style='margin-left: -5px; padding-bottom: 20px')
+              span.card(style='width: 18rem;').box-shadow-mini
+                img.card-img-top(src='/assets/images/Tyler.jpg', alt='Card image cap')
+                .card-body
+                  a.button.btn.btn-primary.btn-block(href='/services/'+tag.strServName, style='height: 60px; font-size: 2em;') #{tag.strServName}
+  //- each tag in servTags
+  //-     a.button.btn.btn-primary.btn-tag.box-shadow-mini(href='/services/'+tag.strServName) #{tag.strServName}
       
   block service

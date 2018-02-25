@@ -647,3 +647,11 @@ header.heads {
 .tes {
     text-shadow: 2px 2px 3px gray;
 }
+
+.no{
+    margin:0px;
+}
+
+.noP{
+    padding:0px;
+}
