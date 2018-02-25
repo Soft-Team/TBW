@@ -21,83 +21,84 @@ block servrequest
     .modal-dialog(role='document')
       .modal-content
         each request in requestTab
-          .modal-header
-            h5#requestTitle.modal-title Service Request
-            button.close(type='button' data-dismiss='modal' aria-label='Close')
-              span(aria-hidden='true') ×
-          .modal-body
-            .row
-              .col
-                h5(style="display:inline;") #{request.strName}
-                each val, index in servParams
-                  if index == 0
-                    h5(style="display:inline;") &nbsp- #{val}
-                br
-                h7(style="display:inline;") #{request.strCity}
-                h7(style="display:inline;") &nbsp- #{request.strBarangay}
-                br
-                br
-                table.table.table-striped.box-shadow-mini
-                  thead.text-white
-                    tr
-                      th.align-left(scope='col' colspan="2") Today's Working Hours
-                  tbody
-                    tr
-                      th(scope='row') #{request.date}
-                      if request.unav == 1
-                        td Unavailable
-                      else if request.unav == 0
-                        td #{request.formatstart} - #{request.formatend}
-                      else
-                        td none
-            .row
-              .col
-                table.table.table-striped.box-shadow-mini
-                  thead
-                    tr
-                      th.align-left.text-white(scope='col' colspan='2') Regular Working Hours
-                  tbody
-                    if empty == 1
+          form(method='POST' action='/services/request/'+request.intServID)
+            .modal-header
+              h5#requestTitle.modal-title Service Request
+              button.close(type='button' data-dismiss='modal' aria-label='Close')
+                span(aria-hidden='true') ×
+            .modal-body
+              .row
+                .col
+                  h5(style="display:inline;") #{request.strName}
+                  each val, index in servParams
+                    if index == 0
+                      h5(style="display:inline;") &nbsp- #{val}
+                  br
+                  h7(style="display:inline;") #{request.strCity}
+                  h7(style="display:inline;") &nbsp- #{request.strBarangay}
+                  br
+                  br
+                  table.table.table-striped.box-shadow-mini
+                    thead.text-white
                       tr
-                        td
-                          i No Schedule Detected
-                    else
-                      each sched in regSchedTab
-                        +regsched(sched.sunday,"Sunday",sched.strSchedDay,sched.formatstart,sched.formatend)
-                      each sched in regSchedTab
-                        +regsched(sched.monday,"Monday",sched.strSchedDay,sched.formatstart,sched.formatend)
-                      each sched in regSchedTab
-                        +regsched(sched.tuesday,"Tuesday",sched.strSchedDay,sched.formatstart,sched.formatend)
-                      each sched in regSchedTab
-                        +regsched(sched.wednesday,"Wednesday",sched.strSchedDay,sched.formatstart,sched.formatend)
-                      each sched in regSchedTab
-                        +regsched(sched.thursday,"Thursday",sched.strSchedDay,sched.formatstart,sched.formatend)
-                      each sched in regSchedTab
-                        +regsched(sched.friday,"Friday",sched.strSchedDay,sched.formatstart,sched.formatend)
-                      each sched in regSchedTab
-                        +regsched(sched.saturday,"Saturday",sched.strSchedDay,sched.formatstart,sched.formatend)
-            .row
-              .col
-                table.table.table-striped.box-shadow-mini
-                  thead.text-white
-                    tr
-                      th.align-left(scope='col' colspan='2') Special Working Hours
-                  tbody
-                    if emptyspecial == 1
+                        th.align-left(scope='col' colspan="2") Today's Working Hours
+                    tbody
                       tr
-                        td(colspan="2")
-                          i No Schedule Detected
-                    else
-                      each spec in specSchedTab
+                        th(scope='row') #{request.date}
+                        if request.unav == 1
+                          td Unavailable
+                        else if request.unav == 0
+                          td #{request.formatstart} - #{request.formatend}
+                        else
+                          td none
+              .row
+                .col
+                  table.table.table-striped.box-shadow-mini
+                    thead
+                      tr
+                        th.align-left.text-white(scope='col' colspan='2') Regular Working Hours
+                    tbody
+                      if empty == 1
                         tr
-                          th(scope='row') #{spec.date}
-                          if spec.unav == 1
-                            td Unavailable
-                          else
-                            td #{spec.formatstart} - #{spec.formatend}
-            label(for='comment') Request Description:
-            textarea.form-control(rows='5' name='desc')
-          br
-          .modal-footer
-            button.btn.btn-primary(type='submit') Submit
-            button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+                          td
+                            i No Schedule Detected
+                      else
+                        each sched in regSchedTab
+                          +regsched(sched.sunday,"Sunday",sched.strSchedDay,sched.formatstart,sched.formatend)
+                        each sched in regSchedTab
+                          +regsched(sched.monday,"Monday",sched.strSchedDay,sched.formatstart,sched.formatend)
+                        each sched in regSchedTab
+                          +regsched(sched.tuesday,"Tuesday",sched.strSchedDay,sched.formatstart,sched.formatend)
+                        each sched in regSchedTab
+                          +regsched(sched.wednesday,"Wednesday",sched.strSchedDay,sched.formatstart,sched.formatend)
+                        each sched in regSchedTab
+                          +regsched(sched.thursday,"Thursday",sched.strSchedDay,sched.formatstart,sched.formatend)
+                        each sched in regSchedTab
+                          +regsched(sched.friday,"Friday",sched.strSchedDay,sched.formatstart,sched.formatend)
+                        each sched in regSchedTab
+                          +regsched(sched.saturday,"Saturday",sched.strSchedDay,sched.formatstart,sched.formatend)
+              .row
+                .col
+                  table.table.table-striped.box-shadow-mini
+                    thead.text-white
+                      tr
+                        th.align-left(scope='col' colspan='2') Special Working Hours
+                    tbody
+                      if emptyspecial == 1
+                        tr
+                          td(colspan="2")
+                            i No Schedule Detected
+                      else
+                        each spec in specSchedTab
+                          tr
+                            th(scope='row') #{spec.date}
+                            if spec.unav == 1
+                              td Unavailable
+                            else
+                              td #{spec.formatstart} - #{spec.formatend}
+              label(for='comment') Request Description:
+              textarea.form-control(rows='5' name='message' required)
+            br
+            .modal-footer
+              button.btn.btn-primary(type='submit') Submit
+              button.btn.btn-secondary(type='button', data-dismiss='modal') Close

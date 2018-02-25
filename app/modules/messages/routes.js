@@ -13,8 +13,8 @@ function fchat(req,res,next){
       if (err) console.log(err);
       if (!(!results[0])){
         for(count=0;count<results.length;count++){
-          if (results[count].strName.length > 10){
-            results[count].name = results[count].strName.substring(0,10).concat('...');
+          if (results[count].strName.length > 8){
+            results[count].name = results[count].strName.substring(0,8).concat('...');
           }
           else{
             results[count].name = results[count].strName;

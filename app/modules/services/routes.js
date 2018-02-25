@@ -180,6 +180,15 @@ function specialSched(req, res, next){
       return next();
   });
 }
+function servStatus(req, res, next){
+  /*All Service Tags
+  *(tblservice)*/
+  db.query("SELECT * FROM tblservice WHERE intServID= ? AND intServStatus= 1",[req.params.servid], function (err, results, fields) {
+      if (err) return res.send(err);
+      req.servStatus = results;
+      return next();
+  });
+}
 
 function render(req,res){
   switch (req.valid) {
@@ -413,6 +422,37 @@ router.post('/', flog, (req, res) => {
   if(!req.body.brngy)
     req.body.brngy= 'any';
   res.redirect('/services/'+ req.body.searchtag +'/'+ req.body.city +'/'+ req.body.brngy +'/'+ req.body.pricing +'/'+ req.body.sorting);
+});
+
+router.post('/request/:servid', flog, servStatus, (req, res) => {
+  if(!req.servStatus[0]){
+    res.render('welcome/views/noroute', {thisUserTab: req.user});
+  }
+  else{
+    var stringquery1= "UPDATE tblservice SET intServStatus= 0 WHERE intServID= ?";
+    var stringquery2= "INSERT INTO tblchat (intChatSeeker, intChatServ) VALUES (?,?)";
+    var stringquery3= "SELECT @A:=intChatID FROM tblchat WHERE intChatServ= ? AND intChatSeeker= ? ORDER BY intChatID DESC LIMIT 1";
+    var stringquery4= "INSERT INTO tblmessage (intMessChatID, txtMessage, dtmDateSent, intSender) VALUES (@A,?,NOW(),2)";
+    db.beginTransaction(function(err) {
+      if (err) console.log(err);
+      db.query(stringquery1,[req.params.servid], function (err,  results, fields) {
+          if (err) console.log(err);
+          db.query(stringquery2,[req.session.user, req.params.servid], function (err,  results, fields) {
+              if (err) console.log(err);
+              db.query(stringquery3,[req.params.servid, req.session.user], function (err,  results, fields) {
+                  if (err) console.log(err);
+                  db.query(stringquery4,[req.body.message], function (err,  results, fields) {
+                      if (err) console.log(err);
+                      db.commit(function(err) {
+                          if (err) console.log(err);
+                          res.redirect('/messages');
+                      });
+                  });
+              });
+          });
+      });
+    });
+  }
 });
 
 exports.services = router;
