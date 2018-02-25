@@ -183,7 +183,7 @@ block main
   #editInvoiceModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='editInvoiceModalTitle' aria-hidden='true')
     .modal-dialog(role='document')
       .modal-content
-          form(method='POST' action='/messages/invoice/'+messOne.intChatID)
+          form(method='POST' action='/messages/invoice/edit/'+messOne.intChatID)
             .modal-header
               h5#editInvoiceModalTitle.modal-title Edit Invoice
               button.close(type='button' data-dismiss='modal' aria-label='Close')
@@ -235,5 +235,23 @@ block main
             .modal-footer
               button.btn.btn-primary(type='submit') Submit
               button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+
+  #viewInvoiceModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='viewInvoiceModalTitle' aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header 
+          h5#viewInvoiceModalTitle.modal-title View Invoice
+          button.close(type='button' data-dismiss='modal' aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+          .row
+            .col
+              each trans in transtab
+                a.button.btn.btn-primary.btn-block(type='button' href='/invoice/'+trans.intTransID) View Invoice
+            .col
+              form(method='POST' action='/messages/invoice/accept/'+messOne.intChatID)
+                button.btn.btn-primary.btn-block(type='submit') Accept Offer
+        .modal-footer
+          button.btn.btn-secondary(type='button', data-dismiss='modal') Close
 
   block chatmess

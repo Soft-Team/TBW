@@ -6,6 +6,7 @@ var prepend = require('../welcome/prepend');
 var formatAMPM = require('../welcome/formatAMPM');
 var dateformat = require('../welcome/dateformat');
 var messCount = require('../welcome/messCount');
+var numberFormat = require('../welcome/numberFormat');
 
 function servTags(req, res, next){
   /*All Service Tags
