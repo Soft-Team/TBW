@@ -34,7 +34,6 @@ function fchat(req,res,next){
           results[count].date = date;
         }
       }
-      console.log(results);
       req.chat= results;
       return next();
     });
@@ -100,7 +99,6 @@ function messRender(req,res){
     case 3:
       if(!req.chat[0]){
         res.render('messages/views/nochat', { thisUserTab: req.user, messCount: req.messCount[0].count });
-        console.log('EMPTY')
       }
       else if(!req.mess[0]){
         res.redirect('/noroute');
@@ -119,10 +117,8 @@ function messRender(req,res){
               if (err) console.log(err);
               db.query("SELECT COUNT(intMessID) AS count FROM tblmessage INNER JOIN tblchat ON intChatID= intMessChatID INNER JOIN tblservice ON intChatServ= intServID WHERE (intChatSeeker= '1' AND intSender= 1 AND intMessSSeen= 0) OR (intServAccNo= '1' AND intSender= 2 AND intMessPSeen= 0)",[req.session.user, req.session.user], function (err,  resultsCount, fields) {
                   if (err) console.log(err);
-                  console.log(resultsCount[0].count);
                   db.commit(function(err) {
                       if (err) console.log(err);
-                      console.log(resultsCount[0].count);
                       res.render('messages/views/index', { thisUserTab: req.user, messCount: resultsCount[0].count , messtab: req.mess, messOne: req.mess[0], chattab: req.chat, params: req.chatparams });
                   });
               });

@@ -105,14 +105,14 @@ CREATE TABLE `tblmessage` (
   PRIMARY KEY (`intMessID`),
   KEY `intMessChatID_idx` (`intMessChatID`),
   CONSTRAINT `intMessChatID` FOREIGN KEY (`intMessChatID`) REFERENCES `tblchat` (`intChatID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=109 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=112 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `tblmessage`
 --
 
-INSERT INTO `tblmessage` VALUES (97,11,'Help','2018-02-25 17:09:29',1,1,2),(98,12,'heelp','2018-02-25 17:11:08',1,1,2),(99,12,'heelp me','2018-02-25 17:11:08',1,1,1),(100,12,'x','2018-02-25 17:52:33',1,1,2),(101,12,'help meeeeeeee','2018-02-25 17:53:23',1,1,2),(102,12,'serve\n','2018-02-25 17:53:27',1,1,2),(103,12,'serve now','2018-02-25 17:53:30',1,1,2),(104,12,'no','2018-02-25 17:53:45',1,1,1),(105,12,'no no no','2018-02-25 17:53:49',1,1,1),(106,11,'yes','2018-02-25 17:54:17',1,1,1),(107,11,'okay\n','2018-02-25 17:54:20',1,1,1),(108,11,'yes yes','2018-02-25 17:54:24',1,1,1);
+INSERT INTO `tblmessage` VALUES (97,11,'Help','2018-02-25 17:09:29',1,1,2),(98,12,'heelp','2018-02-25 17:11:08',1,1,2),(99,12,'heelp me','2018-02-25 17:11:08',1,1,1),(100,12,'x','2018-02-25 17:52:33',1,1,2),(101,12,'help meeeeeeee','2018-02-25 17:53:23',1,1,2),(102,12,'serve\n','2018-02-25 17:53:27',1,1,2),(103,12,'serve now','2018-02-25 17:53:30',1,1,2),(104,12,'no','2018-02-25 17:53:45',1,1,1),(105,12,'no no no','2018-02-25 17:53:49',1,1,1),(106,11,'yes','2018-02-25 17:54:17',1,1,1),(107,11,'okay\n','2018-02-25 17:54:20',1,1,1),(108,11,'yes yes','2018-02-25 17:54:24',1,1,1),(109,11,'y','2018-02-25 18:00:27',1,1,2),(110,11,'y y y','2018-02-25 18:00:33',1,1,2),(111,11,'x','2018-02-25 18:01:00',1,1,1);
 
 --
 -- Table structure for table `tblrating`
@@ -337,19 +337,20 @@ CREATE TABLE `tbltransaction` (
   `dtmTransScheduled` datetime NOT NULL,
   `dtmTransEnded` datetime DEFAULT NULL,
   `txtTransCancelDesc` text,
-  `intTransSeen` int(1) NOT NULL,
+  `intTransSeen` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`intTransID`),
   KEY `intFinderAccNo_idx` (`intFinderAccNo`),
   KEY `intTransServID_idx` (`intTransServID`),
   CONSTRAINT `intFinderAccNo` FOREIGN KEY (`intFinderAccNo`) REFERENCES `tbluser` (`intAccNo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `intTransServID` FOREIGN KEY (`intTransServID`) REFERENCES `tblservice` (`intServID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `tbltransaction`
 --
 
+INSERT INTO `tbltransaction` VALUES (1,1,1,1,'2018-02-25 10:30:00','2018-02-25 10:30:00','2018-02-25 10:30:00','qwer',0);
 
 --
 -- Table structure for table `tbluser`
