@@ -4,6 +4,8 @@ var db = require('../../lib/database')();
 var flog = require('../welcome/loggedin');
 var timeFormat = require('../welcome/timeFormat');
 var messCount = require('../welcome/messCount');
+var prepend = require('../welcome/prepend');
+var numberFormat = require('../welcome/numberFormat');
 
 function fchat(req,res,next){
   /*All Chats of Current User, Match(session);
@@ -65,11 +67,33 @@ function fmess(req,res,next){
     });
 }
 function fparams(req,res,next){
+  /*Current Chat, Match(params);
+  *(tblchat)*/
   db.query("SELECT * FROM tblchat WHERE intChatID= ?",[req.params.chatid], (err, results, fields) => {
       if (err) console.log(err);
+      req.fparams= results;
+      return next();
+    });
+}
+function ftrans(req,res,next){
+  /*Current Chat, Match(params);
+  *(tblchat)*/
+  db.query("SELECT * FROM tblchat INNER JOIN tblservice ON intChatServ= intServID INNER JOIN tbltransaction ON intChatID= intTransChatID WHERE intChatID= ?",[req.params.chatid], (err, results, fields) => {
+      if (err) console.log(err);
       if(!(!results[0])){
-        req.chatparams= results[0].intChatID;
+        req.transstatus = results[0].intTransStatus;
+        date = results[0].dtmTransScheduled;
+        for(count=0;count<results.length;count++){
+          results[count].date = [date.getMonth()+1,date.getDate(),date.getFullYear()].join('/');
+          results[count].prepAccNo = prepend(results[count].intAccNo);
+          results[count].prepTransID = prepend(results[count].intTransID);
+          results[count].formatPrice = numberFormat(results[count].fltTransPrice.toFixed(2));
+        }
       }
+      else{
+        req.transstatus = "none";
+      }
+      req.ftrans= results;
       return next();
     });
 }
@@ -115,11 +139,13 @@ function messRender(req,res){
           if (err) console.log(err);
           db.query(stringquery,[req.params.chatid], function (err,  results, fields) {
               if (err) console.log(err);
-              db.query("SELECT COUNT(intMessID) AS count FROM tblmessage INNER JOIN tblchat ON intChatID= intMessChatID INNER JOIN tblservice ON intChatServ= intServID WHERE (intChatSeeker= '1' AND intSender= 1 AND intMessSSeen= 0) OR (intServAccNo= '1' AND intSender= 2 AND intMessPSeen= 0)",[req.session.user, req.session.user], function (err,  resultsCount, fields) {
+              db.query("SELECT COUNT(intMessID) AS count FROM tblmessage INNER JOIN tblchat ON intChatID= intMessChatID INNER JOIN tblservice ON intChatServ= intServID WHERE (intChatSeeker= ? AND intSender= 1 AND intMessSSeen= 0) OR (intServAccNo= ? AND intSender= 2 AND intMessPSeen= 0)",[req.session.user, req.session.user], function (err,  results, fields) {
                   if (err) console.log(err);
+                  var count = results[0].count
                   db.commit(function(err) {
                       if (err) console.log(err);
-                      res.render('messages/views/index', { thisUserTab: req.user, messCount: resultsCount[0].count , messtab: req.mess, messOne: req.mess[0], chattab: req.chat, params: req.chatparams });
+                      console.log(count);
+                      res.render('messages/views/index', { thisUserTab: req.user, messCount: count, messtab: req.mess, messOne: req.mess[0], chattab: req.chat, params: req.params.chatid, transstatus: req.transstatus, transtab: req.ftrans});
                   });
               });
           });
@@ -130,6 +156,40 @@ function messRender(req,res){
 }
 
 router.get('/', flog, messCount, fchat, render);
-router.get('/:chatid', flog, messCount, fmess, fchat, fparams, messRender);
+router.get('/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, messRender);
 
+router.post('/invoice/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, (req, res) => {;
+  if(req.transstatus != 'none'){
+    res.redirect('/messages/'+req.fparams[0].intChatID);
+  }
+  else{
+    var date = req.body.addYear.toString()+'-'+req.body.addMonth+'-'+req.body.addDay;
+    if (req.body.Sampm == 'AM' && req.body.Shours == '12'){
+        req.body.Shours = '00';
+    }
+    if (req.body.Sampm == 'PM' && req.body.Shours != '12'){
+      req.body.Shours = (parseFloat(req.body.Shours) + 12).toString();
+    }
+    var start = req.body.Shours.concat(':'+req.body.Sminutes);
+    var dtm = date.concat(' '+start);
+    var stringquery1 = "INSERT INTO tbltransaction (intTransChatID, intTransPriceType, fltTransPrice, dtmTransScheduled) VALUES (?,?,?,?)";
+    var bodyarray1 = [req.params.chatid, req.body.pricetype, req.body.price, dtm];
+    var stringquery2 = "INSERT INTO tblmessage ( intMessChatID, txtMessage, dtmDateSent, intMessPSeen, intSender ) VALUES ( ?, ?, NOW(), 1, 1)";
+    var bodyarray2 = [req.params.chatid, "-- I have created an invoice, check it out on the upper right corner!"];
+    db.beginTransaction(function(err) {
+      if (err) console.log(err);
+      db.query(stringquery1, bodyarray1, (err, results, fields) => {
+        if (err) res.render('messages/views/invalid/nodate', { thisUserTab: req.user, messCount: req.messCount[0].count, messtab: req.mess, messOne: req.mess[0], chattab: req.chat, params: req.params.chatid });
+        else
+          db.query(stringquery2, bodyarray2, function (err,  resultsCount, fields) {
+              if (err) console.log(err);
+              db.commit(function(err) {
+                  if (err) console.log(err);
+                  res.redirect('/messages/'+req.fparams[0].intChatID);
+              });
+          });
+      });
+    });
+  }
+});
 exports.messages = router;

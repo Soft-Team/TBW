@@ -105,14 +105,14 @@ CREATE TABLE `tblmessage` (
   PRIMARY KEY (`intMessID`),
   KEY `intMessChatID_idx` (`intMessChatID`),
   CONSTRAINT `intMessChatID` FOREIGN KEY (`intMessChatID`) REFERENCES `tblchat` (`intChatID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=112 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=122 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `tblmessage`
 --
 
-INSERT INTO `tblmessage` VALUES (97,11,'Help','2018-02-25 17:09:29',1,1,2),(98,12,'heelp','2018-02-25 17:11:08',1,1,2),(99,12,'heelp me','2018-02-25 17:11:08',1,1,1),(100,12,'x','2018-02-25 17:52:33',1,1,2),(101,12,'help meeeeeeee','2018-02-25 17:53:23',1,1,2),(102,12,'serve\n','2018-02-25 17:53:27',1,1,2),(103,12,'serve now','2018-02-25 17:53:30',1,1,2),(104,12,'no','2018-02-25 17:53:45',1,1,1),(105,12,'no no no','2018-02-25 17:53:49',1,1,1),(106,11,'yes','2018-02-25 17:54:17',1,1,1),(107,11,'okay\n','2018-02-25 17:54:20',1,1,1),(108,11,'yes yes','2018-02-25 17:54:24',1,1,1),(109,11,'y','2018-02-25 18:00:27',1,1,2),(110,11,'y y y','2018-02-25 18:00:33',1,1,2),(111,11,'x','2018-02-25 18:01:00',1,1,1);
+INSERT INTO `tblmessage` VALUES (97,11,'Help','2018-02-25 17:09:29',1,1,2),(98,12,'heelp','2018-02-25 17:11:08',1,1,2),(99,12,'heelp me','2018-02-25 17:11:08',1,1,1),(100,12,'x','2018-02-25 17:52:33',1,1,2),(101,12,'help meeeeeeee','2018-02-25 17:53:23',1,1,2),(102,12,'serve\n','2018-02-25 17:53:27',1,1,2),(103,12,'serve now','2018-02-25 17:53:30',1,1,2),(104,12,'no','2018-02-25 17:53:45',1,1,1),(105,12,'no no no','2018-02-25 17:53:49',1,1,1),(106,11,'yes','2018-02-25 17:54:17',1,1,1),(107,11,'okay\n','2018-02-25 17:54:20',1,1,1),(108,11,'yes yes','2018-02-25 17:54:24',1,1,1),(109,11,'y','2018-02-25 18:00:27',1,1,2),(110,11,'y y y','2018-02-25 18:00:33',1,1,2),(111,11,'x','2018-02-25 18:01:00',1,1,1),(112,12,'','2018-02-25 18:56:50',1,1,1),(113,12,'','2018-02-25 18:56:51',1,1,1),(114,12,'asd','2018-02-25 21:16:39',1,1,2),(115,12,'new','2018-02-25 21:16:46',1,1,2),(118,12,'-- I have created an invoice, reload the page and check it out on the upper right corner!','2018-02-25 21:39:25',1,1,1),(119,12,'-- I have created an invoice, reload the page and check it out on the upper right corner!','2018-02-25 21:40:24',1,1,1),(120,12,'-- I have created an invoice, reload the page and check it out on the upper right corner!','2018-02-25 21:42:57',1,1,1),(121,12,'-- I have created an invoice, reload the page and check it out on the upper right corner!','2018-02-25 22:40:21',1,1,1);
 
 --
 -- Table structure for table `tblrating`
@@ -332,25 +332,26 @@ CREATE TABLE `tbltransaction` (
   `intTransID` int(11) NOT NULL AUTO_INCREMENT,
   `intFinderAccNo` int(9) NOT NULL COMMENT 'FK',
   `intTransServID` int(11) NOT NULL COMMENT 'FK',
-  `intTransStatus` int(1) NOT NULL,
-  `dtmTransStarted` datetime NOT NULL,
+  `intTransPriceType` int(1) NOT NULL,
+  `fltTransPrice` float NOT NULL,
+  `intTransStatus` int(1) NOT NULL DEFAULT '0',
+  `dtmTransStarted` datetime DEFAULT NULL,
   `dtmTransScheduled` datetime NOT NULL,
   `dtmTransEnded` datetime DEFAULT NULL,
   `txtTransCancelDesc` text,
-  `intTransSeen` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`intTransID`),
   KEY `intFinderAccNo_idx` (`intFinderAccNo`),
   KEY `intTransServID_idx` (`intTransServID`),
   CONSTRAINT `intFinderAccNo` FOREIGN KEY (`intFinderAccNo`) REFERENCES `tbluser` (`intAccNo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `intTransServID` FOREIGN KEY (`intTransServID`) REFERENCES `tblservice` (`intServID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `tbltransaction`
 --
 
-INSERT INTO `tbltransaction` VALUES (1,1,1,1,'2018-02-25 10:30:00','2018-02-25 10:30:00','2018-02-25 10:30:00','qwer',0);
+INSERT INTO `tbltransaction` VALUES (1,1,1,0,0,1,'2018-02-25 10:30:00','2018-02-25 10:30:00','2018-02-25 10:30:00','qwer'),(8,7,36,1,113,0,NULL,'2018-03-01 00:00:00',NULL,NULL);
 
 --
 -- Table structure for table `tbluser`

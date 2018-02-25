@@ -6,6 +6,7 @@ var prepend = require('../welcome/prepend');
 var formatAMPM = require('../welcome/formatAMPM');
 var dateformat = require('../welcome/dateformat');
 var messCount = require('../welcome/messCount');
+var numberFormat = require('../welcome/numberFormat');
 
 function servTags(req, res, next){
   /*All Service Tags
@@ -225,7 +226,7 @@ function servRender(req,res){
         res.render('services/views/notag', {thisUserTab: req.user, messCount: req.messCount[0].count, servName: req.params.servName, servTags: req.servTags });
       }
       else{
-        var stringquery="SELECT * FROM tblservice INNER JOIN tblservicetag ON intServTag= intServTagID INNER JOIN tbluser ON intServAccNo= intAccNo WHERE strServName= ? AND intAccNo!= ? AND intServStatus= 1 ";
+        var stringquery="SELECT * FROM tblservice INNER JOIN tblservicetag ON intServTag= intServTagID INNER JOIN tbluser ON intServAccNo= intAccNo WHERE strServName= ? AND intAccNo!= ? AND intServStatus= 1 AND boolIsBanned= 0 ";
         var paramsarray= [];
         if(req.params.city!='any'){
           stringquery = stringquery.concat("AND strCity= ? ");
@@ -425,18 +426,18 @@ router.post('/', flog, messCount, (req, res) => {
   res.redirect('/services/'+ req.body.searchtag +'/'+ req.body.city +'/'+ req.body.brngy +'/'+ req.body.pricing +'/'+ req.body.sorting);
 });
 
-router.post('/request/:servid', flog, messCount, servStatus, (req, res) => {
+router.post('/request/:servid', flog, messCount, servStatus, requestServ, (req, res) => {
   if(!req.servStatus[0]){
     res.render('welcome/views/noroute', {thisUserTab: req.user, messCount: req.messCount[0].count});
   }
   else{
-    var stringquery1= "UPDATE tblservice SET intServStatus= 0 WHERE intServID= ?";
+    var stringquery1= "UPDATE tblservice SET intServStatus= 2 WHERE intServAccNo= ? AND intServStatus= 1";
     var stringquery2= "INSERT INTO tblchat (intChatSeeker, intChatServ) VALUES (?,?)";
     var stringquery3= "SELECT @A:=intChatID FROM tblchat WHERE intChatServ= ? AND intChatSeeker= ? ORDER BY intChatID DESC LIMIT 1";
     var stringquery4= "INSERT INTO tblmessage (intMessChatID, txtMessage, dtmDateSent, intSender) VALUES (@A,?,NOW(),2)";
     db.beginTransaction(function(err) {
       if (err) console.log(err);
-      db.query(stringquery1,[req.params.servid], function (err,  results, fields) {
+      db.query(stringquery1,[req.requestServ[0].intAccNo], function (err,  results, fields) {
           if (err) console.log(err);
           db.query(stringquery2,[req.session.user, req.params.servid], function (err,  results, fields) {
               if (err) console.log(err);
