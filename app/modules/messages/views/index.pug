@@ -1,6 +1,25 @@
 extends ../../../templates/dash.pug
 
 block main
+  mixin hsel
+    each hour in ['12','01','02','03','04','05','06','07','08','09','10','11']
+      option(value=hour) #{hour}
+  mixin msel
+    option(value='00' selected='') 00
+    each min in ['15','30','45']
+      option(value=min) #{min}
+  
+  mixin dmsel
+    option(value='01' selected='') January
+    each count in ['02','03','04','05','06','07','08','09','10','11','12']
+      each month, index in ['February','March','April','May','June','July','August','September','October','November','December']
+        if index+2 == count
+          option(value= count) #{month}
+  mixin ddsel
+    option(value='01' selected='') 01
+    each day in ['02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31']
+      option(value= day) #{day}
+  
   .container.fill(style='padding:0px')
     .row.chat-wrap
       // Contacts & Conversations
@@ -51,11 +70,26 @@ block main
           each user in thisUserTab
             .row.header-wrap
               .chat-header.col-sm-12
-                h4(style='color:gold') ##{messOne.strServName}
-                  if messOne.sendType == 1
-                      span(style='color: white;') &nbsp#{messOne.Seeker}
-                  else
-                      span(style='color: white;') &nbsp#{messOne.strName}
+                .row.mt-3.pt-2
+                  .col
+                      h4(style='color:gold') ##{messOne.strServName}
+                        if messOne.sendType == 1
+                            span(style='color: white;') &nbsp#{messOne.Seeker}
+                        else
+                            span(style='color: white;') &nbsp#{messOne.strName}
+                  .col.align-right
+                    if messOne.sendType == 1 && transstatus == "none" 
+                      button.btn.btn-light.btn-md.btn(type='button' data-toggle='modal' data-target='#invoiceModal') + Invoice
+                    else if messOne.sendType == 1 && transstatus == 0
+                      button.btn.btn-light.btn-md.btn(type='button' data-toggle='modal' data-target='#editInvoiceModal') * Edit Invoice
+                    else if messOne.sendType == 2 && transstatus == 0
+                      button.btn.btn-light.btn-md.btn(type='button' data-toggle='modal' data-target='#viewInvoiceModal') View Invoice
+                    else if transstatus == 1
+                      span.tag.provider Ongoing
+                    else if transstatus == 2
+                      span.tag.seeker Finished
+                    else if transstatus == 3
+                      span.tag.dangerbox Cancelled
             // Messages
             .row.content-wrap.messages
               .col
@@ -76,13 +110,74 @@ block main
                           small.col-sm-11
                             |  #{mess.txtMessage}
             // Message box & Send Button
-            .row.send-wrap
-              .send-message
-                .message-text
-                  input#chatid(type='text', name='chatid', value= messOne.intChatID, hidden)
-                  input#handle(type='text', name='handle', value= user.strName, hidden)
-                  input#sender(type='text', name='handle', value= messOne.sendType, hidden)
-                  textarea#message.no-resize-bar.form-control(rows='2', name='message', placeholder='Write a message...')
-                a#send.btn.send-button
-                  | Send 
-                  i.fa.fa-send
+            if messOne.intChatStatus == 1
+              .row.send-wrap
+                .send-message
+                  .message-text
+                    input#chatid(type='text', name='chatid', value= messOne.intChatID, hidden)
+                    input#handle(type='text', name='handle', value= user.strName, hidden)
+                    input#sender(type='text', name='handle', value= messOne.sendType, hidden)
+                    each thisuser in thisUserTab
+                      input#thisuser(type='text', name='handle', value=thisuser.intAccNo , hidden)
+                    textarea#message.no-resize-bar.form-control(rows='2', name='message', placeholder='Write a message...')
+                  a#send.btn.send-button
+                    | Send 
+                    i.fa.fa-send
+                      
+      #invoiceModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='invoiceModalTitle' aria-hidden='true')
+        .modal-dialog(role='document')
+          .modal-content
+            form(method='POST' action='/messages/invoice/'+messOne.intChatID)
+              .modal-header
+                h5#invoiceModalTitle.modal-title Create Invoice
+                button.close(type='button' data-dismiss='modal' aria-label='Close')
+                  span(aria-hidden='true') ×
+              .modal-body
+                .row
+                  .col
+                    label(for='priceType') Price Type
+                    select#priceType.form-control(name='pricetype')
+                      if messOne.intPriceType == 1
+                        option(value='1' selected='') Fixed
+                        option(value='2') Rate per Hour
+                      else
+                        option(value='1') Fixed
+                        option(value='2' selected='') Rate per Hour
+                      
+                  .col
+                    label(for='price') Price
+                    #price.input-group.mb-3
+                      .input-group-prepend
+                        span.input-group-text Php
+                      input.form-control(type='text' name='price' value=messOne.fltPrice placeholder='00.00' required)
+                center
+                  label Schedule
+                .row
+                  .col
+                    select#S-addMonth.form-control(name='addMonth')
+                      +dmsel
+                  .col
+                    select#S-addDay.form-control(name='addDay')
+                      +ddsel
+                  .col
+                    input.form-control(type='number' name='addYear' placeholder='Year(eg.2018)' max='9999' required)
+                br
+                .row
+                  .col
+                    p.mt-1.text-center Start
+                  .col
+                    select#S-Shours.form-control(name='Shours')    
+                      +hsel
+                  .col
+                    select#S-Sminutes.form-control(name='Sminutes')
+                      +msel
+                  .col
+                    select#S-Sampm.form-control(name='Sampm')
+                      option(value='AM' selected='') AM
+                      option(value='PM') PM
+              
+              .modal-footer
+                button.btn.btn-primary(type='submit') Submit
+                button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+  
+  block chatmess

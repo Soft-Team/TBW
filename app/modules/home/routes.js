@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var db = require('../../lib/database')();
 var flog = require('../welcome/loggedin');
+var messCount = require('../welcome/messCount');
 
 function render(req,res){
   switch (req.valid) {
@@ -10,11 +11,11 @@ function render(req,res){
       break;
     case 2:
     case 3:
-      res.render('home/views/index', {thisUserTab: req.user});
+      res.render('home/views/index', {thisUserTab: req.user, messCount: req.messCount[0].count});
       break;
   }
 }
 
-router.get('/', flog, render);
+router.get('/', flog, messCount, render);
 
 exports.home = router;

@@ -3,6 +3,7 @@ var router = express.Router();
 var db = require('../../lib/database')();
 var flog = require('../welcome/loggedin');
 var timeFormat = require('../welcome/timeFormat');
+var messCount = require('../welcome/messCount');
 
 function fchat(req,res,next){
   /*All Chats of Current User, Match(session);
@@ -13,8 +14,8 @@ function fchat(req,res,next){
       if (err) console.log(err);
       if (!(!results[0])){
         for(count=0;count<results.length;count++){
-          if (results[count].strName.length > 10){
-            results[count].name = results[count].strName.substring(0,10).concat('...');
+          if (results[count].strName.length > 8){
+            results[count].name = results[count].strName.substring(0,8).concat('...');
           }
           else{
             results[count].name = results[count].strName;
@@ -33,7 +34,6 @@ function fchat(req,res,next){
           results[count].date = date;
         }
       }
-      console.log(results);
       req.chat= results;
       return next();
     });
@@ -43,29 +43,48 @@ function fmess(req,res,next){
   *(tbluser)*(tblchat)*(tblmessage)*(tblservice)*(tblservicetag)*/
   db.query("SELECT A.* , (tbluser.strName)Seeker, (tbluser.intAccNo)SAccNo FROM (SELECT * FROM tblchat INNER JOIN tblmessage ON intChatID= intMessChatID INNER JOIN tblservice ON intChatServ= intServID INNER JOIN tbluser ON intAccNo= intServAccNo INNER JOIN tblservicetag ON intServTagID= intServTag)AS A INNER JOIN tbluser ON tbluser.intAccNo= A.intChatSeeker WHERE A.intChatID= ?",[req.params.chatid], (err, results, fields) => {
       if (err) console.log(err);
-      for(count=0;count<results.length;count++){
-        if(req.session.user == results[count].intAccNo){
-          results[count].sendType = 1;
+      if(!(!results[0])){
+        for(count=0;count<results.length;count++){
+          if(req.session.user == results[count].intAccNo){
+            results[count].sendType = 1;
+          }
+          else if(req.session.user == results[count].SAccNo){
+            results[count].sendType = 2;
+          }
+          else{
+            results[count].sendType = 0;
+          }
+          results[count].formatdate = [results[count].dtmDateSent.getMonth()+1,
+               results[count].dtmDateSent.getDate(),
+               results[count].dtmDateSent.getFullYear()].join('/')+' '+
+               timeFormat(results[count].dtmDateSent);
         }
-        else if(req.session.user == results[count].SAccNo){
-          results[count].sendType = 2;
-        }
-        else{
-          results[count].sendType = 0;
-        }
-        results[count].formatdate = [results[count].dtmDateSent.getMonth()+1,
-             results[count].dtmDateSent.getDate(),
-             results[count].dtmDateSent.getFullYear()].join('/')+' '+
-             timeFormat(results[count].dtmDateSent);
       }
       req.mess= results;
       return next();
     });
 }
 function fparams(req,res,next){
+  /*Current Chat, Match(params);
+  *(tblchat)*/
   db.query("SELECT * FROM tblchat WHERE intChatID= ?",[req.params.chatid], (err, results, fields) => {
       if (err) console.log(err);
-      req.chatparams= results[0].intChatID;
+      req.fparams= results;
+      return next();
+    });
+}
+function ftrans(req,res,next){
+  /*Current Chat, Match(params);
+  *(tblchat)*/
+  db.query("SELECT * FROM tblchat INNER JOIN tblservice ON intChatServ= intServID INNER JOIN tbltransaction ON intServID= intTransServID WHERE intChatID= ?",[req.params.chatid], (err, results, fields) => {
+      if (err) console.log(err);
+      if(!(!results[0])){
+        req.transstatus = results[0].intTransStatus;
+      }
+      else{
+        req.transstatus = "none";
+      }
+      req.ftrans= results;
       return next();
     });
 }
@@ -78,7 +97,7 @@ function render(req,res){
     case 2:
     case 3:
       if(!req.chat[0]){
-        res.render('messages/views/nochat', { thisUserTab: req.user });
+        res.render('messages/views/nochat', { thisUserTab: req.user, messCount: req.messCount[0].count });
       }
       else{
         res.redirect('/messages/'+req.chat[0].intChatID);
@@ -94,8 +113,7 @@ function messRender(req,res){
     case 2:
     case 3:
       if(!req.chat[0]){
-        res.render('messages/views/nochat', { thisUserTab: req.user });
-        console.log('EMPTY')
+        res.render('messages/views/nochat', { thisUserTab: req.user, messCount: req.messCount[0].count });
       }
       else if(!req.mess[0]){
         res.redirect('/noroute');
@@ -104,13 +122,63 @@ function messRender(req,res){
         res.redirect('/restrict');
       }
       else{
-        res.render('messages/views/index', { thisUserTab: req.user , messtab: req.mess, messOne: req.mess[0], chattab: req.chat, params: req.chatparams });
+        var stringquery = "UPDATE tblmessage SET intMessSSeen= 1 WHERE intMessChatID= ?";
+        if(req.mess[0].sendType == 1){
+          stringquery = "UPDATE tblmessage SET intMessPSeen= 1 WHERE intMessChatID= ?";
+        }
+        db.beginTransaction(function(err) {
+          if (err) console.log(err);
+          db.query(stringquery,[req.params.chatid], function (err,  results, fields) {
+              if (err) console.log(err);
+              db.query("SELECT COUNT(intMessID) AS count FROM tblmessage INNER JOIN tblchat ON intChatID= intMessChatID INNER JOIN tblservice ON intChatServ= intServID WHERE (intChatSeeker= '1' AND intSender= 1 AND intMessSSeen= 0) OR (intServAccNo= '1' AND intSender= 2 AND intMessPSeen= 0)",[req.session.user, req.session.user], function (err,  resultsCount, fields) {
+                  if (err) console.log(err);
+                  db.commit(function(err) {
+                      if (err) console.log(err);
+                      res.render('messages/views/index', { thisUserTab: req.user, messCount: resultsCount[0].count , messtab: req.mess, messOne: req.mess[0], chattab: req.chat, params: req.params.chatid, transstatus: req.transstatus});
+                  });
+              });
+          });
+        });
       }
       break;
   }
 }
 
-router.get('/', flog, fchat, render);
-router.get('/:chatid', flog, fmess, fchat, fparams, messRender);
+router.get('/', flog, messCount, fchat, render);
+router.get('/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, messRender);
 
+router.post('/invoice/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, (req, res) => {;
+  if(req.transstatus != 'none'){
+    res.redirect('/messages/'+req.fparams[0].intChatID);
+  }
+  else{
+    var date = req.body.addYear.toString()+'-'+req.body.addMonth+'-'+req.body.addDay;
+    if (req.body.Sampm == 'AM' && req.body.Shours == '12'){
+        req.body.Shours = '00';
+    }
+    if (req.body.Sampm == 'PM' && req.body.Shours != '12'){
+      req.body.Shours = (parseFloat(req.body.Shours) + 12).toString();
+    }
+    var start = req.body.Shours.concat(':'+req.body.Sminutes);
+    var dtm = date.concat(' '+start);
+    var stringquery1 = "INSERT INTO tbltransaction (intFinderAccNo, intTransServID, intTransPriceType, fltTransPrice, dtmTransScheduled) VALUES (?,?,?,?,?)";
+    var bodyarray1 = [req.session.user, req.fparams[0].intChatServ, req.body.pricetype, req.body.price, dtm];
+    var stringquery2 = "INSERT INTO tblmessage ( intMessChatID, txtMessage, dtmDateSent, intMessPSeen, intSender ) VALUES ( ?, ?, NOW(), 1, 1)";
+    var bodyarray2 = [req.params.chatid, "-- I have created an invoice, reload the page and check it out on the upper right corner!"];
+    db.beginTransaction(function(err) {
+      if (err) console.log(err);
+      db.query(stringquery1, bodyarray1, (err, results, fields) => {
+        if (err) res.render('messages/views/invalid/nodate', { thisUserTab: req.user, messCount: resultsCount[0].count , messtab: req.mess, messOne: req.mess[0], chattab: req.chat, params: req.params.chatid });
+        else
+          db.query(stringquery2, bodyarray2, function (err,  resultsCount, fields) {
+              if (err) console.log(err);
+              db.commit(function(err) {
+                  if (err) console.log(err);
+                  res.redirect('/messages/'+req.fparams[0].intChatID);
+              });
+          });
+      });
+    });
+  }
+});
 exports.messages = router;

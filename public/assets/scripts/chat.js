@@ -8,6 +8,7 @@ var message = document.getElementById('message'),
     sender = document.getElementById('sender'),
     btn = document.getElementById('send'),
     output = document.getElementById('output');
+    user = document.getElementById('thisuser');
 
 // Emit events
 btn.addEventListener('click', function(){
@@ -15,7 +16,8 @@ btn.addEventListener('click', function(){
         message: message.value,
         handle: handle.value,
         chatid: chatid.value,
-        sender: sender.value
+        sender: sender.value,
+        user: user.value,
     });
     message.value = "";
 });
@@ -36,7 +38,7 @@ socket.on('chat', function(data){
     }
     output.innerHTML += '<div class="msg"><div class="media-body"><small class="pull-right time"><i class="fa fa-clock-o"></i>&nbsp' + d + '</small><h5 class="media-heading">' + data.handle + '</h5><small class="col-sm-11">' + data.message + '</small></div></div>';
     mess.innerHTML = '<span>' + data.messdisplay + '</span>';
-    time.innerHTML = '<small style="margin-left: 110px" class="pull-right time">' + d + '</small>';
+    time.innerHTML = '<small class="pull-right time">' + d + '</small>';
 
     function formatAMPM(date) {
       var hours = date.getHours();
