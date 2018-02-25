@@ -21,10 +21,10 @@ block myserv
               select#editStatus.form-control(name='status')
                 if service.intServStatus == '1'
                   option(value='1' selected='') Available
-                  option(value='2') Unavailable
+                  option(value='0') Unavailable
                 else
                   option(value='1') Available
-                  option(value='2' selected='') Unavailable
+                  option(value='0' selected='') Unavailable
               br
               .row
                 .col

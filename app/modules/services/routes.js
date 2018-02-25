@@ -425,12 +425,12 @@ router.post('/', flog, messCount, (req, res) => {
   res.redirect('/services/'+ req.body.searchtag +'/'+ req.body.city +'/'+ req.body.brngy +'/'+ req.body.pricing +'/'+ req.body.sorting);
 });
 
-router.post('/request/:servid', flog, messCount, servStatus, (req, res) => {
+router.post('/request/:servid', flog, messCount, servStatus, requestServ, (req, res) => {
   if(!req.servStatus[0]){
     res.render('welcome/views/noroute', {thisUserTab: req.user, messCount: req.messCount[0].count});
   }
   else{
-    var stringquery1= "UPDATE tblservice SET intServStatus= 0 WHERE intServID= ?";
+    var stringquery1= "UPDATE tblservice SET intServStatus= 2 WHERE intServAccNo= ? AND intServStatus= 1";
     var stringquery2= "INSERT INTO tblchat (intChatSeeker, intChatServ) VALUES (?,?)";
     var stringquery3= "SELECT @A:=intChatID FROM tblchat WHERE intChatServ= ? AND intChatSeeker= ? ORDER BY intChatID DESC LIMIT 1";
     var stringquery4= "INSERT INTO tblmessage (intMessChatID, txtMessage, dtmDateSent, intSender) VALUES (@A,?,NOW(),2)";

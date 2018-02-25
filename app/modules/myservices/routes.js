@@ -33,23 +33,12 @@ function searchServAcc(req, res, next){
   });
 }
 function myServices(req, res, next){
-  /*Current User's Services + Chattab validation, Match(session);
+  /*Current User's Services, Match(session);
   *(tbluser)*(tblservice)*(tblservicetag)*(tblchat)*/
-  db.query("SELECT * FROM tbluser INNER JOIN tblservice as b ON intAccNo= intServAccNo INNER JOIN tblservicetag ON intServTag= intServTagID LEFT JOIN (SELECT * FROM tblchat WHERE intChatID = (SELECT MAX(intChatID) FROM tblchat as f where f.intChatServ = tblchat.intChatServ))A ON intServID= intChatServ WHERE intAccNo= ? ",[req.session.user], (err, results, fields) => {
+  db.query("SELECT * FROM tbluser INNER JOIN tblservice ON intAccNo= intServAccNo INNER JOIN tblservicetag ON intServTag= intServTagID WHERE intAccNo= ?",[req.session.user], (err, results, fields) => {
       if (err) return res.send(err);
       if(!(!results[0])){
         for(count=0;count<results.length;count++){
-          if(!(!results[count].intChatStatus)){
-            if(results[count].intChatStatus == 1){
-              results[count].edit = 0;
-            }
-            else{
-              results[count].edit = 1;
-            }
-          }
-          else{
-            results[count].edit = 1;
-          }
           results[count].formatPrice = numberFormat(results[count].fltPrice.toFixed(2));
         }
       }
@@ -60,9 +49,18 @@ function myServices(req, res, next){
 function servValidation(req, res, next){
   /*Service selected by current user + servtag, Match(session,params);
   *(tblservice)*(tblservicetag)*(tblchat)*/
-  db.query("SELECT * FROM(SELECT * FROM tblservice INNER JOIN tblservicetag ON intServTag= intServTagID LEFT JOIN tblchat ON intServID= intChatServ WHERE intServAccNo= '1' AND intServID= '1' ORDER BY intChatID DESC LIMIT 1)A WHERE intChatStatus= 0 OR intChatID IS NULL",[req.session.user, req.params.servid], (err, results, fields) => {
+  db.query("SELECT * FROM tblservice INNER JOIN tblservicetag ON intServTag= intServTagID WHERE intServAccNo= ? AND intServStatus!= 2 AND intServID= ?",[req.session.user, req.params.servid], (err, results, fields) => {
       if (err) return res.send(err);
       req.servValidation = results;
+      return next();
+  });
+}
+function servOngoing(req, res, next){
+  /*All UnavOngoing Services of Current User
+  *(tblservice)*/
+  db.query("SELECT * FROM tblservice WHERE intServAccNo= '1' AND intServStatus= '2' ", (err, results, fields) => {
+      if (err) return res.send(err);
+      req.servOngoing = results;
       return next();
   });
 }
@@ -119,27 +117,43 @@ router.get('/', flog, messCount, myServices, render);
 router.get('/success', flog, messCount, myServices, successRender);
 router.get('/:servid', flog, messCount, myServices, servValidation, editRender);
 
-router.post('/', flog, messCount, myServices, searchServTag, searchServAcc, (req, res) => {
+router.post('/', flog, messCount, myServices, searchServTag, searchServAcc, servOngoing, (req, res) => {
   if(!req.searchServTag[0]){
     res.render('myservices/views/invalid/notag', {servTag: req.body.searchtag, myServices: req.myServices});
   }
   else{
     if(!req.searchServAcc[0]){
-      db.query("INSERT INTO tblservice (intServTag, intServAccNo, intServStatus, fltPrice, intPriceType) VALUES (?,?,'1',?,?)",[req.searchServTag[0].intServTagID, req.session.user, req.body.price, req.body.pricetype], (err, results, fields) => {
+      if(!req.servOngoing[0]){
+        db.query("INSERT INTO tblservice (intServTag, intServAccNo, intServStatus, fltPrice, intPriceType) VALUES (?,?,'1',?,?)",[req.searchServTag[0].intServTagID, req.session.user, req.body.price, req.body.pricetype], (err, results, fields) => {
           if (err) return res.send(err);
           res.redirect('/myservices/success');
-      });
+        });
+      }
+      else{
+        db.query("INSERT INTO tblservice (intServTag, intServAccNo, intServStatus, fltPrice, intPriceType) VALUES (?,?,'2',?,?)",[req.searchServTag[0].intServTagID, req.session.user, req.body.price, req.body.pricetype], (err, results, fields) => {
+          if (err) return res.send(err);
+          res.redirect('/myservices/success');
+        });
+      }
     }
     else{
       res.render('myservices/views/invalid/alreadyadded', {servTag: req.searchServTag[0].strServName, myServices: req.myServices});
     }
   }
 });
-router.post('/:servid', flog, messCount, (req, res) => {
-  db.query("UPDATE tblservice SET intServStatus= ?, intPriceType= ?, fltPrice= ? WHERE intServID= ?",[req.body.status, req.body.pricetype, req.body.price, req.params.servid], (err, results, fields) => {
-      if (err) return res.send(err);
-      res.redirect('/myservices');
-  });
+router.post('/:servid', flog, messCount, servValidation, myServices, servOngoing, (req, res) => {
+  if(!req.servValidation[0]){
+    res.render('myservices/views/invalid/noaccess', {thisUserTab: req.user, messCount: req.messCount[0].count, myServices: req.myServices});
+  }
+  if(!(!req.servOngoing[0])){
+    res.render('myservices/views/invalid/noaccess', {thisUserTab: req.user, messCount: req.messCount[0].count, myServices: req.myServices});
+  }
+  else{
+    db.query("UPDATE tblservice SET intServStatus= ?, intPriceType= ?, fltPrice= ? WHERE intServID= ?",[req.body.status, req.body.pricetype, req.body.price, req.params.servid], (err, results, fields) => {
+        if (err) return res.send(err);
+        res.redirect('/myservices');
+    });
+  }
 });
 
 exports.myservices = router;
