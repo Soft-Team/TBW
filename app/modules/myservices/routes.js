@@ -32,12 +32,25 @@ function searchServAcc(req, res, next){
   });
 }
 function myServices(req, res, next){
-  /*Current User's Services, Match(session);
-  *(tbluser)*(tblservice)*(tblservicetag)*/
-  db.query("SELECT * FROM tbluser INNER JOIN tblservice ON intAccNo= intServAccNo INNER JOIN tblservicetag ON intServTag= intServTagID WHERE intAccNo= ?",[req.session.user], (err, results, fields) => {
+  /*Current User's Services + Chattab validation, Match(session);
+  *(tbluser)*(tblservice)*(tblservicetag)*(tblchat)*/
+  db.query("SELECT * FROM tbluser INNER JOIN tblservice as b ON intAccNo= intServAccNo INNER JOIN tblservicetag ON intServTag= intServTagID LEFT JOIN (SELECT * FROM tblchat WHERE intChatID = (SELECT MAX(intChatID) FROM tblchat as f where f.intChatServ = tblchat.intChatServ))A ON intServID= intChatServ WHERE intAccNo= ? ",[req.session.user], (err, results, fields) => {
       if (err) return res.send(err);
-      for(count=0;count<results.length;count++){
-        results[count].formatPrice = numberFormat(results[count].fltPrice.toFixed(2));
+      if(!(!results[0])){
+        for(count=0;count<results.length;count++){
+          if(!(!results[count].intChatStatus)){
+            if(results[count].intChatStatus == 1){
+              results[count].edit = 0;
+            }
+            else{
+              results[count].edit = 1;
+            }
+          }
+          else{
+            results[count].edit = 1;
+          }
+          results[count].formatPrice = numberFormat(results[count].fltPrice.toFixed(2));
+        }
       }
       req.myServices = results;
       return next();
@@ -45,8 +58,8 @@ function myServices(req, res, next){
 }
 function servValidation(req, res, next){
   /*Service selected by current user + servtag, Match(session,params);
-  *(tblservice)*/
-  db.query("SELECT * FROM tblservice INNER JOIN tblservicetag ON intServTag= intServTagID WHERE intServAccNo= ? AND intServID= ?",[req.session.user, req.params.servid], (err, results, fields) => {
+  *(tblservice)*(tblservicetag)*(tblchat)*/
+  db.query("SELECT * FROM(SELECT * FROM tblservice INNER JOIN tblservicetag ON intServTag= intServTagID LEFT JOIN tblchat ON intServID= intChatServ WHERE intServAccNo= '1' AND intServID= '1' ORDER BY intChatID DESC LIMIT 1)A WHERE intChatStatus= 0 OR intChatID IS NULL",[req.session.user, req.params.servid], (err, results, fields) => {
       if (err) return res.send(err);
       req.servValidation = results;
       return next();
@@ -116,7 +129,7 @@ router.post('/', flog, myServices, searchServTag, searchServAcc, (req, res) => {
           res.redirect('/myservices/success');
       });
     }
-    else{ 
+    else{
       res.render('myservices/views/invalid/alreadyadded', {servTag: req.searchServTag[0].strServName, myServices: req.myServices});
     }
   }

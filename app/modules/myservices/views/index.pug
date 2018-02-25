@@ -53,11 +53,16 @@ block main
                   td Php #{serv.formatPrice} / hr
                 if serv.intServStatus == '1'
                   td Available
-                else 
+                else if serv.edit == 0
+                  td Unavailable (Ongoing)
+                else
                   td Unavailable
-                td
-                  a(href='/myservices/'+serv.intServID, data-toggle='tooltip', data-placement='bottom', title='Edit')
-                    img.size(src='/assets/images/icons/settings.png', alt='Edit')
+                if serv.edit == 1
+                  td
+                    a(href='/myservices/'+serv.intServID, data-toggle='tooltip', data-placement='bottom', title='Edit')
+                      img.size(src='/assets/images/icons/settings.png', alt='Edit')
+                else
+                  td
   
   block myserv                    
     

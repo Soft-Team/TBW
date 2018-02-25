@@ -181,7 +181,7 @@ function specialSched(req, res, next){
   });
 }
 function servStatus(req, res, next){
-  /*All Service Tags
+  /*All Service Tags, Match(params)
   *(tblservice)*/
   db.query("SELECT * FROM tblservice WHERE intServID= ? AND intServStatus= 1",[req.params.servid], function (err, results, fields) {
       if (err) return res.send(err);
