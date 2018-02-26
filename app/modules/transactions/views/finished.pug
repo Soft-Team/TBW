@@ -18,13 +18,19 @@ block main
               th(scope='col', style='padding-left:0px; padding-right:0px; text-align: left;') d
               th(scope='col', style='padding-left:0px; padding-right:0px;') &nbsp
           tbody
-              tr
-                td Provider
-                td Tyler The Plumber
-                td(style='width: 200px !important; padding-right:5px; padding-left:0px; text-align: right;') February 26, 2018
-                td(style='padding-left:0px; padding-right:0px; padding-top: 7px; width: 45px !important;')
-                    a(href='', data-toggle='tooltip', data-placement='bottom', title='Invoice')
-                      img.size(src='/assets/images/icons/Invoice2.png', alt='Invoice', style='height:40px; width:40px;')
-                td(style='padding-left:0px; padding-right: 60px; width: 39px !important;')
-                    a(href='', data-toggle='tooltip', data-placement='bottom', title='Delete')
-                      img.size(src='/assets/images/icons/Cancel2.png', alt='delete', style='height:27px; width:27px;')
+            each thisuser in thisUserTab
+              each trans in finishedtab
+                tr
+                  if trans.intServAccNo == thisuser.intAccNo 
+                    td Provider
+                  else
+                    td Seeker
+                  td #{thisuser.strName}
+                  td(style='width: 200px !important; padding-right:5px; padding-left:0px; text-align: right;')
+                    | #{trans.dateEnd}
+                  if trans.intServAccNo != thisuser.intAccNo 
+                    td
+                  td(style='padding-left:0px; padding-right:0px; padding-top: 7px; width: 45px !important;')
+                      a(href='/invoice/'+trans.intTransID, data-toggle='tooltip', data-placement='bottom', title='Invoice')
+                        img.size(src='/assets/images/icons/Invoice2.png', alt='Invoice', style='height:40px; width:40px;')
+                  td

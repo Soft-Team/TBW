@@ -40,9 +40,11 @@ block main
                         img.size(src='/assets/images/icons/Invoice2.png', alt='Invoice', style='height:38px; width:40px;')
                   if trans.intServAccNo == thisuser.intAccNo 
                     td(style='padding-left:0px; padding-right:0px; padding-top: 7px; width: 90px !important;')
-                      button.btn.btn-success
+                      a.button.btn.btn-success(href='/transactions/ongoing/finish/'+trans.intTransID)
                         span(style='margin-right:3px') Finish
                         i.fa.fa-check-circle
                   td(style='padding-left:0px; padding-right: 60px; width: 39px !important;')
                       a(href='', data-toggle='tooltip', data-placement='bottom', title='Cancel')
                         img.size(src='/assets/images/icons/Cancel2.png', alt='Cancel', style='height:27px; width:27px;')
+
+  block ongoingtrans

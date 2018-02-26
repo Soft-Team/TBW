@@ -1,0 +1,43 @@
+extends ongoing.pug
+
+block ongoingtrans
+  block append scripts
+    script.
+      $(window).on('load',function(){
+        $('#Finish').modal('show');
+      });
+      
+  #Finish.modal.fade(tabindex='-1' role='dialog' aria-labelledby='FinishTitle' aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        each thisuser in thisUserTab
+          each trans in ongoingParams
+            form(method='POST' action='/transactions/ongoing/finish/'+trans.intTransID)
+              .modal-header
+                h5#FinishTitle.modal-title Finish Transaction
+                button.close(type='button' data-dismiss='modal' aria-label='Close')
+                  span(aria-hidden='true') ×
+              .modal-body
+                .row
+                  .col
+                    h5 #{trans.strName} - #{trans.strServName}
+                br
+                .row
+                  .col
+                    label(for='rating') Rating
+                    select#rating.form-control(name='rating')
+                      option(value='5') 5 Stars
+                      option(value='4') 4 Stars
+                      option(value='3') 3 Stars
+                      option(value='2') 2 Stars
+                      option(value='1') 1 Star
+                  .col
+                br
+                .row
+                  .col
+                    label(for='review') Review:
+                    textarea.form-control(rows='5' name='review')
+                    
+              .modal-footer
+                button.btn.btn-primary(type='submit') Submit
+                button.btn.btn-secondary(type='button', data-dismiss='modal') Close
