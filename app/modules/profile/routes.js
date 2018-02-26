@@ -54,6 +54,7 @@ router.get('/:accno', flog, messCount, (req,res) => {
     break;
   }
 }
+
 queryOne(req.params.accno);
 });
 
@@ -80,10 +81,41 @@ router.post('/edit/:accno', flog, messCount, (req,res) => {
     console.log(results);
     });
   });
-}
+}   
     break;
   } 
 });
+
+router.post('/portfolio/:accno', flog, messCount, (req,res) => {
+  switch (req.valid) {
+    case 1:
+        res.render('welcome/views/invalid/adm-restrict');
+      break;
+    case 2:
+    case 3:
+    jpeg = 'PP-'+req.session.user.toString().concat('.jpg');
+    req.files.portfolio.mv('public/userImages/portfolio/'+jpeg, function(err){
+      db.query(`INSERT INTO tbldocument(intDocument) VALUES (?)`, [jpeg] , (err,results,fields)=>{
+        if(err) return console.log(err);
+        res.redirect('/profile/'+req.params.accno);
+        console.log(results);
+        });
+   
+});   
+    break;
+  }
+});
+
+router.get('/report/:accno', flog, messCount, (req,res)=>{
+  switch (req.valid) {
+    case 1:
+        res.render('welcome/views/invalid/adm-restrict');
+      break;
+    case 2:
+    case 3:
+    var queryString= `INSERT INTO tblreport intRepedAccNo = ?, `
+  }
+})
 
 
 exports.profile = router;
