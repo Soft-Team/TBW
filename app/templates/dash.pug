@@ -27,11 +27,11 @@ block dash
                   p.text-white(style="margin-top: 10px") #{thisuser.strName}
                   //- a(href='/profile/'+thisuser.intAccNo)
             // search form
-            form.sidebar-form(action='#', method='get')
-            .input-group
-                input.form-control(type='text', name='q', placeholder='Search...')
-                button#search-btn.btn.btn-flat(type='submit', name='search', href="")
-                   i.fa.fa-search(aria-hidden='true')
+            form(method='POST' action='/home/search')
+              .input-group
+                  input.form-control(type='text', name='search', placeholder='Search...')
+                  button#search-btn.btn.btn-flat(type='submit')
+                     i.fa.fa-search(aria-hidden='true')
         #sidebar
           .row
             .col
