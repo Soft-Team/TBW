@@ -5,16 +5,61 @@ block main
     center
       h1.text-white About Us
   .container(style='margin: 10px 0px 10px 10px; max-width: 1260px !important')
-    center
+    p
+      each val, index in servParams
+        if index == 0
+          h3.margin-L(style="display: inline;") Showing Results for "#{val}"
+          - varServName = val
+        else if index == 1
+          h3(style="display: inline;") &nbsp- "#{val}"
+          - varCity = val
+        else if index == 2
+          h3(style="display: inline;") &nbsp- "#{val}"
+          - varBrngy = val
+        else if index == 3
+          h3(style="display: inline;") &nbsp- "#{val}"
+          - varPricing = val
+        else if index == 4
+          h3(style="display: inline;") &nbsp- "#{val}"
+          - varSorting = val
       br
-      h3 HIRING TRUSTED PROFESSIONALS IS WHAT MAKES TRABAWHO THE BEST
       br
-      p(style='width: 1100px;') The TrabaWho group is a growing services marketplace in Manila, providing a faster, more dependable way to hire services you need from plumbers to tutors.
+      .container
+        .card-deck.ml-1
+          .row(style='padding-left: 60px;')
+            each serv in searchServ
+              .col(style='margin-left: -5px;')
+                span.card(style= 'height: 18.3rem; width: 15rem').border.border-primary.mb-3.box-shadow-mini
+                  table
+                    tbody
+                      tr
+                        td(rowspan='2') 
+                          img(src='/assets/images/Tyler.jpg', alt='Card image cap', style='height: 8rem; width: 8rem; border-radius: 3px 0px 0px 0px; border-right: 1px solid #007BFF;')
+                        td
+                          img(src='/assets/images/Icons/star.png', alt='star', style='height: 1.5rem; width: 1.5rem; margin-left:20px;')
+                          p(style='float: right; margin-right: 30px; margin-bottom: 0rem') 4.8
+                          p.cenR(style='margin-bottom: 0rem') Rating
+                      tr
+                        td
+                          img(src='/assets/images/Icons/case.png', alt='star', style='height: 1.5rem; width: 1.5rem; margin-left:20px;')
+                          p(style='float: right; margin-right: 30px; margin-bottom: 0rem') 100  
+                          p.cenF(style='margin-bottom: 0rem') Finished
 
-      p(style='width: 1100px;') Just tell us what you need and get introduced to vetted and trusted professionals within minutes or hours. Read real customer reviews and hire with confidence.
-      br
-      br
-      h3 TRANSFORMING BUSINESSES ACROSS MANILA
-      br
-      p(style='width: 1100px;') TrabaWho is transforming small and medium sized businesses like never before. They receive thousands of requests for their services on their provider accounts everyday, allowing them to make an instant connection with new clients at an unprecedented rate.
-      br
+                  //-img.card-img-top(src='/assets/images/Tyler.jpg', alt='Card image cap', style='height: 8rem; width: 8rem; ')
+                  .card-body
+                    .card-text
+                      .f(style='text-align:center; border-top: 1px solid #007BFF; color: green;') Verified
+                      .f(style='text-align:center;') #{serv.prepend}
+                      .f(style='text-align:center') #{serv.strName}
+                      .row
+                        .col(style='padding-right:0px; text-align:center; border-right: 1px solid #007BFF;')
+                          .f Quezon City
+                        .col(style='padding-left:0px; text-align:center;')
+                          .f Tandang Sora
+                      if serv.intPriceType == 1
+                        .f(style='text-align:center') ₱#{serv.fltPrice}
+                      else
+                        .f(style='text-align:center') ₱#{serv.fltPrice}/hr
+            .col          
+
+      block servrequest

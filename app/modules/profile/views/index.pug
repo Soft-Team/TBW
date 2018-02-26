@@ -18,6 +18,39 @@ block main
               else
                           h2.text-headline-profile(style='border-bottom: 1px solid') Verified 
               h1(style='margin-left:15px') #{thisUser.strName}
+                form(method='POST' action='/myservices' style='float:right; margin-right: 30px; margin-top: 5px !important;')
+                  .form-group
+                    button.btn.btn-danger.btn-md.btn(type='button' data-toggle='modal' data-target='#searchServModal') Report
+                    #searchServModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='searchServModalTitle' aria-hidden='true')
+                      .modal-dialog(role='document')
+                        .modal-content
+                          .modal-header
+                            h5#searchServModalTitle.modal-title Report User
+                            button.close(type='button' data-dismiss='modal' aria-label='Close')
+                              span(aria-hidden='true') ×
+                          .modal-body
+                            .row
+                              .col
+                                .custom-control.custom-radio
+                                  input#customRadio1.custom-control-input(type='radio', name='customRadio')
+                                  label.custom-control-label(for='customRadio1') Communication Abuse 
+                                .custom-control.custom-radio
+                                  input#customRadio2.custom-control-input(type='radio', name='customRadio')
+                                  label.custom-control-label(for='customRadio2') Scammer/Hacker
+                                .custom-control.custom-radio
+                                  input#customRadio3.custom-control-input(type='radio', name='customRadio')
+                                  label.custom-control-label(for='customRadio3') Spammer
+                                .custom-control.custom-radio
+                                  input#customRadio4.custom-control-input(type='radio', name='customRadio')
+                                  label.custom-control-label(for='customRadio4') Others
+                              .col
+                                .form-group
+                                  label(for='exampleFormControlTextarea1') Others Specify Here..
+                                  textarea#exampleFormControlTextarea1.form-control(rows='3')
+
+                          .modal-footer
+                            button.btn.btn-primary(type='submit') Submit
+                            button.btn.btn-secondary(type='button', data-dismiss='modal') Close
             .col-sm-3(style='width: 190px; border-left: 1px solid; height:160px')
                 table(style='width:190px')
                   tbody
