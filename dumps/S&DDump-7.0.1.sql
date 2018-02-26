@@ -56,14 +56,14 @@ CREATE TABLE `tblchat` (
   KEY `intChatServ_idx` (`intChatServ`),
   CONSTRAINT `intChatServ` FOREIGN KEY (`intChatServ`) REFERENCES `tblservice` (`intServID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `intUser1` FOREIGN KEY (`intChatSeeker`) REFERENCES `tbluser` (`intAccNo`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `tblchat`
 --
 
-INSERT INTO `tblchat` VALUES (11,1,35,1),(12,1,36,1);
+INSERT INTO `tblchat` VALUES (20,1,7,1),(21,2,1,1);
 
 --
 -- Table structure for table `tbldocument`
@@ -105,14 +105,14 @@ CREATE TABLE `tblmessage` (
   PRIMARY KEY (`intMessID`),
   KEY `intMessChatID_idx` (`intMessChatID`),
   CONSTRAINT `intMessChatID` FOREIGN KEY (`intMessChatID`) REFERENCES `tblchat` (`intChatID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=122 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=142 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `tblmessage`
 --
 
-INSERT INTO `tblmessage` VALUES (97,11,'Help','2018-02-25 17:09:29',1,1,2),(98,12,'heelp','2018-02-25 17:11:08',1,1,2),(99,12,'heelp me','2018-02-25 17:11:08',1,1,1),(100,12,'x','2018-02-25 17:52:33',1,1,2),(101,12,'help meeeeeeee','2018-02-25 17:53:23',1,1,2),(102,12,'serve\n','2018-02-25 17:53:27',1,1,2),(103,12,'serve now','2018-02-25 17:53:30',1,1,2),(104,12,'no','2018-02-25 17:53:45',1,1,1),(105,12,'no no no','2018-02-25 17:53:49',1,1,1),(106,11,'yes','2018-02-25 17:54:17',1,1,1),(107,11,'okay\n','2018-02-25 17:54:20',1,1,1),(108,11,'yes yes','2018-02-25 17:54:24',1,1,1),(109,11,'y','2018-02-25 18:00:27',1,1,2),(110,11,'y y y','2018-02-25 18:00:33',1,1,2),(111,11,'x','2018-02-25 18:01:00',1,1,1),(112,12,'','2018-02-25 18:56:50',1,1,1),(113,12,'','2018-02-25 18:56:51',1,1,1),(114,12,'asd','2018-02-25 21:16:39',1,1,2),(115,12,'new','2018-02-25 21:16:46',1,1,2),(118,12,'-- I have created an invoice, reload the page and check it out on the upper right corner!','2018-02-25 21:39:25',1,1,1),(119,12,'-- I have created an invoice, reload the page and check it out on the upper right corner!','2018-02-25 21:40:24',1,1,1),(120,12,'-- I have created an invoice, reload the page and check it out on the upper right corner!','2018-02-25 21:42:57',1,1,1),(121,12,'-- I have created an invoice, reload the page and check it out on the upper right corner!','2018-02-25 22:40:21',1,1,1);
+INSERT INTO `tblmessage` VALUES (137,20,'xx','2018-02-26 01:18:44',1,1,2),(138,20,'-- I have created an invoice, check it out on the upper right corner!','2018-02-26 01:29:24',1,1,1),(139,21,'asd','2018-02-26 01:31:32',1,1,2),(140,21,'-- I have created an invoice, check it out on the upper right corner!','2018-02-26 01:31:53',1,1,1),(141,21,'-- I have created an invoice, check it out on the upper right corner!','2018-02-26 01:32:14',1,1,1);
 
 --
 -- Table structure for table `tblrating`
@@ -216,40 +216,14 @@ CREATE TABLE `tblservice` (
   KEY `intServTag_idx` (`intServTag`),
   CONSTRAINT `intServAccNo` FOREIGN KEY (`intServAccNo`) REFERENCES `tbluser` (`intAccNo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `intServTag` FOREIGN KEY (`intServTag`) REFERENCES `tblservicetag` (`intServTagID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `tblservice`
 --
 
-INSERT INTO `tblservice` VALUES (1,1,1,1,2,72.5),(3,2,1,1,1,32),(5,3,5,1,2,72),(6,3,1,1,2,50),(7,3,2,1,1,60),(29,5,1,1,1,213),(30,4,1,1,2,45),(32,4,2,1,1,1245),(33,2,2,1,2,55),(34,5,2,1,2,120),(35,1,3,0,1,123),(36,1,7,0,1,113),(37,1,4,1,1,200);
-
---
--- Table structure for table `tblservicereq`
---
-
-DROP TABLE IF EXISTS `tblservicereq`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tblservicereq` (
-  `intServReqID` int(11) NOT NULL AUTO_INCREMENT,
-  `intSReqServID` int(11) NOT NULL,
-  `intSReqAccNo` int(9) NOT NULL,
-  `intSReqSeen` int(1) NOT NULL,
-  `intSReqResponse` int(1) NOT NULL,
-  PRIMARY KEY (`intServReqID`),
-  KEY `intSReqServID_idx` (`intSReqServID`),
-  KEY `intSReqAccNo_idx` (`intSReqAccNo`),
-  CONSTRAINT `intSReqAccNo` FOREIGN KEY (`intSReqAccNo`) REFERENCES `tbluser` (`intAccNo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `intSReqServID` FOREIGN KEY (`intSReqServID`) REFERENCES `tblservice` (`intServID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tblservicereq`
---
-
+INSERT INTO `tblservice` VALUES (1,1,1,2,2,72.5),(3,2,1,0,1,32),(5,3,5,1,2,72),(6,3,1,2,2,50),(7,3,2,2,1,60),(29,5,1,2,1,213),(30,4,1,2,2,45),(32,4,2,2,1,1245),(33,2,2,2,2,55),(34,5,2,2,2,120),(35,1,3,1,1,123),(36,1,7,1,1,113),(37,1,4,1,1,200),(38,6,1,2,2,50);
 
 --
 -- Table structure for table `tblservicetag`
@@ -330,8 +304,7 @@ DROP TABLE IF EXISTS `tbltransaction`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tbltransaction` (
   `intTransID` int(11) NOT NULL AUTO_INCREMENT,
-  `intFinderAccNo` int(9) NOT NULL COMMENT 'FK',
-  `intTransServID` int(11) NOT NULL COMMENT 'FK',
+  `intTransChatID` int(11) NOT NULL COMMENT 'FK',
   `intTransPriceType` int(1) NOT NULL,
   `fltTransPrice` float NOT NULL,
   `intTransStatus` int(1) NOT NULL DEFAULT '0',
@@ -340,18 +313,16 @@ CREATE TABLE `tbltransaction` (
   `dtmTransEnded` datetime DEFAULT NULL,
   `txtTransCancelDesc` text,
   PRIMARY KEY (`intTransID`),
-  KEY `intFinderAccNo_idx` (`intFinderAccNo`),
-  KEY `intTransServID_idx` (`intTransServID`),
-  CONSTRAINT `intFinderAccNo` FOREIGN KEY (`intFinderAccNo`) REFERENCES `tbluser` (`intAccNo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `intTransServID` FOREIGN KEY (`intTransServID`) REFERENCES `tblservice` (`intServID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+  KEY `intTransChatID_idx` (`intTransChatID`),
+  CONSTRAINT `intTransChatID` FOREIGN KEY (`intTransChatID`) REFERENCES `tblchat` (`intChatID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `tbltransaction`
 --
 
-INSERT INTO `tbltransaction` VALUES (1,1,1,0,0,1,'2018-02-25 10:30:00','2018-02-25 10:30:00','2018-02-25 10:30:00','qwer'),(8,7,36,1,113,0,NULL,'2018-03-01 00:00:00',NULL,NULL);
+INSERT INTO `tbltransaction` VALUES (12,20,1,60,0,NULL,'2018-03-01 00:00:00',NULL,NULL),(14,21,2,72.5,0,NULL,'2018-04-01 00:00:00',NULL,NULL);
 
 --
 -- Table structure for table `tbluser`
