@@ -59,11 +59,23 @@ function teamRender(req,res){
       break;
   }
 }
+function searchRender(req,res){
+  switch (req.valid) {
+    case 1:
+      res.render('welcome/views/invalid/adm-restrict');
+      break;
+    case 2:
+    case 3:
+      res.render('home/views/search', {thisUserTab: req.user, messCount: req.messCount[0].count});
+      break;
+  }
+}
 
 router.get('/', flog, messCount, render);
 router.get('/guide', flog, messCount, guideRender);
 router.get('/help', flog, messCount, helpRender);
 router.get('/about', flog, messCount, aboutRender);
 router.get('/team', flog, messCount, teamRender);
+router.get('/search', flog, messCount, searchRender);
 
 exports.home = router;
