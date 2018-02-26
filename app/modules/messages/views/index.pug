@@ -115,13 +115,15 @@ block main
               .chat-header.col-sm-12
                 .row.mt-3.pt-2
                   .col
-                      h4(style='color:gold') ##{messOne.strServName}
+                      h4(style='color:#374850') ##{messOne.strServName}
                         if messOne.sendType == 1
                             span(style='color: white;') &nbsp#{messOne.Seeker}
                         else
                             span(style='color: white;') &nbsp#{messOne.strName}
                   .col.align-right
-                    if messOne.sendType == 1 && transstatus == "none" 
+                    if transstatus == 3 || messOne.intChatStatus == 0
+                      span.tag.dangerbox Cancelled
+                    else if messOne.sendType == 1 && transstatus == "none"
                       button.btn.btn-light.btn-md.btn.ml-2(type='button' data-toggle='modal' data-target='#TOModal') + Transaction Offer
                     else if messOne.sendType == 1 && transstatus == 0
                       button.btn.btn-light.btn-md.btn.ml-2(type='button' data-toggle='modal' data-target='#editTOModal') * Edit Offer
@@ -131,10 +133,10 @@ block main
                       span.tag.provider Ongoing
                     else if transstatus == 2
                       span.tag.seeker Finished
-                    else if transstatus == 3
-                      span.tag.dangerbox Cancelled
-                    if messOne.sendType == 2
-                      button.btn.btn-light.btn-md.btn.ml-2(type='button' data-toggle='modal' data-target='#PSModal') Provider Schedule
+                    if messOne.sendType == 2 && transstatus != 3 && messOne.intChatStatus != 0
+                      button.btn.btn-light.btn-md.btn.ml-2(type='button' data-toggle='modal' data-target='#PSModal') Schedule
+                    if transstatus != 2 && transstatus != 3 && messOne.intChatStatus != 0
+                      button.btn.btn-danger.btn-md.btn.ml-2(type='button' data-toggle='modal' data-target='#Cancel') Cancel
             // Messages
             .row.content-wrap.messages
               .col
@@ -387,6 +389,27 @@ block main
                             td #{spec.formatstart} - #{spec.formatend}
           br
           .modal-footer
+            button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+
+  #Cancel.modal.fade(tabindex='-1' role='dialog' aria-labelledby='CancelTitle' aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        form(method='POST' action='/messages/cancel/'+messOne.intChatID)
+          .modal-header 
+            h5#CancelTitle.modal-title Cancel transaction
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+              span(aria-hidden='true') ×
+          .modal-body
+            .row
+              .col
+                p You are about to&nbsp
+                  span(style='color: red;') Cancel&nbsp
+                  | this Chat and it's transaction
+                label(for='desc') Cancel Description:
+                textarea.form-control(rows='5' name='desc' required)
+                  
+          .modal-footer
+            button.btn.btn-danger(type='submit') Sumbit
             button.btn.btn-secondary(type='button', data-dismiss='modal') Close
 
 
