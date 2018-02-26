@@ -33,8 +33,10 @@ block main
                   td(style='padding-left:0px; padding-right:0px; padding-top: 7px; width: 45px !important;')
                       a(href='/invoice/'+trans.intTransID, data-toggle='tooltip', data-placement='bottom', title='Invoice')
                         img.size(src='/assets/images/icons/Invoice2.png', alt='Invoice', style='height:40px; width:40px;')
-                  td
-                  if trans.intServAccNo != thisuser.intAccNo 
+                  if trans.intServAccNo != thisuser.intAccNo && trans.rate == 0 
                     td(style='padding-left:0px; padding-right:0px; padding-top: 7px; width: 45px !important;')
-                        a(href='/ratereview/'+trans.intTransID, data-toggle='tooltip', data-placement='bottom', title='Invoice')
+                        a(href='/transactions/ratereview/'+trans.intTransID, data-toggle='tooltip', data-placement='bottom', title='Invoice')
                           img.size(src='/assets/images/icons/Invoice2.png', alt='Invoice', style='height:40px; width:40px;')
+                  else
+                    ts          
+  block finishedtrans

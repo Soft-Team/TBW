@@ -9,8 +9,8 @@ var dateformat = require('../welcome/dateformat');
 function ongoing(req,res,next){
   /*Ongoing Transactions of Current User, Match(session);
   *(tblchat)*(tbluser)*(tblservice)*(tblservicetag)*(tbltransaction)*(tblmessage)*/
-  var stringquery = "SELECT A.* , strName, intAccNo FROM(SELECT * FROM tblservice INNER JOIN tblchat ON intServID= intChatServ INNER JOIN tblservicetag ON intServTagID= intServTag INNER JOIN tbltransaction ON intChatID= intTransChatID WHERE (intServAccNo= ? OR intChatSeeker= ?) AND intTransStatus= 1)A INNER JOIN tbluser ON intAccNo= intServAccNo OR intAccNo= intChatSeeker WHERE intAccNo!= ?";
-  db.query(stringquery,[req.session.user,req.session.user,req.session.user], (err, results, fields) => {
+  var stringquery = "SELECT A.* , strName, intAccNo FROM(SELECT * FROM tblservice INNER JOIN tblchat ON intServID= intChatServ INNER JOIN tblservicetag ON intServTagID= intServTag INNER JOIN tbltransaction ON intChatID= intTransChatID LEFT JOIN (SELECT * FROM tblrating WHERE intRatedAccNo != ?)X ON intRateTransID= intTransID WHERE (intServAccNo= ? OR intChatSeeker= ?) AND intTransStatus= 1)A INNER JOIN tbluser ON intAccNo= intServAccNo OR intAccNo= intChatSeeker WHERE intAccNo!= ?";
+  db.query(stringquery,[req.session.user,req.session.user,req.session.user,req.session.user], (err, results, fields) => {
       if (err) console.log(err);
       if(!(!results[0])){
         for(count=0;count<results.length;count++){
@@ -18,6 +18,11 @@ function ongoing(req,res,next){
           var formatDate = dateformat(date);
           results[count].time = timeFormat(date);
           results[count].date = date.toDateString("en-US").slice(4, 15);
+
+          results[count].rate = 1;
+          if(!results[count].intRateID){
+            results[count].rate = 0;
+          }
         }
       }
       req.ongoing= results;
@@ -45,8 +50,8 @@ function ongoingParams(req,res,next){
 function finished(req,res,next){
   /*Finished Transactions of Current User, Match(session);
   *(tblchat)*(tbluser)*(tblservice)*(tblservicetag)*(tbltransaction)*(tblmessage)*/
-  var stringquery = "SELECT A.* , strName, intAccNo FROM(SELECT * FROM tblservice INNER JOIN tblchat ON intServID= intChatServ INNER JOIN tblservicetag ON intServTagID= intServTag INNER JOIN tbltransaction ON intChatID= intTransChatID WHERE (intServAccNo= ? OR intChatSeeker= ?) AND intTransStatus= 2)A INNER JOIN tbluser ON intAccNo= intServAccNo OR intAccNo= intChatSeeker WHERE intAccNo!= ?";
-  db.query(stringquery,[req.session.user,req.session.user,req.session.user], (err, results, fields) => {
+  var stringquery = "SELECT A.* , strName, intAccNo FROM(SELECT * FROM tblservice INNER JOIN tblchat ON intServID= intChatServ INNER JOIN tblservicetag ON intServTagID= intServTag INNER JOIN tbltransaction ON intChatID= intTransChatID LEFT JOIN (SELECT * FROM tblrating WHERE intRatedAccNo != ?)X ON intRateTransID= intTransID WHERE (intServAccNo= ? OR intChatSeeker= ?) AND intTransStatus= 2)A INNER JOIN tbluser ON intAccNo= intServAccNo OR intAccNo= intChatSeeker WHERE intAccNo!= ?";
+  db.query(stringquery,[req.session.user,req.session.user,req.session.user,req.session.user], (err, results, fields) => {
       if (err) console.log(err);
       if(!(!results[0])){
         for(count=0;count<results.length;count++){
@@ -59,8 +64,14 @@ function finished(req,res,next){
           var formatDateEnd = dateformat(dateEnd);
           results[count].timeEnd = timeFormat(dateEnd);
           results[count].dateEnd = dateEnd.toDateString("en-US").slice(4, 15);
+
+          results[count].rate = 1;
+          if(!results[count].intRateID){
+            results[count].rate = 0;
+          }
         }
       }
+      console.log(results);
       req.finished= results;
       return next();
     });
@@ -79,7 +90,7 @@ function finishedParams(req,res,next){
           results[count].date = date.toDateString("en-US").slice(4, 15);
         }
       }
-      req.ongoingParams= results;
+      req.finishedParams= results;
       return next();
     });
 }
@@ -91,7 +102,7 @@ function ongoingRender(req,res){
       break;
     case 2:
     case 3:
-      res.render('transactions/views/ongoing', {thisUserTab: req.user, messCount: req.messCount[0].count, ongoingtab: req.ongoing});
+      res.render('transactions/views/ongoing', {thisUserTab: req.user, messCount: req.messCount[0].count, ongoingtab: req.ongoing });
       break;
   }
 }
@@ -102,7 +113,7 @@ function finishedRender(req,res){
       break;
     case 2:
     case 3:
-      res.render('transactions/views/finished', {thisUserTab: req.user, messCount: req.messCount[0].count, finishedtab: req.finished});
+      res.render('transactions/views/finished', {thisUserTab: req.user, messCount: req.messCount[0].count, finishedtab: req.finished });
       break;
   }
 }
@@ -124,7 +135,18 @@ function finRender(req,res){
       break;
     case 2:
     case 3:
-      res.render('transactions/views/fin', {thisUserTab: req.user, messCount: req.messCount[0].count, ongoingtab: req.ongoing, ongoingParams: req.ongoingParams});
+      res.render('transactions/views/fin', {thisUserTab: req.user, messCount: req.messCount[0].count, ongoingtab: req.ongoing, ongoingParams: req.ongoingParams });
+      break;
+  }
+}
+function raterevRender(req,res){
+  switch (req.valid) {
+    case 1:
+      res.render('welcome/views/invalid/adm-restrict');
+      break;
+    case 2:
+    case 3:
+      res.render('transactions/views/raterev', {thisUserTab: req.user, messCount: req.messCount[0].count, finishedtab: req.finished, finishedParams: req.finishedParams });
       break;
   }
 }
@@ -133,7 +155,7 @@ router.get('/ongoing', flog, messCount, ongoing, ongoingRender);
 router.get('/finished', flog, messCount, finished, finishedRender);
 router.get('/log', flog, messCount, logRender);
 router.get('/ongoing/finish/:transid', flog, messCount, ongoing, ongoingParams, finRender);
-router.get('/ratereview/:transid', flog, messCount, finished, finRender);
+router.get('/ratereview/:transid', flog, messCount, finished, finishedParams, raterevRender);
 
 router.post('/ongoing/finish/:transid', flog, ongoingParams,  (req, res) => {
   if(!req.ongoingParams[0]){
@@ -160,12 +182,13 @@ router.post('/ongoing/finish/:transid', flog, ongoingParams,  (req, res) => {
     }
   }
 });
-router.post('/ongoing/ratereview/:transid', flog, finishedParams,  (req, res) => {
+router.post('/ratereview/:transid', flog, finishedParams,  (req, res) => {
+  console.log(req.body);
   if(!req.finishedParams[0]){
     res.redirect('/transactions/finished');
   }
   else{
-    if(req.finishedParams[0].intServAccNo != req.session.user){
+    if(req.finishedParams[0].intChatSeeker != req.session.user){
       res.redirect('/transactions/finished');
     }
     else{

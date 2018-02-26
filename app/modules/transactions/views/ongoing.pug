@@ -43,9 +43,10 @@ block main
                   td(style='padding-left:0px; padding-right:0px; padding-top: 7px; width: 45px !important;')
                       a(href='/messages/'+trans.intChatID, data-toggle='tooltip', data-placement='bottom', title='Message')
                         img.size(src='/assets/images/icons/Message2.png', alt='Message', style='height:40px; width:40px;')
-                  td(style='padding-left:0px; padding-right:0px; padding-top: 7px; width: 40px !important;')
-                      a(href='/invoice/'+trans.intTransID, data-toggle='tooltip', data-placement='bottom', title='Invoice')
-                        img.size(src='/assets/images/icons/Invoice2.png', alt='Invoice', style='height:38px; width:40px;')
+                  if trans.rate == 0
+                    td(style='padding-left:0px; padding-right:0px; padding-top: 7px; width: 40px !important;')
+                        a(href='/invoice/'+trans.intTransID, data-toggle='tooltip', data-placement='bottom', title='Invoice')
+                          img.size(src='/assets/images/icons/Invoice2.png', alt='Invoice', style='height:38px; width:40px;')
                   if trans.intServAccNo == thisuser.intAccNo 
                     td(style='padding-left:0px; padding-right:0px; padding-top: 7px; width: 90px !important;')
                       a.button.btn.btn-success(href='/transactions/ongoing/finish/'+trans.intTransID)
