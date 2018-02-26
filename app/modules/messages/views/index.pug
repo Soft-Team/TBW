@@ -53,7 +53,15 @@ block main
       else
         option(value= day) #{day}
   
-  
+  mixin regsched(day,daystr,schedday,start,end)
+    if day == 2
+      tr
+        th(scope="row") #{daystr}
+        td None
+    else if schedday == daystr
+      tr
+        th(scope="row") #{daystr}
+        td #{start} - #{end}
   
   .container.fill(style='padding:0px')
     .row.chat-wrap
@@ -114,17 +122,19 @@ block main
                             span(style='color: white;') &nbsp#{messOne.strName}
                   .col.align-right
                     if messOne.sendType == 1 && transstatus == "none" 
-                      button.btn.btn-light.btn-md.btn(type='button' data-toggle='modal' data-target='#TOModal') + Transaction Offer
+                      button.btn.btn-light.btn-md.btn.ml-2(type='button' data-toggle='modal' data-target='#TOModal') + Transaction Offer
                     else if messOne.sendType == 1 && transstatus == 0
-                      button.btn.btn-light.btn-md.btn(type='button' data-toggle='modal' data-target='#editTOModal') * Edit Offer
+                      button.btn.btn-light.btn-md.btn.ml-2(type='button' data-toggle='modal' data-target='#editTOModal') * Edit Offer
                     else if messOne.sendType == 2 && transstatus == 0
-                      button.btn.btn-light.btn-md.btn(type='button' data-toggle='modal' data-target='#viewTOModal') View Offer
+                      button.btn.btn-light.btn-md.btn.ml-2(type='button' data-toggle='modal' data-target='#viewTOModal') View Offer
                     else if transstatus == 1
                       span.tag.provider Ongoing
                     else if transstatus == 2
                       span.tag.seeker Finished
                     else if transstatus == 3
                       span.tag.dangerbox Cancelled
+                    if messOne.sendType == 2
+                      button.btn.btn-light.btn-md.btn.ml-2(type='button' data-toggle='modal' data-target='#PSModal') Provider Schedule
             // Messages
             .row.content-wrap.messages
               .col
@@ -299,5 +309,85 @@ block main
           .modal-footer
             button.btn.btn-primary.btn-block(type='submit') Accept Offer
             button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+
+  #PSModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='PSModalTitle' aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        each day in todayTab
+          .modal-header
+            h5#PSModalTitle.modal-title Provider Schedule
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+              span(aria-hidden='true') ×
+          .modal-body
+            .row
+              .col
+                h5(style="display:inline;") #{day.strName}
+                br
+                h7(style="display:inline;") #{day.strCity}
+                h7(style="display:inline;") &nbsp- #{day.strBarangay}
+                br
+                br
+                table.table.table-striped.box-shadow-mini
+                  thead.text-white
+                    tr
+                      th.align-left(scope='col' colspan="2") Today's Working Hours
+                  tbody
+                    tr
+                      th(scope='row') #{day.date}
+                      if day.unav == 1
+                        td Unavailable
+                      else if day.unav == 0
+                        td #{day.formatstart} - #{day.formatend}
+                      else
+                        td none
+            .row
+              .col
+                table.table.table-striped.box-shadow-mini
+                  thead
+                    tr
+                      th.align-left.text-white(scope='col' colspan='2') Regular Working Hours
+                  tbody
+                    if empty == 1
+                      tr
+                        td
+                          i No Schedule Detected
+                    else
+                      each sched in regSchedTab
+                        +regsched(sched.sunday,"Sunday",sched.strSchedDay,sched.formatstart,sched.formatend)
+                      each sched in regSchedTab
+                        +regsched(sched.monday,"Monday",sched.strSchedDay,sched.formatstart,sched.formatend)
+                      each sched in regSchedTab
+                        +regsched(sched.tuesday,"Tuesday",sched.strSchedDay,sched.formatstart,sched.formatend)
+                      each sched in regSchedTab
+                        +regsched(sched.wednesday,"Wednesday",sched.strSchedDay,sched.formatstart,sched.formatend)
+                      each sched in regSchedTab
+                        +regsched(sched.thursday,"Thursday",sched.strSchedDay,sched.formatstart,sched.formatend)
+                      each sched in regSchedTab
+                        +regsched(sched.friday,"Friday",sched.strSchedDay,sched.formatstart,sched.formatend)
+                      each sched in regSchedTab
+                        +regsched(sched.saturday,"Saturday",sched.strSchedDay,sched.formatstart,sched.formatend)
+            .row
+              .col
+                table.table.table-striped.box-shadow-mini
+                  thead.text-white
+                    tr
+                      th.align-left(scope='col' colspan='2') Special Working Hours
+                  tbody
+                    if emptyspecial == 1
+                      tr
+                        td(colspan="2")
+                          i No Schedule Detected
+                    else
+                      each spec in specSchedTab
+                        tr
+                          th(scope='row') #{spec.date}
+                          if spec.unav == 1
+                            td Unavailable
+                          else
+                            td #{spec.formatstart} - #{spec.formatend}
+          br
+          .modal-footer
+            button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+
 
   block chatmess

@@ -7,6 +7,7 @@ var messCount = require('../welcome/messCount');
 var prepend = require('../welcome/prepend');
 var numberFormat = require('../welcome/numberFormat');
 var dateformat = require('../welcome/dateformat');
+var formatAMPM = require('../welcome/formatAMPM');
 
 function fchat(req,res,next){
   /*All Chats of Current User, Match(session);
@@ -113,6 +114,161 @@ function ftrans(req,res,next){
       return next();
     });
 }
+function ftodaysched(req,res,next){
+  /*Today Sched of Current Chat Provider, Match(params)
+  *(tblservicetag)*(tbluser)*(tblschedule)*(tblspecialsched)*(tblchat)*/
+  db.query("SELECT *, CURDATE() AS curdate FROM tblservice INNER JOIN tblchat ON intServID= intChatServ INNER JOIN tbluser ON intAccNo= intServAccNo LEFT JOIN (SELECT * FROM tblschedule WHERE strSchedDay= DAYNAME(CURDATE()))A ON intAccNo= intSchedAccNo LEFT JOIN(SELECT * FROM tblspecialsched WHERE datSpecialDate= CURDATE())B ON intSpecialAccNo= intAccNo WHERE intChatID= ?",[req.params.chatid], (err, results, fields) => {
+    if (err) console.log(err);
+    if(!(!results[0])){
+      results[0].date = results[0].curdate.toDateString("en-US").slice(4, 15);
+      results[0].unav = 0;
+      if(!(!results[0].intSpecialID)){
+        if(!results[0].tmSpecialStart){
+          results[0].unav = 1;
+        }
+        else{
+        results[0].formatstart = formatAMPM(results[0].tmSpecialStart);
+        results[0].formatend = formatAMPM(results[0].tmSpecialEnd);
+        }
+      }
+      else if(!(!results[0].intSchedID)){
+        results[0].formatstart = formatAMPM(results[0].tmSchedStart);
+        results[0].formatend = formatAMPM(results[0].tmSchedEnd);
+      }
+      else{
+        results[0].unav = 3;
+      }
+    }
+    req.ftodaysched= results;
+    return next();
+  });
+}
+function fregularSched(req, res, next){
+  /*Regular Schedule of Current Chat Provider, Match(params)
+  *(tblschedule)*/
+  db.query("SELECT * FROM tblschedule INNER JOIN tblservice ON intSchedAccNo= intServAccNo INNER JOIN tblchat ON intServID= intChatServ WHERE intChatID= ?",[req.params.chatid], function (err, results, fields) {
+      if (err) return res.send(err);
+      if(!results[0]){
+        var empty = 1;
+      }
+      else{
+        var empty = 0;
+        for(count=0;count<results.length;count++){
+          results[count].formatstart = formatAMPM(results[count].tmSchedStart);
+          results[count].formatend = formatAMPM(results[count].tmSchedEnd);
+          switch (results[count].strSchedDay){
+            case "Sunday":
+              for(count1=0;count1<results.length;count1++){
+                results[count1].sunday = 1;
+              }
+              break;
+            case "Monday":
+              for(count1=0;count1<results.length;count1++){
+                results[count1].monday = 1;
+              }
+              break;
+            case "Tuesday":
+              for(count1=0;count1<results.length;count1++){
+                results[count1].tuesday = 1;
+              }
+              break;
+            case "Wednesday":
+              for(count1=0;count1<results.length;count1++){
+                results[count1].wednesday = 1;
+              }
+              break;
+            case "Thursday":
+              for(count1=0;count1<results.length;count1++){
+                results[count1].thursday = 1;
+              }
+              break;
+            case "Friday":
+              for(count1=0;count1<results.length;count1++){
+                results[count1].friday = 1;
+              }
+              break;
+            case "Saturday":
+              for(count1=0;count1<results.length;count1++){
+                results[count1].saturday = 1;
+              }
+              break;
+          }
+        }
+        if (!results[0].sunday){
+          for(count=0;count<results.length;count++){
+            results[count].sunday = 0;
+            results[results.length-1].sunday = 2;
+          }
+        }
+        if (!results[0].monday){
+          for(count=0;count<results.length;count++){
+            results[count].monday = 0;
+            results[results.length-1].monday = 2;
+          }
+        }
+        if (!results[0].tuesday){
+          for(count=0;count<results.length;count++){
+            results[count].tuesday = 0;
+            results[results.length-1].tuesday = 2;
+          }
+        }
+        if (!results[0].wednesday){
+          for(count=0;count<results.length;count++){
+            results[count].wednesday = 0;
+            results[results.length-1].wednesday = 2;
+          }
+        }
+        if (!results[0].thursday){
+          for(count=0;count<results.length;count++){
+            results[count].thursday = 0;
+            results[results.length-1].thursday = 2;
+          }
+        }
+        if (!results[0].friday){
+          for(count=0;count<results.length;count++){
+            results[count].friday = 0;
+            results[results.length-1].friday = 2;
+          }
+        }
+        if (!results[0].saturday){
+          for(count=0;count<results.length;count++){
+            results[count].saturday = 0;
+            results[results.length-1].saturday = 2;
+          }
+        }
+      }
+      req.fregularSched = results;
+      req.empty = empty;
+      return next();
+  });
+}
+function fspecialSched(req, res, next){
+  /*Special Schedule of Current Chat Provider, Match(params)
+  *(tblspecialschedule)*(tblservice)*/
+  db.query("SELECT * FROM tblspecialsched INNER JOIN tblservice ON intSpecialAccNo= intServAccNo INNER JOIN tblchat ON intChatServ= intServID WHERE intChatID= ? AND datSpecialDate >= CURDATE() ORDER BY datSpecialDate ASC",[req.params.chatid], function (err, results, fields) {
+      if (err) return res.send(err);
+      if(!results[0]){
+        var empty = 1;
+      }
+      else{
+        var empty = 0;
+        for(count=0;count<results.length;count++){
+          if(!results[count].tmSpecialStart){
+            results[count].unav = 1;
+          }
+          else{
+            results[count].formatstart = formatAMPM(results[count].tmSpecialStart);
+            results[count].formatend = formatAMPM(results[count].tmSpecialEnd);
+            results[count].unav = 0;
+          }
+          results[count].date = results[count].datSpecialDate.toDateString("en-US").slice(4, 15);
+        }
+      }
+      req.fspecialSched = results;
+      req.emptyspecial = empty;
+      return next();
+  });
+}
 function ftest(req,res,next){
   /*Transaction of curent Chat, Match(params);
   *(tblchat)*(tblservice)*(tbltransaction)*/
@@ -175,7 +331,11 @@ function messRender(req,res){
                   var count = results[0].count
                   db.commit(function(err) {
                       if (err) console.log(err);
-                      res.render('messages/views/index', { thisUserTab: req.user, messCount: count, messtab: req.mess, messOne: req.mess[0], chattab: req.chat, params: req.params.chatid, transstatus: req.transstatus, transtab: req.ftrans});
+                      if(!req.ftodaysched[0]){
+                        res.redirect('/noroute');
+                      }
+                      else
+                        res.render('messages/views/index', { thisUserTab: req.user, messCount: count, messtab: req.mess, messOne: req.mess[0], chattab: req.chat, params: req.params.chatid, transstatus: req.transstatus, transtab: req.ftrans, todayTab: req.ftodaysched, regSchedTab: req.fregularSched, empty: req.empty, specSchedTab: req.fspecialSched, emptyspecial: req.emptyspecial});
                   });
               });
           });
@@ -186,9 +346,9 @@ function messRender(req,res){
 }
 
 router.get('/', flog, messCount, fchat, render);
-router.get('/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, messRender);
+router.get('/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, ftodaysched, fregularSched, fspecialSched, messRender);
 
-router.post('/transet/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, (req, res) => {;
+router.post('/transet/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, ftodaysched, fregularSched, fspecialSched, (req, res) => {;
   if(req.transstatus != 'none'){
     res.redirect('/messages/'+req.fparams[0].intChatID);
   }
@@ -209,7 +369,7 @@ router.post('/transet/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, 
     db.beginTransaction(function(err) {
       if (err) console.log(err);
       db.query(stringquery1, bodyarray1, (err, results, fields) => {
-        if (err) res.render('messages/views/invalid/nodate', { thisUserTab: req.user, messCount: req.messCount[0].count, messtab: req.mess, messOne: req.mess[0], chattab: req.chat, params: req.params.chatid });
+        if (err) res.render('messages/views/invalid/nodate', { thisUserTab: req.user, messCount: req.messCount[0].count, messtab: req.mess, messOne: req.mess[0], chattab: req.chat, params: req.params.chatid, transstatus: req.transstatus, todayTab: req.ftodaysched, regSchedTab: req.fregularSched, empty: req.empty, specSchedTab: req.fspecialSched, emptyspecial: req.emptyspecial});
         else
           db.query(stringquery2, bodyarray2, function (err,  resultsCount, fields) {
               if (err) console.log(err);
@@ -222,7 +382,7 @@ router.post('/transet/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, 
     });
   }
 });
-router.post('/transet/edit/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, (req, res) => {;
+router.post('/transet/edit/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, ftodaysched, fregularSched, fspecialSched, (req, res) => {;
   if(req.transstatus == 'none'){
     res.redirect('/messages/'+req.fparams[0].intChatID);
   }
@@ -243,7 +403,7 @@ router.post('/transet/edit/:chatid', flog, messCount, fmess, fchat, fparams, ftr
     db.beginTransaction(function(err) {
       if (err) console.log(err);
       db.query(stringquery1, bodyarray1, (err, results, fields) => {
-        if (err) res.render('messages/views/invalid/nodate', { thisUserTab: req.user, messCount: req.messCount[0].count, messtab: req.mess, messOne: req.mess[0], chattab: req.chat, params: req.params.chatid, transtab: req.ftrans });
+        if (err) res.render('messages/views/invalid/nodate', { thisUserTab: req.user, messCount: req.messCount[0].count, messtab: req.mess, messOne: req.mess[0], chattab: req.chat, params: req.params.chatid, transstatus: req.transstatus, transtab: req.ftrans, todayTab: req.ftodaysched, regSchedTab: req.fregularSched, empty: req.empty, specSchedTab: req.fspecialSched, emptyspecial: req.emptyspecial});
         else
           db.query(stringquery2, bodyarray2, function (err,  resultsCount, fields) {
               if (err) console.log(err);
