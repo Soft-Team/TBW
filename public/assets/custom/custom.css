@@ -729,3 +729,14 @@ header.heads {
     width: 287px;
     height: 280px;
 }
+
+.port{
+    width: 160px;
+    height: 230px;
+    margin: 20px 20px 0px 20px;
+}
+
+.img-with-text {
+    text-align: justify;
+    width: [width of img];
+}

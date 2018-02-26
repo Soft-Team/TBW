@@ -77,10 +77,12 @@ block main
                     a#personal-info-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Personal-Info', role='tab', aria-controls='Personal-Info', aria-selected='false') Personal Info
                     a#services-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Services', role='tab', aria-controls='Services', aria-selected='false') Services
                     a#reviews-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Reviews', role='tab', aria-controls='Reviews', aria-selected='false') Reviews
+                    a#portfolio-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Portfolio', role='tab', aria-controls='Portfolio', aria-selected='false') Portfolio
                   else
                     a#personal-info-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Personal-Info', role='tab', aria-controls='Personal-Info', aria-selected='false') Personal Info
                     a#services-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Services', role='tab', aria-controls='Services', aria-selected='false') Services
                     a#reviews-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Reviews', role='tab', aria-controls='Reviews', aria-selected='false') Reviews
+                    a#portfolio-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Portfolio', role='tab', aria-controls='Portfolio', aria-selected='false') Portfolio
         #nav-tabContent.tab-content
           #Settings.tab-pane.fade(role='tabpanel', aria-labelledby='settings-tab')
             each thisUser in SelUserTab        
@@ -102,7 +104,7 @@ block main
                           label(for='changepassword') Upload Picture
                               input#profilepic.filestyle(type='file' name='profilepic' data-classbutton='btn btn-primary' data-input='false' data-classicon='icon-plus' )
                         .form-group
-                          button.btn.btn-primary(style='float:right; margin-top:24px;') Submit 
+                          button.btn.btn-primary(style='float:right; margin-top:24px;') Upload 
                 .col-sm-3(style='display: inline-block; width: 642px; padding-top: 40px; text-align:left')
                         .form-group.col-md-6
                           label(for='inputCity') City
@@ -110,6 +112,18 @@ block main
                         .form-group.col-md-6
                           label(for='inputState') Barangay
                           input#inputBarangay.form-control(type='text' name='barangay' value= thisUser.strBarangay placeholder='Tatalon' required='')
+                        .form-row
+                          .form-group.col-md-6
+                            label(for='changepassword') Upload Valid ID
+                                input#profilepic.filestyle(type='file' name='profilepic' data-classbutton='btn btn-primary' data-input='false' data-classicon='icon-plus' )
+                          .form-group
+                            button.btn.btn-primary(style='float:right; margin-top:24px;') Upload  
+                        .form-row
+                          .form-group.col-md-6
+                            label(for='changepassword') Upload Portfolio
+                                input#profilepic.filestyle(type='file' name='profilepic' data-classbutton='btn btn-primary' data-input='false' data-classicon='icon-plus' )
+                          .form-group
+                            button.btn.btn-primary(style='float:right; margin-top:24px;') Upload 
                       
 
           #Personal-Info.tab-pane.fade(role='tabpanel', aria-labelledby='personal-info-tab')
@@ -177,3 +191,10 @@ block main
                 .col-sm-3(style='width: 140px; display: inline-block; padding-top: 10px; padding-left: 10px')
                   img(src='/assets/images/Icons/star.png', alt='star', style='height: 4rem; width: 4rem; margin-top:5px; float:left')
                   h1(style='float:right; margin-top: 20px') 4.5
+          #Portfolio.tab-pane.fade(role='tabpanel', aria-labelledby='portfolio-tab', style='')
+            .col
+              .row
+                .img-with-text
+                  img.port(src='/assets/images/Sample.jpg', alt='sample')
+                  center
+                    p File Name
