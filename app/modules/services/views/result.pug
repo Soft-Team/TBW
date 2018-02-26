@@ -83,14 +83,17 @@ block main
               //-img.card-img-top(src='/assets/images/Tyler.jpg', alt='Card image cap', style='height: 8rem; width: 8rem; ')
               .card-body
                 .card-text
-                  .f(style='text-align:center; border-top: 1px solid #007BFF; color: green;') Verified
+                  if serv.intStatus == 1
+                    .f(style='text-align:center; border-top: 1px solid #007BFF; color: gray;') Unverified
+                  else
+                    .f(style='text-align:center; border-top: 1px solid #007BFF; color: green;') Verified
                   .f(style='text-align:center;') #{serv.prepend}
                   .f(style='text-align:center') #{serv.strName}
                   .row
                     .col(style='padding-right:0px; text-align:center; border-right: 1px solid #007BFF;')
-                      .f Quezon City
+                      .f #{serv.strCity}
                     .col(style='padding-left:0px; text-align:center;')
-                      .f Tandang Sora
+                      .f #{serv.strBarangay}
                   if serv.intPriceType == 1
                     .f(style='text-align:center') ₱#{serv.fltPrice}
                   else
