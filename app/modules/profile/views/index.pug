@@ -4,148 +4,143 @@ block main
   .jumbotron-banner(style='height:100px')
     center
   .sector(style='margin-top:0px; padding:0px')
-    .sector-container-profile
-      .profile-container
-          .col-sm-3(style='display: inline-block; width: 160px; padding-left: 0px; padding-right: 0px')
-            img(src='/assets/images/Tyler.jpg', alt='Card image cap', style='height: 10rem; width: 10rem; border-right: 1px solid; ')
-          .col-sm-3(style='display: inline-block; width: 894px ')
-            h2.text-headline-profile(style='border-bottom: 1px solid') Verified
-            h1(style='margin-left:15px') Tyler The Plumber
-          .col-sm-3(style='width: 190px; border-left: 1px solid; height:160px')
-              table(style='width:190px')
-                tbody
-                  tr
-                    td(style='padding-top:3px')
-                      img(src='/assets/images/Icons/star.png', alt='star', style='height: 2rem; width: 2rem; margin-top:5px; margin-left:50px;')
-                      h2(style='float: right; margin-right: 50px; margin-bottom: 0rem') 4.8
-                      h4.profileA(style='margin-bottom: 0rem; margin-top:0px; display:inline-block') Rating
-                  tr
-                    td(style='padding-top:3px')
-                      img(src='/assets/images/Icons/case.png', alt='star', style='height: 2rem; width: 2rem; margin-top:5px; margin-left:50px ')
-                      h2(style='float: right; margin-right: 50px; margin-bottom: 0rem') 300
-                      h4.profileB(style='margin-bottom: 0rem; margin-top:0px; display:inline-block') Finished
-  nav
-    .card.text-center(style='width:1286px')
-      .card-header(style='padding-bottom:0rem')
-        #nav-tab.nav.nav-tabs(role='tablist', style='border:0px')
-          a#settings-tab.nav-item.nav-link(href='#Settings', data-toggle='tab', data-placement='bottom', title='Edit',role='tab', aria-controls='settings', aria-selected='true')
-            img.size-ico(src='/assets/images/icons/settings.png', alt='Edit')
-          a#personal-info-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Personal-Info', role='tab', aria-controls='Personal-Info', aria-selected='false') Personal Info
-          a#services-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Services', role='tab', aria-controls='Services', aria-selected='false') Services
-          a#reviews-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Reviews', role='tab', aria-controls='Reviews', aria-selected='false') Reviews
-      #nav-tabContent.tab-content
-        #Settings.tab-pane.fade(role='tabpanel', aria-labelledby='settings-tab')
-          .col-sm-3(style='display: inline-block; width: 642px; padding-top: 40px; padding-left: 50px; text-align:left')
-            .form-group.col-md-6.noP
-              label(for='displayname') Change Email
-                input#email.form-control(type='email' name='email' aria-describedby='emailHelp' placeholder='eg. johndoe@email.com' maxlength='320' required='', style='width: 23rem;')
-            .form-group.col-md-6.noP
-              label(for='changenumber') Change Contact Number
-                input#contact.form-control(type='number' name='contact' aria-describedby='contactHelp' placeholder='09236835707' max='99999999999' required='', style='width: 23rem;')
-            .form-group.col-md-6.noP
-              label(for='changepassword') Change Password
-                input#password1.form-control(type='password' name='password' placeholder='Create a Password' minlength='8' maxlength='100' required='', style='width: 23rem;')
-                input#password2.form-control(type='password' name='confirm' aria-describedby='password2Help' placeholder='Retype Password' required='', style='width: 23rem;')
-                small#password2Help.form-text.text-muted Minimum of 8 characters.
-            .form-row
-              .form-group.col-md-6
-                label(for='changepassword') Upload Picture
-                  .custom-file
-                    input#customFile.custom-file-input(type='file')
-                    label.custom-file-label(for='customFile') Choose file
-              .form-group
-                button.btn.btn-primary(style='float:right; margin-top:24px;') Submit
-
-          .col-sm-3(style='display: inline-block; width: 642px; padding-top: 40px; text-align:left')
-            .form-group
-              label.col-md-4.noP.control-label(for='userdesc') User Description
-              .col-md-6.noP
-                textarea#userdesc.form-control(name='userdesc', type='text', placeholder='Say something about yourself..', required='', rows='3', style='width: 23rem;')
-            .form-row
-              .form-group.col-md-6
-                label(for='inputCity') City
-                input#inputCity.form-control(type='text')
-              .form-group.col-md-4
-                label(for='inputState') Barangay
-                input#inputBarangay.form-control(type='text')
-            .form-group
-              label.col-md-4.noP.control-label(for='userdesc') Also Available At
-              .col-md-6.noP
-                textarea#userdesc.form-control(name='userdesc', type='text', placeholder='Social media links go here..', required='', rows='3', style='width: 23rem;')
-
-        #Personal-Info.tab-pane.fade(role='tabpanel', aria-labelledby='personal-info-tab')
-          .col-sm-3(style='display: inline-block; width: 642px; padding-top: 40px; padding-left: 50px; text-align:left')
-            i.fa.fa-building.fa-2x
-            span.font2 City: Manila
-            hr
-            i.fa.fa-address-book.fa-2x
-            span.font2 Contact: 0916754679
-            hr
-          .col-sm-3(style='display: inline-block; width: 642px; padding-top: 40px; padding-right: 50px; text-align:left')
-            i.fa.fa-home.fa-2x
-            span.font2 Barangay: Tondo
-            hr
-            i.fa.fa-envelope.fa-2x
-            span.font2 Email: Flower_Boy@yahoo.com
-            hr
-          .col-sm-3(style='width: 1284px; padding-top: 10px; padding-left: 50px; padding-right: 50px; text-align:left')
-            i.fa.fa-user.fa-2x
-            span.font2 User Description:
-              .container(style='padding-top:20px;')
-                h4 Hello guys welcome to my profile, My lines of proffesion are Plumbing, Rapping and making Beats ayy lmoa
-            hr
-            i.fa.fa-users.fa-2x
-            span.font2 Also Available At
-              .container(style='padding-top:20px;')
-                h4 Facebook: TylerThePlumber
-        #Services.tab-pane.fade(role='tabpanel', aria-labelledby='services-tab')
-          center
-            .container(style='padding-top: 20px; padding-bottom: 20px')
-              p.font
-                table.table.table-striped.font1.box-shadow-mini
-                  thead
-                    tr.text-white
-                      th(scope='col') Service
-                      th(scope='col') Price
-                      th(scope='col') Status
-                      th(scope='col') &nbsp
+  each user in thisUserTab    
+    -var me = `${user.strUserName}`
+      -console.log(me);
+    each thisUser in SelUserTab
+      .sector-container-profile
+        .profile-container
+            .col-sm-3(style='display: inline-block; width: 160px; padding-left: 0px; padding-right: 0px')
+              img(src=`/userImages/profile/${thisUser.strProfilePic}`, alt='Card image cap', style='height: 10rem; width: 10rem; border-right: 1px solid; ')
+            .col-sm-3(style='display: inline-block; width: 894px ')
+              if (thisUser.intStatus == 1)
+                          h2.text-headline-profile(style='border-bottom: 1px solid') Unverified 
+              else
+                          h2.text-headline-profile(style='border-bottom: 1px solid') Verified 
+              h1(style='margin-left:15px') #{thisUser.strName}
+            .col-sm-3(style='width: 190px; border-left: 1px solid; height:160px')
+                table(style='width:190px')
                   tbody
-                      tr
-                        td Plumbing
-                          td Php 200 / hr
-                          td Available
-                          td &nbsp
-                      tr
-                        td Laundry
-                          td Php 150 / hr
-                          td Unavailable
-                          td &nbsp
-                      tr
-                        td Tutor
-                          td Php 300 / hr
-                          td Available
-                          td &nbsp
-        #Reviews.tab-pane.fade(role='tabpanel', aria-labelledby='reviews-tab', style='height: 300px')
-          .sector-container-footer
-            .footer-container
-              .col-sm-3(style='display: inline-block; width: 110px; padding-top: 10px; padding-left: 10px; text-align:left')
-                .pull-left.image
-                  .chat-img(style='height:80px; width:80px')
-                    img.img-circle(src='/assets/images/profile.png', alt='User Image')
-              .col-sm-3(style='display: inline-block; width: 950px; padding-top: 10px; padding-left: 10px; text-align:left')
-                h2 Takeoff
-                h3 Help sample text eksdee
-              .col-sm-3(style='width: 140px; display: inline-block; padding-top: 10px; padding-left: 10px')
-                img(src='/assets/images/Icons/star.png', alt='star', style='height: 4rem; width: 4rem; margin-top:5px; float:left')
-                h1(style='float:right; margin-top: 20px') 4.5
-            .footer-container
-              .col-sm-3(style='display: inline-block; width: 110px; padding-top: 10px; padding-left: 10px; text-align:left')
-                .pull-left.image
-                  .chat-img(style='height:80px; width:80px')
-                    img.img-circle(src='/assets/images/profile.png', alt='User Image')
-              .col-sm-3(style='display: inline-block; width: 950px; padding-top: 10px; padding-left: 10px; text-align:left')
-                h2 Takeoff
-                h3 Help sample text eksdee
-              .col-sm-3(style='width: 140px; display: inline-block; padding-top: 10px; padding-left: 10px')
-                img(src='/assets/images/Icons/star.png', alt='star', style='height: 4rem; width: 4rem; margin-top:5px; float:left')
-                h1(style='float:right; margin-top: 20px') 4.5
+                    tr
+                      td(style='padding-top:3px')
+                        img(src='/assets/images/Icons/star.png', alt='star', style='height: 2rem; width: 2rem; margin-top:5px; margin-left:50px;')
+                        h2(style='float: right; margin-right: 50px; margin-bottom: 0rem') 4.8
+                        h4.profileA(style='margin-bottom: 0rem; margin-top:0px; display:inline-block') Rating
+                    tr
+                      td(style='padding-top:3px')
+                        img(src='/assets/images/Icons/case.png', alt='star', style='height: 2rem; width: 2rem; margin-top:5px; margin-left:50px ')
+                        h2(style='float: right; margin-right: 50px; margin-bottom: 0rem') 300
+                        h4.profileB(style='margin-bottom: 0rem; margin-top:0px; display:inline-block') Finished
+    nav
+      .card.text-center(style='width:1286px')
+        .card-header(style='padding-bottom:0rem')
+          each thisUser in SelUserTab
+            #nav-tab.nav.nav-tabs(role='tablist', style='border:0px')
+              -uname = `${thisUser.strUserName}`
+                -console.log(uname);
+                  if me==uname  
+                    a#settings-tab.nav-item.nav-link(href='#Settings', data-toggle='tab', data-placement='bottom', title='Edit',role='tab', aria-controls='settings', aria-selected='true')
+                      img.size-ico(src='/assets/images/icons/settings.png', alt='Edit')
+                    a#personal-info-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Personal-Info', role='tab', aria-controls='Personal-Info', aria-selected='false') Personal Info
+                    a#services-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Services', role='tab', aria-controls='Services', aria-selected='false') Services
+                    a#reviews-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Reviews', role='tab', aria-controls='Reviews', aria-selected='false') Reviews
+                  else
+                    a#personal-info-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Personal-Info', role='tab', aria-controls='Personal-Info', aria-selected='false') Personal Info
+                    a#services-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Services', role='tab', aria-controls='Services', aria-selected='false') Services
+                    a#reviews-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Reviews', role='tab', aria-controls='Reviews', aria-selected='false') Reviews
+        #nav-tabContent.tab-content
+          #Settings.tab-pane.fade(role='tabpanel', aria-labelledby='settings-tab')
+            each thisUser in SelUserTab        
+              form.ui.form(method='post' action=`/profile/edit/${thisUser.intAccNo}` enctype='multipart/form-data')  
+                .col-sm-3(style='display: inline-block; width: 642px; padding-top: 40px; padding-left: 50px; text-align:left')
+                      .form-group.col-md-6.noP
+                        label(for='displayname') Change Email
+                          input#email.form-control(type='email' name='email' value= thisUser.strEmail aria-describedby='emailHelp' placeholder='eg. johndoe@email.com' maxlength='320' required='', style='width: 23rem;')
+                      .form-group.col-md-6.noP
+                        label(for='changenumber') Change Contact Number
+                          input#contact.form-control(type='number' name='contactno' value= thisUser.strContactNo aria-describedby='contactHelp' placeholder='09236835707' max='99999999999' required='', style='width: 23rem;')
+                      .form-group.col-md-6.noP
+                        label(for='changepassword') Change Password
+                          input#password1.form-control(type='password' name='password' placeholder='Create a Password' minlength='8' maxlength='100' required='', style='width: 23rem;')
+                          input#password2.form-control(type='password' name='confirm' aria-describedby='password2Help' placeholder='Retype Password' required='', style='width: 23rem;')
+                          small#password2Help.form-text.text-muted Minimum of 8 characters.
+                      .form-row
+                        .form-group.col-md-6
+                          label(for='changepassword') Upload Picture
+                              input#profilepic.filestyle(type='file' name='profilepic' data-classbutton='btn btn-primary' data-input='false' data-classicon='icon-plus' )
+                        .form-group
+                          button.btn.btn-primary(style='float:right; margin-top:24px;') Submit 
+                .col-sm-3(style='display: inline-block; width: 642px; padding-top: 40px; text-align:left')
+                        .form-group.col-md-6
+                          label(for='inputCity') City
+                          input#inputCity.form-control(type='text' name='city' value= thisUser.strCity placeholder='Quezon City' required='')
+                        .form-group.col-md-6
+                          label(for='inputState') Barangay
+                          input#inputBarangay.form-control(type='text' name='barangay' value= thisUser.strBarangay placeholder='Tatalon' required='')
+                      
+
+          #Personal-Info.tab-pane.fade(role='tabpanel', aria-labelledby='personal-info-tab')
+            .col-sm-3(style='display: inline-block; width: 642px; padding-top: 40px; padding-left: 50px; text-align:left')
+              each thisUser in SelUserTab
+                i.fa.fa-building.fa-2x
+                span.font2 City: #{thisUser.strCity}
+                hr
+                i.fa.fa-address-book.fa-2x
+                span.font2 Contact: #{thisUser.strContactNo}
+                hr
+            .col-sm-3(style='display: inline-block; width: 642px; padding-top: 40px; padding-right: 50px; text-align:left')
+              each thisUser in SelUserTab
+                i.fa.fa-home.fa-2x
+                span.font2 Barangay: #{thisUser.strBarangay}
+                hr
+                i.fa.fa-envelope.fa-2x
+                span.font2 Email: #{thisUser.strEmail}
+                hr
+          #Services.tab-pane.fade(role='tabpanel', aria-labelledby='services-tab')
+            center
+              .container(style='padding-top: 20px; padding-bottom: 20px')
+                p.font
+                  table.table.table-striped.font1.box-shadow-mini
+                    thead
+                      tr.text-white
+                        th(scope='col') Service
+                        th(scope='col') Price
+                        th(scope='col') Status
+                        th(scope='col') &nbsp
+                    tbody
+                      each serv in resultsTwoForPug
+                        tr
+                            td #{serv.strServName}
+                            if serv.intPriceType == '1'
+                              td Php #{serv.fltPrice}
+                            else 
+                              td Php #{serv.fltPrice} / hr
+                            if serv.intServStatus == '1'
+                              td Available
+                            else if serv.intServStatus == '0'
+                              td Unavailable
+                              td &nbsp
+          #Reviews.tab-pane.fade(role='tabpanel', aria-labelledby='reviews-tab', style='height: 300px')
+            .sector-container-footer
+              .footer-container
+                .col-sm-3(style='display: inline-block; width: 110px; padding-top: 10px; padding-left: 10px; text-align:left')
+                  .pull-left.image
+                    .chat-img(style='height:80px; width:80px')
+                      img.img-circle(src='/assets/images/profile.png', alt='User Image')
+                .col-sm-3(style='display: inline-block; width: 950px; padding-top: 10px; padding-left: 10px; text-align:left')
+                  h2 Takeoff
+                  h3 Help sample text eksdee
+                .col-sm-3(style='width: 140px; display: inline-block; padding-top: 10px; padding-left: 10px')
+                  img(src='/assets/images/Icons/star.png', alt='star', style='height: 4rem; width: 4rem; margin-top:5px; float:left')
+                  h1(style='float:right; margin-top: 20px') 4.5
+              .footer-container
+                .col-sm-3(style='display: inline-block; width: 110px; padding-top: 10px; padding-left: 10px; text-align:left')
+                  .pull-left.image
+                    .chat-img(style='height:80px; width:80px')
+                      img.img-circle(src='/assets/images/profile.png', alt='User Image')
+                .col-sm-3(style='display: inline-block; width: 950px; padding-top: 10px; padding-left: 10px; text-align:left')
+                  h2 Takeoff
+                  h3 Help sample text eksdee
+                .col-sm-3(style='width: 140px; display: inline-block; padding-top: 10px; padding-left: 10px')
+                  img(src='/assets/images/Icons/star.png', alt='star', style='height: 4rem; width: 4rem; margin-top:5px; float:left')
+                  h1(style='float:right; margin-top: 20px') 4.5
