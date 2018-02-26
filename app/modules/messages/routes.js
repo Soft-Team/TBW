@@ -105,14 +105,10 @@ function ftrans(req,res,next){
         results[0].Mstart = time.charAt(3).concat(time.charAt(4));
         results[0].Sampm = time.charAt(6).concat(time.charAt(7));
 
-        console.log('-----VARIABLES-----');
-        console.log(time);
-        console.log(date);
       }
       else{
         req.transstatus = "none";
       }
-      console.log(results);
       req.ftrans= results;
       return next();
     });
@@ -242,7 +238,6 @@ router.post('/transet/edit/:chatid', flog, messCount, fmess, fchat, fparams, ftr
     var dtm = date.concat(' '+start);
     var stringquery1 = "UPDATE tbltransaction SET intTransPriceType= ?, fltTransPrice= ?, dtmTransScheduled= ? WHERE intTransID= ?";
     var bodyarray1 = [req.body.pricetype, req.body.price, dtm, req.ftrans[0].intTransID];
-    console.log(bodyarray1);
     var stringquery2 = "INSERT INTO tblmessage ( intMessChatID, txtMessage, dtmDateSent, intMessPSeen, intSender ) VALUES ( ?, ?, NOW(), 1, 1)";
     var bodyarray2 = [req.params.chatid, "-- I have FIXED the invoice, check it out on the upper right corner!"];
     db.beginTransaction(function(err) {
@@ -257,6 +252,28 @@ router.post('/transet/edit/:chatid', flog, messCount, fmess, fchat, fparams, ftr
                   res.redirect('/messages/'+req.fparams[0].intChatID);
               });
           });
+      });
+    });
+  }
+});
+router.post('/transet/accept/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, (req, res) => {;
+  if(req.transstatus == 'none'){
+    res.redirect('/messages/'+req.fparams[0].intChatID);
+  }
+  else{
+    var stringquery = "INSERT INTO tblmessage ( intMessChatID, txtMessage, dtmDateSent, intMessSSeen, intSender ) VALUES ( ?, ?, NOW(), 1, 1)";
+    var bodyarray = [req.params.chatid, "-- I have ACCEPTED your offer, transaction is now ONGOING !"];
+    db.beginTransaction(function(err) {
+      if (err) console.log(err);
+      db.query("UPDATE tbltransaction SET dtmTransStarted= NOW() WHERE intTransID= ?", [req.ftrans[0].intTransID], function (err,  resultsCount, fields) {
+        if (err) console.log(err);
+        db.query(stringquery, bodyarray, function (err,  resultsCount, fields) {
+            if (err) console.log(err);
+            db.commit(function(err) {
+                if (err) console.log(err);
+                res.redirect('/messages/'+req.fparams[0].intChatID);
+            });
+        });
       });
     });
   }
