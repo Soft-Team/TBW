@@ -61,10 +61,10 @@ block main
   br
   .container
     .card-deck.ml-1
-      .row
+      .row(style='padding-left: 60px;')
         each serv in searchServ
           .col(style='margin-left: -5px;')
-            span.card(style= 'height: 15.1.5rem; width: 15rem').border.border-primary.mb-3.box-shadow-mini
+            span.card(style= 'height: 18.3rem; width: 15rem').border.border-primary.mb-3.box-shadow-mini
               table
                 tbody
                   tr
@@ -97,7 +97,7 @@ block main
                     .f(style='text-align:center') ₱#{serv.fltPrice}/hr
                 .btn-group.special(role='group')
                   a.button.btn.btn-primary(href='/services/'+varServName+'/'+varCity+'/'+varBrngy+'/'+varPricing+'/'+varSorting+'/request/'+serv.intServID style='width: 14.7rem; border-radius: 0px; border-radius: 0px 0px 0px 3px;') Request
-                  button.btn.btn-secondary(href='' style='width: 14.7rem; border-radius: 0px 0px 3px 0px;') Portfolio
+                  button.btn.btn-secondary(href='' style='width: 14.7rem; border-radius: 0px 0px 3px 0px; height:40px') Portfolio
         .col          
 
   block servrequest
