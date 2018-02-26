@@ -39,6 +39,7 @@ function fchat(req,res,next){
         }
       }
       req.chat= results;
+      console.log(results);
       return next();
     });
 }
@@ -283,6 +284,15 @@ function ftest(req,res,next){
     return next();
   });
 }
+function fprovider(req,res,next){
+  /*Service Provider, Match(params);
+  *(tblchat)*(tblservice)*/
+  db.query("SELECT * FROM tblchat INNER JOIN tblservice ON intChatServ= intServID WHERE intChatID= ?",[req.params.chatid], (err, results, fields) => {
+      if (err) console.log(err);
+      req.fprovider= results;
+      return next();
+    });
+}
 
 function render(req,res){
   switch (req.valid) {
@@ -348,7 +358,7 @@ function messRender(req,res){
 router.get('/', flog, messCount, fchat, render);
 router.get('/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, ftodaysched, fregularSched, fspecialSched, messRender);
 
-router.post('/transet/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, ftodaysched, fregularSched, fspecialSched, (req, res) => {;
+router.post('/transet/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, ftodaysched, fregularSched, fspecialSched, (req, res) => {
   if(req.transstatus != 'none'){
     res.redirect('/messages/'+req.fparams[0].intChatID);
   }
@@ -382,7 +392,7 @@ router.post('/transet/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, 
     });
   }
 });
-router.post('/transet/edit/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, ftodaysched, fregularSched, fspecialSched, (req, res) => {;
+router.post('/transet/edit/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, ftodaysched, fregularSched, fspecialSched, (req, res) => {
   if(req.transstatus == 'none'){
     res.redirect('/messages/'+req.fparams[0].intChatID);
   }
@@ -416,7 +426,7 @@ router.post('/transet/edit/:chatid', flog, messCount, fmess, fchat, fparams, ftr
     });
   }
 });
-router.post('/transet/accept/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, (req, res) => {;
+router.post('/transet/accept/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, (req, res) => {
   if(req.transstatus == 'none'){
     res.redirect('/messages/'+req.fparams[0].intChatID);
   }
@@ -436,6 +446,56 @@ router.post('/transet/accept/:chatid', flog, messCount, fmess, fchat, fparams, f
         });
       });
     });
+  }
+});
+router.post('/cancel/:chatid', flog, ftrans, fprovider, (req, res) => {
+  var stringquery = "INSERT INTO tblmessage ( intMessChatID, txtMessage, dtmDateSent, intMessPSeen, intSender ) VALUES ( ?, ?, NOW(), 1, 1)";
+  var bodyarray = [req.params.chatid, "-- has CANCELLED this chat and its transaction."];
+  if(!req.ftrans[0]){
+    db.beginTransaction(function(err) {
+      if (err) console.log(err);
+        db.query(stringquery, bodyarray, function (err,  results, fields) {
+            if (err) console.log(err);
+            db.query("UPDATE tblchat SET intChatStatus= 0 WHERE intChatID= ?",[req.params.chatid], (err, results, fields) => {
+                if (err) console.log(err);
+                db.query("UPDATE tblservice SET intServStatus= 1 WHERE intServAccNo= ? AND intServStatus= 2", [req.fprovider[0].intServAccNo], function (err,  results, fields) {
+                    if (err) console.log(err);
+                    db.query("INSERT INTO tblcancellation (intCancelChatID, dtmCancelDate, txtCancelReason) VALUES (?,NOW(),?)", [req.params.chatid, req.body.desc], function (err,  results, fields) {
+                        if (err) console.log(err);
+                        db.commit(function(err) {
+                            if (err) console.log(err);
+                              res.redirect('/messages');
+                        });
+                    });
+                });
+            });
+        });
+    });
+  }
+  else{
+    db.beginTransaction(function(err) {
+      if (err) console.log(err);
+      db.query(stringquery, bodyarray, function (err,  results, fields) {
+          if (err) console.log(err);
+          db.query("UPDATE tbltransaction SET intTransStatus= 3 WHERE intTransID= ?",[req.ftrans[0].intTransID], function (err,  results, fields) {
+              if (err) console.log(err);
+              db.query("UPDATE tblchat SET intChatStatus= 0 WHERE intChatID= ?",[req.params.chatid], function (err,  results, fields) {
+                  if (err) console.log(err);
+                  db.query("UPDATE tblservice SET intServStatus= 1 WHERE intServAccNo= ? AND intServStatus= 2", [req.ftrans[0].intServAccNo], function (err,  results, fields) {
+                      if (err) console.log(err);
+                      db.query("INSERT INTO tblcancellation (intCancelChatID, dtmCancelDate, txtCancelReason) VALUES (?,NOW(),?)", [req.params.chatid, req.body.desc], function (err,  results, fields) {
+                          if (err) console.log(err);
+                          db.commit(function(err) {
+                              if (err) console.log(err);
+                                res.redirect('/messages');
+                          });
+                      });
+                  });
+              });
+          });
+      });
+    });
+
   }
 });
 
