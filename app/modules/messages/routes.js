@@ -265,7 +265,7 @@ router.post('/transet/accept/:chatid', flog, messCount, fmess, fchat, fparams, f
     var bodyarray = [req.params.chatid, "-- I have ACCEPTED your offer, transaction is now ONGOING !"];
     db.beginTransaction(function(err) {
       if (err) console.log(err);
-      db.query("UPDATE tbltransaction SET dtmTransStarted= NOW() WHERE intTransID= ?", [req.ftrans[0].intTransID], function (err,  resultsCount, fields) {
+      db.query("UPDATE tbltransaction SET intTransStatus= 1, dtmTransStarted= NOW() WHERE intTransID= ?", [req.ftrans[0].intTransID], function (err,  resultsCount, fields) {
         if (err) console.log(err);
         db.query(stringquery, bodyarray, function (err,  resultsCount, fields) {
             if (err) console.log(err);
