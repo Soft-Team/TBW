@@ -6,6 +6,7 @@ var timeFormat = require('../welcome/timeFormat');
 var messCount = require('../welcome/messCount');
 var prepend = require('../welcome/prepend');
 var numberFormat = require('../welcome/numberFormat');
+var dateformat = require('../welcome/dateformat');
 
 function fchat(req,res,next){
   /*All Chats of Current User, Match(session);
@@ -82,20 +83,53 @@ function ftrans(req,res,next){
       if (err) console.log(err);
       if(!(!results[0])){
         req.transstatus = results[0].intTransStatus;
-        date = results[0].dtmTransScheduled;
-        for(count=0;count<results.length;count++){
-          results[count].date = [date.getMonth()+1,date.getDate(),date.getFullYear()].join('/');
-          results[count].prepAccNo = prepend(results[count].intAccNo);
-          results[count].prepTransID = prepend(results[count].intTransID);
-          results[count].formatPrice = numberFormat(results[count].fltTransPrice.toFixed(2));
-        }
+
+        var zero = "0", Sampm, dm, dd, dy;
+        var date = results[0].dtmTransScheduled;
+        var formatDate = dateformat(date);
+        var time = timeFormat(date);
+
+        results[0].prepTransID = prepend(results[0].intTransID);
+        results[0].formatPrice = numberFormat(results[0].fltTransPrice.toFixed(2));
+
+        dm = formatDate.charAt(4).concat(formatDate.charAt(5));
+        dd = formatDate.charAt(6).concat(formatDate.charAt(7));
+        dy = formatDate.charAt(0) + formatDate.charAt(1) + formatDate.toString().charAt(2) + formatDate.toString().charAt(3);
+
+        results[0].month = dm;
+        results[0].day = dd;
+        results[0].year = dy;
+        results[0].date = date.toDateString("en-US").slice(4, 15);
+
+        results[0].Hstart = time.charAt(0).concat(time.charAt(1));
+        results[0].Mstart = time.charAt(3).concat(time.charAt(4));
+        results[0].Sampm = time.charAt(6).concat(time.charAt(7));
+
+        console.log('-----VARIABLES-----');
+        console.log(time);
+        console.log(date);
       }
       else{
         req.transstatus = "none";
       }
+      console.log(results);
       req.ftrans= results;
       return next();
     });
+}
+function ftest(req,res,next){
+  /*Transaction of curent Chat, Match(params);
+  *(tblchat)*(tblservice)*(tbltransaction)*/
+  db.query("SELECT * FROM tblchat INNER JOIN tblservice ON intChatServ= intServID INNER JOIN tbltransaction ON intChatID= intTransChatID WHERE intChatID= ?",[req.params.chatid], (err, results, fields) => {
+    if (err) console.log(err);
+    if(!(!results[0])){
+
+    }
+    /*console.log('-------TEST_RESULTS-------');
+    console.log(results);*/
+    req.ftest= results;
+    return next();
+  });
 }
 
 function render(req,res){
@@ -145,7 +179,6 @@ function messRender(req,res){
                   var count = results[0].count
                   db.commit(function(err) {
                       if (err) console.log(err);
-                      console.log(count);
                       res.render('messages/views/index', { thisUserTab: req.user, messCount: count, messtab: req.mess, messOne: req.mess[0], chattab: req.chat, params: req.params.chatid, transstatus: req.transstatus, transtab: req.ftrans});
                   });
               });
@@ -159,7 +192,7 @@ function messRender(req,res){
 router.get('/', flog, messCount, fchat, render);
 router.get('/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, messRender);
 
-router.post('/invoice/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, (req, res) => {;
+router.post('/transet/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, (req, res) => {;
   if(req.transstatus != 'none'){
     res.redirect('/messages/'+req.fparams[0].intChatID);
   }
@@ -193,4 +226,40 @@ router.post('/invoice/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, 
     });
   }
 });
+router.post('/transet/edit/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, (req, res) => {;
+  if(req.transstatus == 'none'){
+    res.redirect('/messages/'+req.fparams[0].intChatID);
+  }
+  else{
+    var date = req.body.addYear.toString()+'-'+req.body.addMonth+'-'+req.body.addDay;
+    if (req.body.Sampm == 'AM' && req.body.Shours == '12'){
+        req.body.Shours = '00';
+    }
+    if (req.body.Sampm == 'PM' && req.body.Shours != '12'){
+      req.body.Shours = (parseFloat(req.body.Shours) + 12).toString();
+    }
+    var start = req.body.Shours.concat(':'+req.body.Sminutes);
+    var dtm = date.concat(' '+start);
+    var stringquery1 = "UPDATE tbltransaction SET intTransPriceType= ?, fltTransPrice= ?, dtmTransScheduled= ? WHERE intTransID= ?";
+    var bodyarray1 = [req.body.pricetype, req.body.price, dtm, req.ftrans[0].intTransID];
+    console.log(bodyarray1);
+    var stringquery2 = "INSERT INTO tblmessage ( intMessChatID, txtMessage, dtmDateSent, intMessPSeen, intSender ) VALUES ( ?, ?, NOW(), 1, 1)";
+    var bodyarray2 = [req.params.chatid, "-- I have FIXED the invoice, check it out on the upper right corner!"];
+    db.beginTransaction(function(err) {
+      if (err) console.log(err);
+      db.query(stringquery1, bodyarray1, (err, results, fields) => {
+        if (err) res.render('messages/views/invalid/nodate', { thisUserTab: req.user, messCount: req.messCount[0].count, messtab: req.mess, messOne: req.mess[0], chattab: req.chat, params: req.params.chatid, transtab: req.ftrans });
+        else
+          db.query(stringquery2, bodyarray2, function (err,  resultsCount, fields) {
+              if (err) console.log(err);
+              db.commit(function(err) {
+                  if (err) console.log(err);
+                  res.redirect('/messages/'+req.fparams[0].intChatID);
+              });
+          });
+      });
+    });
+  }
+});
+
 exports.messages = router;

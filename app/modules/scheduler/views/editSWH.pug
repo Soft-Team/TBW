@@ -38,12 +38,11 @@ block scheduler
       option(value='PM' selected='') PM
       
   mixin monthsel(thismonth)
-    each count in ['01','02','03','04','05','06','07','08','09','10','11','12']
-      each month, index in ['January','February','March','April','May','June','July','August','September','October','November','December']
-        if index+1 == thismonth
-          option(value= thismonth selected='') #{month}
-        else if index+1 == count
-          option(value= count) #{month}
+    each month, index in ['January','February','March','April','May','June','July','August','September','October','November','December']
+      if index+1 == thismonth 
+        option(value= thismonth selected='') #{month}
+      else
+        option(value= index+1) #{month}
   mixin daysel(thisday)
     each day in ['01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31']
       if day == thisday
