@@ -51,8 +51,14 @@ body{
 .align-right {
     text-align: right !important;
 }
-.box-shadow-mini{
+.box-shadow-mini {
     box-shadow: 0px 1px 3px black;
+}
+.link-white  {
+    color: white !important;
+}
+.link-white:hover  {
+    text-decoration: underline !important;
 }
 
 /*btn-group btn-block*/

@@ -110,8 +110,9 @@ function render(req,res){
       }
       else{
         res.redirect('/messages/'+req.chat[0].intChatID);
-        break;
+
       }
+      break;
   }
 }
 function messRender(req,res){
