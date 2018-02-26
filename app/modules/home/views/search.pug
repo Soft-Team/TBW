@@ -14,12 +14,12 @@ block main
             each search in searchtab
               if search.intAccNo != 0
                 .col(style='margin-left: -5px;')
-                  span.card(style= 'height: 18.3rem; width: 15rem').border.border-primary.mb-3.box-shadow-mini
+                  span.card(style= 'height: 14.4rem; width: 15rem').border.border-primary.mb-3.box-shadow-mini
                     table
                       tbody
                         tr
                           td(rowspan='2') 
-                            img(src='/assets/images/Tyler.jpg', alt='Card image cap', style='height: 8rem; width: 8rem; border-radius: 3px 0px 0px 0px; border-right: 1px solid #007BFF;')
+                            img(src='/assets/images/Unknown.jpg', alt='Card image cap', style='height: 8rem; width: 8rem; border-radius: 3px 0px 0px 0px; border-right: 1px solid #007BFF;')
                           td
                             img(src='/assets/images/Icons/star.png', alt='star', style='height: 1.5rem; width: 1.5rem; margin-left:20px;')
                             p(style='float: right; margin-right: 30px; margin-bottom: 0rem') 4.8
@@ -41,9 +41,9 @@ block main
                         .f(style='text-align:center') #{search.strName}
                         .row
                           .col(style='padding-right:0px; text-align:center; border-right: 1px solid #007BFF;')
-                            .f #{search.strCity}
+                            .f(style='border:0px !important') #{search.strCity}
                           .col(style='padding-left:0px; text-align:center;')
-                            .f #{search.strBarangay}
+                            .f(style='border:0px !important') #{search.strBarangay}
                 .col          
 
   
