@@ -56,9 +56,9 @@ function servValidation(req, res, next){
   });
 }
 function servOngoing(req, res, next){
-  /*All UnavOngoing Services of Current User
+  /*All UnavOngoing Services of Current User, Match(session)
   *(tblservice)*/
-  db.query("SELECT * FROM tblservice WHERE intServAccNo= '1' AND intServStatus= '2' ", (err, results, fields) => {
+  db.query("SELECT * FROM tblservice WHERE intServAccNo= ? AND intServStatus= '2' ",[req.session.user], (err, results, fields) => {
       if (err) return res.send(err);
       req.servOngoing = results;
       return next();

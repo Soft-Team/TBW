@@ -76,8 +76,8 @@ function fparams(req,res,next){
     });
 }
 function ftrans(req,res,next){
-  /*Current Chat, Match(params);
-  *(tblchat)*/
+  /*Transaction of curent Chat, Match(params);
+  *(tblchat)*(tblservice)*(tbltransaction)*/
   db.query("SELECT * FROM tblchat INNER JOIN tblservice ON intChatServ= intServID INNER JOIN tbltransaction ON intChatID= intTransChatID WHERE intChatID= ?",[req.params.chatid], (err, results, fields) => {
       if (err) console.log(err);
       if(!(!results[0])){

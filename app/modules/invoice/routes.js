@@ -6,8 +6,8 @@ var prepend = require('../welcome/prepend');
 var numberFormat = require('../welcome/numberFormat');
 
 function finvoice(req,res,next){
-  /*Current Chat, Match(params);
-  *(tbltransaction)-(tblchat)-(tblservice)*(tbluser)*/
+  /*Transaction Info for Invoice, Match(params);
+  *(tbltransaction)-(tblchat)-(tblservice)*(tbluser)*(tblservicetag)*/
   var stringquery="SELECT tbltransaction.* , tbluser.*, tblservicetag.* FROM tbltransaction INNER JOIN tblchat ON intTransChatID= intChatID INNER JOIN tblservice ON intChatServ= intServID INNER JOIN tbluser ON intServAccNo= intAccNo INNER JOIN tblservicetag ON intServTag= intServTagID WHERE intTransID= ? ";
   stringquery = stringquery.concat("UNION SELECT tbltransaction.* , tbluser.*, tblservicetag.* FROM tbltransaction INNER JOIN tblchat ON intChatID= intTransChatID INNER JOIN tblservice ON intChatServ= intServID INNER JOIN tbluser ON intChatSeeker= intAccNo INNER JOIN tblservicetag ON intServTag= intServTagID WHERE intTransID= ?");
   db.query(stringquery,[req.params.transid, req.params.transid], (err, results, fields) => {
