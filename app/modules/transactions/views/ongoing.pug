@@ -7,7 +7,7 @@ block main
 
   p  
   center
-    .container
+    .container(style='margin-bottom: 133px !important;')
       p.font
         table.table.table-striped.font1.box-shadow-mini
           thead
@@ -18,17 +18,31 @@ block main
               th(scope='col', style='padding-left:0px; padding-right:0px; text-align: left;') dule
               th(scope='col', style='padding-left:0px; padding-right:0px;') &nbsp
               th(scope='col', style='padding-left:0px; padding-right:0px;') &nbsp
+              th(scope='col', style='padding-left:0px; padding-right:0px;') &nbsp
           tbody
-              tr
-                td Provider
-                td Tyler The Plumber
-                td(style='width: 200px !important; padding-right:5px; padding-left:0px; text-align: right;') March 01, 2018
-                td(style='padding-left:0px; padding-right:0px; padding-top: 7px; width: 45px !important;')
-                    a(href='', data-toggle='tooltip', data-placement='bottom', title='Message')
-                      img.size(src='/assets/images/icons/Message2.png', alt='Message', style='height:40px; width:40px;')
-                td(style='padding-left:0px; padding-right:0px; padding-top: 7px; width: 40px !important;')
-                    a(href='', data-toggle='tooltip', data-placement='bottom', title='Invoice')
-                      img.size(src='/assets/images/icons/Invoice2.png', alt='Invoice', style='height:38px; width:40px;')
-                td(style='padding-left:0px; padding-right: 60px; width: 39px !important;')
-                    a(href='', data-toggle='tooltip', data-placement='bottom', title='Cancel')
-                      img.size(src='/assets/images/icons/Cancel2.png', alt='Cancel', style='height:27px; width:27px;')
+            each thisuser in thisUserTab
+              each trans in ongoingtab
+                tr
+                  if trans.intServAccNo == thisuser.intAccNo 
+                    td Provider
+                  else
+                    td Seeker
+                  td #{thisuser.strName}
+                  td(style='width: 300px !important; padding-right:5px; padding-left:0px; text-align: right;')
+                    | #{trans.date} - #{trans.time}
+                  if trans.intServAccNo != thisuser.intAccNo 
+                    td
+                  td(style='padding-left:0px; padding-right:0px; padding-top: 7px; width: 45px !important;')
+                      a(href='/messages/'+trans.intChatID, data-toggle='tooltip', data-placement='bottom', title='Message')
+                        img.size(src='/assets/images/icons/Message2.png', alt='Message', style='height:40px; width:40px;')
+                  td(style='padding-left:0px; padding-right:0px; padding-top: 7px; width: 40px !important;')
+                      a(href='/invoice/'+trans.intTransID, data-toggle='tooltip', data-placement='bottom', title='Invoice')
+                        img.size(src='/assets/images/icons/Invoice2.png', alt='Invoice', style='height:38px; width:40px;')
+                  if trans.intServAccNo == thisuser.intAccNo 
+                    td(style='padding-left:0px; padding-right:0px; padding-top: 7px; width: 90px !important;')
+                      button.btn.btn-success
+                        span(style='margin-right:3px') Finish
+                        i.fa.fa-check-circle
+                  td(style='padding-left:0px; padding-right: 60px; width: 39px !important;')
+                      a(href='', data-toggle='tooltip', data-placement='bottom', title='Cancel')
+                        img.size(src='/assets/images/icons/Cancel2.png', alt='Cancel', style='height:27px; width:27px;')

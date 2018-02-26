@@ -425,7 +425,6 @@ router.post('/', flog, messCount, (req, res) => {
     req.body.brngy= 'any';
   res.redirect('/services/'+ req.body.searchtag +'/'+ req.body.city +'/'+ req.body.brngy +'/'+ req.body.pricing +'/'+ req.body.sorting);
 });
-
 router.post('/request/:servid', flog, messCount, servStatus, requestServ, (req, res) => {
   if(!req.servStatus[0]){
     res.render('welcome/views/noroute', {thisUserTab: req.user, messCount: req.messCount[0].count});
