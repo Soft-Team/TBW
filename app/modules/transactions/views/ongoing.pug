@@ -17,11 +17,9 @@ block main
               each thisuser in thisUserTab
                 each trans in ongoingtab
                   if trans.intServAccNo != thisuser.intAccNo  
-                    th(scope='col', style='padding-left:0px; padding-right:0px;') &nbsp
-              th(scope='col', style='text-align: right; padding-right: 0px') Sche
-              th(scope='col', style='padding-left:0px; padding-right:0px; text-align: left;') dule
-              th(scope='col', style='padding-left:0px; padding-right:0px;') &nbsp
-              th(scope='col', style='padding-left:0px; padding-right:0px;') &nbsp
+                    th(scope='col', style='padding-left:0px; padding-right:0px;') Schedule
+              th(scope='col', style='text-align: right; padding-right: 0px') &nbsp
+              th(scope='col', style='padding-left:0px; padding-right:0px; text-align: left;') &nbsp
               each thisuser in thisUserTab
                 each trans in ongoingtab
                   if trans.intServAccNo == thisuser.intAccNo  
@@ -37,7 +35,7 @@ block main
                     td Seeker
                   td #{trans.strName}
                   if trans.intServAccNo != thisuser.intAccNo 
-                    td
+                    
                   td(style='width: 300px !important; padding-right:5px; padding-left:0px; text-align: right;')
                     | #{trans.date} - #{trans.time}
                   td(style='padding-left:0px; padding-right:0px; padding-top: 7px; width: 45px !important;')
@@ -49,11 +47,13 @@ block main
                           img.size(src='/assets/images/icons/Invoice2.png', alt='Invoice', style='height:38px; width:40px;')
                   if trans.intServAccNo == thisuser.intAccNo 
                     td(style='padding-left:0px; padding-right:0px; padding-top: 7px; width: 90px !important;')
-                      a.button.btn.btn-success(href='/transactions/ongoing/finish/'+trans.intTransID)
+                      a.button.btn.btn-success(href='/transactions/ongoing/finish/'+trans.intTransID, style='margin: 0px 5px 0px 5px;')
                         span(style='margin-right:3px') Finish
                         i.fa.fa-check-circle
-                  td(style='padding-left:0px; padding-right: 60px; width: 39px !important;')
-                      a(href='', data-toggle='tooltip', data-placement='bottom', title='Cancel')
-                        img.size(src='/assets/images/icons/Cancel2.png', alt='Cancel', style='height:27px; width:27px;')
+                  else
+                    td &nbsp
+                  //- td(style='padding-left:0px; padding-right: 0px; width: 39px !important;')
+                  //-     a(href='', data-toggle='tooltip', data-placement='bottom', title='Cancel')
+                  //-       img.size(src='/assets/images/icons/Cancel2.png', alt='Cancel', style='height:27px; width:27px;')
 
   block ongoingtrans
