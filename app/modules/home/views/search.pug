@@ -38,7 +38,8 @@ block main
                         else 
                           .f(style='text-align:center; border-top: 1px solid #007BFF; color: gray;') Unverified
                         .f(style='text-align:center;') #{search.prepend}
-                        .f(style='text-align:center') #{search.strName}
+                        .f(style='text-align:center')
+                          a(href='/profile/'+search.intAccNo) #{search.strName}
                         .row
                           .col(style='padding-right:0px; text-align:center; border-right: 1px solid #007BFF;')
                             .f(style='border:0px !important') #{search.strCity}

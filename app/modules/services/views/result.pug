@@ -88,7 +88,8 @@ block main
                   else
                     .f(style='text-align:center; border-top: 1px solid #007BFF; color: green;') Verified
                   .f(style='text-align:center;') #{serv.prepend}
-                  .f(style='text-align:center') #{serv.strName}
+                  .f(style='text-align:center')
+                    a(href='/profile/'+serv.intAccNo) #{serv.strName}
                   .row
                     .col(style='padding-right:0px; text-align:center; border-right: 1px solid #007BFF;')
                       .f #{serv.strCity}

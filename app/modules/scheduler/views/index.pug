@@ -65,10 +65,14 @@ block main
             tr
               th.align-left(scope='col' colspan="3") Current Transaction Schedule
           tbody
-            tr
-              th(scope='row') Feb 20, 2018
-              td 11AM - 2PM
-              td Manila
+            if emptytrans == 1
+              tr
+                td none
+            else
+              each trans in ongoingtrans
+                tr
+                  th(scope='row') #{trans.date}
+                  td #{trans.time}
     .row
       .col
         table.table.table-striped.box-shadow-mini

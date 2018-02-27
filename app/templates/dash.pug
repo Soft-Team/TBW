@@ -24,8 +24,9 @@ block dash
                 //- img(src='/assets/images/Tyler.jpg', alt='User Image', style='height: 50px, width: 50px')
             .pull-right.info
                 each thisuser in thisUserTab
-                  p.text-white(style="margin-top: 10px") #{thisuser.strName}
-                  //- a(href='/profile/'+thisuser.intAccNo)
+                  p.text-white(style="margin-top: 10px")
+                    a(href='/profile/'+thisuser.intAccNo style='color: white; text-decoration: none;') #{thisuser.strName}
+                  
             // search form
             form(method='POST' action='/home/search')
               .input-group

@@ -5,6 +5,7 @@ var flog = require('../welcome/loggedin');
 var formatAMPM = require('../welcome/formatAMPM');
 var dateformat = require('../welcome/dateformat');
 var messCount = require('../welcome/messCount');
+var timeFormat = require('../welcome/timeFormat');
 
 function regularSched(req, res, next){
   /*Regular Schedule of Current User, Match(session)
@@ -309,6 +310,27 @@ function today(req, res, next){
       return next();
   });
 }
+function ongoingtrans(req, res, next){
+  /*Current Date*/
+  db.query("SELECT * FROM tbltransaction INNER JOIN tblchat ON intTransChatID= intChatID INNER JOIN tblservice ON intChatServ= intServID WHERE (intServAccNo= ? OR intChatSeeker= ?) AND intTransStatus= 1",[req.session.user,req.session.user], function (err, results, fields) {
+      if (err) return res.send(err);
+      if(!(!results[0])){
+        for(count=0;count<results.length;count++){
+          var date = results[count].dtmTransScheduled;
+          var formatDate = dateformat(date);
+          var time = timeFormat(date);
+          results[count].date = date.toDateString("en-US").slice(4, 15);
+          results[count].time = time;
+        }
+        req.emptytrans = 0;
+      }
+      else{
+        req.emptytrans = 1;
+      }
+      req.ongoingtrans = results;
+      return next();
+  });
+}
 
 function render(req,res){
   switch (req.valid) {
@@ -328,7 +350,7 @@ function render(req,res){
         var today = "empty";
         emptyToday = 1;
       }
-      res.render('scheduler/views/index', {thisUserTab: req.user, messCount: req.messCount[0].count, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial, todayTab: today, emptynow: emptyToday, curdate: req.today});
+      res.render('scheduler/views/index', {thisUserTab: req.user, messCount: req.messCount[0].count, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial, todayTab: today, emptynow: emptyToday, curdate: req.today, ongoingtrans: req.ongoingtrans, emptytrans: req.emptytrans});
       break;
   }
 }
@@ -351,10 +373,10 @@ function editRWHRender(req,res){
         emptyToday = 1;
       }
       if (!req.regularDay[0]){
-        res.render('scheduler/views/invalid/nosched', {thisUserTab: req.user, messCount: req.messCount[0].count, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial, todayTab: today, emptynow: emptyToday, curdate: req.today});
+        res.render('scheduler/views/invalid/nosched', {thisUserTab: req.user, messCount: req.messCount[0].count, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial, todayTab: today, emptynow: emptyToday, curdate: req.today, ongoingtrans: req.ongoingtrans, emptytrans: req.emptytrans});
       }
       else{
-        res.render('scheduler/views/editRWH', {thisUserTab: req.user, messCount: req.messCount[0].count, regSchedTab: req.regularSched, regDayTab: req.regularDay, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial, todayTab: today, emptynow: emptyToday, curdate: req.today});
+        res.render('scheduler/views/editRWH', {thisUserTab: req.user, messCount: req.messCount[0].count, regSchedTab: req.regularSched, regDayTab: req.regularDay, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial, todayTab: today, emptynow: emptyToday, curdate: req.today, ongoingtrans: req.ongoingtrans, emptytrans: req.emptytrans});
       }
       break;
   }
@@ -396,10 +418,10 @@ function editSWHRender(req,res){
         emptyToday = 1;
       }
       if (!req.specialDay[0]){
-        res.render('scheduler/views/invalid/nosched', {thisUserTab: req.user, messCount: req.messCount[0].count, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial, todayTab: today, emptynow: emptyToday, curdate: req.today})
+        res.render('scheduler/views/invalid/nosched', {thisUserTab: req.user, messCount: req.messCount[0].count, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial, todayTab: today, emptynow: emptyToday, curdate: req.today, ongoingtrans: req.ongoingtrans, emptytrans: req.emptytrans})
       }
       else{
-        res.render('scheduler/views/editSWH', {thisUserTab: req.user, messCount: req.messCount[0].count, regSchedTab: req.regularSched, specDayTab: req.specialDay, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial, todayTab: today, emptynow: emptyToday, curdate: req.today});
+        res.render('scheduler/views/editSWH', {thisUserTab: req.user, messCount: req.messCount[0].count, regSchedTab: req.regularSched, specDayTab: req.specialDay, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial, todayTab: today, emptynow: emptyToday, curdate: req.today, ongoingtrans: req.ongoingtrans, emptytrans: req.emptytrans});
       }
       break;
   }
@@ -423,10 +445,10 @@ function delSWHRender(req,res){
   }
 }
 
-router.get('/', flog, messCount, regularSched, specialSched, todaySpecial, todayRegular, today, render);
-router.get('/rwh/:schedid', flog, messCount, regularSched, regularDay, specialSched, todaySpecial, todayRegular, today, editRWHRender);
+router.get('/', flog, messCount, regularSched, specialSched, todaySpecial, todayRegular, today, ongoingtrans, render);
+router.get('/rwh/:schedid', flog, messCount, regularSched, regularDay, specialSched, todaySpecial, todayRegular, today, ongoingtrans, editRWHRender);
 router.get('/rwh/:schedid/remove', flog, messCount, regularSched, regularDay, specialSched, delRWHRender);
-router.get('/swh/:schedid', flog, messCount, regularSched, specialDay, specialSched, todaySpecial, todayRegular, today, editSWHRender);
+router.get('/swh/:schedid', flog, messCount, regularSched, specialDay, specialSched, todaySpecial, todayRegular, today, ongoingtrans, editSWHRender);
 router.get('/swh/:schedid/remove', flog, messCount, regularSched, specialDay, specialSched, delSWHRender);
 
 router.post('/rwh', flog, messCount, (req, res) => {
@@ -469,9 +491,9 @@ router.post('/rwh/:schedid', flog, messCount, (req, res) => {
     res.redirect('/scheduler');
   });
 });
-router.post('/swh', flog, messCount, regularSched, specialSched, specialTaken, (req, res) => {
+router.post('/swh', flog, messCount, regularSched, specialSched, specialTaken, ongoingtrans, (req, res) => {
   if(!(!req.specialTaken[0])){
-    res.render('scheduler/views/invalid/taken', {thisUserTab: req.user, messCount: req.messCount[0].count, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial});
+    res.render('scheduler/views/invalid/taken', {thisUserTab: req.user, messCount: req.messCount[0].count, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial, ongoingtrans: req.ongoingtrans, emptytrans: req.emptytrans});
   }
   else{
     var date = req.body.addYear.toString()+'-'+req.body.addMonth+'-'+req.body.addDay;
@@ -498,7 +520,7 @@ router.post('/swh', flog, messCount, regularSched, specialSched, specialTaken, (
       var bodyarray = [req.session.user, date, start, end];
     }
     db.query(stringquery, bodyarray, (err, results, fields) => {
-      if (err) res.render('scheduler/views/invalid/nodate', {thisUserTab: req.user, messCount: req.messCount[0].count, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial});
+      if (err) res.render('scheduler/views/invalid/nodate', {thisUserTab: req.user, messCount: req.messCount[0].count, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial, ongoingtrans: req.ongoingtrans, emptytrans: req.emptytrans});
       else res.redirect('/scheduler');
     });
   }
