@@ -189,7 +189,7 @@ function servStatus(req, res, next){
       if (err) return res.send(err);
       req.servStatus = results;
       return next();
-  });W
+  });
 }
 
 function render(req,res){

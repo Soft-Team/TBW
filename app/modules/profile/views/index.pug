@@ -14,9 +14,9 @@ block main
               img(src=`/userImages/profile/${thisUser.strProfilePic}`, alt='Card image cap', style='height: 10rem; width: 10rem; border-right: 1px solid; ')
             .col-sm-3(style='display: inline-block; width: 894px ')
               if (thisUser.intStatus == 1)
-                          h2.text-headline-profile(style='border-bottom: 1px solid') Unverified 
+                          h2.text-headline-profile(style='border-bottom: 1px solid #000000; color:grey;') Unverified 
               else
-                          h2.text-headline-profile(style='border-bottom: 1px solid') Verified 
+                          h2.text-headline-profile(style='border-bottom: 1px solid; color:green;') Verified 
               h1(style='margin-left:15px') #{thisUser.strName}
                 form(method='POST' action='/myservices' style='float:right; margin-right: 30px; margin-top: 5px !important;')
                   .form-group
@@ -72,14 +72,14 @@ block main
               -uname = `${thisUser.strUserName}`
                 -console.log(uname);
                   if me==uname  
-                    a#settings-tab.nav-item.nav-link(href='#Settings', data-toggle='tab', data-placement='bottom', title='Edit',role='tab', aria-controls='settings', aria-selected='true')
+                    a#settings-tab.nav-item.nav-link(href='#Settings', data-toggle='tab', data-placement='bottom', title='Edit',role='tab', aria-controls='settings', aria-selected='false')
                       img.size-ico(src='/assets/images/icons/settings.png', alt='Edit')
-                    a#personal-info-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Personal-Info', role='tab', aria-controls='Personal-Info', aria-selected='false') Personal Info
+                    a#personal-info-tab.nav-item.nav-link.active.text-b(data-toggle='tab', href='#Personal-Info', role='tab', aria-controls='Personal-Info', aria-selected='true') Personal Info
                     a#services-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Services', role='tab', aria-controls='Services', aria-selected='false') Services
                     a#reviews-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Reviews', role='tab', aria-controls='Reviews', aria-selected='false') Reviews
                     a#portfolio-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Portfolio', role='tab', aria-controls='Portfolio', aria-selected='false') Portfolio
                   else
-                    a#personal-info-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Personal-Info', role='tab', aria-controls='Personal-Info', aria-selected='false') Personal Info
+                    a#personal-info-tab.nav-item.nav-link.active.text-b(data-toggle='tab', href='#Personal-Info', role='tab', aria-controls='Personal-Info', aria-selected='true') Personal Info
                     a#services-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Services', role='tab', aria-controls='Services', aria-selected='false') Services
                     a#reviews-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Reviews', role='tab', aria-controls='Reviews', aria-selected='false') Reviews
                     a#portfolio-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Portfolio', role='tab', aria-controls='Portfolio', aria-selected='false') Portfolio
@@ -128,7 +128,7 @@ block main
                           button.btn.btn-primary(style='float:right; margin-top:24px;') Upload 
                       
 
-          #Personal-Info.tab-pane.fade(role='tabpanel', aria-labelledby='personal-info-tab')
+          #Personal-Info.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='personal-info-tab')
             .col-sm-3(style='display: inline-block; width: 642px; padding-top: 40px; padding-left: 50px; text-align:left')
               each thisUser in SelUserTab
                 i.fa.fa-building.fa-2x
@@ -199,6 +199,14 @@ block main
             .col
               .row
                 .img-with-text
-                  img.port(src='/assets/images/Sample.jpg', alt='sample')
+                  a(href='/assets/images/Sample.jpg' alt='sample')
+                    img.port(src='/assets/images/Sample.jpg')
+                  
                   center
-                    p File Name
+                    p Sample Portfolio
+                .img-with-text
+                  a(href='/assets/images/Sample1.jpg' alt='sample')
+                    img.port(src='/assets/images/Sample1.jpg')
+                  
+                  center
+                    p Sample Portfolio
