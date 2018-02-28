@@ -45,12 +45,12 @@ block main
                 if paramsuser.current == 1
                   a#settings-tab.nav-item.nav-link(href='#Settings', data-toggle='tab', data-placement='bottom', title='Edit',role='tab', aria-controls='settings', aria-selected='true')
                     img.size-ico(src='/assets/images/icons/settings.png', alt='Edit')
-                  a#personal-info-tab.nav-item.nav-link.selected.text-b(data-toggle='tab', href='#Personal-Info', role='tab', aria-controls='Personal-Info', aria-selected='false' selected='') Personal Info
+                  a#personal-info-tab.nav-item.nav-link.active.selected.text-b(data-toggle='tab', href='#Personal-Info', role='tab', aria-controls='Personal-Info', aria-selected='false' selected='') Personal Info
                   a#services-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Services', role='tab', aria-controls='Services', aria-selected='false') Services
                   a#reviews-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Reviews', role='tab', aria-controls='Reviews', aria-selected='false') Reviews
                   a#portfolio-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Portfolio', role='tab', aria-controls='Portfolio', aria-selected='false') Portfolio
                 else
-                  a#personal-info-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Personal-Info', role='tab', aria-controls='Personal-Info', aria-selected='false') Personal Info
+                  a#personal-info-tab.nav-item.nav-link.active.text-b(data-toggle='tab', href='#Personal-Info', role='tab', aria-controls='Personal-Info', aria-selected='false') Personal Info
                   a#services-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Services', role='tab', aria-controls='Services', aria-selected='false') Services
                   a#reviews-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Reviews', role='tab', aria-controls='Reviews', aria-selected='false') Reviews
                   a#portfolio-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Portfolio', role='tab', aria-controls='Portfolio', aria-selected='false') Portfolio
@@ -102,7 +102,7 @@ block main
                       input#portfolio.filestyle(type='file' name='portfolio' data-classbutton='btn btn-primary' data-input='false' data-classicon='icon-plus' )
                     .form-group
                       button.btn.btn-primary(style='float:right; margin-top:24px;') Upload                       
-          #Personal-Info.tab-pane.fade(role='tabpanel', aria-labelledby='personal-info-tab')
+          #Personal-Info.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='personal-info-tab')
             .col-sm-3(style='display: inline-block; width: 642px; padding-top: 40px; padding-left: 50px; text-align:left')
               each paramsuser, index in paramsUser
                 if index == 0
