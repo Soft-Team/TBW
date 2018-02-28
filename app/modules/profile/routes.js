@@ -5,117 +5,63 @@ var flog = require('../welcome/loggedin');
 var messCount = require('../welcome/messCount');
 var numberFormat = require('../welcome/numberFormat');
 var fs = require('fs');
+var prepend = require('../welcome/prepend');
 
-function render(req,res){
-  res.redirect('/profile/'+req.session.user);
-}
-
-
-
-router.get('/', flog, messCount, render);
-
-
-
-router.get('/:accno', flog, messCount, (req,res) => {
-  function queryOne(x){
-    switch (req.valid) {
-      case 1:
-        res.render('welcome/views/invalid/adm-restrict');
-        break;
-      case 2:
-      case 3:
-      db.query(`SELECT * FROM tbluser WHERE tbluser.intAccNo=?`, [x], (err,results,fields)=>{
-        if(err) return console.log(err);
-      console.log(results);
-      queryTwo(results,x);
-    });
-    break;
-    }
-  }
-  
-  function queryTwo(resultsOne,paramsMo){
-    switch (req.valid) {
-      case 1:
-        res.render('welcome/views/invalid/adm-restrict');
-        break;
-      case 2:
-      case 3:
-    db.query(`SELECT * FROM tblservice JOIN tblservicetag on tblservice.intServTag = tblservicetag.intServTagID
-              JOIN tbluser on tblservice.intServAccNo = tbluser.intAccNo WHERE tbluser.IntAccNo = ?`, [paramsMo], (err, results, fields) =>{
-      res.render('profile/views/index', {thisUserTab: req.user, messCount: req.messCount[0].count, SelUserTab: resultsOne, resultsTwoForPug: results});
-      if(err) return console.log(err);
+function paramsUser(req, res, next){
+  /*All Service Tags of Selected User, Match(params)
+  *(tblservicetag)*(tblservice)*(tbluser)*/
+  db.query("SELECT * FROM tbluser LEFT JOIN tblservice ON intAccNo= intServAccNo LEFT JOIN tblservicetag ON intServTag= intServTagID WHERE intAccNo= ?",[req.params.userid], function (err, results, fields) {
+      if (err) return res.send(err);
       if(!(!results[0])){
         for(count=0;count<results.length;count++){
-          results[count].formatPrice = numberFormat(results[count].fltPrice.toFixed(2));
+          results[count].prepend = prepend(results[count].intAccNo);
+          results[count].current = 0;
+          if(results[count].intAccNo == req.session.user){
+            results[count].current = 1;
+          }
+        }
+        req.servempty = 1;
+        if(!(!results[0].intServAccNo)){
+          req.servempty = 0;
+          for(count=0;count<results.length;count++){
+            results[count].formatPrice = numberFormat(results[count].fltPrice.toFixed(2));
+          }
         }
       }
-      console.log(results);
-    });
-    break;
+      req.paramsUser = results;
+      return next();
+  });
+}
+
+function render(req,res){
+  switch (req.valid) {
+    case 1:
+      res.render('welcome/views/invalid/adm-restrict');
+      break;
+    case 2:
+    case 3:
+      res.redirect('/profile/'+req.session.user);
+      break;
+  }
+}
+function profRender(req,res){
+  switch (req.valid) {
+    case 1:
+      res.render('welcome/views/invalid/adm-restrict');
+      break;
+    case 2:
+    case 3:
+      if(!req.paramsUser[0]){
+        res.redirect('/noroute');
+      }
+      else{
+        res.render('profile/views/index',{thisUserTab: req.user, messCount: req.messCount[0].count, paramsUser: req.paramsUser, servempty: req.servempty});
+      }
+      break;
   }
 }
 
-queryOne(req.params.accno);
-});
-
-router.post('/edit/:accno', flog, messCount, (req,res) => {
-  switch (req.valid) {
-    case 1:
-        res.render('welcome/views/invalid/adm-restrict');
-      break;
-    case 2:
-    case 3:
-    jpeg = 'DP-'+req.session.user.toString().concat('.jpg');
-    if (!req.files.profilepic){
-      db.query(`UPDATE tbluser SET strEmail=?, strContactNo=?, strPassword=?, strCity=?, strBarangay=? WHERE tbluser.intAccNo=?`, [req.body.email, req.body.contactno, req.body.password, req.body.city, req.body.barangay, req.params.accno] , (err,results,fields)=>{
-        if(err) return console.log(err);
-        res.redirect('/profile/'+req.params.accno);
-        console.log(results);
-        });
-    }
-    else{
-    req.files.profilepic.mv('public/userImages/profile/'+jpeg, function(err){
-    db.query(`UPDATE tbluser SET strEmail=?, strContactNo=?, strPassword=?, strCity=?, strBarangay=?, strProfilePic=? WHERE tbluser.intAccNo=?`, [req.body.email, req.body.contactno, req.body.password, req.body.city, req.body.barangay, jpeg, req.params.accno] , (err,results,fields)=>{
-    if(err) return console.log(err);
-    res.redirect('/profile/'+req.params.accno);
-    console.log(results);
-    });
-  });
-}   
-    break;
-  } 
-});
-
-router.post('/portfolio/:accno', flog, messCount, (req,res) => {
-  switch (req.valid) {
-    case 1:
-        res.render('welcome/views/invalid/adm-restrict');
-      break;
-    case 2:
-    case 3:
-    jpeg = 'PP-'+req.session.user.toString().concat('.jpg');
-    req.files.portfolio.mv('public/userImages/portfolio/'+jpeg, function(err){
-      db.query(`INSERT INTO tbldocument(intDocument) VALUES (?)`, [jpeg] , (err,results,fields)=>{
-        if(err) return console.log(err);
-        res.redirect('/profile/'+req.params.accno);
-        console.log(results);
-        });
-   
-});   
-    break;
-  }
-});
-
-router.get('/report/:accno', flog, messCount, (req,res)=>{
-  switch (req.valid) {
-    case 1:
-        res.render('welcome/views/invalid/adm-restrict');
-      break;
-    case 2:
-    case 3:
-    var queryString= `INSERT INTO tblreport intRepedAccNo = ?, `
-  }
-})
-
+router.get('/', flog, messCount, render);
+router.get('/:userid', flog, messCount, paramsUser, profRender);
 
 exports.profile = router;
