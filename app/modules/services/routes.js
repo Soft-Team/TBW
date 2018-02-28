@@ -189,7 +189,7 @@ function servStatus(req, res, next){
       if (err) return res.send(err);
       req.servStatus = results;
       return next();
-  });W
+  });
 }
 
 function render(req,res){
@@ -200,7 +200,7 @@ function render(req,res){
     case 2:
     case 3:
       res.render('services/views/index', {thisUserTab: req.user, messCount: req.messCount[0].count, servTags: req.servTags});
-      break;  
+      break;
   }
 }
 function servNameRender(req,res){
