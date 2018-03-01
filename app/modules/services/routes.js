@@ -241,37 +241,34 @@ function servRender(req,res){
           stringquery = stringquery.concat("AND intPriceType= ? ");
           paramsarray.push(req.params.pricing);
         }
-        /**/
-        /*
+
         if(req.params.sorting=='rating'){
-          stringquery = stringquery.concat("ORDER BY  DESC ");
+          stringquery = stringquery.concat("ORDER BY ave DESC ");
         }
-        if(req.params.sorting=='finished'){
-          stringquery = stringquery.concat("ORDER BY  DESC ");
-        }*/
+        else if(req.params.sorting=='lprice'){
+          stringquery = stringquery.concat("ORDER BY fltPrice ASC ");
+        }
+        else if(req.params.sorting=='finished'){
+          stringquery = stringquery.concat("ORDER BY sum DESC ");
+        }
+      
         if(paramsarray.length==1){
           db.query(stringquery,[req.params.servName,req.session.user,paramsarray[0]], function (err, results, fields) {
               if (err) return res.send(err);
               if(!results[0])
                 res.render('services/views/noresult', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, servTags: req.servTags});
               else{
-                if(!results[0].ave){
-                  for(count=0;count<results.length;count++){
-                    results[count].ave = 0;
-                  }
-                }
-                else{
-                  for(count=0;count<results.length;count++){
-                    results[count].ave = numberFormat(results[count].ave.toFixed(1));
-                  }
-                }
-                if(!results[0].sum){
-                  for(count=0;count<results.length;count++){
-                    results[count].sum = 0;
-                  }
-                }
                 for(count=0;count<results.length;count++){
                   results[count].prepend = prepend(results[count].intServAccNo);
+                  if(!results[count].ave){
+                    results[count].ave = 0;
+                  }
+                  else{
+                    results[count].ave = numberFormat(results[count].ave.toFixed(1));
+                  }
+                  if(!results[count].sum){
+                    results[count].sum = 0;
+                  }
                 }
                 res.render('services/views/result', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, searchServ: results});
               }
@@ -283,23 +280,17 @@ function servRender(req,res){
               if(!results[0])
                 res.render('services/views/noresult', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, servTags: req.servTags});
               else{
-                if(!results[0].ave){
-                  for(count=0;count<results.length;count++){
-                    results[count].ave = 0;
-                  }
-                }
-                else{
-                  for(count=0;count<results.length;count++){
-                    results[count].ave = numberFormat(results[count].ave.toFixed(1));
-                  }
-                }
-                if(!results[0].sum){
-                  for(count=0;count<results.length;count++){
-                    results[count].sum = 0;
-                  }
-                }
                 for(count=0;count<results.length;count++){
                   results[count].prepend = prepend(results[count].intServAccNo);
+                  if(!results[count].ave){
+                    results[count].ave = 0;
+                  }
+                  else{
+                    results[count].ave = numberFormat(results[count].ave.toFixed(1));
+                  }
+                  if(!results[count].sum){
+                    results[count].sum = 0;
+                  }
                 }
                 res.render('services/views/result', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, searchServ: results});
               }
@@ -311,23 +302,17 @@ function servRender(req,res){
               if(!results[0])
                 res.render('services/views/noresult', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, servTags: req.servTags});
               else{
-                if(!results[0].ave){
-                  for(count=0;count<results.length;count++){
-                    results[count].ave = 0;
-                  }
-                }
-                else{
-                  for(count=0;count<results.length;count++){
-                    results[count].ave = numberFormat(results[count].ave.toFixed(1));
-                  }
-                }
-                if(!results[0].sum){
-                  for(count=0;count<results.length;count++){
-                    results[count].sum = 0;
-                  }
-                }
                 for(count=0;count<results.length;count++){
                   results[count].prepend = prepend(results[count].intServAccNo);
+                  if(!results[count].ave){
+                    results[count].ave = 0;
+                  }
+                  else{
+                    results[count].ave = numberFormat(results[count].ave.toFixed(1));
+                  }
+                  if(!results[count].sum){
+                    results[count].sum = 0;
+                  }
                 }
                 res.render('services/views/result', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, searchServ: results});
               }
@@ -339,7 +324,6 @@ function servRender(req,res){
               if(!results[0])
                 res.render('services/views/noresult', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, servTags: req.servTags});
               else{
-                console.log(results);
                 for(count=0;count<results.length;count++){
                   results[count].prepend = prepend(results[count].intServAccNo);
                   if(!results[count].ave){
@@ -387,13 +371,17 @@ function servReqRender(req,res){
           stringquery = stringquery.concat("AND intPriceType= ? ");
           paramsarray.push(req.params.pricing);
         }
-        /*
+
         if(req.params.sorting=='rating'){
-          stringquery = stringquery.concat("ORDER BY  DESC ");
+          stringquery = stringquery.concat("ORDER BY ave DESC ");
         }
-        if(req.params.sorting=='finished'){
-          stringquery = stringquery.concat("ORDER BY  DESC ");
-        }*/
+        else if(req.params.sorting=='lprice'){
+          stringquery = stringquery.concat("ORDER BY fltPrice ASC ");
+        }
+        else if(req.params.sorting=='finished'){
+          stringquery = stringquery.concat("ORDER BY sum DESC ");
+        }
+
         if(paramsarray.length==1){
           db.query(stringquery,[req.params.servName,req.session.user,paramsarray[0]], function (err, results, fields) {
               if (err) return res.send(err);
@@ -402,12 +390,21 @@ function servReqRender(req,res){
               else{
                 for(count=0;count<results.length;count++){
                   results[count].prepend = prepend(results[count].intServAccNo);
+                  if(!results[count].ave){
+                    results[count].ave = 0;
+                  }
+                  else{
+                    results[count].ave = numberFormat(results[count].ave.toFixed(1));
+                  }
+                  if(!results[count].sum){
+                    results[count].sum = 0;
+                  }
                 }
                 if(!req.requestServ[0]){
                   res.render('services/views/result', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, searchServ: results});
                 }
                 else{
-                res.render('services/views/request', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, searchServ: results, requestTab: req.requestServ, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial});
+                  res.render('services/views/request', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, searchServ: results, requestTab: req.requestServ, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial});
                 }
               }
           });
@@ -420,6 +417,15 @@ function servReqRender(req,res){
               else{
                 for(count=0;count<results.length;count++){
                   results[count].prepend = prepend(results[count].intServAccNo);
+                  if(!results[count].ave){
+                    results[count].ave = 0;
+                  }
+                  else{
+                    results[count].ave = numberFormat(results[count].ave.toFixed(1));
+                  }
+                  if(!results[count].sum){
+                    results[count].sum = 0;
+                  }
                 }
                 if(!req.requestServ[0]){
                   res.render('services/views/result', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, searchServ: results});
@@ -438,6 +444,15 @@ function servReqRender(req,res){
               else{
                 for(count=0;count<results.length;count++){
                   results[count].prepend = prepend(results[count].intServAccNo);
+                  if(!results[count].ave){
+                    results[count].ave = 0;
+                  }
+                  else{
+                    results[count].ave = numberFormat(results[count].ave.toFixed(1));
+                  }
+                  if(!results[count].sum){
+                    results[count].sum = 0;
+                  }
                 }
                 if(!req.requestServ[0]){
                   res.render('services/views/result', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, searchServ: results});
@@ -456,6 +471,15 @@ function servReqRender(req,res){
               else{
                 for(count=0;count<results.length;count++){
                   results[count].prepend = prepend(results[count].intServAccNo);
+                  if(!results[count].ave){
+                    results[count].ave = 0;
+                  }
+                  else{
+                    results[count].ave = numberFormat(results[count].ave.toFixed(1));
+                  }
+                  if(!results[count].sum){
+                    results[count].sum = 0;
+                  }
                 }
                 if(!req.requestServ[0]){
                   res.render('services/views/result', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, searchServ: results});
