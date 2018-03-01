@@ -14,6 +14,8 @@ module.exports= (req,res,next)=>{
         req.valid = 3;
       else
         res.render('welcome/views/invalid/error');
+      if(!(!results[0]))
+        results[0].formatcontact = results[0].strContactNo.slice(1);
       req.user = results;
       return next();
   });
