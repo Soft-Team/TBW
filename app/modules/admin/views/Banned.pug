@@ -13,6 +13,7 @@ block main
                     tr  
                         th(scope='col') #
                         th(scope='col') Name
+                        th(scope='col') Username
                         th(scope='col') Email
                         th(scope='col') Contact No.
                         th(scope='col') &nbsp
@@ -20,6 +21,8 @@ block main
                 each user in resultspug
                     tr
                         td(style="padding-right: 20px; padding-bottom: 10px;") #{user.intAccNo}
+                        td 
+                            a(href=`/profile/${user.intAccNo}`) #{user.strUserName}
                         td #{user.strName}
                         td #{user.strEmail}
                         td #{user.strContactNo}

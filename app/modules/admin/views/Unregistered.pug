@@ -3,7 +3,7 @@ extends ../../../templates/dash-admin.pug
 block main
     .jumbotron-admin
         center
-            h1 Active Users
+            h1 Unregistered Business Accounts
     p  
     center
     .container
@@ -12,37 +12,30 @@ block main
                 thead
                     tr  
                         th(scope='col') #
+                        th(scope='col') Business Name
                         th(scope='col') Username
-                        th(scope='col') Name
-                        th(scope='col') Barangay
+                        th(scope='col') Owner Name
                         th(scope='col') City
                         th(scope='col') Email
                         th(scope='col') Contact No.
-                        th(scope='col') User Type
-                        th(scope='col') Status
+                        th(scope='col') &nbsp
+                        th(scope='col') &nbsp
                         th(scope='col') &nbsp
 
                 tbody
                 each user in resultspug
                     tr
                         td(style="padding-right: 20px; padding-bottom: 10px;") #{user.intAccNo}
+                        td #{user.strName}
                         td 
                             a(href=`/profile/${user.intAccNo}`) #{user.strUserName}
-                        td #{user.strName}
-                        td #{user.strBarangay}
+                        td #{user.strOwner}
                         td #{user.strCity}
                         td #{user.strEmail}
                         td #{user.strContactNo}
-                        if user.intType =='2'
-                            td Normal
-                        else if user.intType =='3'
-                            td Business
-                        else
-                            td Admin
-                        if user.intStatus == '1'
-                            td Unverified
-                        else 
-                            td Verified
                         td 
-                            a.btn.btn-outline-danger(href=`/admin/Banned/${user.strUserName}`) Ban  
-                            
+                            a.btn.btn-outline-success(href=`/admin/Unregistered/Accept/${user.strUserName}`) Accept
+                        td  
+                            a.btn.btn-outline-danger(href=`/admin/Unregistered/Decline/${user.strUserName}`) Decline
+                        td 
+                            a.btn.btn-outline-dark(onClick=`window.open("/userImages/permits/${user.strValidID}");` href='#' alt='sample') Business Permit
