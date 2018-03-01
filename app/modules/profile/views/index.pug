@@ -44,66 +44,11 @@ block main
           each paramsuser, index in paramsUser
             if index == 0
               #nav-tab.nav.nav-tabs(role='tablist', style='border:0px')
-                if paramsuser.current == 1
-                  a#settings-tab.nav-item.nav-link(href='#Settings', data-toggle='tab', data-placement='bottom', title='Edit',role='tab', aria-controls='settings', aria-selected='true')
-                    img.size-ico(src='/assets/images/icons/settings.png', alt='Edit')
-                  a#personal-info-tab.nav-item.nav-link.active.selected.text-b(data-toggle='tab', href='#Personal-Info', role='tab', aria-controls='Personal-Info', aria-selected='false' selected='') Personal Info
-                  a#services-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Services', role='tab', aria-controls='Services', aria-selected='false') Services
-                  a#reviews-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Reviews', role='tab', aria-controls='Reviews', aria-selected='false') Reviews
-                  a#portfolio-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Portfolio', role='tab', aria-controls='Portfolio', aria-selected='false') Portfolio
-                else
-                  a#personal-info-tab.nav-item.nav-link.active.text-b(data-toggle='tab', href='#Personal-Info', role='tab', aria-controls='Personal-Info', aria-selected='false') Personal Info
-                  a#services-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Services', role='tab', aria-controls='Services', aria-selected='false') Services
-                  a#reviews-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Reviews', role='tab', aria-controls='Reviews', aria-selected='false') Reviews
-                  a#portfolio-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Portfolio', role='tab', aria-controls='Portfolio', aria-selected='false') Portfolio
+                a#personal-info-tab.nav-item.nav-link.active.selected.text-b(data-toggle='tab', href='#Personal-Info', role='tab', aria-controls='Personal-Info', aria-selected='false' selected='') Personal Info
+                a#services-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Services', role='tab', aria-controls='Services', aria-selected='false') Services
+                a#reviews-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Reviews', role='tab', aria-controls='Reviews', aria-selected='false') Reviews
+                a#portfolio-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Portfolio', role='tab', aria-controls='Portfolio', aria-selected='false') Portfolio
         #nav-tabContent.tab-content
-          #Settings.tab-pane.fade(role='tabpanel', aria-labelledby='settings-tab')
-            each paramsuser, index in paramsUser
-              if index == 0
-                form.ui.form(method='post' action='/profile/edit/'+paramsuser.intAccNo enctype='multipart/form-data')  
-                  .col-sm-3(style='display: inline-block; width: 642px; padding-top: 40px; padding-left: 50px; text-align:left')
-                    .form-group.col-md-6.noP
-                      label(for='email') Change Email
-                        input#email.form-control(type='email' name='email' value= paramsuser.strEmail aria-describedby='emailHelp' placeholder='eg. johndoe@email.com' maxlength='320' required='', style='width: 23rem;')
-                    .form-group.col-md-6.noP
-                      label(for='contact') Change Contact Number
-                        input#contact.form-control(type='number' name='contactno' value= paramsuser.strContactNo aria-describedby='contactHelp' placeholder='09236835707' max='99999999999' required='', style='width: 23rem;')
-                    .form-group.col-md-6.noP
-                      label(for='oldpassword') Old Password
-                        input#oldpassword.form-control(type='password' name='oldpass' placeholder='New Password' minlength='8' maxlength='100' required='', style='width: 23rem;')
-      
-                    .form-group.col-md-6.noP
-                      label(for='password1') Change Password
-                        input#password1.form-control(type='password' name='password' placeholder='New Password' minlength='8' maxlength='100' required='', style='width: 23rem;')
-                        input#password2.form-control(type='password' name='confirm' aria-describedby='password2Help' placeholder='Retype Password' required='', style='width: 23rem;')
-                        small#password2Help.form-text.text-muted Minimum of 8 characters.
-                    .form-row
-                      .form-group.col-md-6
-                        label(for='changepassword') Upload Picture
-                            input#profilepic.filestyle(type='file' name='profilepic' data-classbutton='btn btn-primary' data-input='false' data-classicon='icon-plus' )
-                      .form-group
-                        button.btn.btn-primary(style='float:right; margin-top:24px;') Submit
-                  .col-sm-3(style='display: inline-block; width: 642px; padding-top: 40px; text-align:left')
-                    .form-group.col-md-6
-                      label(for='inputCity') City
-                      input#inputCity.form-control(type='text' name='city' value= paramsuser.strCity placeholder='Quezon City' required='')
-                    .form-group.col-md-6
-                      label(for='inputState') Barangay
-                      input#inputBarangay.form-control(type='text' name='barangay' value= paramsuser.strBarangay placeholder='Tatalon' required='')
-                form.ui.form(method='post' action='/profile/valid/'+paramsuser.intAccNo enctype='multipart/form-data')         
-                  .form-row
-                    .form-group.col-md-6
-                      label(for='changepassword') Upload Valid ID
-                      input#profilepic.filestyle(type='file' name='profilepic' data-classbutton='btn btn-primary' data-input='false' data-classicon='icon-plus' )
-                    .form-group
-                      button.btn.btn-primary(style='float:right; margin-top:24px;') Upload  
-                form.ui.form(method='post' action='/profile/portfolio/'+paramsuser.intAccNo enctype='multipart/form-data')           
-                  .form-row
-                    .form-group.col-md-6
-                      label(for='changepassword') Upload Portfolio
-                      input#portfolio.filestyle(type='file' name='portfolio' data-classbutton='btn btn-primary' data-input='false' data-classicon='icon-plus' )
-                    .form-group
-                      button.btn.btn-primary(style='float:right; margin-top:24px;') Upload                       
           #Personal-Info.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='personal-info-tab')
             .col-sm-3
               each paramsuser, index in paramsUser
@@ -154,13 +99,8 @@ block main
                 .col-sm-3
                   .pull-left.image
                     .chat-img(style='height:80px; width:80px')
-<<<<<<< HEAD
                       img.img-circle(src='/assets/images/Unknown.jpg', alt='User Image')
                 .col-sm-3
-=======
-                      img.img-circle(src='/assets/images/Tyler.jpg', alt='User Image')
-                .col-sm-3(style='display: inline-block; width: 950px; padding-top: 10px; padding-left: 10px; text-align:left')
->>>>>>> da1d0062947884df8508a044b85a4279450631f3
                   h2 Takeoff
                   h3 Help sample text eksdee
                 .col-sm-3
@@ -170,13 +110,8 @@ block main
                 .col-sm-3
                   .pull-left.image
                     .chat-img(style='height:80px; width:80px')
-<<<<<<< HEAD
                       img.img-circle(src='/assets/images/Unknown.jpg', alt='User Image')
                 .col-sm-3
-=======
-                      img.img-circle(src='/assets/images/Tyler.jpg', alt='User Image')
-                .col-sm-3(style='display: inline-block; width: 950px; padding-top: 10px; padding-left: 10px; text-align:left')
->>>>>>> da1d0062947884df8508a044b85a4279450631f3
                   h2 Takeoff
                   h3 Help sample text eksdee
                   br
@@ -236,7 +171,7 @@ block main
       .modal-content
         each thisuser in thisUserTab
           .modal-header
-            h5#editModalTitle.modal-title Report User
+            h5#editModalTitle.modal-title Profile Settings
             button.close(type='button' data-dismiss='modal' aria-label='Close')
               span(aria-hidden='true') ×
               
@@ -324,8 +259,7 @@ block main
                         .col-8
                           .form-group.mr-3
                             input#vid.filestyle(type='file' name='validid' data-classbutton='btn btn-primary' data-input='false' data-classicon='icon-plus' accept='image/*' required)
-                      
-                      hr
+                      br
                       .row
                         .col
                           .btn-group.special(role='group')
