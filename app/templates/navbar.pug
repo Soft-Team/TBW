@@ -12,7 +12,10 @@ block content
       #navbarNav.collapse.navbar-collapse.navbarNavDropdown.justify-content-end
         ul.navbar-nav
           li.nav-item.active
-            a.nav-link.nav-text(href='/messages') Messages[#{messCount}]&nbsp&nbsp
+            a.nav-link.nav-text(href='/messages') 
+              | Messages&nbsp
+              span.badge.badge-light #{messCount}
+              | &nbsp&nbsp
           //- li.nav-item.active
           //-   a.nav-link.nav-text(href='/notification') Notifications &nbsp&nbsp
           li.nav-item.active

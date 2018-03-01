@@ -21,6 +21,11 @@ img{
 body{
     background-color: #EBECEE;
 }
+
+/*body::-webkit-scrollbar {
+    width: 5px !important;
+}*/
+
 /*no scrollbars*/
     /*body::-webkit-scrollbar {
         display: none;
@@ -111,6 +116,18 @@ body{
 #agreement + label > a:hover{
     color: #0056B3;
     text-decoration: underline;
+}
+.form-text{
+	position:relative;
+}
+input#contact{
+	padding:5px 5px 5px 50px !important;
+}
+.static-value{
+	position:absolute;
+	left:10px;
+	color:#444;
+	top:5.5px;
 }
 
 /*errorpage*/
@@ -784,13 +801,70 @@ header.heads {
     width: [width of img];
 }
 
-/*profile-navs*/
+/*profile*/
 #settings-tab, #personal-info-tab, #services-tab,
 #reviews-tab, #portfolio-tab{
     text-decoration: none;
     color: white;
 }
-#settings-tab.active, #personal-info-tab.active, #services-tab.active, 
+#settings-tab.active, #personal-info-tab.active, #services-tab.active,
 #reviews-tab.active, #portfolio-tab.active{
     color: black;
+}
+
+#report{
+    float:right;
+    margin-right: 30px;
+    margin-top: 5px !important;
+}
+#left-pane{
+    display: inline-block;
+    width: 160px;
+    padding-left: 0px;
+    padding-right: 0px
+}
+#center-pane{
+    display: inline-block;
+    width: 894px
+}
+#right-pane{
+  width: 190px;
+  border-left: 1px solid;
+  height:160px;
+  background: #EBECEE;
+}
+
+#Personal-Info > .col-sm-3{
+    display: inline-block;
+    width: 642px;
+    padding-top: 40px;
+    padding-left: 50px;
+    text-align: left;
+}
+#Reviews .footer-container > .col-sm-3:nth-child(1){
+    display: inline-block;
+    width: 110px;
+    padding-top: 10px;
+    padding-left: 10px;
+    text-align: left;
+}
+#Reviews .footer-container > .col-sm-3:nth-child(2){
+    display: inline-block;
+    width: 950px;
+    padding-top: 10px;
+    padding-left: 10px;
+    text-align:left;
+}
+#Reviews .footer-container > .col-sm-3:nth-child(3){
+    width: 140px;
+    display: inline-block;
+    padding-top: 10px;
+    padding-left: 10px;
+}
+.bootstrap-filestyle.input-group{
+    padding-top: 0px !important;
+}
+
+.editbuttons{
+    color: white !important;
 }

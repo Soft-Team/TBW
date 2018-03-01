@@ -1,6 +1,10 @@
 extends ../../../templates/dash.pug
 
 block main
+  block append scripts
+    script(type='text/javascript', src='/assets/scripts/bootstrap-filestyle.min.js')
+    script.
+      $(":file").filestyle();
   .jumbotron-banner(style='height:100px')
     center
   .sector(style='margin-top:0px; padding:0px')
@@ -9,16 +13,19 @@ block main
       if index == 0
         .sector-container-profile
           .profile-container
-              .col-sm-3(style='display: inline-block; width: 160px; padding-left: 0px; padding-right: 0px')
+              #left-pane.col-sm-3
                 img(src='/userImages/profile/'+paramsuser.strProfilePic, alt='Card image cap', style='height: 10rem; width: 10rem; border-right: 1px solid; ')
-              .col-sm-3(style='display: inline-block; width: 894px ')
+              #center-pane.col-sm-3
                 if paramsuser.intStatus == 1
                   h2.text-headline-profile(style='border-bottom: 1px solid') Unverified 
                 else
                   h2.text-headline-profile(style='border-bottom: 1px solid') Verified 
                 h1(style='margin-left:15px') #{paramsuser.strName}
-                  button.btn.btn-danger.btn-md.btn.align-right(type='button' data-toggle='modal' data-target='#reportModal' style='float:right; margin-right: 30px; margin-top: 5px !important;') Report
-              .col-sm-3(style='width: 190px; border-left: 1px solid; height:160px; background: #EBECEE;')
+                  if paramsuser.current != 1
+                    button#report.btn.btn-danger.btn-md.btn(type='button' data-toggle='modal' data-target='#reportModal') !
+                  else
+                    button#report.btn.btn-light.btn-md.btn.ml-2(type='button' data-toggle='modal' data-target='#editModal') *
+              #right-pane.col-sm-3
                   table(style='width:190px')
                     tbody
                       tr
@@ -98,7 +105,7 @@ block main
                     .form-group
                       button.btn.btn-primary(style='float:right; margin-top:24px;') Upload                       
           #Personal-Info.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='personal-info-tab')
-            .col-sm-3(style='display: inline-block; width: 642px; padding-top: 40px; padding-left: 50px; text-align:left')
+            .col-sm-3
               each paramsuser, index in paramsUser
                 if index == 0
                   i.fa.fa-building.fa-2x
@@ -107,7 +114,7 @@ block main
                   i.fa.fa-address-book.fa-2x
                   span.font2 Contact: #{paramsuser.strContactNo}
                   hr
-            .col-sm-3(style='display: inline-block; width: 642px; padding-top: 40px; padding-right: 50px; text-align:left')
+            .col-sm-3
               each paramsuser, index in paramsUser
                 if index == 0
                   i.fa.fa-home.fa-2x
@@ -144,26 +151,26 @@ block main
           #Reviews.tab-pane.fade(role='tabpanel', aria-labelledby='reviews-tab', style='height: 300px')
             .sector-container-footer
               .footer-container
-                .col-sm-3(style='display: inline-block; width: 110px; padding-top: 10px; padding-left: 10px; text-align:left')
+                .col-sm-3
                   .pull-left.image
                     .chat-img(style='height:80px; width:80px')
                       img.img-circle(src='/assets/images/Unknown.jpg', alt='User Image')
-                .col-sm-3(style='display: inline-block; width: 950px; padding-top: 10px; padding-left: 10px; text-align:left')
+                .col-sm-3
                   h2 Takeoff
                   h3 Help sample text eksdee
-                .col-sm-3(style='width: 140px; display: inline-block; padding-top: 10px; padding-left: 10px')
+                .col-sm-3
                   img(src='/assets/images/Icons/star.png', alt='star', style='height: 4rem; width: 4rem; margin-top:5px; float:left')
                   h1(style='float:right; margin-top: 20px') 4.5
               .footer-container
-                .col-sm-3(style='display: inline-block; width: 110px; padding-top: 10px; padding-left: 10px; text-align:left')
+                .col-sm-3
                   .pull-left.image
                     .chat-img(style='height:80px; width:80px')
                       img.img-circle(src='/assets/images/Unknown.jpg', alt='User Image')
-                .col-sm-3(style='display: inline-block; width: 950px; padding-top: 10px; padding-left: 10px; text-align:left')
+                .col-sm-3
                   h2 Takeoff
                   h3 Help sample text eksdee
                   br
-                .col-sm-3(style='width: 140px; display: inline-block; padding-top: 10px; padding-left: 10px')
+                .col-sm-3
                   img(src='/assets/images/Icons/star.png', alt='star', style='height: 4rem; width: 4rem; margin-top:5px; float:left')
                   h1(style='float:right; margin-top: 20px') 4.5
           #Portfolio.tab-pane.fade(role='tabpanel', aria-labelledby='portfolio-tab', style='')
@@ -213,3 +220,105 @@ block main
           .modal-footer
               button.btn.btn-primary(type='submit') Submit
               button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+
+  #editModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='editModalTitle' aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        each thisuser in thisUserTab
+          .modal-header
+            h5#editModalTitle.modal-title Report User
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+              span(aria-hidden='true') ×
+              
+          .modal-body
+            .row
+              .col
+                ul#pills-tab.nav.nav-pills.mb-3(role='tablist')
+                  li.nav-item
+                    a#pills-personal-tab.nav-link.active(data-toggle='pill', href='#pills-personal', role='tab', aria-controls='pills-personal', aria-selected='true') Personal Information
+                  li.nav-item
+                    a#pills-password-tab.nav-link(data-toggle='pill', href='#pills-password', role='tab', aria-controls='pills-password', aria-selected='false') Password
+                  li.nav-item
+                    a#pills-validid-tab.nav-link(data-toggle='pill', href='#pills-validid', role='tab', aria-controls='pills-validid', aria-selected='false') Valid ID
+                hr
+                #pills-tabContent.tab-content
+                  #pills-personal.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='pills-personal-tab')
+                    form(method='POST' action='/profile/personal/'+thisuser.intAccNo enctype='multipart/form-data')
+                      .row
+                        .col-4
+                          p.mt-1.ml-3
+                            b Profile Picture
+                        .col-8
+                          .form-group.mr-3
+                            input#dp.filestyle(type='file' name='profilepic' data-classbutton='btn btn-primary' data-input='false' data-classicon='icon-plus' accept='image/*')
+                      .row
+                        .col
+                          .form-group
+                            label(for='email')
+                              b Email
+                            input#email.form-control(type='email' name='email' value= thisuser.strEmail aria-describedby='emailHelp' placeholder='eg. johndoe@email.com' maxlength='320' required)
+                        .col
+                          .form-group
+                            label(for='contact')
+                              b Contact Number
+                            input#contactnum.form-control(type='number' name='contactno' value= thisuser.strContactNo aria-describedby='contactHelp' placeholder='09236835707' max='99999999999' required)
+                      .row
+                        .col
+                          .form-group
+                            label(for='inputCity')
+                              b City
+                            input#inputCity.form-control(type='text' name='city' value= thisuser.strCity placeholder='Quezon City' required='')
+                        .col
+                          .form-group
+                            label(for='inputState')
+                              b Barangay
+                            input#inputBarangay.form-control(type='text' name='barangay' value= thisuser.strBarangay placeholder='Tatalon' required='')                
+                      hr
+                      .row
+                        .col
+                          .btn-group.special(role='group')
+                            button.editbuttons.btn.btn-primary.btn-md(type='submit') Submit
+                            a.editbuttons.btn.btn-secondary.btn-md(type='button' data-dismiss='modal' aria-pressed='true') Cancel
+                  
+                  #pills-password.tab-pane.fade(role='tabpanel', aria-labelledby='pills-password-tab')
+                    form(method='POST' action='/profile/pass/'+thisuser.intAccNo)
+                      .row
+                        .col-4
+                          label.mt-2.ml-2(for='oldpassword') Old Password
+                        .col-8
+                          .form-group
+                            input#oldpassword.form-control(type='password' name='oldpass' placeholder='Old Password' minlength='8' maxlength='100' required)
+                      .row
+                        .col-4
+                          label.mt-2.ml-2(for='newpass') New Password
+                          label.mt-2.ml-2(for='confirmpass') Confirm
+                        .col-8
+                          .form-group
+                            input#newpass.form-control.mb-1(type='password' name='newpass' placeholder='New Password' minlength='8' maxlength='100' required)
+                            input#confirmpass.form-control(type='password' name='confirmpass' placeholder='Confirm Password' aria-describedby='passwordHelp' minlength='8' maxlength='100' required)
+                            small#passwordHelp.form-text.text-muted Minimum of 8 characters.
+                    
+                      hr
+                      .row
+                        .col
+                          .btn-group.special(role='group')
+                            button.editbuttons.btn.btn-primary.btn-md(type='submit') Submit
+                            a.editbuttons.btn.btn-secondary.btn-md(type='button' data-dismiss='modal' aria-pressed='true') Cancel
+                  
+                  #pills-validid.tab-pane.fade(role='tabpanel', aria-labelledby='pills-validid-tab')
+                    form(method='POST' action='/profile/validid/'+thisuser.intAccNo enctype='multipart/form-data')
+                      .row
+                        .col-4
+                          p.mt-1.ml-3
+                            b Valid ID
+                        .col-8
+                          .form-group.mr-3
+                            input#vid.filestyle(type='file' name='validid' data-classbutton='btn btn-primary' data-input='false' data-classicon='icon-plus' accept='image/*' required)
+                      
+                      hr
+                      .row
+                        .col
+                          .btn-group.special(role='group')
+                            button.editbuttons.btn.btn-primary.btn-md(type='submit') Submit
+                            a.editbuttons.btn.btn-secondary.btn-md(type='button' data-dismiss='modal' aria-pressed='true') Cancel
+                  
