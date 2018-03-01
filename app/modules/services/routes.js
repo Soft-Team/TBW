@@ -226,7 +226,8 @@ function servRender(req,res){
         res.render('services/views/notag', {thisUserTab: req.user, messCount: req.messCount[0].count, servName: req.params.servName, servTags: req.servTags });
       }
       else{
-        var stringquery="SELECT * FROM tblservice INNER JOIN tblservicetag ON intServTag= intServTagID INNER JOIN tbluser ON intServAccNo= intAccNo WHERE strServName= ? AND intAccNo!= ? AND intServStatus= 1 AND boolIsBanned= 0 ";
+        var stringquery="SELECT * FROM tblservice INNER JOIN tblservicetag ON intServTag= intServTagID INNER JOIN tbluser ON intServAccNo= intAccNo LEFT JOIN (SELECT *,AVG(intRating) AS ave FROM tblrating GROUP BY intRatedAccNo)A ON intAccNo= intRatedAccNo LEFT JOIN (SELECT intServAccNo as servacc, S.sum FROM(SELECT *,SUM(count) AS sum FROM";
+        stringquery= stringquery.concat("(SELECT *,COUNT(intTransID)as count FROM tbltransaction INNER JOIN tblchat ON intChatID= intTransChatID INNER JOIN tblservice ON intChatServ= intServID GROUP BY intServAccNo)C GROUP BY intServAccNo)S)B ON intAccNo= servacc WHERE strServName= ? AND intAccNo!= ? AND tblservice.intServStatus= 1 AND boolIsBanned= 0 ");
         var paramsarray= [];
         if(req.params.city!='any'){
           stringquery = stringquery.concat("AND strCity= ? ");
@@ -254,6 +255,21 @@ function servRender(req,res){
               if(!results[0])
                 res.render('services/views/noresult', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, servTags: req.servTags});
               else{
+                if(!results[0].ave){
+                  for(count=0;count<results.length;count++){
+                    results[count].ave = 0;
+                  }
+                }
+                else{
+                  for(count=0;count<results.length;count++){
+                    results[count].ave = numberFormat(results[count].ave.toFixed(1));
+                  }
+                }
+                if(!results[0].sum){
+                  for(count=0;count<results.length;count++){
+                    results[count].sum = 0;
+                  }
+                }
                 for(count=0;count<results.length;count++){
                   results[count].prepend = prepend(results[count].intServAccNo);
                 }
@@ -267,6 +283,21 @@ function servRender(req,res){
               if(!results[0])
                 res.render('services/views/noresult', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, servTags: req.servTags});
               else{
+                if(!results[0].ave){
+                  for(count=0;count<results.length;count++){
+                    results[count].ave = 0;
+                  }
+                }
+                else{
+                  for(count=0;count<results.length;count++){
+                    results[count].ave = numberFormat(results[count].ave.toFixed(1));
+                  }
+                }
+                if(!results[0].sum){
+                  for(count=0;count<results.length;count++){
+                    results[count].sum = 0;
+                  }
+                }
                 for(count=0;count<results.length;count++){
                   results[count].prepend = prepend(results[count].intServAccNo);
                 }
@@ -280,6 +311,21 @@ function servRender(req,res){
               if(!results[0])
                 res.render('services/views/noresult', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, servTags: req.servTags});
               else{
+                if(!results[0].ave){
+                  for(count=0;count<results.length;count++){
+                    results[count].ave = 0;
+                  }
+                }
+                else{
+                  for(count=0;count<results.length;count++){
+                    results[count].ave = numberFormat(results[count].ave.toFixed(1));
+                  }
+                }
+                if(!results[0].sum){
+                  for(count=0;count<results.length;count++){
+                    results[count].sum = 0;
+                  }
+                }
                 for(count=0;count<results.length;count++){
                   results[count].prepend = prepend(results[count].intServAccNo);
                 }
@@ -293,9 +339,20 @@ function servRender(req,res){
               if(!results[0])
                 res.render('services/views/noresult', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, servTags: req.servTags});
               else{
+                console.log(results);
                 for(count=0;count<results.length;count++){
                   results[count].prepend = prepend(results[count].intServAccNo);
+                  if(!results[count].ave){
+                    results[count].ave = 0;
+                  }
+                  else{
+                    results[count].ave = numberFormat(results[count].ave.toFixed(1));
+                  }
+                  if(!results[count].sum){
+                    results[count].sum = 0;
+                  }
                 }
+
                 res.render('services/views/result', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, searchServ: results});
               }
           });
