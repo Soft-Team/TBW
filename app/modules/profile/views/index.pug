@@ -34,7 +34,7 @@ block main
                       tr
                         td(style='padding-top:3px')
                           img(src='/assets/images/Icons/star.png', alt='star', style='height: 2rem; width: 2rem; margin-top:5px; margin-left:50px;')
-                          h2(style='float: right; margin-right: 50px; margin-bottom: 0rem') 4.8
+                          h2(style='float: right; margin-right: 50px; margin-bottom: 0rem') #{thisuser.formatrating}
                           h4.profileA(style='margin-bottom: 0rem; margin-top:0px; display:inline-block') Rating
                       tr
                         td(style='padding-top:3px')
@@ -102,7 +102,7 @@ block main
                 .col-sm-3
                   .pull-left.image
                     .chat-img(style='height:80px; width:80px')
-                      img.img-circle(src='/assets/images/Unknown.jpg', alt='User Image')
+                      img.img-circle(src='/assets/images/Unknown.jpg' alt='User Image' height="85" width="85")
                 .col-sm-3
                   h2 Takeoff
                   h3 Help sample text eksdee
@@ -113,7 +113,7 @@ block main
                 .col-sm-3
                   .pull-left.image
                     .chat-img(style='height:80px; width:80px')
-                      img.img-circle(src='/assets/images/Unknown.jpg', alt='User Image')
+                      img.img-circle(src='/assets/images/Unknown.jpg' alt='User Image' height="85" width="85")
                 .col-sm-3
                   h2 Takeoff
                   h3 Help sample text eksdee
@@ -259,19 +259,31 @@ block main
                             a.editbuttons.btn.btn-secondary.btn-md(type='button' data-dismiss='modal' aria-pressed='true') Cancel
                   
                   #pills-validid.tab-pane.fade(role='tabpanel', aria-labelledby='pills-validid-tab')
-                    form(method='POST' action='/profile/validid/'+thisuser.intAccNo enctype='multipart/form-data')
-                      .row
-                        .col-4
-                          p.mt-1.ml-3
-                            b Valid ID
-                        .col-8
-                          .form-group.mr-3
-                            input#vid.filestyle(type='file' name='validid' data-classbutton='btn btn-primary' data-input='false' data-classicon='icon-plus' accept='image/*' required)
-                      br
-                      .row
-                        .col
-                          .btn-group.special(role='group')
-                            button.editbuttons.btn.btn-primary.btn-md(type='submit') Submit
-                            a.editbuttons.btn.btn-secondary.btn-md(type='button' data-dismiss='modal' aria-pressed='true') Cancel
+                    each paramsuser,index in paramsUser
+                      if index == 0
+                        if paramsuser.strValidID != 'none'
+                          p You have already submitted a valid ID.
+                          hr
+                          hr
+                          .row
+                            .col.align-right
+                              button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+                        else
+                          form(method='POST' action='/profile/validid/'+thisuser.intAccNo enctype='multipart/form-data')
+                            .row
+                              .col-4
+                                p.mt-1.ml-3
+                                  b Valid ID
+                              .col-8
+                                .form-group.mr-3
+                                  input#vid.filestyle(type='file' name='validid' data-classbutton='btn btn-primary' data-input='false' data-classicon='icon-plus' accept='image/*' required)
+                            
+                            hr
+                            hr
+                            .row
+                              .col
+                                .btn-group.special(role='group')
+                                  button.editbuttons.btn.btn-primary.btn-md(type='submit') Submit
+                                  a.editbuttons.btn.btn-secondary.btn-md(type='button' data-dismiss='modal' aria-pressed='true') Cancel
 
   block profile
