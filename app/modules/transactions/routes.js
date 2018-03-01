@@ -9,7 +9,8 @@ var dateformat = require('../welcome/dateformat');
 function ongoing(req,res,next){
   /*Ongoing Transactions of Current User, Match(session);
   *(tblchat)*(tbluser)*(tblservice)*(tblservicetag)*(tbltransaction)*(tblmessage)*/
-  var stringquery = "SELECT A.* , strName, intAccNo FROM(SELECT * FROM tblservice INNER JOIN tblchat ON intServID= intChatServ INNER JOIN tblservicetag ON intServTagID= intServTag INNER JOIN tbltransaction ON intChatID= intTransChatID LEFT JOIN (SELECT * FROM tblrating WHERE intRatedAccNo != ?)X ON intRateTransID= intTransID WHERE (intServAccNo= ? OR intChatSeeker= ?) AND intTransStatus= 1)A INNER JOIN tbluser ON intAccNo= intServAccNo OR intAccNo= intChatSeeker WHERE intAccNo!= ?";
+  var stringquery = "SELECT A.* , strName, intAccNo FROM(SELECT * FROM tblservice INNER JOIN tblchat ON intServID= intChatServ INNER JOIN tblservicetag ON intServTagID= intServTag INNER JOIN tbltransaction ON intChatID= intTransChatID LEFT JOIN (SELECT * FROM tblrating WHERE intRatedAccNo != ?)X ON intRateTransID= intTransID WHERE (intServAccNo= ? OR intChatSeeker= ?) AND intTransStatus= 1)A INNER JOIN tbluser ON intAccNo= intServAccNo OR intAccNo= intChatSeeker WHERE intAccNo!= ? ";
+  stringquery = stringquery.concat("ORDER BY dtmTransStarted DESC");
   db.query(stringquery,[req.session.user,req.session.user,req.session.user,req.session.user], (err, results, fields) => {
       if (err) console.log(err);
       if(!(!results[0])){
@@ -51,7 +52,8 @@ function ongoingParams(req,res,next){
 function finished(req,res,next){
   /*Finished Transactions of Current User, Match(session);
   *(tblchat)*(tbluser)*(tblservice)*(tblservicetag)*(tbltransaction)*(tblmessage)*/
-  var stringquery = "SELECT A.* , strName, intAccNo FROM(SELECT * FROM tblservice INNER JOIN tblchat ON intServID= intChatServ INNER JOIN tblservicetag ON intServTagID= intServTag INNER JOIN tbltransaction ON intChatID= intTransChatID LEFT JOIN (SELECT * FROM tblrating WHERE intRatedAccNo != ?)X ON intRateTransID= intTransID WHERE (intServAccNo= ? OR intChatSeeker= ?) AND intTransStatus= 2)A INNER JOIN tbluser ON intAccNo= intServAccNo OR intAccNo= intChatSeeker WHERE intAccNo!= ?";
+  var stringquery = "SELECT A.* , strName, intAccNo FROM(SELECT * FROM tblservice INNER JOIN tblchat ON intServID= intChatServ INNER JOIN tblservicetag ON intServTagID= intServTag INNER JOIN tbltransaction ON intChatID= intTransChatID LEFT JOIN (SELECT * FROM tblrating WHERE intRatedAccNo != ?)X ON intRateTransID= intTransID WHERE (intServAccNo= ? OR intChatSeeker= ?) AND intTransStatus= 2)A INNER JOIN tbluser ON intAccNo= intServAccNo OR intAccNo= intChatSeeker WHERE intAccNo!= ? ";
+  stringquery = stringquery.concat("ORDER BY dtmTransEnded DESC");
   db.query(stringquery,[req.session.user,req.session.user,req.session.user,req.session.user], (err, results, fields) => {
       if (err) console.log(err);
       if(!(!results[0])){
@@ -167,17 +169,25 @@ router.post('/ongoing/finish/:transid', flog, ongoingParams,  (req, res) => {
       res.redirect('/transactions/ongoing');
     }
     else{
+      var stringquery = "INSERT INTO tblmessage ( intMessChatID, txtMessage, dtmDateSent, intMessPSeen, intSender ) VALUES ( ?, ?, NOW(), 1, 1)";
+      var bodyarray = [req.ongoingParams[0].intChatID, "-- transaction has FINISHED"];
       db.beginTransaction(function(err) {
           if (err) console.log(err);
-          db.query("UPDATE tblservice SET intServStatus= 1 WHERE intServAccNo= ? AND intServStatus= 2", [req.ongoingParams[0].intServAccNo], function (err,  results, fields) {
+          db.query(stringquery, bodyarray, function (err,  results, fields) {
               if (err) console.log(err);
-            db.query("UPDATE tbltransaction SET intTransStatus= 2, dtmTransEnded= NOW() WHERE intTransID= ?",[req.params.transid], (err, results, fields) => {
-                if (err) console.log(err);
-                  db.query("INSERT INTO tblrating (intRatedAccNo, intRateTransID, intRating, datRateDate, txtRateReview) VALUES (?,?,?,CURDATE(),?)", [req.ongoingParams[0].intChatSeeker, req.ongoingParams[0].intTransID, req.body.rating, req.body.review], function (err,  results, fields) {
+              db.query("UPDATE tblchat SET intChatStatus= 0 WHERE intChatID= ?",[req.ongoingParams[0].intChatID], function (err,  results, fields) {
+                  if (err) console.log(err);
+                  db.query("UPDATE tblservice SET intServStatus= 1 WHERE intServAccNo= ? AND intServStatus= 2", [req.ongoingParams[0].intServAccNo], function (err,  results, fields) {
                       if (err) console.log(err);
-                      db.commit(function(err) {
-                          if (err) console.log(err);
-                          res.redirect('/transactions/finished');
+                    db.query("UPDATE tbltransaction SET intTransStatus= 2, dtmTransEnded= NOW() WHERE intTransID= ?",[req.params.transid], (err, results, fields) => {
+                        if (err) console.log(err);
+                          db.query("INSERT INTO tblrating (intRatedAccNo, intRateTransID, intRating, datRateDate, txtRateReview) VALUES (?,?,?,CURDATE(),?)", [req.ongoingParams[0].intChatSeeker, req.ongoingParams[0].intTransID, req.body.rating, req.body.review], function (err,  results, fields) {
+                              if (err) console.log(err);
+                              db.commit(function(err) {
+                                  if (err) console.log(err);
+                                  res.redirect('/transactions/finished');
+                              });
+                          });
                       });
                   });
               });
