@@ -17,14 +17,17 @@ block main
                 img(src='/userImages/profile/'+paramsuser.strProfilePic, alt='Card image cap', style='height: 10rem; width: 10rem; border-right: 1px solid; ')
               #center-pane.col-sm-3
                 if paramsuser.intStatus == 1
-                  h2.text-headline-profile(style='border-bottom: 1px solid') Unverified 
+                  h2.text-headline-profile(style='border-bottom: 1px solid #000000; color:grey;') Unverified 
                 else
-                  h2.text-headline-profile(style='border-bottom: 1px solid') Verified 
+                  h2.text-headline-profile(style='border-bottom: 1px solid#000000; color:green;') Verified 
                 h1(style='margin-left:15px') #{paramsuser.strName}
                   if paramsuser.current != 1
-                    button#report.btn.btn-danger.btn-md.btn(type='button' data-toggle='modal' data-target='#reportModal') !
+                    button#report.btn.btn-danger.btn-md.btn(type='button' data-toggle='modal' data-target='#reportModal' style='padding-top:8px')
+                      i.fa.fa-exclamation.fa-2x(style='height:35px; width:35px;')
                   else
-                    button#report.btn.btn-light.btn-md.btn.ml-2(type='button' data-toggle='modal' data-target='#editModal') *
+                    button#report.btn.btn-light.btn-md.btn.ml-2(type='button' data-toggle='modal' data-target='#editModal')
+                      //- i.fa.fa-cogs.fa-2x
+                      img(src='/assets/images/icons/settings.png' style='height:35px; width:35px;')
               #right-pane.col-sm-3
                   table(style='width:190px')
                     tbody
