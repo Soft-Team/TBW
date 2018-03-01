@@ -2,6 +2,7 @@ var express = require('express');
 var adminRouter = express.Router();
 var db = require('../../lib/database')();
 var flog = require('../welcome/loggedin');
+var fs = require('fs');
 
 adminRouter.get('/', flog, (req,res) => {
   switch (req.valid) {
@@ -200,7 +201,8 @@ adminRouter.get('/IDVerification/Approved/:username', flog, (req, res) => {
 adminRouter.get('/IDVerification/Declined/:username', flog, (req, res) => {
   switch (req.valid) {
     case 1:
-      db.query(`UPDATE tbluser SET intStatus = 2 WHERE strUserName = ?`, [req.params.username], (err, results, fields) =>{
+      db.query(`UPDATE tbluser SET validID = null WHERE strUserName = ?`, [req.params.username], (err, results, fields) =>{
+        fs.unlink(`public/userImages/ids/${tbluser.strValidID}`);
         if(err) return console.log(err)
         return res.redirect('/admin/IDVerification');
       });

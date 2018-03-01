@@ -142,8 +142,8 @@ block main
   #reportModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='reportModalTitle' aria-hidden='true')
     .modal-dialog(role='document')
       .modal-content
-        each thisUser in thisUserTab
-          form(method='POST' action=(`/profile/reported/`+thisUser.intAccNo) style='float:right; margin-right: 30px; margin-top: 5px !important;')
+        each paramsuser, index in paramsUser
+          form(method='POST' action=(`/profile/reported/`+paramsuser.intAccNo) style='float:right; margin-right: 30px; margin-top: 5px !important;')
             .modal-header
               h5#reportModalTitle.modal-title Report User
               button.close(type='button' data-dismiss='modal' aria-label='Close')
