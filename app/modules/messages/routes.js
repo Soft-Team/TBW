@@ -449,7 +449,13 @@ router.post('/transet/accept/:chatid', flog, messCount, fmess, fchat, fparams, f
   }
 });
 router.post('/cancel/:chatid', flog, ftrans, fprovider, (req, res) => {
-  var stringquery = "INSERT INTO tblmessage ( intMessChatID, txtMessage, dtmDateSent, intMessPSeen, intSender ) VALUES ( ?, ?, NOW(), 1, 1)";
+
+  if(req.session.user == req.fprovider[0].intChatSeeker){
+    var stringquery = "INSERT INTO tblmessage ( intMessChatID, txtMessage, dtmDateSent, intMessSSeen, intSender ) VALUES ( ?, ?, NOW(), 1, 2)";
+  }
+  else{
+    var stringquery = "INSERT INTO tblmessage ( intMessChatID, txtMessage, dtmDateSent, intMessPSeen, intSender ) VALUES ( ?, ?, NOW(), 1, 1)";
+  }
   var bodyarray = [req.params.chatid, "-- has CANCELLED this chat and its transaction."];
   if(!req.ftrans[0]){
     db.beginTransaction(function(err) {
