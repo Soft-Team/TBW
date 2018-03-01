@@ -32,7 +32,8 @@ router.get('/terms', termsRender);
 
 router.post('/', auth, (req, res) => {
   if(req.body.password === req.body.confirm){
-    db.query("INSERT INTO tbluser (strName, strUserName, strPassword, intType, intStatus, strCity, strBarangay, strEmail, strContactNo) VALUES (?,?,?,'2','1',?,?,?,?)",[req.body.name, req.body.username, req.body.password, req.body.city, req.body.brngy, req.body.email, req.body.contact], (err, results, fields) => {
+    var contact = '0'+req.body.contact.toString();
+    db.query("INSERT INTO tbluser (strName, strUserName, strPassword, intType, intStatus, strCity, strBarangay, strEmail, strContactNo) VALUES (?,?,?,'2','1',?,?,?,?)",[req.body.name, req.body.username, req.body.password, req.body.city, req.body.brngy, req.body.email, contact], (err, results, fields) => {
       if (err) console.log(err);
       res.render('register/views/success');
     });
@@ -43,9 +44,10 @@ router.post('/', auth, (req, res) => {
 });
 router.post('/business', auth, (req, res) => {
   if(req.body.password === req.body.confirm){
+    var contact = '0'+req.body.contact.toString();
     jpeg = 'BP-'+req.body.username.concat('.jpg');
     req.files.bpermit.mv('public/userImages/permits/'+jpeg, function(err) {
-      db.query("INSERT INTO tbluser (strName, strUserName, strPassword, intType, intStatus, strCity, strBarangay, strEmail, strContactNo, strOwner, strValidID) VALUES (?,?,?,'3','1',?,?,?,?,?,?)",[req.body.name, req.body.username, req.body.password, req.body.city, req.body.brngy, req.body.email, req.body.contact, req.body.owner, jpeg], (err, results, fields) => {
+      db.query("INSERT INTO tbluser (strName, strUserName, strPassword, intType, intStatus, strCity, strBarangay, strEmail, strContactNo, strOwner, strValidID) VALUES (?,?,?,'3','1',?,?,?,?,?,?)",[req.body.name, req.body.username, req.body.password, req.body.city, req.body.brngy, req.body.email, contact, req.body.owner, jpeg], (err, results, fields) => {
         if (err) console.log(err);
         res.render('register/views/success');
       });

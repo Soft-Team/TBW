@@ -205,11 +205,16 @@ block main
                             label(for='email')
                               b Email
                             input#email.form-control(type='email' name='email' value= thisuser.strEmail aria-describedby='emailHelp' placeholder='eg. johndoe@email.com' maxlength='320' required)
+                            small#emailHelp.form-text.text-muted Email will be displayed publicly.
                         .col
                           .form-group
                             label(for='contact')
                               b Contact Number
-                            input#contactnum.form-control(type='number' name='contact' value= thisuser.strContactNo aria-describedby='contactHelp' placeholder='09236835707' max='99999999999' required)
+                            .form-text
+                              input#contact.form-control(type='number' name='contact' value= thisuser.formatcontact aria-describedby='contactHelp' placeholder='09236835707' max='99999999999' required)
+                              label.static-value(for='cellno') (+63)
+                            small#contactHelp.form-text.text-muted Contact Number will be displayed publicly.
+
                       .row
                         .col
                           .form-group
@@ -268,4 +273,5 @@ block main
                           .btn-group.special(role='group')
                             button.editbuttons.btn.btn-primary.btn-md(type='submit') Submit
                             a.editbuttons.btn.btn-secondary.btn-md(type='button' data-dismiss='modal' aria-pressed='true') Cancel
-                  
+
+  block profile

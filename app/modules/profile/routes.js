@@ -64,4 +64,73 @@ function profRender(req,res){
 router.get('/', flog, messCount, render);
 router.get('/:userid', flog, messCount, paramsUser, profRender);
 
+router.post('/personal/:userid', flog, messCount, paramsUser, (req, res) => {
+  var contact = '0'+req.body.contact.toString();
+  if(!req.files.profilepic){
+    db.query("UPDATE tbluser SET strEmail= ?, strContactNo= ?, strCity= ?, strBarangay= ? WHERE intAccNo= ?",[req.body.email, contact, req.body.city, req.body.brngy, req.session.user], function (err,  results, fields) {
+      if (err) console.log(err);
+      res.redirect('/profile/'+req.session.user);
+    });
+  }
+  else if(req.files.profilepic.mimetype != 'image/jpeg' && req.files.profilepic.mimetype != 'image/png'){
+    console.log(req.files.profilepic.mimetype);
+    res.render('profile/views/invalid/imgerror',{thisUserTab: req.user, messCount: req.messCount[0].count, paramsUser: req.paramsUser, servempty: req.servempty});
+  }
+  else{
+    console.log('no');
+    var newAccNo= prepend(req.session.user);
+    var jpeg = 'DP-'+newAccNo.toString().concat('.jpg');
+    db.beginTransaction(function(err) {
+      if (err) console.log(err);
+      if(req.user[0].strProfilePic!= 'unknown.jpg'){
+        fs.unlink('public/userImages/profile/'+jpeg);
+      }
+      db.query("SELECT * FROM tbluser WHERE intAccNo= ?",[req.session.user], function (err,  results, fields) {
+          if (err) console.log(err);
+          req.files.profilepic.mv('public/userImages/profile/'+jpeg, function(err){
+              db.query("UPDATE tbluser SET strEmail= ?, strContactNo= ?, strCity= ?, strBarangay= ?, strProfilePic= ? WHERE intAccNo= ?", [req.body.email, contact, req.body.city, req.body.barangay, jpeg, req.session.user] , (err,results,fields)=>{
+                  if (err) console.log(err);
+                  db.commit(function(err) {
+                      if (err) console.log(err);
+                      res.redirect('/profile/'+req.session.user);
+                  });
+              });
+          });
+      });
+    });
+  }
+});
+router.post('/pass/:userid', flog, messCount, paramsUser, (req, res) => {
+  if(req.paramsUser[0].strPassword == req.body.oldpass){
+    if(req.body.newpass == req.body.confirmpass){
+      db.query("UPDATE tbluser SET strPassword= ? WHERE intAccNo= ?",[req.body.newpass, req.session.user], function (err,  results, fields) {
+        if (err) console.log(err);
+        res.redirect('/profile/'+req.session.user);
+      });
+    }
+    else{
+      res.render('profile/views/invalid/notmatch',{thisUserTab: req.user, messCount: req.messCount[0].count, paramsUser: req.paramsUser, servempty: req.servempty});
+    }
+  }
+  else{
+    res.render('profile/views/invalid/notmatch',{thisUserTab: req.user, messCount: req.messCount[0].count, paramsUser: req.paramsUser, servempty: req.servempty});
+  }
+
+});
+router.post('/validid/:userid', flog, messCount, paramsUser, (req, res) => {
+  var newAccNo= prepend(req.session.user);
+  var jpeg = 'VID-'+newAccNo.toString().concat('.jpg');
+  if(req.files.validid.mimetype != 'image/jpeg' && req.files.validid.mimetype != 'image/png'){
+    res.render('profile/views/invalid/imgerror',{thisUserTab: req.user, messCount: req.messCount[0].count, paramsUser: req.paramsUser, servempty: req.servempty});
+  }
+  else{
+    req.files.validid.mv('public/userImages/ids/'+jpeg, function(err){
+      db.query("UPDATE tbluser SET strValidID= ? WHERE intAccNo= ?", [jpeg, req.session.user] , (err,results,fields)=>{
+          if (err) console.log(err);
+          res.redirect('/profile/'+req.session.user);
+      });
+    });
+  }
+});
+
 exports.profile = router;
