@@ -169,7 +169,11 @@ adminRouter.get('/ReportLog', flog, (req,res) => {
 adminRouter.get('/IDVerification', flog, (req,res) => {
   switch (req.valid) {
     case 1:
-      res.render('admin/views/IDVerification');
+      db.query(`SELECT * FROM tbluser WHERE boolIsBanned=0 AND intType = 2 AND intStatus = 1`,  (err, results, fields) => {
+        if(err) return console.log(err)
+        console.log(results.length);
+        return res.render('admin/views/IDVerification', {resultspug: results});
+      });
       break;
     case 2:
     case 3:
@@ -177,6 +181,37 @@ adminRouter.get('/IDVerification', flog, (req,res) => {
       break;
   }
 });
+
+adminRouter.get('/IDVerification/Approved/:username', flog, (req, res) => {
+  switch (req.valid) {
+    case 1:
+      db.query(`UPDATE tbluser SET intStatus = 2 WHERE strUserName = ?`, [req.params.username], (err, results, fields) =>{
+        if(err) return console.log(err)
+        return res.redirect('/admin/IDVerification');
+      });
+      break;
+    case 2:
+    case 3:
+      res.render('welcome/views/invalid/restrict');
+      break;
+  }
+});
+ 
+adminRouter.get('/IDVerification/Declined/:username', flog, (req, res) => {
+  switch (req.valid) {
+    case 1:
+      db.query(`UPDATE tbluser SET intStatus = 2 WHERE strUserName = ?`, [req.params.username], (err, results, fields) =>{
+        if(err) return console.log(err)
+        return res.redirect('/admin/IDVerification');
+      });
+      break;
+    case 2:
+    case 3:
+      res.render('welcome/views/invalid/restrict');
+      break;
+  }
+});
+
 
 adminRouter.get('/TransactionLog', flog, (req,res) => {
   switch (req.valid) {

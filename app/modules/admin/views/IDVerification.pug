@@ -4,3 +4,41 @@ block main
     .jumbotron-admin
         center  
             h1 ID Verification Requests
+    p  
+    center
+    .container
+        p.font
+            table.table.table-striped.table-hover.box-shadow-mini
+                thead
+                    tr  
+                        th(scope='col') #
+                        th(scope='col') Username
+                        th(scope='col') Name
+                        th(scope='col') Barangay
+                        th(scope='col') City
+                        th(scope='col') Email
+                        th(scope='col') Contact No.
+                        th(scope='col') User Type
+                        th(scope='col') &nbsp
+                        th(scope='col') &nbsp
+                        th(scope='col') &nbsp
+
+                tbody
+                each user in resultspug
+                    tr
+                        td(style="padding-right: 20px; padding-bottom: 10px;") #{user.intAccNo}
+                        td 
+                            a(href=`/profile/${user.intAccNo}`) #{user.strUserName}
+                        td #{user.strName}
+                        td #{user.strBarangay}
+                        td #{user.strCity}
+                        td #{user.strEmail}
+                        td #{user.strContactNo}
+                        td 
+                            a.btn.btn-outline-success(href=`/admin/IDVerification/Approved/${user.strUserName}`) Approve
+                        td  
+                            a.btn.btn-outline-danger(href=`/admin/Unregistered/Decline/${user.strUserName}`) Decline    
+                        td 
+                            a.btn.btn-outline-dark(onClick=`window.open("/userImages/ids/${user.strValidID}");` href='#' alt='sample') Valid ID
+
+                                    

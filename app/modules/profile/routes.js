@@ -156,4 +156,7 @@ router.post('/validid/:userid', flog, messCount, paramsUser, (req, res) => {
   }
 });
 
+router.post('reported/:userid', flog, messCount, paramsUser, (req, res) => {
+  
+})
 exports.profile = router;
