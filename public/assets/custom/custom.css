@@ -793,7 +793,7 @@ header.heads {
 .port{
     width: 160px;
     height: 230px;
-    margin: 20px 20px 0px 20px;
+    margin: 20px 0px 0px 20px;
 }
 
 .img-with-text {
@@ -1007,3 +1007,19 @@ header.heads {
 .text-h{
     font-weight: bold;
 }
+
+.clo{
+    margin-top:10px;
+    color:grey;
+    right:-15px;
+    top:-15px;
+    width:30px;
+    height:30px;
+    line-height:30px;
+    text-align:center;
+    font-size:12px;
+    font-weight:bold;
+    font-family:'Arial Black', Arial, sans-serif;
+    cursor:pointer;
+    float:right;
+  }
