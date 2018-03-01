@@ -27,7 +27,13 @@ function paramsUser(req, res, next){
             results[count].formatPrice = numberFormat(results[count].fltPrice.toFixed(2));
           }
         }
+        if(!results[0].strValidID){
+          for(count=0;count<results.length;count++){
+            results[count].strValidID = 'none';
+          }
+        }
       }
+      console.log(results);
       req.paramsUser = results;
       return next();
   });
