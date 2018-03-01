@@ -1,11 +1,6 @@
 extends ../../../templates/dash.pug
 
 block main
-  block append scripts
-    script.
-      $(window).on('load',function(){
-        $('#personal-info-tab').click();
-      });
   .jumbotron-banner(style='height:100px')
     center
   .sector(style='margin-top:0px; padding:0px')
@@ -23,7 +18,7 @@ block main
                   h2.text-headline-profile(style='border-bottom: 1px solid') Verified 
                 h1(style='margin-left:15px') #{paramsuser.strName}
                   button.btn.btn-danger.btn-md.btn.align-right(type='button' data-toggle='modal' data-target='#reportModal' style='float:right; margin-right: 30px; margin-top: 5px !important;') Report
-              .col-sm-3(style='width: 190px; border-left: 1px solid; height:160px')
+              .col-sm-3(style='width: 190px; border-left: 1px solid; height:160px; background: #EBECEE;')
                   table(style='width:190px')
                     tbody
                       tr
@@ -175,13 +170,13 @@ block main
             .col
               .row
                 .img-with-text
-                  a(href='/assets/images/Sample.jpg' alt='sample')
+                  a(onClick="window.open('/assets/images/Sample.jpg');" href='#' alt='sample')
                     img.port(src='/assets/images/Sample.jpg')
                   
                   center
                      p Sample Portfolio
                 .img-with-text
-                  a(href='/assets/images/Sample1.jpg' alt='sample')
+                  a(onClick="window.open('/assets/images/Sample1.jpg');" href='#' alt='sample')
                     img.port(src='/assets/images/Sample1.jpg')
                   
                   center

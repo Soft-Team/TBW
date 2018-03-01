@@ -597,10 +597,12 @@ header.heads {
 
 .profile-container{
     height: 161.5px;
-    /*width: 1300px;*/
-    margin-right: auto;
-    margin-left: auto;
+    width: 1246px;
+    /*margin-right: auto;*/
+    /*margin-left: auto;*/
     border: 1px solid;
+    background: linear-gradient(-90deg, #71C1FF, #EBECEE);
+    border-radius: 4px;
 }
 .col-sm-3{
     float: left;
@@ -780,4 +782,15 @@ header.heads {
 .img-with-text {
     text-align: justify;
     width: [width of img];
+}
+
+/*profile-navs*/
+#settings-tab, #personal-info-tab, #services-tab,
+#reviews-tab, #portfolio-tab{
+    text-decoration: none;
+    color: white;
+}
+#settings-tab.active, #personal-info-tab.active, #services-tab.active, 
+#reviews-tab.active, #portfolio-tab.active{
+    color: black;
 }
