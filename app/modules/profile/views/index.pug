@@ -34,12 +34,12 @@ block main
                       tr
                         td(style='padding-top:3px')
                           img(src='/assets/images/Icons/star.png', alt='star', style='height: 2rem; width: 2rem; margin-top:5px; margin-left:50px;')
-                          h2(style='float: right; margin-right: 50px; margin-bottom: 0rem') #{thisuser.formatrating}
+                          h2(style='float: right; margin-right: 50px; margin-bottom: 0rem') #{paramsuser.ave}
                           h4.profileA(style='margin-bottom: 0rem; margin-top:0px; display:inline-block') Rating
                       tr
                         td(style='padding-top:3px')
                           img(src='/assets/images/Icons/case.png', alt='star', style='height: 2rem; width: 2rem; margin-top:5px; margin-left:50px ')
-                          h2(style='float: right; margin-right: 50px; margin-bottom: 0rem') 300
+                          h2(style='float: right; margin-right: 50px; margin-bottom: 0rem') #{paramsuser.sum}
                           h4.profileB(style='margin-bottom: 0rem; margin-top:0px; display:inline-block') Finished
     nav
       .card.text-center(style='width:1286px')
