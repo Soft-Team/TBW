@@ -4,6 +4,16 @@ var db = require('../../lib/database')();
 var flog = require('../welcome/loggedin');
 var fs = require('fs');
 
+function selectedUser(req,res,next){
+  /*Selected User, Match(params);
+  *(tbluser)*/
+  db.query("SELECT * FROM tbluser WHERE strUserName= ?",[req.params.username], (err, results, fields) => {
+      if (err) console.log(err);
+      req.selectedUser= results;
+      return next();
+    });
+}
+
 adminRouter.get('/', flog, (req,res) => {
   switch (req.valid) {
     case 1:
@@ -170,7 +180,7 @@ adminRouter.get('/ReportLog', flog, (req,res) => {
 adminRouter.get('/IDVerification', flog, (req,res) => {
   switch (req.valid) {
     case 1:
-      db.query(`SELECT * FROM tbluser WHERE boolIsBanned=0 AND intType = 2 AND intStatus = 1`,  (err, results, fields) => {
+      db.query(`SELECT * FROM tbluser WHERE boolIsBanned=0 AND intType = 2 AND intStatus = 1 AND strValidID IS NOT NULL`,  (err, results, fields) => {
         if(err) return console.log(err)
         console.log(results.length);
         return res.render('admin/views/IDVerification', {resultspug: results});
@@ -197,14 +207,22 @@ adminRouter.get('/IDVerification/Approved/:username', flog, (req, res) => {
       break;
   }
 });
- 
-adminRouter.get('/IDVerification/Declined/:username', flog, (req, res) => {
+
+adminRouter.get('/IDVerification/Declined/:username', flog, selectedUser, (req, res) => {
   switch (req.valid) {
     case 1:
-      db.query(`UPDATE tbluser SET validID = null WHERE strUserName = ?`, [req.params.username], (err, results, fields) =>{
-        fs.unlink(`public/userImages/ids/${tbluser.strValidID}`);
-        if(err) return console.log(err)
-        return res.redirect('/admin/IDVerification');
+      db.beginTransaction(function(err) {
+        if (err) console.log(err);
+        fs.unlink('public/userImages/ids/'+req.selectedUser[0].strValidID);
+        db.query("SELECT * FROM tbluser WHERE strUserName= ?",[req.params.username], (err, results, fields) => {
+            db.query(`UPDATE tbluser SET strValidID = null WHERE strUserName = ?`, [req.params.username], (err, results, fields) =>{
+              if (err) console.log(err);
+              db.commit(function(err) {
+                  if (err) console.log(err);
+                  res.redirect('/admin/IDVerification');
+              });
+            });
+        });
       });
       break;
     case 2:
