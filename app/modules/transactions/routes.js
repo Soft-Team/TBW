@@ -43,6 +43,7 @@ function ongoingParams(req,res,next){
           results[count].date = date.toDateString("en-US").slice(4, 15);
         }
       }
+      console.log(results);
       req.ongoingParams= results;
       return next();
     });
@@ -168,13 +169,16 @@ router.post('/ongoing/finish/:transid', flog, ongoingParams,  (req, res) => {
     else{
       db.beginTransaction(function(err) {
           if (err) console.log(err);
-          db.query("UPDATE tbltransaction SET intTransStatus= 2, dtmTransEnded= NOW() WHERE intTransID= ?",[req.params.transid], (err, results, fields) => {
+          db.query("UPDATE tblservice SET intServStatus= 1 WHERE intServAccNo= ? AND intServStatus= 2", [req.ongoingParams[0].intServAccNo], function (err,  results, fields) {
               if (err) console.log(err);
-              db.query("INSERT INTO tblrating (intRatedAccNo, intRateTransID, intRating, datRateDate, txtRateReview) VALUES (?,?,?,CURDATE(),?)", [req.ongoingParams[0].intChatSeeker, req.ongoingParams[0].intTransID, req.body.rating, req.body.review], function (err,  results, fields) {
-                  if (err) console.log(err);
-                  db.commit(function(err) {
+            db.query("UPDATE tbltransaction SET intTransStatus= 2, dtmTransEnded= NOW() WHERE intTransID= ?",[req.params.transid], (err, results, fields) => {
+                if (err) console.log(err);
+                  db.query("INSERT INTO tblrating (intRatedAccNo, intRateTransID, intRating, datRateDate, txtRateReview) VALUES (?,?,?,CURDATE(),?)", [req.ongoingParams[0].intChatSeeker, req.ongoingParams[0].intTransID, req.body.rating, req.body.review], function (err,  results, fields) {
                       if (err) console.log(err);
-                      res.redirect('/transactions/finished');
+                      db.commit(function(err) {
+                          if (err) console.log(err);
+                          res.redirect('/transactions/finished');
+                      });
                   });
               });
           });

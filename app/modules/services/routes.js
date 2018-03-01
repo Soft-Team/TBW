@@ -240,6 +240,7 @@ function servRender(req,res){
           stringquery = stringquery.concat("AND intPriceType= ? ");
           paramsarray.push(req.params.pricing);
         }
+        /**/
         /*
         if(req.params.sorting=='rating'){
           stringquery = stringquery.concat("ORDER BY  DESC ");

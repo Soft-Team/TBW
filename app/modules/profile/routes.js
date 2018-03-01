@@ -10,7 +10,9 @@ var prepend = require('../welcome/prepend');
 function paramsUser(req, res, next){
   /*All Service Tags of Selected User, Match(params)
   *(tblservicetag)*(tblservice)*(tbluser)*/
-  db.query("SELECT * FROM tbluser LEFT JOIN tblservice ON intAccNo= intServAccNo LEFT JOIN tblservicetag ON intServTag= intServTagID WHERE intAccNo= ?",[req.params.userid], function (err, results, fields) {
+  var stringquery = "SELECT * FROM tbluser LEFT JOIN tblservice ON intAccNo= intServAccNo LEFT JOIN tblservicetag ON intServTag= intServTagID LEFT JOIN (SELECT *,AVG(intRating) AS ave FROM tblrating WHERE intRatedAccNo= ? GROUP BY intRatedAccNo)A ON intAccNo= intRatedAccNo LEFT JOIN (SELECT * FROM(SELECT *,SUM(count) AS sum FROM(SELECT *,COUNT(intTransID)as count FROM tbltransaction INNER JOIN tblchat ON intChatID= intTransChatID INNER JOIN tblservice ON intChatServ= intServID WHERE ";
+  var stringquery = stringquery.concat("intServAccNo= ? GROUP BY intServAccNo)C)S)B ON intAccNo= B.intServAccNo WHERE intAccNo= ?");
+  db.query(stringquery,[req.params.userid, req.params.userid, req.params.userid], function (err, results, fields) {
       if (err) return res.send(err);
       if(!(!results[0])){
         for(count=0;count<results.length;count++){
@@ -30,6 +32,21 @@ function paramsUser(req, res, next){
         if(!results[0].strValidID){
           for(count=0;count<results.length;count++){
             results[count].strValidID = 'none';
+          }
+        }
+        if(!results[0].ave){
+          for(count=0;count<results.length;count++){
+            results[count].ave = 0;
+          }
+        }
+        else{
+          for(count=0;count<results.length;count++){
+            results[count].ave = numberFormat(results[count].ave.toFixed(1));
+          }
+        }
+        if(!results[0].sum){
+          for(count=0;count<results.length;count++){
+            results[count].sum = 0;
           }
         }
       }
