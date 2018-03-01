@@ -18,7 +18,7 @@ adminRouter.get('/', flog, (req,res) => {
 adminRouter.get('/Active', flog, (req,res)=>{
   switch (req.valid) {
     case 1:
-      db.query(`SELECT * FROM tbluser WHERE boolIsBanned=0`, (err, results, fields) => {
+      db.query(`SELECT * FROM tbluser WHERE boolIsBanned= 0 AND (((intStatus= 1 OR intStatus= 2) AND intType!= 3) OR (intStatus= 2 AND intType= 3))`,  (err, results, fields) => {
         if(err) return console.log(err)
         results= results.filter(function(record) {return record.intType !== 1});
         console.log(results.length);
@@ -76,6 +76,71 @@ adminRouter.get('/Unbanned/:username', flog, (req, res)=>{
       break;
   }
 })
+
+adminRouter.get('/Unregistered', flog, (req, res)=>{
+  switch (req.valid) {
+    case 1:
+      db.query(`SELECT * FROM tbluser WHERE boolIsBanned=0 AND (intType = 3 AND intStatus = 1)`,  (err, results, fields) => {
+        if(err) return console.log(err)
+        results= results.filter(function(record) {return record.intType !== 1});
+        console.log(results.length);
+        return res.render('admin/views/Unregistered', {resultspug: results});
+      });
+      break;
+    case 2:
+    case 3:
+      res.render('welcome/views/invalid/restrict');
+      break;
+  }
+});
+
+adminRouter.get('/Unregistered/Accept/:username' , flog, (req, res)=>{
+  switch (req.valid) {
+    case 1:
+      db.query(`UPDATE tbluser SET intStatus = 2 WHERE strUserName = ?`, [req.params.username], (err, results, fields) =>{
+        if(err) return console.log(err)
+        return res.redirect('/admin/Unregistered');
+      });
+      break;
+    case 2:
+    case 3:
+      res.render('welcome/views/invalid/restrict');
+      break;
+  }
+});
+
+adminRouter.get('/Unregistered/Decline/:username', flog, (req,res) =>{
+  switch (req.valid) {
+    case 1:
+      db.query(`UPDATE tbluser SET intStatus = 3 WHERE strUserName = ?`, [req.params.username], (err, results, fields) =>{
+        if(err) return console.log(err)
+        return res.redirect('/admin/Unregistered');
+      });
+      break;
+    case 2:
+    case 3:
+      res.render('welcome/views/invalid/restrict');
+      break;
+  }
+});
+
+adminRouter.get('/Declined', flog, (req, res) => {
+  switch (req.valid) {
+    case 1:
+      db.query(`SELECT * FROM tbluser WHERE intStatus = 3`,  (err, results, fields) => {
+        if(err) return console.log(err)
+        results= results.filter(function(record) {return record.intType !== 1});
+        console.log(results.length);
+        return res.render('admin/views/Declined', {resultspug: results});
+      });
+      break;
+    case 2:
+    case 3:
+      res.render('welcome/views/invalid/restrict');
+      break;
+  }
+});
+
 
 adminRouter.get('/ReportedUsers', flog, (req,res) => {
   switch (req.valid) {

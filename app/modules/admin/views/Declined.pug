@@ -3,7 +3,7 @@ extends ../../../templates/dash-admin.pug
 block main
     .jumbotron-admin
         center
-            h1 Active Users
+            h1 Declined Users
     p  
     center
     .container
@@ -19,7 +19,8 @@ block main
                         th(scope='col') Email
                         th(scope='col') Contact No.
                         th(scope='col') User Type
-                        th(scope='col') Status
+                        th(scope='col') &nbsp
+                        th(scope='col') &nbsp
                         th(scope='col') &nbsp
 
                 tbody
@@ -39,10 +40,9 @@ block main
                             td Business
                         else
                             td Admin
-                        if user.intStatus == '1'
-                            td Unverified
-                        else 
-                            td Verified
                         td 
-                            a.btn.btn-outline-danger(href=`/admin/Banned/${user.strUserName}`) Ban  
+                            a.btn.btn-outline-success(href=`/admin/Unregistered/Accept/${user.strUserName}`) Accept
+                        td 
+                            a.btn.btn-outline-dark(onClick=`window.open("/userImages/permits/${user.strValidID}");` href='#' alt='sample') Business Permit
+    
                             
