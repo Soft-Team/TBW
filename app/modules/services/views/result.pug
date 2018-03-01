@@ -72,12 +72,12 @@ block main
                       img(src='/userImages/profile/'+serv.strProfilePic, alt='Card image cap', style='height: 8rem; width: 8rem; border-radius: 3px 0px 0px 0px; border-right: 1px solid #007BFF;')
                     td
                       img(src='/assets/images/Icons/star.png', alt='star', style='height: 1.5rem; width: 1.5rem; margin-left:20px;')
-                      p(style='float: right; margin-right: 30px; margin-bottom: 0rem') 4.8
+                      p(style='float: right; margin-right: 30px; margin-bottom: 0rem') #{serv.ave}
                       p.cenR(style='margin-bottom: 0rem') Rating
                   tr
                     td
                       img(src='/assets/images/Icons/case.png', alt='star', style='height: 1.5rem; width: 1.5rem; margin-left:20px;')
-                      p(style='float: right; margin-right: 30px; margin-bottom: 0rem') 100  
+                      p(style='float: right; margin-right: 30px; margin-bottom: 0rem') #{serv.sum}
                       p.cenF(style='margin-bottom: 0rem') Finished
 
               //-img.card-img-top(src='/assets/images/Tyler.jpg', alt='Card image cap', style='height: 8rem; width: 8rem; ')

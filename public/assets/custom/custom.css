@@ -635,12 +635,12 @@ header.heads {
 
 /* Center Rating & Center Finished */
 .profileA{
-    padding: .5px 60px 5px 60px;
+    padding: .5px 50px 5px 70px;
     border-bottom: 1px solid;
 }
 
 .profileB{
-    padding: 0px 0px 60px;
+    padding: 0px 40px 60px 55px
 }
 
 .f{
@@ -828,10 +828,11 @@ header.heads {
     width: 894px
 }
 #right-pane{
-  width: 190px;
+  width: 190.4px;
   border-left: 1px solid;
   height:160px;
   background: #EBECEE;
+  border-radius: 0px 3px 3px 0px;
 }
 
 #Personal-Info > .col-sm-3{

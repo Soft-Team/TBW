@@ -10,8 +10,8 @@ var prepend = require('../welcome/prepend');
 function paramsUser(req, res, next){
   /*All Service Tags of Selected User, Match(params)
   *(tblservicetag)*(tblservice)*(tbluser)*/
-  var stringquery = "SELECT * FROM tbluser LEFT JOIN tblservice ON intAccNo= intServAccNo LEFT JOIN tblservicetag ON intServTag= intServTagID LEFT JOIN (SELECT *,AVG(intRating) AS ave FROM tblrating WHERE intRatedAccNo= ? GROUP BY intRatedAccNo)A ON intAccNo= intRatedAccNo LEFT JOIN (SELECT * FROM(SELECT *,SUM(count) AS sum FROM(SELECT *,COUNT(intTransID)as count FROM tbltransaction INNER JOIN tblchat ON intChatID= intTransChatID INNER JOIN tblservice ON intChatServ= intServID WHERE ";
-  var stringquery = stringquery.concat("intServAccNo= ? GROUP BY intServAccNo)C)S)B ON intAccNo= B.intServAccNo WHERE intAccNo= ?");
+  var stringquery = "SELECT * FROM tbluser LEFT JOIN tblservice ON intAccNo= intServAccNo LEFT JOIN tblservicetag ON intServTag= intServTagID LEFT JOIN (SELECT *,AVG(intRating) AS ave FROM tblrating WHERE intRatedAccNo= ? GROUP BY intRatedAccNo)A ON intAccNo= intRatedAccNo LEFT JOIN (SELECT intServAccNo as servacc, S.sum FROM(SELECT *,SUM(count) AS sum FROM(SELECT *,COUNT(intTransID)as count FROM tbltransaction INNER JOIN tblchat ON intChatID= intTransChatID INNER JOIN tblservice ON intChatServ= intServID WHERE ";
+  stringquery = stringquery.concat("intServAccNo= ? GROUP BY intServAccNo)C)S)B ON intAccNo= servacc WHERE intAccNo= ?");
   db.query(stringquery,[req.params.userid, req.params.userid, req.params.userid], function (err, results, fields) {
       if (err) return res.send(err);
       if(!(!results[0])){
