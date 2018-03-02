@@ -28,7 +28,7 @@ block main
                     button#report.btn.btn-light.btn-md.btn.ml-2(type='button' data-toggle='modal' data-target='#editModal' title='Edit')
                       img(src='/assets/images/icons/settings.png' style='height:35px; width:35px;')
               #right-pane.col-sm-3
-                  table(style='width:190px;   border-radius: 0px 5px 5px 0px; ')
+                  table
                     tbody
                       tr
                         td(style='padding-top:3px;', title='Seeker and Provider rating')
@@ -122,53 +122,54 @@ block main
                   h1(style='float:right; margin-top: 20px') 4.5
           #Portfolio.tab-pane.fade(role='tabpanel', aria-labelledby='portfolio-tab', style='')
             .col
-              .row
-                .img-with-text
-                  .clo X
-                  a(onClick="window.open('/assets/images/Sample.jpg');" href='#' alt='sample')
-                    img.port(src='/assets/images/Sample.jpg')
-                  
-                  center
-                     p Sample Portfolio
-                .img-with-text
-                  .clo X
-                  a(onClick="window.open('/assets/images/Sample1.jpg');" href='#' alt='sample')
-                    img.port(src='/assets/images/Sample1.jpg')
-                  
-                  center
-                    p Sample Portfolio
+              each paramsuser,index in paramsUser
+                if index == 0 
+                  .row
+                    .col
+                    .col.mt-4.mb-4
+                      if paramsuser.current == 1
+                        button.btn.btn-primary.btn-md.btn(type='button' data-toggle='modal' data-target='#AddDocument' style='padding-top:8px') + Add Document
+                    .col
+                  .row.mb-4
+                    each doc in documents
+                      .img-with-text
+                        a.clo(href='/profile/'+paramsuser.intAccNo+'/document/remove/'+doc.intDocID) X
+                        a(onClick="window.open('/userImages/documents/'"+doc.strDocument+");" href='#' alt='document')
+                          img.port(src='/userImages/documents/'+doc.strDocument)
+
 
   #reportModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='reportModalTitle' aria-hidden='true')
     .modal-dialog(role='document')
       .modal-content
-        form(method='POST' action='/myservices' style='float:right; margin-right: 30px; margin-top: 5px !important;')
-          .modal-header
-            h5#reportModalTitle.modal-title Report User
-            button.close(type='button' data-dismiss='modal' aria-label='Close')
-              span(aria-hidden='true') ×
-          .modal-body
-            .row
-              .col
-                .custom-control.custom-radio
-                  input#customRadio1.custom-control-input(type='radio', name='customRadio')
-                  label.custom-control-label(for='customRadio1') Communication Abuse 
-                .custom-control.custom-radio
-                  input#customRadio2.custom-control-input(type='radio', name='customRadio')
-                  label.custom-control-label(for='customRadio2') Scammer/Hacker
-                .custom-control.custom-radio
-                  input#customRadio3.custom-control-input(type='radio', name='customRadio')
-                  label.custom-control-label(for='customRadio3') Spammer
-                .custom-control.custom-radio
-                  input#customRadio4.custom-control-input(type='radio', name='customRadio')
-                  label.custom-control-label(for='customRadio4') Others
-              .col
-                .form-group
-                  label(for='exampleFormControlTextarea1') Others Specify Here..
-                  textarea#exampleFormControlTextarea1.form-control(rows='3')
+        each paramsuser, index in paramsUser
+          form(method='POST' action=(`/profile/reported/`+paramsuser.intAccNo) style='float:right; margin-right: 30px; margin-top: 5px !important;')
+            .modal-header
+              h5#reportModalTitle.modal-title Report User
+              button.close(type='button' data-dismiss='modal' aria-label='Close')
+                span(aria-hidden='true') ×
+            .modal-body
+              .row
+                .col
+                  .custom-control.custom-radio
+                    input#customRadio1.custom-control-input(type='radio', name='customRadio', value = 'Communication Abuse')
+                    label.custom-control-label(for='customRadio1') Communication Abuse 
+                  .custom-control.custom-radio
+                    input#customRadio2.custom-control-input(type='radio', name='customRadio', value = 'Scammer/Hacker')
+                    label.custom-control-label(for='customRadio2') Scammer/Hacker
+                  .custom-control.custom-radio
+                    input#customRadio3.custom-control-input(type='radio', name='customRadio', value = 'Spammer')
+                    label.custom-control-label(for='customRadio3') Spammer
+                  .custom-control.custom-radio
+                    input#customRadio4.custom-control-input(type='radio', name='customRadio')
+                    label.custom-control-label(for='customRadio4') Others
+                .col
+                  .form-group
+                    label(for='exampleFormControlTextarea1') Others Specify Here..
+                    textarea#exampleFormControlTextarea1.form-control(rows='3', value = 'Others')
 
-          .modal-footer
-              button.btn.btn-primary(type='submit') Submit
-              button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+            .modal-footer
+                button.btn.btn-primary(type='submit') Submit
+                button.btn.btn-secondary(type='button', data-dismiss='modal') Close
 
   #editModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='editModalTitle' aria-hidden='true')
     .modal-dialog(role='document')
@@ -286,5 +287,28 @@ block main
                                 .btn-group.special(role='group')
                                   button.editbuttons.btn.btn-primary.btn-md(type='submit') Submit
                                   a.editbuttons.btn.btn-secondary.btn-md(type='button' data-dismiss='modal' aria-pressed='true') Cancel
+
+  #AddDocument.modal.fade(tabindex='-1' role='dialog' aria-labelledby='AddDocumentTitle' aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        form(method='POST' action='/profile/document/'+thisuser.intAccNo enctype='multipart/form-data')
+          .modal-header
+            h5#AddDocumentTitle.modal-title Add Document
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+              span(aria-hidden='true') ×
+          .modal-body
+            .row
+              .col-4
+                p.mt-1.ml-3
+                  b Valid ID
+              .col-8
+                .form-group.mr-3
+                  input#docu.filestyle(type='file' name='document' data-classbutton='btn btn-primary' data-input='false' data-classicon='icon-plus' accept='image/*' required)
+            
+
+          .modal-footer
+              button.btn.btn-primary(type='submit') Submit
+              button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+
 
   block profile
