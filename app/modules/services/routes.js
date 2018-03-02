@@ -191,6 +191,15 @@ function servStatus(req, res, next){
       return next();
   });
 }
+function documents(req,res,next){
+  /*Documents of Params Service User, Match(params);
+  *(tbldocument)*/
+  db.query("SELECT * FROM tbldocument INNER JOIN tbluser ON intDocAccNo= intAccNo INNER JOIN tblservice ON intAccNo= intServAccNo WHERE intServID= ?",[req.params.servid], (err, results, fields) => {
+      if (err) console.log(err);
+      req.documents= results;
+      return next();
+    });
+}
 
 function render(req,res){
   switch (req.valid) {
@@ -251,7 +260,7 @@ function servRender(req,res){
         else if(req.params.sorting=='finished'){
           stringquery = stringquery.concat("ORDER BY sum DESC ");
         }
-      
+
         if(paramsarray.length==1){
           db.query(stringquery,[req.params.servName,req.session.user,paramsarray[0]], function (err, results, fields) {
               if (err) return res.send(err);
@@ -357,7 +366,8 @@ function servReqRender(req,res){
         res.render('services/views/notag', {thisUserTab: req.user, messCount: req.messCount[0].count, servName: req.params.servName, servTags: req.servTags});
       }
       else{
-        var stringquery="SELECT * FROM tblservice INNER JOIN tblservicetag ON intServTag= intServTagID INNER JOIN tbluser ON intServAccNo= intAccNo WHERE strServName= ? AND intAccNo!= ? AND intServStatus= 1 ";
+        var stringquery="SELECT * FROM tblservice INNER JOIN tblservicetag ON intServTag= intServTagID INNER JOIN tbluser ON intServAccNo= intAccNo LEFT JOIN (SELECT *,AVG(intRating) AS ave FROM tblrating GROUP BY intRatedAccNo)A ON intAccNo= intRatedAccNo LEFT JOIN (SELECT intServAccNo as servacc, S.sum FROM(SELECT *,SUM(count) AS sum FROM";
+        stringquery= stringquery.concat("(SELECT *,COUNT(intTransID)as count FROM tbltransaction INNER JOIN tblchat ON intChatID= intTransChatID INNER JOIN tblservice ON intChatServ= intServID GROUP BY intServAccNo)C GROUP BY intServAccNo)S)B ON intAccNo= servacc WHERE strServName= ? AND intAccNo!= ? AND tblservice.intServStatus= 1 AND boolIsBanned= 0 ");
         var paramsarray= [];
         if(req.params.city!='any'){
           stringquery = stringquery.concat("AND strCity= ? ");
@@ -494,11 +504,146 @@ function servReqRender(req,res){
       break;
   }
 }
+function portfolioRender(req,res){
+  var searchparams = [req.params.servName, req.params.city, req.params.brngy, req.params.pricing, req.params.sorting];
+  switch (req.valid) {
+    case 1:
+      res.render('welcome/views/invalid/adm-restrict');
+      break;
+    case 2:
+    case 3:
+      if(!req.searchServTag[0]){
+        res.render('services/views/notag', {thisUserTab: req.user, messCount: req.messCount[0].count, servName: req.params.servName, servTags: req.servTags});
+      }
+      else{
+        var stringquery="SELECT * FROM tblservice INNER JOIN tblservicetag ON intServTag= intServTagID INNER JOIN tbluser ON intServAccNo= intAccNo LEFT JOIN (SELECT *,AVG(intRating) AS ave FROM tblrating GROUP BY intRatedAccNo)A ON intAccNo= intRatedAccNo LEFT JOIN (SELECT intServAccNo as servacc, S.sum FROM(SELECT *,SUM(count) AS sum FROM";
+        stringquery= stringquery.concat("(SELECT *,COUNT(intTransID)as count FROM tbltransaction INNER JOIN tblchat ON intChatID= intTransChatID INNER JOIN tblservice ON intChatServ= intServID GROUP BY intServAccNo)C GROUP BY intServAccNo)S)B ON intAccNo= servacc WHERE strServName= ? AND intAccNo!= ? AND tblservice.intServStatus= 1 AND boolIsBanned= 0 ");
+        var paramsarray= [];
+        if(req.params.city!='any'){
+          stringquery = stringquery.concat("AND strCity= ? ");
+          paramsarray.push(req.params.city);
+        }
+        if(req.params.brngy!='any'){
+          stringquery = stringquery.concat("AND strBarangay= ? ");
+          paramsarray.push(req.params.brngy);
+        }
+        if(req.params.pricing!='any'){
+          stringquery = stringquery.concat("AND intPriceType= ? ");
+          paramsarray.push(req.params.pricing);
+        }
+
+        if(req.params.sorting=='rating'){
+          stringquery = stringquery.concat("ORDER BY ave DESC ");
+        }
+        else if(req.params.sorting=='lprice'){
+          stringquery = stringquery.concat("ORDER BY fltPrice ASC ");
+        }
+        else if(req.params.sorting=='finished'){
+          stringquery = stringquery.concat("ORDER BY sum DESC ");
+        }
+
+        if(paramsarray.length==1){
+          db.query(stringquery,[req.params.servName,req.session.user,paramsarray[0]], function (err, results, fields) {
+              if (err) return res.send(err);
+              if(!results[0])
+                res.render('services/views/noresult', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, servTags: req.servTags});
+              else{
+                for(count=0;count<results.length;count++){
+                  results[count].prepend = prepend(results[count].intServAccNo);
+                  if(!results[count].ave){
+                    results[count].ave = 0;
+                  }
+                  else{
+                    results[count].ave = numberFormat(results[count].ave.toFixed(1));
+                  }
+                  if(!results[count].sum){
+                    results[count].sum = 0;
+                  }
+                }
+                  res.render('services/views/portfolio', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, searchServ: results, documents: req.documents, requestTab: req.requestServ, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial});
+
+              }
+          });
+        }
+        else if(paramsarray.length==2){
+          db.query(stringquery,[req.params.servName,req.session.user,paramsarray[0],paramsarray[1]], function (err, results, fields) {
+              if (err) return res.send(err);
+              if(!results[0])
+                res.render('services/views/noresult', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, servTags: req.servTags});
+              else{
+                for(count=0;count<results.length;count++){
+                  results[count].prepend = prepend(results[count].intServAccNo);
+                  if(!results[count].ave){
+                    results[count].ave = 0;
+                  }
+                  else{
+                    results[count].ave = numberFormat(results[count].ave.toFixed(1));
+                  }
+                  if(!results[count].sum){
+                    results[count].sum = 0;
+                  }
+                }
+                res.render('services/views/portfolio', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, searchServ: results, documents: req.documents, requestTab: req.requestServ, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial});
+
+              }
+          });
+        }
+        else if(paramsarray.length==3){
+          db.query(stringquery,[req.params.servName,req.session.user,paramsarray[0],paramsarray[1],paramsarray[2]], function (err, results, fields) {
+              if (err) return res.send(err);
+              if(!results[0])
+                res.render('services/views/noresult', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, servTags: req.servTags});
+              else{
+                for(count=0;count<results.length;count++){
+                  results[count].prepend = prepend(results[count].intServAccNo);
+                  if(!results[count].ave){
+                    results[count].ave = 0;
+                  }
+                  else{
+                    results[count].ave = numberFormat(results[count].ave.toFixed(1));
+                  }
+                  if(!results[count].sum){
+                    results[count].sum = 0;
+                  }
+                }
+                res.render('services/views/portfolio', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, searchServ: results, documents: req.documents, requestTab: req.requestServ, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial});
+
+              }
+          });
+        }
+        else{
+          db.query(stringquery,[req.params.servName, req.session.user], function (err, results, fields) {
+              if (err) return res.send(err);
+              if(!results[0])
+                res.render('services/views/noresult', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, servTags: req.servTags});
+              else{
+                for(count=0;count<results.length;count++){
+                  results[count].prepend = prepend(results[count].intServAccNo);
+                  if(!results[count].ave){
+                    results[count].ave = 0;
+                  }
+                  else{
+                    results[count].ave = numberFormat(results[count].ave.toFixed(1));
+                  }
+                  if(!results[count].sum){
+                    results[count].sum = 0;
+                  }
+                }
+                res.render('services/views/portfolio', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, searchServ: results, documents: req.documents, requestTab: req.requestServ, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial});
+
+              }
+          });
+        }
+      }
+      break;
+  }
+}
 
 router.get('/', flog, messCount, servTags, render);
 router.get('/:servName', flog, messCount, servTags, servNameRender);
 router.get('/:servName/:city/:brngy/:pricing/:sorting', flog, messCount, searchServTag, servTags, servRender);
 router.get('/:servName/:city/:brngy/:pricing/:sorting/request/:servid', flog, messCount, searchServTag, servTags, requestServ, regularSched, specialSched, servReqRender);
+router.get('/:servName/:city/:brngy/:pricing/:sorting/portfolio/:servid', flog, messCount, searchServTag, servTags, documents, portfolioRender);
 
 router.post('/', flog, messCount, (req, res) => {
   if(!req.body.city)

@@ -123,21 +123,21 @@ block main
                   h1(style='float:right; margin-top: 20px') 4.5
           #Portfolio.tab-pane.fade(role='tabpanel', aria-labelledby='portfolio-tab', style='')
             .col
-              .row
-                .img-with-text
-                  .clo X
-                  a(onClick="window.open('/assets/images/Sample.jpg');" href='#' alt='sample')
-                    img.port(src='/assets/images/Sample.jpg')
-                  
-                  center
-                     p Sample Portfolio
-                .img-with-text
-                  .clo X
-                  a(onClick="window.open('/assets/images/Sample1.jpg');" href='#' alt='sample')
-                    img.port(src='/assets/images/Sample1.jpg')
-                  
-                  center
-                    p Sample Portfolio
+              each paramsuser,index in paramsUser
+                if index == 0 
+                  .row
+                    .col
+                    .col.mt-4.mb-4
+                      if paramsuser.current == 1
+                        button.btn.btn-primary.btn-md.btn(type='button' data-toggle='modal' data-target='#AddDocument' style='padding-top:8px') + Add Document
+                    .col
+                  .row.mb-4
+                    each doc in documents
+                      .img-with-text
+                        a.clo(href='/profile/'+paramsuser.intAccNo+'/document/remove/'+doc.intDocID) X
+                        a(onClick="window.open('/userImages/documents/'"+doc.strDocument+");" href='#' alt='document')
+                          img.port(src='/userImages/documents/'+doc.strDocument)
+
 
   #reportModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='reportModalTitle' aria-hidden='true')
     .modal-dialog(role='document')
@@ -288,5 +288,28 @@ block main
                                 .btn-group.special(role='group')
                                   button.editbuttons.btn.btn-primary.btn-md(type='submit') Submit
                                   a.editbuttons.btn.btn-secondary.btn-md(type='button' data-dismiss='modal' aria-pressed='true') Cancel
+
+  #AddDocument.modal.fade(tabindex='-1' role='dialog' aria-labelledby='AddDocumentTitle' aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        form(method='POST' action='/profile/document/'+thisuser.intAccNo enctype='multipart/form-data')
+          .modal-header
+            h5#AddDocumentTitle.modal-title Add Document
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+              span(aria-hidden='true') ×
+          .modal-body
+            .row
+              .col-4
+                p.mt-1.ml-3
+                  b Valid ID
+              .col-8
+                .form-group.mr-3
+                  input#docu.filestyle(type='file' name='document' data-classbutton='btn btn-primary' data-input='false' data-classicon='icon-plus' accept='image/*' required)
+            
+
+          .modal-footer
+              button.btn.btn-primary(type='submit') Submit
+              button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+
 
   block profile

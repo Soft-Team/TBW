@@ -6,6 +6,7 @@ var messCount = require('../welcome/messCount');
 var numberFormat = require('../welcome/numberFormat');
 var fs = require('fs');
 var prepend = require('../welcome/prepend');
+var makeid = require('../welcome/makeid');
 
 function paramsUser(req, res, next){
   /*All Service Tags of Selected User, Match(params)
@@ -55,6 +56,24 @@ function paramsUser(req, res, next){
       return next();
   });
 }
+function documents(req,res,next){
+  /*Documents of Params User, Match(params);
+  *(tbldocument)*/
+  db.query("SELECT * FROM tbldocument WHERE intDocAccNo= ?",[req.params.userid], (err, results, fields) => {
+      if (err) console.log(err);
+      req.documents= results;
+      return next();
+    });
+}
+function paramsDoc(req,res,next){
+  /*Documents of Params User, Match(params);
+  *(tbldocument)*/
+  db.query("SELECT * FROM tbldocument WHERE intDocID= ?",[req.params.docid], (err, results, fields) => {
+      if (err) console.log(err);
+      req.paramsDoc= results;
+      return next();
+    });
+}
 
 function render(req,res){
   switch (req.valid) {
@@ -78,16 +97,40 @@ function profRender(req,res){
         res.redirect('/noroute');
       }
       else{
-        res.render('profile/views/index',{thisUserTab: req.user, messCount: req.messCount[0].count, paramsUser: req.paramsUser, servempty: req.servempty});
+        res.render('profile/views/index',{thisUserTab: req.user, messCount: req.messCount[0].count, paramsUser: req.paramsUser, servempty: req.servempty, documents: req.documents});
+      }
+      break;
+  }
+}
+function delDocRender(req,res){
+  switch (req.valid) {
+    case 1:
+      res.render('welcome/views/invalid/adm-restrict');
+      break;
+    case 2:
+    case 3:
+      if (!req.paramsUser[0] || !req.paramsDoc[0]){
+        res.redirect('/noroute');
+      }
+      else if (req.paramsUser[0].intAccNo != req.session.user){
+        res.redirect('/profile/'+req.session.user);
+      }
+      else{
+        db.query("DELETE FROM tbldocument WHERE intDocID= ?", [req.params.docid] , (err,results,fields)=>{
+            if (err) console.log(err);
+            fs.unlink('public/userImages/documents/'+req.paramsDoc[0].strDocument);
+            res.redirect('/profile/'+req.session.user);
+        });
       }
       break;
   }
 }
 
 router.get('/', flog, messCount, render);
-router.get('/:userid', flog, messCount, paramsUser, profRender);
+router.get('/:userid', flog, messCount, paramsUser, documents, profRender);
+router.get('/:userid/document/remove/:docid', flog, paramsUser, documents, paramsDoc, delDocRender);
 
-router.post('/personal/:userid', flog, messCount, paramsUser, (req, res) => {
+router.post('/personal/:userid', flog, messCount, paramsUser, documents, (req, res) => {
   var contact = '0'+req.body.contact.toString();
   if(!req.files.profilepic){
     db.query("UPDATE tbluser SET strEmail= ?, strContactNo= ?, strCity= ?, strBarangay= ? WHERE intAccNo= ?",[req.body.email, contact, req.body.city, req.body.brngy, req.session.user], function (err,  results, fields) {
@@ -97,7 +140,7 @@ router.post('/personal/:userid', flog, messCount, paramsUser, (req, res) => {
   }
   else if(req.files.profilepic.mimetype != 'image/jpeg' && req.files.profilepic.mimetype != 'image/png'){
     console.log(req.files.profilepic.mimetype);
-    res.render('profile/views/invalid/imgerror',{thisUserTab: req.user, messCount: req.messCount[0].count, paramsUser: req.paramsUser, servempty: req.servempty});
+    res.render('profile/views/invalid/imgerror',{thisUserTab: req.user, messCount: req.messCount[0].count, paramsUser: req.paramsUser, servempty: req.servempty, documents: req.documents});
   }
   else{
     console.log('no');
@@ -123,7 +166,7 @@ router.post('/personal/:userid', flog, messCount, paramsUser, (req, res) => {
     });
   }
 });
-router.post('/pass/:userid', flog, messCount, paramsUser, (req, res) => {
+router.post('/pass/:userid', flog, messCount, paramsUser, documents, (req, res) => {
   if(req.paramsUser[0].strPassword == req.body.oldpass){
     if(req.body.newpass == req.body.confirmpass){
       db.query("UPDATE tbluser SET strPassword= ? WHERE intAccNo= ?",[req.body.newpass, req.session.user], function (err,  results, fields) {
@@ -132,19 +175,19 @@ router.post('/pass/:userid', flog, messCount, paramsUser, (req, res) => {
       });
     }
     else{
-      res.render('profile/views/invalid/notmatch',{thisUserTab: req.user, messCount: req.messCount[0].count, paramsUser: req.paramsUser, servempty: req.servempty});
+      res.render('profile/views/invalid/notmatch',{thisUserTab: req.user, messCount: req.messCount[0].count, paramsUser: req.paramsUser, servempty: req.servempty, documents: req.documents});
     }
   }
   else{
-    res.render('profile/views/invalid/notmatch',{thisUserTab: req.user, messCount: req.messCount[0].count, paramsUser: req.paramsUser, servempty: req.servempty});
+    res.render('profile/views/invalid/notmatch',{thisUserTab: req.user, messCount: req.messCount[0].count, paramsUser: req.paramsUser, servempty: req.servempty, documents: req.documents});
   }
 
 });
-router.post('/validid/:userid', flog, messCount, paramsUser, (req, res) => {
+router.post('/validid/:userid', flog, messCount, paramsUser, documents, (req, res) => {
   var newAccNo= prepend(req.session.user);
   var jpeg = 'VID-'+newAccNo.toString().concat('.jpg');
   if(req.files.validid.mimetype != 'image/jpeg' && req.files.validid.mimetype != 'image/png'){
-    res.render('profile/views/invalid/imgerror',{thisUserTab: req.user, messCount: req.messCount[0].count, paramsUser: req.paramsUser, servempty: req.servempty});
+    res.render('profile/views/invalid/imgerror',{thisUserTab: req.user, messCount: req.messCount[0].count, paramsUser: req.paramsUser, servempty: req.servempty, documents: req.documents});
   }
   else{
     req.files.validid.mv('public/userImages/ids/'+jpeg, function(err){
@@ -155,9 +198,20 @@ router.post('/validid/:userid', flog, messCount, paramsUser, (req, res) => {
     });
   }
 });
+router.post('/document/:userid', flog, messCount, paramsUser, documents, (req, res) => {
+  var newAccNo= prepend(req.session.user);
+  var jpeg = 'DOC-'+newAccNo.toString().concat(makeid(30)+'.jpg');
+  if(req.files.document.mimetype != 'image/jpeg' && req.files.document.mimetype != 'image/png'){
+    res.render('profile/views/invalid/imgerror',{thisUserTab: req.user, messCount: req.messCount[0].count, paramsUser: req.paramsUser, servempty: req.servempty, documents: req.documents});
+  }
+  else{
+    req.files.document.mv('public/userImages/documents/'+jpeg, function(err){
+      db.query("INSERT INTO tbldocument (intDocAccNo, strDocument) VALUES (?,?)", [req.session.user, jpeg] , (err,results,fields)=>{
+          if (err) console.log(err);
+          res.redirect('/profile/'+req.session.user);
+      });
+    });
+  }
+});
 
-router.post('reported/:userid', flog, messCount, paramsUser, (req, res) => {
-    db.query(`INSERT INTO tbluser(intRepCategory, txtRepDesc, datRepDate) VALUES (?,?,?)`)
-  
-})
 exports.profile = router;
