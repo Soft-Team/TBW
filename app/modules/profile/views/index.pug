@@ -25,22 +25,22 @@ block main
                     button#report.btn.btn-danger.btn-md.btn(type='button' data-toggle='modal' data-target='#reportModal' style='padding-top:8px')
                       i.fa.fa-exclamation.fa-2x(style='height:35px; width:35px;')
                   else
-                    button#report.btn.btn-light.btn-md.btn.ml-2(type='button' data-toggle='modal' data-target='#editModal')
-                      //- i.fa.fa-cogs.fa-2x
+                    button#report.btn.btn-light.btn-md.btn.ml-2(type='button' data-toggle='modal' data-target='#editModal' title='Edit')
                       img(src='/assets/images/icons/settings.png' style='height:35px; width:35px;')
               #right-pane.col-sm-3
                   table(style='width:190px;   border-radius: 0px 5px 5px 0px; ')
                     tbody
                       tr
-                        td(style='padding-top:3px;')
+                        td(style='padding-top:3px;', title='Seeker and Provider rating')
                           img(src='/assets/images/Icons/star.png', alt='star', style='height: 2rem; width: 2rem; margin-top:5px; margin-left:50px;')
                           h2(style='float: right; margin-right: 50px; margin-bottom: 0rem') #{paramsuser.ave}
                           h4.profileA(style='margin-bottom: 0rem; margin-top:0px; display:inline-block') Rating
                       tr
-                        td(style='padding-top:3px')
+                        td(style='padding-top:3px', title='Jobs finished as a Provider')
                           img(src='/assets/images/Icons/case.png', alt='star', style='height: 2rem; width: 2rem; margin-top:5px; margin-left:50px ')
                           h2(style='float: right; margin-right: 50px; margin-bottom: 0rem') #{paramsuser.sum}
                           h4.profileB(style='margin-bottom: 0rem; margin-top:0px; display:inline-block') Finished
+                        
     nav
       .card.text-center(style='width:1286px')
         .card-header(style='padding-bottom:0rem')
@@ -94,8 +94,7 @@ block main
                             else if serv.intServStatus == '0'
                               td Unavailable
                             else if serv.intServStatus == '2'
-                              td Unavailable(Ongoing)  
-                              td &nbsp
+                              td Unavailable(Ongoing) 
           #Reviews.tab-pane.fade(role='tabpanel', aria-labelledby='reviews-tab', style='height: 300px')
             .sector-container-footer
               .footer-container
