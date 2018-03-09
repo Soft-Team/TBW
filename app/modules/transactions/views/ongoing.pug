@@ -12,42 +12,40 @@ block main
         table.table.table-striped.font1.box-shadow-mini
           thead
             tr.text-white
+              th(scope='col') Service
               th(scope='col') Role
               th(scope='col') Partner 
-                    th(scope='col', style='padding-left:0px; padding-right:0px;') Schedule
-              th(scope='col', style='text-align: right; padding-right: 0px') &nbsp
-              th(scope='col', style='padding-left:0px; padding-right:0px; text-align: left;') &nbsp
-              th(scope='col', style='padding-left:0px; padding-right:0px; text-align: left;') &nbsp
+              th(scope='col') Schedule
+              th(scope='col') Actions
               
           tbody
             each thisuser in thisUserTab
+              - empty = 1
               each trans in ongoingtab
+                - empty = 0
                 tr
+                  td #{trans.strServName}
                   if trans.intServAccNo == thisuser.intAccNo 
                     td Provider
                   else
                     td Seeker
-                  td #{trans.strName}
-                  if trans.intServAccNo != thisuser.intAccNo 
-                    
-                  td(style='width: 300px !important; padding-right:5px; padding-left:0px; text-align: right;')
+                  td 
+                    a(href='/profile/'+trans.intAccNo) #{trans.strName}
+                  td
                     | #{trans.date} - #{trans.time}
-                  td(style='padding-left:0px; padding-right:0px; padding-top: 7px; width: 45px !important;')
-                      a(href='/messages/'+trans.intChatID, data-toggle='tooltip', data-placement='bottom', title='Message')
-                        img.size(src='/assets/images/icons/Message2.png', alt='Message', style='height:40px; width:40px;')
-                  if trans.rate == 0
-                    td(style='padding-left:0px; padding-right:0px; padding-top: 7px; width: 40px !important;')
-                        a(href='/invoice/'+trans.intTransID, data-toggle='tooltip', data-placement='bottom', title='Invoice')
-                          img.size(src='/assets/images/icons/Invoice2.png', alt='Invoice', style='height:38px; width:40px;')
-                  if trans.intServAccNo == thisuser.intAccNo 
-                    td(style='padding-left:0px; padding-right:0px; padding-top: 7px; width: 90px !important;')
-                      a.button.btn.btn-success(href='/transactions/ongoing/finish/'+trans.intTransID, style='margin: 0px 5px 0px 5px;')
-                        span(style='margin-right:3px') Finish
-                        i.fa.fa-check-circle
-                  else
-                    td &nbsp
-                  //- td(style='padding-left:0px; padding-right: 0px; width: 39px !important;')
-                  //-     a(href='', data-toggle='tooltip', data-placement='bottom', title='Cancel')
-                  //-       img.size(src='/assets/images/icons/Cancel2.png', alt='Cancel', style='height:27px; width:27px;')
-
+                  td
+                    a.mx-2(href='/messages/'+trans.intChatID, data-toggle='tooltip', data-placement='bottom', title='Message')
+                      img.size(src='/assets/images/icons/Message2.png', alt='Message', style='height:40px; width:40px;')
+                    a.mx-2(href='/invoice/'+trans.intTransID, target='_blank', data-toggle='tooltip', data-placement='bottom', title='Invoice')
+                      img.size(src='/assets/images/icons/Invoice2.png', alt='Invoice', style='height:38px; width:40px;')
+                    if trans.intServAccNo == thisuser.intAccNo 
+                      a.mx-2.button.btn.btn-success(href='/transactions/ongoing/finish/'+trans.intTransID, style='margin: 0px 5px 0px 5px;')
+                        span
+                          i.fa.fa-check-circle
+                    else
+                      span.mx-4(style="padding-left: 2px;") &nbsp
+              if empty == 1
+                tr
+                  td(colspan="5") 
+                    i None
   block ongoingtrans

@@ -12,31 +12,37 @@ block main
         table.table.table-striped.font1.box-shadow-mini
           thead
             tr.text-white
+              th(scope='col') Service
               th(scope='col') Role
               th(scope='col') Partner
-              th(scope='col', style='text-align: right; padding-right: 0px') Finishe
-              th(scope='col', style='padding-left:0px; padding-right:0px; text-align: left;') d
-              th(scope='col', style='padding-left:0px; padding-right:0px;') &nbsp
-              th(scope='col', style='padding-left:0px; padding-right:0px;') &nbsp
+              th(scope='col') Finished
+              th(scope='col') Actions
           tbody
             each thisuser in thisUserTab
+              - empty = 1
               each trans in finishedtab
+                - empty = 0
                 tr
+                  td #{trans.strServName}
                   if trans.intServAccNo == thisuser.intAccNo 
                     td Provider
                   else
                     td Seeker
-                  td #{trans.strName}
-                  td(style='width: 200px !important; padding-right:5px; padding-left:0px; text-align: right;')
+                  td 
+                    a(href='/profile/'+trans.intAccNo) #{trans.strName}
+                  td
                     | #{trans.dateEnd}
                   td
-                  td(style='padding-left:0px; padding-right:0px; padding-top: 7px; width: 45px !important;')
-                      a(href='/invoice/'+trans.intTransID, data-toggle='tooltip', data-placement='bottom', title='Invoice')
-                        img.size(src='/assets/images/icons/Invoice2.png', alt='Invoice', style='height:40px; width:40px;')
-                  if trans.intServAccNo != thisuser.intAccNo && trans.rate == 0 
-                    td(style='padding-left:0px; padding-right:0px; padding-top: 7px; width: 45px !important;')
-                        a(href='/transactions/ratereview/'+trans.intTransID, data-toggle='tooltip', data-placement='bottom', title='Rating')
-                          img.size(src='/assets/images/icons/star2.png', alt='Invoice', style='height:35px; width:35px;')
-                  else
-                    ts          
+                    a.mx-2(href='/invoice/'+trans.intTransID, target='_blank', data-toggle='tooltip', data-placement='bottom', title='Invoice')
+                      img.size(src='/assets/images/icons/Invoice2.png', alt='Invoice', style='height:40px; width:40px;')
+                    if trans.intServAccNo != thisuser.intAccNo && trans.rate == 0 
+                      a.mx-2(href='/transactions/ratereview/'+trans.intTransID, data-toggle='tooltip', data-placement='bottom', title='Rating')
+                        img.size(src='/assets/images/icons/star2.png', alt='Invoice', style='height:35px; width:35px;')
+                    else
+                      span.mx-2(style="padding: 15px;") &nbsp
+              if empty == 1
+                tr
+                  td(colspan="5") 
+                    i None      
+                      
   block finishedtrans

@@ -82,8 +82,15 @@ block main
                         th(scope='col') Price
                         th(scope='col') Status
                     tbody
-                      each serv in paramsUser
-                        tr
+                      - empty = 1
+                      each serv,index in paramsUser
+                        if !serv.intServID
+                          tr
+                            td(colspan='3')
+                              i None
+                        else
+                          - empty = 0
+                          tr
                             td #{serv.strServName}
                             if serv.intPriceType == '1'
                               td Php #{serv.formatPrice}
@@ -95,6 +102,10 @@ block main
                               td Unavailable
                             else if serv.intServStatus == '2'
                               td Unavailable(Ongoing) 
+                      if empty == 1
+                        tr
+                          td(colspan='3')
+                            i None
           #Reviews.tab-pane.fade(role='tabpanel', aria-labelledby='reviews-tab', style='height: 300px')
             .sector-container-footer
               .footer-container
@@ -131,12 +142,18 @@ block main
                         button.btn.btn-primary.btn-md.btn(type='button' data-toggle='modal' data-target='#AddDocument' style='padding-top:8px') + Add Document
                     .col
                   .row.mb-4
+                    - empty = 0
                     each doc in documents
+                      - empty = 1
                       .img-with-text
                         a.clo(href='/profile/'+paramsuser.intAccNo+'/document/remove/'+doc.intDocID) X
-                        a(onClick="window.open('/userImages/documents/'"+doc.strDocument+");" href='#' alt='document')
+                        a(href='/userImages/documents/'+doc.strDocument target="_blank")
                           img.port(src='/userImages/documents/'+doc.strDocument)
-
+                    if empty == 0
+                      .col
+                      .col.mt-2
+                        i No documents to display
+                      .col
 
   #reportModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='reportModalTitle' aria-hidden='true')
     .modal-dialog(role='document')
