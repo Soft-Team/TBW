@@ -119,7 +119,7 @@ router.get('/:servid', flog, messCount, myServices, servValidation, editRender);
 
 router.post('/', flog, messCount, myServices, searchServTag, searchServAcc, servOngoing, (req, res) => {
   if(!req.searchServTag[0]){
-    res.render('myservices/views/invalid/notag', {servTag: req.body.searchtag, myServices: req.myServices});
+    res.render('myservices/views/invalid/notag', {thisUserTab: req.user, messCount: req.messCount[0].count, servTag: req.body.searchtag, myServices: req.myServices});
   }
   else{
     if(!req.searchServAcc[0]){
@@ -137,7 +137,7 @@ router.post('/', flog, messCount, myServices, searchServTag, searchServAcc, serv
       }
     }
     else{
-      res.render('myservices/views/invalid/alreadyadded', {servTag: req.searchServTag[0].strServName, myServices: req.myServices});
+      res.render('myservices/views/invalid/alreadyadded', {thisUserTab: req.user, messCount: req.messCount[0].count, servTag: req.searchServTag[0].strServName, myServices: req.myServices});
     }
   }
 });
