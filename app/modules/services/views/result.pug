@@ -43,7 +43,7 @@ block main
                           option(value='rating' selected='') Rating
                           option(value='lprice') Lowest Price
                           option(value='finished') Finished Transaction
-                      
+                    br
                   .modal-footer
                     button.btn.btn-primary(type='submit') Submit
                     button.btn.btn-secondary(type='button', data-dismiss='modal') Close
@@ -71,7 +71,7 @@ block main
       .row(style='padding-left: 45px;')
         each serv in searchServ
           .col(style='margin-left: -5px; margin-bottom: 10px;')
-            span.card(style= 'height: 18.3rem; width: 15rem').border.border-primary.mb-3.box-shadow-mini
+            span.card(style= 'height: 16.7rem; width: 15rem').border.border-primary.mb-3.box-shadow-mini
               table
                 tbody
                   tr
@@ -87,16 +87,15 @@ block main
                       p(style='float: right; margin-right: 30px; margin-bottom: 0rem') #{serv.sum}
                       p.cenF(style='margin-bottom: 0rem') Finished
 
-              //-img.card-img-top(src='/assets/images/Tyler.jpg', alt='Card image cap', style='height: 8rem; width: 8rem; ')
               .card-body
                 .card-text
+                  .f(style='text-align:center; border-top: 1px solid #007BFF') #{serv.prepend}
                   if serv.intStatus == 1
-                    .f(style='text-align:center; border-top: 1px solid #007BFF; color: gray;') Unverified
+                    .f.text-white(style='text-align:center; background: #868E96;')
+                      a.link-white(href='/profile/'+serv.intAccNo) #{serv.strName}
                   else
-                    .f(style='text-align:center; border-top: 1px solid #007BFF; color: green;') Verified
-                  .f(style='text-align:center;') #{serv.prepend}
-                  .f(style='text-align:center')
-                    a(href='/profile/'+serv.intAccNo) #{serv.strName}
+                    .f.text-white(style='text-align:center; background: #2FAF7A;')
+                      a.link-white(href='/profile/'+serv.intAccNo) #{serv.strName}
                   .row
                     .col(style='padding-right:0px; text-align:center; border-right: 1px solid #007BFF;')
                       .f #{serv.strCity}
