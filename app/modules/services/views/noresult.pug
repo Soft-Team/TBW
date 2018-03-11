@@ -6,7 +6,36 @@ block service
       $(window).on('load',function(){
         $('#noResult').modal('show');
       });
-      
+  
+  mixin options
+        each val, index in servParams
+          if index == 0
+            h4(style="display: inline; color: #2FAF7A;") #{val} 
+            - varServName = val
+          else if index == 1
+            - varCity = val
+          else if index == 2
+            - varBrngy = val
+          else if index == 3
+            - varPricing = val
+          else if index == 4
+            - varSorting = val
+            
+        - optPricing = varPricing
+        - optSorting = varSorting
+        
+        if optPricing == 1
+          - optPricing = 'Ave Fixed'
+        else if optPricing == 2
+          - optPricing = 'Ave Rate'
+          
+        if optSorting == 'rating'
+          - optSorting = 'Rating'
+        else if optSorting == 'lprice'
+          - optSorting = 'Lowest Price'
+        else if optSorting == 'finished'
+          - optSorting = 'Finished Transaction'
+  
   #noResult.modal.fade(tabindex='-1' role='dialog' aria-labelledby='noResultTitle' aria-hidden='true')
     .modal-dialog(role='document')
       .modal-content
@@ -15,20 +44,14 @@ block service
           button.close(type='button' data-dismiss='modal' aria-label='Close')
             span(aria-hidden='true') ×
         .modal-body
-          each val, index in servParams
-            if index == 0
-              p No results found for "#{val}" with settings:
-            else if index == 1
-              ul
-                li City: #{val}
-            else if index == 2
-              ul
-                li Barangay: #{val}
-            else if index == 3
-              ul
-                li Pricing: #{val}
-            else if index == 4
-              ul
-                li Sorting: #{val}
+          p No results found for :
+          +options
+          
+          ul
+            li City : #{varCity}
+            li Barangay : #{varBrngy}
+            li Pricing : #{optPricing}
+            li Sorting : #{optSorting}
+          
         .modal-footer
           button.btn.btn-secondary(type='button', data-dismiss='modal') Close

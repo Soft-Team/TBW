@@ -1,6 +1,37 @@
 extends ../../../templates/dash.pug
 
 block main
+  mixin options
+    each val, index in servParams
+      if index == 0
+        p
+        h4.margin-L(style="display: inline;") Showing Results for&nbsp
+        h4(style="display: inline; color: #2FAF7A;") #{val} 
+        - varServName = val
+      else if index == 1
+        - varCity = val
+      else if index == 2
+        - varBrngy = val
+      else if index == 3
+        - varPricing = val
+      else if index == 4
+        - varSorting = val
+        
+    - optPricing = varPricing
+    - optSorting = varSorting
+    
+    if optPricing == 1
+      - optPricing = 'Ave Fixed'
+    else if optPricing == 2
+      - optPricing = 'Ave Rate'
+      
+    if optSorting == 'rating'
+      - optSorting = 'Rating'
+    else if optSorting == 'lprice'
+      - optSorting = 'Lowest Price'
+    else if optSorting == 'finished'
+      - optSorting = 'Finished Transaction'
+  
   .jumbotron-banner
     center
       h1.text-white Search For Services
@@ -21,9 +52,9 @@ block main
                     .row
                       if thisuser.intAutoFill == 1
                         .col
-                          input.form-control(type='text' name='city' value=user.strCity placeholder='City')
+                          input.form-control(type='text' name='city' value=user.city placeholder='City')
                         .col
-                          input.form-control(type='text' name='brngy' value=user.strBarangay placeholder='Barangay')
+                          input.form-control(type='text' name='brngy' value=user.brngy placeholder='Barangay')
                       else
                         .col
                           input.form-control(type='text' name='city' placeholder='City')
@@ -43,27 +74,12 @@ block main
                           option(value='rating' selected='') Rating
                           option(value='lprice') Lowest Price
                           option(value='finished') Finished Transaction
-                    br
                   .modal-footer
                     button.btn.btn-primary(type='submit') Submit
                     button.btn.btn-secondary(type='button', data-dismiss='modal') Close
-  p
-  each val, index in servParams
-    if index == 0
-      h3.margin-L(style="display: inline;") Showing Results for "#{val}"
-      - varServName = val
-    else if index == 1
-      h3(style="display: inline;") &nbsp- "#{val}"
-      - varCity = val
-    else if index == 2
-      h3(style="display: inline;") &nbsp- "#{val}"
-      - varBrngy = val
-    else if index == 3
-      h3(style="display: inline;") &nbsp- "#{val}"
-      - varPricing = val
-    else if index == 4
-      h3(style="display: inline;") &nbsp- "#{val}"
-      - varSorting = val
+  
+  +options
+  i.ml-1.fa.d-inline.fa-lg.fa-list-ul(style="line-height: 0.1em;" data-toggle="tooltip" data-placement="right" data-html="true" title="City : "+varCity+"<br>Barangay : "+varBrngy+"<br>Pricing : "+optPricing+"<br>Sorting : "+optSorting)
   br
   br
   .container(style='max-width: 1300px !important')
@@ -98,9 +114,9 @@ block main
                       a.link-white(href='/profile/'+serv.intAccNo) #{serv.strName}
                   .row
                     .col(style='padding-right:0px; text-align:center; border-right: 1px solid #007BFF;')
-                      .f #{serv.strCity}
+                      .f(data-toggle="tooltip" data-placement="top" title=serv.strCity) #{serv.city}
                     .col(style='padding-left:0px; text-align:center;')
-                      .f #{serv.strBarangay}
+                      .f(data-toggle="tooltip" data-placement="top" title=serv.strBarangay) #{serv.brngy}
                   if serv.intPriceType == 1
                     .f(style='text-align:center') ₱#{serv.fltPrice}
                   else
@@ -108,8 +124,5 @@ block main
                 .btn-group.special(role='group')
                   a.button.btn.btn-primary(href='/services/'+varServName+'/'+varCity+'/'+varBrngy+'/'+varPricing+'/'+varSorting+'/request/'+serv.intServID style='width: 14.7rem; border-radius: 0px; border-radius: 0px 0px 0px 3px;') Request
                   a.button.btn.btn-secondary(href='/services/'+varServName+'/'+varCity+'/'+varBrngy+'/'+varPricing+'/'+varSorting+'/portfolio/'+serv.intServID style='width: 14.7rem; border-radius: 0px 0px 3px 0px; height:40px') Portfolio
-  
-  
-   
 
   block servtarget

@@ -8,6 +8,7 @@ var prepend = require('../welcome/prepend');
 var numberFormat = require('../welcome/numberFormat');
 var dateformat = require('../welcome/dateformat');
 var formatAMPM = require('../welcome/formatAMPM');
+var ellipsis = require('../welcome/ellipsis');
 
 function fchat(req,res,next){
   /*All Chats of Current User, Match(session);
@@ -19,19 +20,19 @@ function fchat(req,res,next){
       if (!(!results[0])){
         for(count=0;count<results.length;count++){
           if (results[count].strName.length > 8){
-            results[count].name = results[count].strName.substring(0,8).concat('...');
+            results[count].name = ellipsis(results[count].strName,0,8);
           }
           else{
             results[count].name = results[count].strName;
           }
           if (results[count].strServName.length > 8){
-            results[count].servname = results[count].strServName.substring(0,8).concat('...');
+            results[count].servname = ellipsis(results[count].strServName,0,8);
           }
           else{
             results[count].servname = results[count].strServName;
           }
           if (results[count].txtMessage.length > 8){
-            results[count].txtMessage = results[count].txtMessage.substring(0,8).concat('...');
+            results[count].txtMessage = ellipsis(results[count].txtMessage,0,8);
           }
           date = results[count].dtmDateSent;
           date = [date.getMonth()+1,date.getDate(),date.getFullYear()].join('/')+' '+timeFormat(date);

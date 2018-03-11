@@ -18,10 +18,7 @@ block main
                         th(scope='col') City
                         th(scope='col') Email
                         th(scope='col') Contact No.
-                        th(scope='col') User Type
-                        th(scope='col') &nbsp
-                        th(scope='col') &nbsp
-                        th(scope='col') &nbsp
+                        th(scope='col') Actions
 
                 tbody
                 each user in resultspug
@@ -35,10 +32,8 @@ block main
                         td #{user.strEmail}
                         td #{user.strContactNo}
                         td 
-                            a.btn.btn-outline-success(href=`/admin/IDVerification/Approved/${user.strUserName}`) Approve
-                        td  
-                            a.btn.btn-outline-danger(href=`/admin/IDVerification/Declined/${user.strUserName}`) Decline    
-                        td 
-                            a.btn.btn-outline-dark(onClick=`window.open("/userImages/ids/${user.strValidID}");` href='#' alt='sample') Valid ID
+                            a.btn.btn-sm.btn-outline-primary.mr-2(onClick=`window.open("/userImages/ids/${user.strValidID}");` href='#' alt='sample') Valid ID
+                            a.btn.btn-sm.btn-outline-success.mr-2(href=`/admin/IDVerification/Approved/${user.strUserName}`) Approve
+                            a.btn.btn-sm.btn-outline-danger(href=`/admin/IDVerification/Declined/${user.strUserName}`) Decline    
 
                                     
