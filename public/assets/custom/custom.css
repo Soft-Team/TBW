@@ -65,6 +65,12 @@ body{
 .link-white:hover  {
     text-decoration: underline !important;
 }
+.link-black  {
+    color: black !important;
+}
+.link-black:hover  {
+    text-decoration: underline !important;
+}
 
 /*btn-group btn-block*/
 .btn-group.special {

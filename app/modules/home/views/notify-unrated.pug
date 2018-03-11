@@ -1,0 +1,31 @@
+extends index.pug
+
+block homeblocks
+  block append scripts
+    script.
+      $(window).on('load',function(){
+        $('#unrated').modal('show');
+      });
+      
+  #unrated.modal.fade(tabindex='-1' role='dialog' aria-labelledby='unratedTitle' aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        each unrated in unratedTab
+          .modal-header
+            h5#unratedTitle.modal-title Unrated Transaction
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+              span(aria-hidden='true') ×
+          .modal-body
+            .alert.alert-info(role='alert')
+              b Your transaction has finished! 
+              p Time to rate the Service Provider inorder to request other services.
+            p.mt-1 
+              b Finished Transaction Details:
+            h4(style="display: inline; color: #2FAF7A;") #{unrated.strServName} 
+            ul
+              li Provider : #{unrated.strName} 
+              li Date Finished: #{unrated.dateEnd}
+          .modal-footer
+            a(href='/transactions/ratereview/'+unrated.intTransID)
+              button.btn.btn-primary(type='button') Rate Now
+            button.btn.btn-secondary(type='button', data-dismiss='modal') Rate Later

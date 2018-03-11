@@ -52,7 +52,6 @@ function requestServ(req, res, next){
           results[0].unav = 3;
         }
       }
-      console.log(results);
       req.requestServ = results;
       return next();
   });
@@ -202,31 +201,19 @@ function documents(req,res,next){
     });
 }
 function unrated(req,res,next){
-  /*Unrate Finished Transactions of Current User as Seeker, Match(session);
+  /*Unrated Finished Transactions of Current User as Seeker, Match(session);
   *(tblchat)*(tbluser)*(tblservice)*(tblservicetag)*(tbltransaction)*(tblmessage)*/
   var stringquery = "SELECT A.* , strName, intAccNo FROM(SELECT * FROM tblservice INNER JOIN tblchat ON intServID= intChatServ INNER JOIN tblservicetag ON intServTagID= intServTag INNER JOIN tbltransaction ON intChatID= intTransChatID INNER JOIN (SELECT * FROM tblrating WHERE intRatedAccNo != ?)X ON intRateTransID= intTransID WHERE (intServAccNo= ? OR intChatSeeker= ?) AND intTransStatus= 2)A INNER JOIN tbluser ON intAccNo= intServAccNo OR intAccNo= intChatSeeker WHERE intAccNo!= ? ";
+  stringquery = stringquery.concat("LIMIT 1;");
   db.query(stringquery,[req.session.user,req.session.user,req.session.user,req.session.user], (err, results, fields) => {
       if (err) console.log(err);
       if(!(!results[0])){
-        for(count=0;count<results.length;count++){
-          var date = results[count].dtmTransScheduled;
-          var formatDate = dateformat(date);
-          results[count].time = timeFormat(date);
-          results[count].date = date.toDateString("en-US").slice(4, 15);
-
-          var dateEnd = results[count].dtmTransEnded;
-          var formatDateEnd = dateformat(dateEnd);
-          results[count].timeEnd = timeFormat(dateEnd);
-          results[count].dateEnd = dateEnd.toDateString("en-US").slice(4, 15);
-
-          results[count].rate = 1;
-          if(!results[count].intRateID){
-            results[count].rate = 0;
-          }
-        }
+        req.emptyUnrated= 0;
       }
-      console.log(results);
-      req.finished= results;
+      else{
+        req.emptyUnrated= 1;
+      }
+      req.unrated= results;
       return next();
     });
 }
@@ -503,7 +490,7 @@ function servReqRender(req,res){
                   res.render('services/views/result', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, searchServ: results});
                 }
                 else{
-                  res.render('services/views/request', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, searchServ: results, requestTab: req.requestServ, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial});
+                  res.render('services/views/request', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, searchServ: results, requestTab: req.requestServ, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial, unratedTab: req.unrated, emptyUnrated: req.emptyUnrated});
                 }
               }
           });
@@ -542,7 +529,7 @@ function servReqRender(req,res){
                   res.render('services/views/result', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, searchServ: results});
                 }
                 else{
-                res.render('services/views/request', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, searchServ: results, requestTab: req.requestServ, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial});
+                res.render('services/views/request', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, searchServ: results, requestTab: req.requestServ, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial, unratedTab: req.unrated, emptyUnrated: req.emptyUnrated});
                 }
               }
           });
@@ -581,7 +568,7 @@ function servReqRender(req,res){
                   res.render('services/views/result', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, searchServ: results});
                 }
                 else{
-                res.render('services/views/request', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, searchServ: results, requestTab: req.requestServ, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial});
+                res.render('services/views/request', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, searchServ: results, requestTab: req.requestServ, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial, unratedTab: req.unrated, emptyUnrated: req.emptyUnrated});
                 }
               }
           });
@@ -620,7 +607,7 @@ function servReqRender(req,res){
                   res.render('services/views/result', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, searchServ: results});
                 }
                 else{
-                res.render('services/views/request', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, searchServ: results, requestTab: req.requestServ, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial});
+                res.render('services/views/request', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, searchServ: results, requestTab: req.requestServ, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial, unratedTab: req.unrated, emptyUnrated: req.emptyUnrated});
                 }
               }
           });
@@ -814,7 +801,7 @@ function portfolioRender(req,res){
 router.get('/', flog, messCount, servTags, render);
 router.get('/:servName', flog, messCount, servTags, servNameRender);
 router.get('/:servName/:city/:brngy/:pricing/:sorting', flog, messCount, searchServTag, servTags, servRender);
-router.get('/:servName/:city/:brngy/:pricing/:sorting/request/:servid', flog, messCount, searchServTag, servTags, requestServ, regularSched, specialSched, servReqRender);
+router.get('/:servName/:city/:brngy/:pricing/:sorting/request/:servid', flog, messCount, searchServTag, servTags, requestServ, regularSched, specialSched, unrated, servReqRender);
 router.get('/:servName/:city/:brngy/:pricing/:sorting/portfolio/:servid', flog, messCount, searchServTag, servTags, documents, portfolioRender);
 
 router.post('/', flog, messCount, (req, res) => {

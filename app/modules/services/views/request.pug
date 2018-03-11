@@ -29,6 +29,14 @@ block servtarget
             .modal-body
               .row
                 .col
+                  if emptyUnrated == 0
+                    each unrated in unratedTab
+                      .alert.alert-danger(role='alert')
+                        i
+                          | You will not be able to Request while having an&nbsp
+                          b
+                            a.text-danger(href='/transactions/ratereview/'+unrated.intTransID) Unrated Finished Transaction&nbsp
+                          | as Seeker
                   h5(style="display:inline;") #{request.strName}
                   each val, index in servParams
                     if index == 0
@@ -97,7 +105,15 @@ block servtarget
                             else
                               td #{spec.formatstart} - #{spec.formatend}
               label(for='comment') Request Description:
-              textarea.form-control(rows='5' name='message' required)
+              if emptyUnrated == 0
+                i
+                  textarea.form-control(rows='5' name='message' disabled) Text Area is Disabled.
+              else
+                textarea.form-control(rows='5' name='message' required)
+                
             .modal-footer
-              button.btn.btn-primary(type='submit') Submit
+              if emptyUnrated == 0
+                button.btn.btn-primary(type='submit' disabled) Submit
+              else
+                button.btn.btn-primary(type='submit') Submit
               button.btn.btn-secondary(type='button', data-dismiss='modal') Close
