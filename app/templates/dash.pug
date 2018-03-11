@@ -1,6 +1,10 @@
 extends navbar.pug
 
 block dash
+  block append stylesheets
+    link(rel='stylesheet', type='text/css', href='/assets/custom/contentstyles.css')
+    link(rel='stylesheet', type='text/css', href='/assets/custom/messages.css')
+    link(rel='stylesheet', type='text/css', href='https://fonts.googleapis.com/css?family=Open+Sans')
   block append scripts
     script.
       function dropdown1(){
@@ -22,9 +26,6 @@ block dash
                 .chat-pad(style="height: 50px, width: 50px")
                   .chat-img(style="height: 50px, width: 50px")
                     img(src='/userImages/profile/'+thisuser.strProfilePic alt='' height="50" width="50")
-                    //-
-                      i(style='height: 50px; background-image: url("/userImages/profile/'+thisuser.strProfilePic+'); background-position: 50% 50%; background-repeat: no-repeat; background-size: cover; width: 50px;')
-                  //- img(src='/assets/images/Tyler.jpg', alt='User Image', style='height: 50px, width: 50px')
               .pull-right.info
                 p.text-white(style="margin-top: 10px")
                   a(href='/profile/'+thisuser.intAccNo style='color: white; text-decoration: none;') #{thisuser.strName}
@@ -56,9 +57,6 @@ block dash
         .col
           .row
               .col-sm-12.main(style='min-height: 100%;')
-                link(rel='stylesheet', type='text/css', href='/assets/custom/contentstyles.css')
-                link(rel='stylesheet', type='text/css', href='/assets/custom/messages.css')
-                link(rel='stylesheet', type='text/css', href='https://fonts.googleapis.com/css?family=Open+Sans')
                 .container(style='padding:0px !important; margin: 0px !important; min-height: 100%; max-width: 200%;')
                   block main
                 

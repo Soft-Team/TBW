@@ -213,5 +213,13 @@ router.post('/document/:userid', flog, messCount, paramsUser, documents, (req, r
     });
   }
 });
+router.post('/more/:userid', flog, messCount, paramsUser, documents, (req, res) =>{
+  var check = req.body.autofill ? 1 : 0;
+  db.query("UPDATE tbluser SET intAutoFill=? WHERE intAccNo= ?",[check, req.session.user], function (err,  results, fields) {
+    if (err) console.log(err);
+    res.redirect('/profile/'+req.session.user);
+  });
+
+});
 
 exports.profile = router;

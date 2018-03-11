@@ -1,10 +1,13 @@
 extends ../../../templates/dash.pug
 
 block main
+  block append stylesheets
+    link(rel='stylesheet', type='text/css', href='/assets/custom/switch.css')
   block append scripts
     script(type='text/javascript', src='/assets/scripts/bootstrap-filestyle.min.js')
     script.
       $(":file").filestyle();
+
   .jumbotron-banner(style='height:100px')
     center
   .sector(style='margin-top:0px; padding:0px')
@@ -13,34 +16,34 @@ block main
       if index == 0
         .sector-container-profile
           .profile-container
-              #left-pane.col-sm-3
-                img(src='/userImages/profile/'+paramsuser.strProfilePic, alt='Card image cap', style='height: 10rem; width: 10rem; border-right: 1px solid; ')
-              #center-pane.col-sm-3
-                if paramsuser.intStatus == 1
-                  h2.text-headline-profile(style='border-bottom: 1px solid #000000; color:grey;') Unverified 
+            #left-pane.col-sm-3
+              img(src='/userImages/profile/'+paramsuser.strProfilePic, alt='Card image cap', style='height: 10rem; width: 10rem; border-right: 1px solid; ')
+            #center-pane.col-sm-3
+              if paramsuser.intStatus == 1
+                h2.text-headline-profile(style='border-bottom: 1px solid #000000; color:grey;') Unverified 
+              else
+                h2.text-headline-profile(style='border-bottom: 1px solid#000000; color:green;') Verified 
+              h1(style='margin-left:15px') #{paramsuser.strName}
+                if paramsuser.current != 1
+                  button#report.btn.btn-danger.btn-md.btn(type='button' data-toggle='modal' data-target='#reportModal' style='padding-top:8px')
+                    i.fa.fa-exclamation.fa-2x(style='height:35px; width:35px;')
                 else
-                  h2.text-headline-profile(style='border-bottom: 1px solid#000000; color:green;') Verified 
-                h1(style='margin-left:15px') #{paramsuser.strName}
-                  if paramsuser.current != 1
-                    button#report.btn.btn-danger.btn-md.btn(type='button' data-toggle='modal' data-target='#reportModal' style='padding-top:8px')
-                      i.fa.fa-exclamation.fa-2x(style='height:35px; width:35px;')
-                  else
-                    button#report.btn.btn-light.btn-md.btn.ml-2(type='button' data-toggle='modal' data-target='#editModal' title='Edit')
-                      img(src='/assets/images/icons/settings.png' style='height:35px; width:35px;')
-              #right-pane.col-sm-3
-                  table
-                    tbody
-                      tr
-                        td(style='padding-top:3px;', title='Seeker and Provider rating')
-                          img(src='/assets/images/Icons/star.png', alt='star', style='height: 2rem; width: 2rem; margin-top:5px; margin-left:50px;')
-                          h2(style='float: right; margin-right: 50px; margin-bottom: 0rem') #{paramsuser.ave}
-                          h4.profileA(style='margin-bottom: 0rem; margin-top:0px; display:inline-block') Rating
-                      tr
-                        td(style='padding-top:3px', title='Jobs finished as a Provider')
-                          img(src='/assets/images/Icons/case.png', alt='star', style='height: 2rem; width: 2rem; margin-top:5px; margin-left:50px ')
-                          h2(style='float: right; margin-right: 50px; margin-bottom: 0rem') #{paramsuser.sum}
-                          h4.profileB(style='margin-bottom: 0rem; margin-top:0px; display:inline-block') Finished
-                        
+                  button#report.btn.btn-light.btn-md.btn.ml-2(type='button' data-toggle='modal' data-target='#editModal' title='Edit')
+                    img(src='/assets/images/icons/settings.png' style='height:35px; width:35px;')
+            #right-pane.col-sm-3
+              table
+                tbody
+                  tr
+                    td(style='padding-top:3px;', title='Seeker and Provider rating')
+                      img(src='/assets/images/Icons/star.png', alt='star', style='height: 2rem; width: 2rem; margin-top:5px; margin-left:50px;')
+                      h2(style='float: right; margin-right: 50px; margin-bottom: 0rem') #{paramsuser.ave}
+                      h4.profileA(style='margin-bottom: 0rem; margin-top:0px; display:inline-block') Rating
+                  tr
+                    td(style='padding-top:3px', title='Jobs finished as a Provider')
+                      img(src='/assets/images/Icons/case.png', alt='star', style='height: 2rem; width: 2rem; margin-top:5px; margin-left:50px ')
+                      h2(style='float: right; margin-right: 50px; margin-bottom: 0rem') #{paramsuser.sum}
+                      h4.profileB(style='margin-bottom: 0rem; margin-top:0px; display:inline-block') Finished
+
     nav
       .card.text-center(style='width:1286px')
         .card-header(style='padding-bottom:0rem')
@@ -185,8 +188,8 @@ block main
                     textarea#exampleFormControlTextarea1.form-control(rows='3', value = 'Others')
 
             .modal-footer
-                button.btn.btn-primary(type='submit') Submit
-                button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+              button.btn.btn-primary(type='submit') Submit
+              button.btn.btn-secondary(type='button', data-dismiss='modal') Close
 
   #editModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='editModalTitle' aria-hidden='true')
     .modal-dialog(role='document')
@@ -196,7 +199,7 @@ block main
             h5#editModalTitle.modal-title Profile Settings
             button.close(type='button' data-dismiss='modal' aria-label='Close')
               span(aria-hidden='true') ×
-              
+
           .modal-body
             .row
               .col
@@ -207,6 +210,8 @@ block main
                     a#pills-password-tab.nav-link(data-toggle='pill', href='#pills-password', role='tab', aria-controls='pills-password', aria-selected='false') Password
                   li.nav-item
                     a#pills-validid-tab.nav-link(data-toggle='pill', href='#pills-validid', role='tab', aria-controls='pills-validid', aria-selected='false') Valid ID
+                  li.nav-item
+                    a#pills-more-tab.nav-link(data-toggle='pill', href='#pills-more', role='tab', aria-controls='pills-more', aria-selected='false') More
                 hr
                 #pills-tabContent.tab-content
                   #pills-personal.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='pills-personal-tab')
@@ -250,8 +255,8 @@ block main
                         .col
                           .btn-group.special(role='group')
                             button.editbuttons.btn.btn-primary.btn-md(type='submit') Submit
-                            a.editbuttons.btn.btn-secondary.btn-md(type='button' data-dismiss='modal' aria-pressed='true') Cancel
-                  
+                            button.editbuttons.btn.btn-secondary.btn-md(type='button' data-dismiss='modal' aria-pressed='true') Cancel
+
                   #pills-password.tab-pane.fade(role='tabpanel', aria-labelledby='pills-password-tab')
                     form(method='POST' action='/profile/pass/'+thisuser.intAccNo)
                       .row
@@ -269,14 +274,14 @@ block main
                             input#newpass.form-control.mb-1(type='password' name='newpass' placeholder='New Password' minlength='8' maxlength='100' required)
                             input#confirmpass.form-control(type='password' name='confirmpass' placeholder='Confirm Password' aria-describedby='passwordHelp' minlength='8' maxlength='100' required)
                             small#passwordHelp.form-text.text-muted Minimum of 8 characters.
-                    
+
                       hr
                       .row
                         .col
                           .btn-group.special(role='group')
                             button.editbuttons.btn.btn-primary.btn-md(type='submit') Submit
-                            a.editbuttons.btn.btn-secondary.btn-md(type='button' data-dismiss='modal' aria-pressed='true') Cancel
-                  
+                            button.editbuttons.btn.btn-secondary.btn-md(type='button' data-dismiss='modal' aria-pressed='true') Cancel
+
                   #pills-validid.tab-pane.fade(role='tabpanel', aria-labelledby='pills-validid-tab')
                     each paramsuser,index in paramsUser
                       if index == 0
@@ -296,14 +301,37 @@ block main
                               .col-8
                                 .form-group.mr-3
                                   input#vid.filestyle(type='file' name='validid' data-classbutton='btn btn-primary' data-input='false' data-classicon='icon-plus' accept='image/*' required)
-                            
+
                             hr
                             hr
                             .row
                               .col
                                 .btn-group.special(role='group')
                                   button.editbuttons.btn.btn-primary.btn-md(type='submit') Submit
-                                  a.editbuttons.btn.btn-secondary.btn-md(type='button' data-dismiss='modal' aria-pressed='true') Cancel
+                                  button.editbuttons.btn.btn-secondary.btn-md(type='button' data-dismiss='modal' aria-pressed='true') Cancel
+
+                  #pills-more.tab-pane.fade(role='tabpanel', aria-labelledby='pills-more-tab')
+                    form(method='POST' action='/profile/more/'+thisuser.intAccNo)
+                      .row
+                        .col.mx-2
+                          .material-switch(style="display: inline")
+                            if thisuser.intAutoFill == 1
+                              input#AutoFill(name='autofill' type='checkbox' checked)
+                              |   
+                              label.label-default(for='AutoFill' style="margin-bottom: 6.5px;")
+                            else
+                              input#AutoFill(name='autofill' type='checkbox')
+                              |   
+                              label.label-default(for='AutoFill' style="margin-bottom: 6.5px;")
+                          span.ml-3 Auto-Fill Location on Search
+                      hr
+                      hr
+                      .row
+                        .col
+                          .btn-group.special(role='group')
+                            button.editbuttons.btn.btn-primary.btn-md(type='submit') Submit
+                            button.editbuttons.btn.btn-secondary.btn-md(type='button' data-dismiss='modal' aria-pressed='true') Cancel
+
 
   #AddDocument.modal.fade(tabindex='-1' role='dialog' aria-labelledby='AddDocumentTitle' aria-hidden='true')
     .modal-dialog(role='document')
@@ -321,11 +349,11 @@ block main
               .col-8
                 .form-group.mr-3
                   input#docu.filestyle(type='file' name='document' data-classbutton='btn btn-primary' data-input='false' data-classicon='icon-plus' accept='image/*' required)
-            
+
 
           .modal-footer
-              button.btn.btn-primary(type='submit') Submit
-              button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+            button.btn.btn-primary(type='submit') Submit
+            button.btn.btn-secondary(type='button', data-dismiss='modal') Close
 
 
   block profile

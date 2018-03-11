@@ -20,10 +20,16 @@ block service
               input.form-control(type='text' name='searchtag' placeholder='Service Tag' value=servName required)
               br
               .row
-                .col
-                  input.form-control(type='text' name='city' value=user.strCity placeholder='City')
-                .col
-                  input.form-control(type='text' name='brngy' value=user.strBarangay placeholder='Barangay')
+                if thisuser.intAutoFill == 1
+                  .col
+                    input.form-control(type='text' name='city' value=user.strCity placeholder='City')
+                  .col
+                    input.form-control(type='text' name='brngy' value=user.strBarangay placeholder='Barangay')
+                else
+                  .col
+                    input.form-control(type='text' name='city' placeholder='City')
+                  .col
+                    input.form-control(type='text' name='brngy' placeholder='Barangay')
               br
               .row
                 .col
