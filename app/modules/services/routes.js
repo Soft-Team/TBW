@@ -201,6 +201,35 @@ function documents(req,res,next){
       return next();
     });
 }
+function unrated(req,res,next){
+  /*Unrate Finished Transactions of Current User as Seeker, Match(session);
+  *(tblchat)*(tbluser)*(tblservice)*(tblservicetag)*(tbltransaction)*(tblmessage)*/
+  var stringquery = "SELECT A.* , strName, intAccNo FROM(SELECT * FROM tblservice INNER JOIN tblchat ON intServID= intChatServ INNER JOIN tblservicetag ON intServTagID= intServTag INNER JOIN tbltransaction ON intChatID= intTransChatID INNER JOIN (SELECT * FROM tblrating WHERE intRatedAccNo != ?)X ON intRateTransID= intTransID WHERE (intServAccNo= ? OR intChatSeeker= ?) AND intTransStatus= 2)A INNER JOIN tbluser ON intAccNo= intServAccNo OR intAccNo= intChatSeeker WHERE intAccNo!= ? ";
+  db.query(stringquery,[req.session.user,req.session.user,req.session.user,req.session.user], (err, results, fields) => {
+      if (err) console.log(err);
+      if(!(!results[0])){
+        for(count=0;count<results.length;count++){
+          var date = results[count].dtmTransScheduled;
+          var formatDate = dateformat(date);
+          results[count].time = timeFormat(date);
+          results[count].date = date.toDateString("en-US").slice(4, 15);
+
+          var dateEnd = results[count].dtmTransEnded;
+          var formatDateEnd = dateformat(dateEnd);
+          results[count].timeEnd = timeFormat(dateEnd);
+          results[count].dateEnd = dateEnd.toDateString("en-US").slice(4, 15);
+
+          results[count].rate = 1;
+          if(!results[count].intRateID){
+            results[count].rate = 0;
+          }
+        }
+      }
+      console.log(results);
+      req.finished= results;
+      return next();
+    });
+}
 
 function render(req,res){
   switch (req.valid) {
