@@ -10,8 +10,8 @@ var dateformat = require('../welcome/dateformat');
 function unrated(req,res,next){
   /*Unrated Finished Transactions of Current User as Seeker, Match(session);
   *(tblchat)*(tbluser)*(tblservice)*(tblservicetag)*(tbltransaction)*(tblmessage)*/
-  var stringquery = "SELECT A.* , strName, intAccNo FROM(SELECT * FROM tblservice INNER JOIN tblchat ON intServID= intChatServ INNER JOIN tblservicetag ON intServTagID= intServTag INNER JOIN tbltransaction ON intChatID= intTransChatID INNER JOIN (SELECT * FROM tblrating WHERE intRatedAccNo != ?)X ON intRateTransID= intTransID WHERE (intServAccNo= ? OR intChatSeeker= ?) AND intTransStatus= 2)A INNER JOIN tbluser ON intAccNo= intServAccNo OR intAccNo= intChatSeeker WHERE intAccNo!= ? ";
-  stringquery = stringquery.concat("LIMIT 1;");
+  var stringquery = "SELECT A.* , strName, intAccNo FROM(SELECT * FROM tblservice INNER JOIN tblchat ON intServID= intChatServ INNER JOIN tblservicetag ON intServTagID= intServTag INNER JOIN tbltransaction ON intChatID= intTransChatID LEFT JOIN (SELECT * FROM tblrating WHERE intRatedAccNo != ?)X ON intRateTransID= intTransID WHERE (intServAccNo= ? OR intChatSeeker= ?) AND intTransStatus= 2)A INNER JOIN tbluser ON intAccNo= intServAccNo OR intAccNo= intChatSeeker WHERE intAccNo!= ? ";
+  stringquery = stringquery.concat("AND intServAccNo!= 1 AND intRateID IS NULL LIMIT 1;");
   db.query(stringquery,[req.session.user,req.session.user,req.session.user,req.session.user], (err, results, fields) => {
       if (err) console.log(err);
       if(!(!results[0])){
@@ -48,6 +48,7 @@ function render(req,res){
       break;
     case 2:
     case 3:
+      console.log(req.unrated)
       if(!req.unrated[0])
         res.render('home/views/index', {thisUserTab: req.user, messCount: req.messCount[0].count});
       else
