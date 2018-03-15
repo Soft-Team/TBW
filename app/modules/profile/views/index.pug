@@ -85,14 +85,12 @@ block main
                         th(scope='col') Price
                         th(scope='col') Status
                     tbody
-                      - empty = 1
                       each serv,index in paramsUser
                         if !serv.intServID
                           tr
                             td(colspan='3')
                               i None
                         else
-                          - empty = 0
                           tr
                             td #{serv.strServName}
                             if serv.intPriceType == '1'
@@ -105,35 +103,27 @@ block main
                               td Unavailable
                             else if serv.intServStatus == '2'
                               td Unavailable(Ongoing) 
-                      if empty == 1
-                        tr
-                          td(colspan='3')
-                            i None
           #Reviews.tab-pane.fade(role='tabpanel', aria-labelledby='reviews-tab', style='height: 300px')
             .sector-container-footer
-              .footer-container
-                .col-sm-3
-                  .pull-left.image
-                    .chat-img(style='height:80px; width:80px')
-                      img.img-circle(src='/assets/images/Unknown.jpg' alt='User Image' height="85" width="85")
-                .col-sm-3
-                  h2 Takeoff
-                  h3 Help sample text eksdee
-                .col-sm-3
-                  img(src='/assets/images/Icons/star.png', alt='star', style='height: 4rem; width: 4rem; margin-top:5px; float:left')
-                  h1(style='float:right; margin-top: 20px') 4.5
-              .footer-container
-                .col-sm-3
-                  .pull-left.image
-                    .chat-img(style='height:80px; width:80px')
-                      img.img-circle(src='/assets/images/Unknown.jpg' alt='User Image' height="85" width="85")
-                .col-sm-3
-                  h2 Takeoff
-                  h3 Help sample text eksdee
-                  br
-                .col-sm-3
-                  img(src='/assets/images/Icons/star.png', alt='star', style='height: 4rem; width: 4rem; margin-top:5px; float:left')
-                  h1(style='float:right; margin-top: 20px') 4.5
+              - emptyRev = 1
+              each rev in reviews
+                - emptyRev = 0
+                .footer-container
+                  .col-sm-3
+                    .pull-left.image
+                      .chat-img(style='height:80px; width:80px')
+                        img.img-circle(src='/userImages/profile/'+rev.strProfilePic alt='User Image' height="85" width="85")
+                  .col-sm-3
+                    if rev.intChatSeeker == rev.intAccNo
+                      h2 #{rev.strName} ( #{rev.strServName} Seeker )
+                    else
+                      h2 #{rev.strName} ( #{rev.strServName} Provider )
+                    h3 #{rev.txtRateReview}
+                  .col-sm-3
+                    img(src='/assets/images/Icons/star.png', alt='star', style='height: 4rem; width: 4rem; margin-top:5px; float:left')
+                    h1(style='float:right; margin-top: 20px') #{rev.intRating}
+              if emptyRev == 1
+                i No reviews to display
           #Portfolio.tab-pane.fade(role='tabpanel', aria-labelledby='portfolio-tab', style='')
             .col
               each paramsuser,index in paramsUser
@@ -345,7 +335,7 @@ block main
             .row
               .col-4
                 p.mt-1.ml-3
-                  b Valid ID
+                  b Document
               .col-8
                 .form-group.mr-3
                   input#docu.filestyle(type='file' name='document' data-classbutton='btn btn-primary' data-input='false' data-classicon='icon-plus' accept='image/*' required)
@@ -354,6 +344,5 @@ block main
           .modal-footer
             button.btn.btn-primary(type='submit') Submit
             button.btn.btn-secondary(type='button', data-dismiss='modal') Close
-
 
   block profile

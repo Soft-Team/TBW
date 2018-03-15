@@ -17,13 +17,19 @@ block servtarget
         .modal-body
           #carousel-1.carousel.slide(data-ride='carousel')
             .carousel-inner(role='listbox')
+              - emptyDoc = 1
               each doc,index in documents
+                - emptyDoc = 0
                 if index == 0
                   .carousel-item.active
                     img.w-100.d-block(src='/userImages/documents/'+doc.strDocument, alt='Slide Image')
                 else
                   .carousel-item
                     img.w-100.d-block(src='/userImages/documents/'+doc.strDocument, alt='Slide Image')
+              if emptyDoc == 1
+                p
+                  i No documents to display
+                
             div
               a.carousel-control-prev(href='#carousel-1', role='button', data-slide='prev')
                 span.carousel-control-prev-icon

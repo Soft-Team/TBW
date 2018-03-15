@@ -73,9 +73,10 @@ block main
           .row.header-wrap
             .chat-header.col-sm-12
               .input-group
-                input.form-control(type='text', name='q', placeholder='All Services', style='width:100px')
-                button#search-btn.btn.btn-primary(type='submit', name='search', href="") Change
-                    i.fa(aria-hidden='true')
+                form(method='POST' action='/messages/service/'+messOne.intChatID)
+                  input.form-control(type='text', name='messageserv', placeholder='All Services', style='width:100px')
+                  button#search-btn.btn.btn-primary(type='submit') Change
+                      i.fa(aria-hidden='true')
           // Conversations
           .row.content-wrap
           

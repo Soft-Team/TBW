@@ -114,9 +114,15 @@ block main
                       a.link-white(href='/profile/'+serv.intAccNo) #{serv.strName}
                   .row
                     .col(style='padding-right:0px; text-align:center; border-right: 1px solid #007BFF;')
-                      .f(data-toggle="tooltip" data-placement="top" title=serv.strCity) #{serv.city}
+                      if serv.cityEllipsis == 0
+                        .f #{serv.city}
+                      else
+                        .f(data-toggle="tooltip" data-placement="top" title=serv.strCity) #{serv.city}
                     .col(style='padding-left:0px; text-align:center;')
-                      .f(data-toggle="tooltip" data-placement="top" title=serv.strBarangay) #{serv.brngy}
+                      if serv.brngyEllipsis == 0
+                        .f #{serv.brngy}
+                      else
+                        .f(data-toggle="tooltip" data-placement="top" title=serv.strBarangay) #{serv.brngy}
                   if serv.intPriceType == 1
                     .f(style='text-align:center') ₱#{serv.fltPrice}
                   else

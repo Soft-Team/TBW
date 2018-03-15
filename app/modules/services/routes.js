@@ -13,8 +13,20 @@ var timeFormat = require('../welcome/timeFormat');
 function servTags(req, res, next){
   /*All Service Tags
   strServName(tblservicetag)*/
-  db.query("SELECT strServName FROM tblservicetag LEFT JOIN tblservice ON intServTagID= intServTag GROUP BY strServName ORDER BY COUNT(intServTagID) DESC", function (err, results, fields) {
+  db.query("SELECT *, COUNT(intServID)CNT FROM tblservicetag LEFT JOIN tblservice ON intServTagID= intServTag GROUP BY strServName ORDER BY CNT DESC", function (err, results, fields) {
       if (err) return res.send(err);
+      if(!(!results[0])){
+        for(count=0;count<results.length;count++){
+          if (results[count].strServName.length > 12){
+            results[count].servname = ellipsis(results[count].strServName,0,10);
+            results[count].ellipsis = 1;
+          }
+          else{
+            results[count].servname = results[count].strServName;
+            results[count].ellipsis = 0;
+          }
+        }
+      }
       req.servTags = results;
       return next();
   });
@@ -312,17 +324,21 @@ function servRender(req,res){
                   if(!results[count].sum){
                     results[count].sum = 0;
                   }
-                  if (results[count].strCity.length > 10){
+                  if (results[count].strCity.length > 12){
                     results[count].city = ellipsis(results[count].strCity,0,10);
+                    results[count].cityEllipsis = 1;
                   }
                   else{
                     results[count].city = results[count].strCity;
+                    results[count].cityEllipsis = 0;
                   }
-                  if (results[count].strBarangay.length > 10){
+                  if (results[count].strBarangay.length > 12){
                     results[count].brngy = ellipsis(results[count].strBarangay,0,10);
+                    results[count].brngyEllipsis = 1;
                   }
                   else{
                     results[count].brngy = results[count].strBarangay;
+                    results[count].brngyEllipsis = 0;
                   }
                 }
                 res.render('services/views/result', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, searchServ: results});
@@ -346,17 +362,21 @@ function servRender(req,res){
                   if(!results[count].sum){
                     results[count].sum = 0;
                   }
-                  if (results[count].strCity.length > 10){
+                  if (results[count].strCity.length > 12){
                     results[count].city = ellipsis(results[count].strCity,0,10);
+                    results[count].cityEllipsis = 1;
                   }
                   else{
                     results[count].city = results[count].strCity;
+                    results[count].cityEllipsis = 0;
                   }
-                  if (results[count].strBarangay.length > 10){
+                  if (results[count].strBarangay.length > 12){
                     results[count].brngy = ellipsis(results[count].strBarangay,0,10);
+                    results[count].brngyEllipsis = 1;
                   }
                   else{
                     results[count].brngy = results[count].strBarangay;
+                    results[count].brngyEllipsis = 0;
                   }
                 }
                 res.render('services/views/result', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, searchServ: results});
@@ -380,17 +400,21 @@ function servRender(req,res){
                   if(!results[count].sum){
                     results[count].sum = 0;
                   }
-                  if (results[count].strCity.length > 10){
+                  if (results[count].strCity.length > 12){
                     results[count].city = ellipsis(results[count].strCity,0,10);
+                    results[count].cityEllipsis = 1;
                   }
                   else{
                     results[count].city = results[count].strCity;
+                    results[count].cityEllipsis = 0;
                   }
-                  if (results[count].strBarangay.length > 10){
+                  if (results[count].strBarangay.length > 12){
                     results[count].brngy = ellipsis(results[count].strBarangay,0,10);
+                    results[count].brngyEllipsis = 1;
                   }
                   else{
                     results[count].brngy = results[count].strBarangay;
+                    results[count].brngyEllipsis = 0;
                   }
                 }
                 res.render('services/views/result', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, searchServ: results});
@@ -414,17 +438,21 @@ function servRender(req,res){
                   if(!results[count].sum){
                     results[count].sum = 0;
                   }
-                  if (results[count].strCity.length > 10){
+                  if (results[count].strCity.length > 12){
                     results[count].city = ellipsis(results[count].strCity,0,10);
+                    results[count].cityEllipsis = 1;
                   }
                   else{
                     results[count].city = results[count].strCity;
+                    results[count].cityEllipsis = 0;
                   }
-                  if (results[count].strBarangay.length > 10){
+                  if (results[count].strBarangay.length > 12){
                     results[count].brngy = ellipsis(results[count].strBarangay,0,10);
+                    results[count].brngyEllipsis = 1;
                   }
                   else{
                     results[count].brngy = results[count].strBarangay;
+                    results[count].brngyEllipsis = 0;
                   }
                 }
                 res.render('services/views/result', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, searchServ: results});
@@ -490,17 +518,21 @@ function servReqRender(req,res){
                   if(!results[count].sum){
                     results[count].sum = 0;
                   }
-                  if (results[count].strCity.length > 10){
+                  if (results[count].strCity.length > 12){
                     results[count].city = ellipsis(results[count].strCity,0,10);
+                    results[count].cityEllipsis = 1;
                   }
                   else{
                     results[count].city = results[count].strCity;
+                    results[count].cityEllipsis = 0;
                   }
-                  if (results[count].strBarangay.length > 10){
+                  if (results[count].strBarangay.length > 12){
                     results[count].brngy = ellipsis(results[count].strBarangay,0,10);
+                    results[count].brngyEllipsis = 1;
                   }
                   else{
                     results[count].brngy = results[count].strBarangay;
+                    results[count].brngyEllipsis = 0;
                   }
                 }
                 if(!req.requestServ[0]){
@@ -529,17 +561,21 @@ function servReqRender(req,res){
                   if(!results[count].sum){
                     results[count].sum = 0;
                   }
-                  if (results[count].strCity.length > 10){
+                  if (results[count].strCity.length > 12){
                     results[count].city = ellipsis(results[count].strCity,0,10);
+                    results[count].cityEllipsis = 1;
                   }
                   else{
                     results[count].city = results[count].strCity;
+                    results[count].cityEllipsis = 0;
                   }
-                  if (results[count].strBarangay.length > 10){
+                  if (results[count].strBarangay.length > 12){
                     results[count].brngy = ellipsis(results[count].strBarangay,0,10);
+                    results[count].brngyEllipsis = 1;
                   }
                   else{
                     results[count].brngy = results[count].strBarangay;
+                    results[count].brngyEllipsis = 0;
                   }
                 }
                 if(!req.requestServ[0]){
@@ -568,17 +604,21 @@ function servReqRender(req,res){
                   if(!results[count].sum){
                     results[count].sum = 0;
                   }
-                  if (results[count].strCity.length > 10){
+                  if (results[count].strCity.length > 12){
                     results[count].city = ellipsis(results[count].strCity,0,10);
+                    results[count].cityEllipsis = 1;
                   }
                   else{
                     results[count].city = results[count].strCity;
+                    results[count].cityEllipsis = 0;
                   }
-                  if (results[count].strBarangay.length > 10){
+                  if (results[count].strBarangay.length > 12){
                     results[count].brngy = ellipsis(results[count].strBarangay,0,10);
+                    results[count].brngyEllipsis = 1;
                   }
                   else{
                     results[count].brngy = results[count].strBarangay;
+                    results[count].brngyEllipsis = 0;
                   }
                 }
                 if(!req.requestServ[0]){
@@ -607,17 +647,21 @@ function servReqRender(req,res){
                   if(!results[count].sum){
                     results[count].sum = 0;
                   }
-                  if (results[count].strCity.length > 10){
+                  if (results[count].strCity.length > 12){
                     results[count].city = ellipsis(results[count].strCity,0,10);
+                    results[count].cityEllipsis = 1;
                   }
                   else{
                     results[count].city = results[count].strCity;
+                    results[count].cityEllipsis = 0;
                   }
-                  if (results[count].strBarangay.length > 10){
+                  if (results[count].strBarangay.length > 12){
                     results[count].brngy = ellipsis(results[count].strBarangay,0,10);
+                    results[count].brngyEllipsis = 1;
                   }
                   else{
                     results[count].brngy = results[count].strBarangay;
+                    results[count].brngyEllipsis = 0;
                   }
                 }
                 if(!req.requestServ[0]){
@@ -688,17 +732,21 @@ function portfolioRender(req,res){
                   if(!results[count].sum){
                     results[count].sum = 0;
                   }
-                  if (results[count].strCity.length > 10){
+                  if (results[count].strCity.length > 12){
                     results[count].city = ellipsis(results[count].strCity,0,10);
+                    results[count].cityEllipsis = 1;
                   }
                   else{
                     results[count].city = results[count].strCity;
+                    results[count].cityEllipsis = 0;
                   }
-                  if (results[count].strBarangay.length > 10){
+                  if (results[count].strBarangay.length > 12){
                     results[count].brngy = ellipsis(results[count].strBarangay,0,10);
+                    results[count].brngyEllipsis = 1;
                   }
                   else{
                     results[count].brngy = results[count].strBarangay;
+                    results[count].brngyEllipsis = 0;
                   }
                 }
                   res.render('services/views/portfolio', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, searchServ: results, documents: req.documents, requestTab: req.requestServ, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial});
@@ -722,17 +770,21 @@ function portfolioRender(req,res){
                   if(!results[count].sum){
                     results[count].sum = 0;
                   }
-                  if (results[count].strCity.length > 10){
+                  if (results[count].strCity.length > 12){
                     results[count].city = ellipsis(results[count].strCity,0,10);
+                    results[count].cityEllipsis = 1;
                   }
                   else{
                     results[count].city = results[count].strCity;
+                    results[count].cityEllipsis = 0;
                   }
-                  if (results[count].strBarangay.length > 10){
+                  if (results[count].strBarangay.length > 12){
                     results[count].brngy = ellipsis(results[count].strBarangay,0,10);
+                    results[count].brngyEllipsis = 1;
                   }
                   else{
                     results[count].brngy = results[count].strBarangay;
+                    results[count].brngyEllipsis = 0;
                   }
                 }
                 res.render('services/views/portfolio', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, searchServ: results, documents: req.documents, requestTab: req.requestServ, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial});
@@ -757,17 +809,21 @@ function portfolioRender(req,res){
                   if(!results[count].sum){
                     results[count].sum = 0;
                   }
-                  if (results[count].strCity.length > 10){
+                  if (results[count].strCity.length > 12){
                     results[count].city = ellipsis(results[count].strCity,0,10);
+                    results[count].cityEllipsis = 1;
                   }
                   else{
                     results[count].city = results[count].strCity;
+                    results[count].cityEllipsis = 0;
                   }
-                  if (results[count].strBarangay.length > 10){
+                  if (results[count].strBarangay.length > 12){
                     results[count].brngy = ellipsis(results[count].strBarangay,0,10);
+                    results[count].brngyEllipsis = 1;
                   }
                   else{
                     results[count].brngy = results[count].strBarangay;
+                    results[count].brngyEllipsis = 0;
                   }
                 }
                 res.render('services/views/portfolio', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, searchServ: results, documents: req.documents, requestTab: req.requestServ, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial});
@@ -792,17 +848,21 @@ function portfolioRender(req,res){
                   if(!results[count].sum){
                     results[count].sum = 0;
                   }
-                  if (results[count].strCity.length > 10){
+                  if (results[count].strCity.length > 12){
                     results[count].city = ellipsis(results[count].strCity,0,10);
+                    results[count].cityEllipsis = 1;
                   }
                   else{
                     results[count].city = results[count].strCity;
+                    results[count].cityEllipsis = 0;
                   }
-                  if (results[count].strBarangay.length > 10){
+                  if (results[count].strBarangay.length > 12){
                     results[count].brngy = ellipsis(results[count].strBarangay,0,10);
+                    results[count].brngyEllipsis = 1;
                   }
                   else{
                     results[count].brngy = results[count].strBarangay;
+                    results[count].brngyEllipsis = 0;
                   }
                 }
                 res.render('services/views/portfolio', {thisUserTab: req.user, messCount: req.messCount[0].count, servParams: searchparams, searchServ: results, documents: req.documents, requestTab: req.requestServ, regSchedTab: req.regularSched, empty: req.empty, specSchedTab: req.specialSched, emptyspecial: req.emptyspecial});

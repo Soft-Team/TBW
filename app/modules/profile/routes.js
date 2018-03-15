@@ -51,7 +51,6 @@ function paramsUser(req, res, next){
           }
         }
       }
-      console.log(results);
       req.paramsUser = results;
       return next();
   });
@@ -71,6 +70,17 @@ function paramsDoc(req,res,next){
   db.query("SELECT * FROM tbldocument WHERE intDocID= ?",[req.params.docid], (err, results, fields) => {
       if (err) console.log(err);
       req.paramsDoc= results;
+      return next();
+    });
+}
+function paramsReviews(req,res,next){
+  /*Reviews of Params User, Match(params);
+  *(tblrating)*(tbltransaction)*(tblchat)*(tblservice)*(tbluser)*/
+  var stringquery= "SELECT * FROM tblrating INNER JOIN tbltransaction ON intTransID= intRateTransID ";
+  stringquery = stringquery.concat("INNER JOIN (SELECT * FROM tblchat INNER JOIN tblservice ON intChatServ= intServID WHERE intChatSeeker!= ? OR intServAccNo!= ?)A ON intTransChatID= A.intChatID INNER JOIN (SELECT * FROM tbluser WHERE intAccNo!= ?)B ON B.intAccNo= intServAccNo OR intAccNo= intChatSeeker INNER JOIN tblservicetag ON intServTagID= intServTag WHERE intRatedAccNo = ? ORDER BY dtmTransEnded");
+  db.query(stringquery,[req.params.userid, req.params.userid, req.params.userid, req.params.userid], (err, results, fields) => {
+      if (err) console.log(err);
+      req.paramsReviews= results;
       return next();
     });
 }
@@ -97,7 +107,7 @@ function profRender(req,res){
         res.redirect('/noroute');
       }
       else{
-        res.render('profile/views/index',{thisUserTab: req.user, messCount: req.messCount[0].count, paramsUser: req.paramsUser, servempty: req.servempty, documents: req.documents});
+        res.render('profile/views/index',{thisUserTab: req.user, messCount: req.messCount[0].count, paramsUser: req.paramsUser, servempty: req.servempty, documents: req.documents, reviews: req.paramsReviews});
       }
       break;
   }
@@ -127,10 +137,10 @@ function delDocRender(req,res){
 }
 
 router.get('/', flog, messCount, render);
-router.get('/:userid', flog, messCount, paramsUser, documents, profRender);
+router.get('/:userid', flog, messCount, paramsUser, documents, paramsReviews, profRender);
 router.get('/:userid/document/remove/:docid', flog, paramsUser, documents, paramsDoc, delDocRender);
 
-router.post('/personal/:userid', flog, messCount, paramsUser, documents, (req, res) => {
+router.post('/personal/:userid', flog, messCount, paramsUser, documents, paramsReviews, (req, res) => {
   var contact = '0'+req.body.contact.toString();
   if(!req.files.profilepic){
     db.query("UPDATE tbluser SET strEmail= ?, strContactNo= ?, strCity= ?, strBarangay= ? WHERE intAccNo= ?",[req.body.email, contact, req.body.city, req.body.brngy, req.session.user], function (err,  results, fields) {
@@ -139,11 +149,10 @@ router.post('/personal/:userid', flog, messCount, paramsUser, documents, (req, r
     });
   }
   else if(req.files.profilepic.mimetype != 'image/jpeg' && req.files.profilepic.mimetype != 'image/png'){
-    console.log(req.files.profilepic.mimetype);
-    res.render('profile/views/invalid/imgerror',{thisUserTab: req.user, messCount: req.messCount[0].count, paramsUser: req.paramsUser, servempty: req.servempty, documents: req.documents});
+
+    res.render('profile/views/invalid/imgerror',{thisUserTab: req.user, messCount: req.messCount[0].count, paramsUser: req.paramsUser, servempty: req.servempty, documents: req.documents, reviews: req.paramsReviews});
   }
   else{
-    console.log('no');
     var newAccNo= prepend(req.session.user);
     var jpeg = 'DP-'+newAccNo.toString().concat('.jpg');
     db.beginTransaction(function(err) {
@@ -166,7 +175,7 @@ router.post('/personal/:userid', flog, messCount, paramsUser, documents, (req, r
     });
   }
 });
-router.post('/pass/:userid', flog, messCount, paramsUser, documents, (req, res) => {
+router.post('/pass/:userid', flog, messCount, paramsUser, documents, paramsReviews, (req, res) => {
   if(req.paramsUser[0].strPassword == req.body.oldpass){
     if(req.body.newpass == req.body.confirmpass){
       db.query("UPDATE tbluser SET strPassword= ? WHERE intAccNo= ?",[req.body.newpass, req.session.user], function (err,  results, fields) {
@@ -175,19 +184,19 @@ router.post('/pass/:userid', flog, messCount, paramsUser, documents, (req, res) 
       });
     }
     else{
-      res.render('profile/views/invalid/notmatch',{thisUserTab: req.user, messCount: req.messCount[0].count, paramsUser: req.paramsUser, servempty: req.servempty, documents: req.documents});
+      res.render('profile/views/invalid/notmatch',{thisUserTab: req.user, messCount: req.messCount[0].count, paramsUser: req.paramsUser, servempty: req.servempty, documents: req.documents, reviews: req.paramsReviews});
     }
   }
   else{
-    res.render('profile/views/invalid/notmatch',{thisUserTab: req.user, messCount: req.messCount[0].count, paramsUser: req.paramsUser, servempty: req.servempty, documents: req.documents});
+    res.render('profile/views/invalid/notmatch',{thisUserTab: req.user, messCount: req.messCount[0].count, paramsUser: req.paramsUser, servempty: req.servempty, documents: req.documents, reviews: req.paramsReviews});
   }
 
 });
-router.post('/validid/:userid', flog, messCount, paramsUser, documents, (req, res) => {
+router.post('/validid/:userid', flog, messCount, paramsUser, documents, paramsReviews, (req, res) => {
   var newAccNo= prepend(req.session.user);
   var jpeg = 'VID-'+newAccNo.toString().concat('.jpg');
   if(req.files.validid.mimetype != 'image/jpeg' && req.files.validid.mimetype != 'image/png'){
-    res.render('profile/views/invalid/imgerror',{thisUserTab: req.user, messCount: req.messCount[0].count, paramsUser: req.paramsUser, servempty: req.servempty, documents: req.documents});
+    res.render('profile/views/invalid/imgerror',{thisUserTab: req.user, messCount: req.messCount[0].count, paramsUser: req.paramsUser, servempty: req.servempty, documents: req.documents, reviews: req.paramsReviews});
   }
   else{
     req.files.validid.mv('public/userImages/ids/'+jpeg, function(err){
@@ -198,11 +207,11 @@ router.post('/validid/:userid', flog, messCount, paramsUser, documents, (req, re
     });
   }
 });
-router.post('/document/:userid', flog, messCount, paramsUser, documents, (req, res) => {
+router.post('/document/:userid', flog, messCount, paramsUser, documents, paramsReviews, (req, res) => {
   var newAccNo= prepend(req.session.user);
   var jpeg = 'DOC-'+newAccNo.toString().concat(makeid(30)+'.jpg');
   if(req.files.document.mimetype != 'image/jpeg' && req.files.document.mimetype != 'image/png'){
-    res.render('profile/views/invalid/imgerror',{thisUserTab: req.user, messCount: req.messCount[0].count, paramsUser: req.paramsUser, servempty: req.servempty, documents: req.documents});
+    res.render('profile/views/invalid/imgerror',{thisUserTab: req.user, messCount: req.messCount[0].count, paramsUser: req.paramsUser, servempty: req.servempty, documents: req.documents, reviews: req.paramsReviews});
   }
   else{
     req.files.document.mv('public/userImages/documents/'+jpeg, function(err){

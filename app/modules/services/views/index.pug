@@ -51,7 +51,10 @@ block main
     h3.margin-L Popular Service Tags
     br
     each tag in servTags
-      a.button.btn.btn-primary.btn-tag.box-shadow-mini(href='/services/'+tag.strServName) #{tag.strServName}
+      if tag.ellipsis == 0
+        a.button.btn.btn-primary.btn-tag.box-shadow-mini(href='/services/'+tag.strServName) #{tag.servname}
+      else
+        a.button.btn.btn-primary.btn-tag.box-shadow-mini(href='/services/'+tag.strServName data-toggle="tooltip" data-placement="top" title=tag.strServName) #{tag.servname}
     //- .container(style='max-width: 1254px !important')
     //-   .card-deck.ml-1
     //-     .row(style='padding-left: 60px;')
@@ -63,4 +66,6 @@ block main
     //-               a.button.btn.btn-primary.btn-block(href='/services/'+tag.strServName, style='height: 60px; font-size: 2em;') #{tag.strServName}
       
       
+  block service
+
   block service
