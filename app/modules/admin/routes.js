@@ -17,7 +17,8 @@ function selectedUser(req,res,next){
 adminRouter.get('/', flog, (req,res) => {
   switch (req.valid) {
     case 1:
-      res.render('admin/views/index');
+      /*res.render('admin/views/index');*/
+      res.redirect('/admin/Active');
       break;
     case 2:
     case 3:

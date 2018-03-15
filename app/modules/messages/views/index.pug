@@ -8,7 +8,7 @@ block main
     option(value='00' selected='') 00
     each min in ['15','30','45']
       option(value=min) #{min}
-  
+
   mixin dmsel
     option(value='01' selected='') January
     each count in ['02','03','04','05','06','07','08','09','10','11','12']
@@ -19,7 +19,7 @@ block main
     option(value='01' selected='') 01
     each day in ['02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31']
       option(value= day) #{day}
-  
+
   mixin hoursel(hour)
     each thishour in ['12','01','02','03','04','05','06','07','08','09','10','11']
       if thishour == hour
@@ -39,7 +39,7 @@ block main
     else
       option(value='AM') AM
       option(value='PM' selected='') PM
-      
+
   mixin monthsel(thismonth)
     each month, index in ['January','February','March','April','May','June','July','August','September','October','November','December']
       if index+1 == thismonth 
@@ -52,7 +52,7 @@ block main
         option(value= day selected='') #{day}
       else
         option(value= day) #{day}
-  
+
   mixin regsched(day,daystr,schedday,start,end)
     if day == 2
       tr
@@ -62,7 +62,7 @@ block main
       tr
         th(scope="row") #{daystr}
         td #{start} - #{end}
-  
+
   .container.fill(style='padding:0px')
     .row.chat-wrap
       // Contacts & Conversations
@@ -73,13 +73,12 @@ block main
           .row.header-wrap
             .chat-header.col-sm-12
               .input-group
-                form(method='POST' action='/messages/service/'+messOne.intChatID)
-                  input.form-control(type='text', name='messageserv', placeholder='All Services', style='width:100px')
-                  button#search-btn.btn.btn-primary(type='submit') Change
-                      i.fa(aria-hidden='true')
+                input.form-control(type='text', name='messageserv', placeholder='All Services', style='width:100px' readonly)
+                button#search-btn.btn.btn-primary(type='button' data-toggle='modal' data-target='#ServTag') Change
+                  i.fa(aria-hidden='true')
           // Conversations
           .row.content-wrap
-          
+
             each chat in chattab
               .conversation.btn.pt-3.pb-1
                 .media-body
@@ -116,11 +115,11 @@ block main
               .chat-header.col-sm-12
                 .row.mt-3.pt-2
                   .col
-                      h4(style='color:#374850') ##{messOne.strServName}
-                        if messOne.sendType == 1
-                            span(style='color: white;') &nbsp#{messOne.Seeker}
-                        else
-                            span(style='color: white;') &nbsp#{messOne.strName}
+                    h4(style='color:#374850') ##{messOne.strServName}
+                      if messOne.sendType == 1
+                        span(style='color: white;') &nbsp#{messOne.Seeker}
+                      else
+                        span(style='color: white;') &nbsp#{messOne.strName}
                   .col.align-right
                     if transstatus == 2
                       span.tag.seeker Finished
@@ -147,18 +146,18 @@ block main
                   each mess in messtab
                     .msg
                       .media-body
-                          small.pull-right.time
-                            i.fa.fa-clock-o
-                            | &nbsp#{mess.formatdate}
-                          if mess.sendType == mess.intSender
-                              h5.right.media-heading #{user.strName}
+                        small.pull-right.time
+                          i.fa.fa-clock-o
+                          | &nbsp#{mess.formatdate}
+                        if mess.sendType == mess.intSender
+                          h5.right.media-heading #{user.strName}
+                        else
+                          if user.intAccNo == mess.SAccNo
+                            h5.left.media-heading #{mess.strName}
                           else
-                            if user.intAccNo == mess.SAccNo
-                                h5.left.media-heading #{mess.strName}
-                            else
-                                h5.left.media-heading #{mess.Seeker}
-                          small.col-sm-11
-                            |  #{mess.txtMessage}
+                            h5.left.media-heading #{mess.Seeker}
+                        small.col-sm-11
+                          |  #{mess.txtMessage}
             // Message box & Send Button
             if messOne.intChatStatus == 1
               .row.send-wrap
@@ -173,7 +172,7 @@ block main
                   a#send.btn.send-button
                     | Send 
                     i.fa.fa-send
-                      
+
   #TOModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='TOModalTitle' aria-hidden='true')
     .modal-dialog(role='document')
       .modal-content
@@ -193,7 +192,7 @@ block main
                   else
                     option(value='1') Fixed
                     option(value='2' selected='') Rate per Hour
-                  
+
               .col
                 label(for='price') Price
                 #price.input-group.mb-3
@@ -225,66 +224,66 @@ block main
                 select#S-Sampm.form-control(name='Sampm')
                   option(value='AM' selected='') AM
                   option(value='PM') PM
-          
+
           .modal-footer
             button.btn.btn-primary(type='submit') Submit
             button.btn.btn-secondary(type='button', data-dismiss='modal') Close
-            
+
   #editTOModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='editTOModalTitle' aria-hidden='true')
     .modal-dialog(role='document')
       .modal-content
-          form(method='POST' action='/messages/transet/edit/'+messOne.intChatID)
-            each trans in transtab
-              .modal-header
-                h5#editTOModalTitle.modal-title Edit Transaction Offer
-                button.close(type='button' data-dismiss='modal' aria-label='Close')
-                  span(aria-hidden='true') ×
-              .modal-body
-                .row
-                  .col
-                    label(for='priceType') Price Type
-                    select#priceType.form-control(name='pricetype')
-                      if trans.intTransPriceType == 1
-                        option(value='1' selected='') Fixed
-                        option(value='2') Rate per Hour
-                      else
-                        option(value='1') Fixed
-                        option(value='2' selected='') Rate per Hour
-                      
-                  .col
-                    label(for='price') Price
-                    #price.input-group.mb-3
-                      .input-group-prepend
-                        span.input-group-text Php
-                      input.form-control(type='text' name='price' value=trans.fltTransPrice placeholder='00.00' required)
-                center
-                  label Schedule
-                .row
-                  .col
-                    select#S-addMonth.form-control(name='addMonth')
-                      +monthsel(trans.month)
-                  .col
-                    select#S-addDay.form-control(name='addDay')
-                      +daysel(trans.day)
-                  .col
-                    input.form-control(type='number' name='addYear' placeholder='Year(eg.2018)' max='9999' value=trans.year required)
-                br
-                .row
-                  .col
-                    p.mt-1.text-center Start
-                  .col
-                    select#S-Shours.form-control(name='Shours')    
-                      +hoursel(trans.Hstart)
-                  .col
-                    select#S-Sminutes.form-control(name='Sminutes')
-                      +minsel(trans.Mstart)
-                  .col
-                    select#S-Sampm.form-control(name='Sampm')
-                      +ampmsel(trans.Sampm)
-              
-              .modal-footer
-                button.btn.btn-primary(type='submit') Submit
-                button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+        form(method='POST' action='/messages/transet/edit/'+messOne.intChatID)
+          each trans in transtab
+            .modal-header
+              h5#editTOModalTitle.modal-title Edit Transaction Offer
+              button.close(type='button' data-dismiss='modal' aria-label='Close')
+                span(aria-hidden='true') ×
+            .modal-body
+              .row
+                .col
+                  label(for='priceType') Price Type
+                  select#priceType.form-control(name='pricetype')
+                    if trans.intTransPriceType == 1
+                      option(value='1' selected='') Fixed
+                      option(value='2') Rate per Hour
+                    else
+                      option(value='1') Fixed
+                      option(value='2' selected='') Rate per Hour
+
+                .col
+                  label(for='price') Price
+                  #price.input-group.mb-3
+                    .input-group-prepend
+                      span.input-group-text Php
+                    input.form-control(type='text' name='price' value=trans.fltTransPrice placeholder='00.00' required)
+              center
+                label Schedule
+              .row
+                .col
+                  select#S-addMonth.form-control(name='addMonth')
+                    +monthsel(trans.month)
+                .col
+                  select#S-addDay.form-control(name='addDay')
+                    +daysel(trans.day)
+                .col
+                  input.form-control(type='number' name='addYear' placeholder='Year(eg.2018)' max='9999' value=trans.year required)
+              br
+              .row
+                .col
+                  p.mt-1.text-center Start
+                .col
+                  select#S-Shours.form-control(name='Shours')    
+                    +hoursel(trans.Hstart)
+                .col
+                  select#S-Sminutes.form-control(name='Sminutes')
+                    +minsel(trans.Mstart)
+                .col
+                  select#S-Sampm.form-control(name='Sampm')
+                    +ampmsel(trans.Sampm)
+
+            .modal-footer
+              button.btn.btn-primary(type='submit') Submit
+              button.btn.btn-secondary(type='button', data-dismiss='modal') Close
 
   #viewTOModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='viewTOModalTitle' aria-hidden='true')
     .modal-dialog(role='document')
@@ -309,8 +308,8 @@ block main
                   p
                     b Date Scheduled: 
                     | #{trans.date}
-                      
-                  
+
+
           .modal-footer
             button.btn.btn-primary.btn-block(type='submit') Accept Offer
             button.btn.btn-secondary(type='button', data-dismiss='modal') Close
@@ -410,10 +409,27 @@ block main
                   | this Chat and it's transaction
                 label(for='desc') Cancel Description:
                 textarea.form-control(rows='5' name='desc' required)
-                  
+
           .modal-footer
             button.btn.btn-danger(type='submit') Sumbit
             button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+
+  #ServTag.modal.fade(tabindex='-1' role='dialog' aria-labelledby='ServTagTitle' aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+          h5#ServTagTitle.modal-title Change Service Tag
+          button.close(type='button' data-dismiss='modal' aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+          each serv in messServ
+            .row.mb-3
+              .col
+                h4(style="display: inline; color: #2FAF7A;") #{serv.strServName}
+              
+        .modal-footer
+          button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+
 
 
   block chatmess

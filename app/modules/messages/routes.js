@@ -271,6 +271,27 @@ function fspecialSched(req, res, next){
       return next();
   });
 }
+function fprovider(req,res,next){
+  /*Service Provider, Match(params);
+  *(tblchat)*(tblservice)*/
+  db.query("SELECT * FROM tblchat INNER JOIN tblservice ON intChatServ= intServID WHERE intChatID= ?",[req.params.chatid], (err, results, fields) => {
+      if (err) console.log(err);
+      req.fprovider= results;
+      return next();
+    });
+}
+function fmessServ(req,res,next){
+  /*Transaction of curent Chat, Match(params);
+  *(tblchat)*(tblservice)*(tbltransaction)*/
+  db.query("SELECT *, COUNT(intServTagID)CNT FROM tblservicetag INNER JOIN tblservice ON intServTagID= intServTag INNER JOIN tblchat ON intServID= intChatServ WHERE intServAccNo= ? OR intChatSeeker= ? GROUP BY intServTagID ORDER BY CNT DESC",[req.session.user, req.session.user], (err, results, fields) => {
+    if (err) console.log(err);
+    if(!(!results[0])){
+
+    }
+    req.fmessServ= results;
+    return next();
+  });
+}
 function ftest(req,res,next){
   /*Transaction of curent Chat, Match(params);
   *(tblchat)*(tblservice)*(tbltransaction)*/
@@ -285,15 +306,7 @@ function ftest(req,res,next){
     return next();
   });
 }
-function fprovider(req,res,next){
-  /*Service Provider, Match(params);
-  *(tblchat)*(tblservice)*/
-  db.query("SELECT * FROM tblchat INNER JOIN tblservice ON intChatServ= intServID WHERE intChatID= ?",[req.params.chatid], (err, results, fields) => {
-      if (err) console.log(err);
-      req.fprovider= results;
-      return next();
-    });
-}
+
 
 function render(req,res){
   switch (req.valid) {
@@ -346,7 +359,7 @@ function messRender(req,res){
                         res.redirect('/noroute');
                       }
                       else
-                        res.render('messages/views/index', { thisUserTab: req.user, messCount: count, messtab: req.mess, messOne: req.mess[0], chattab: req.chat, params: req.params.chatid, transstatus: req.transstatus, transtab: req.ftrans, todayTab: req.ftodaysched, regSchedTab: req.fregularSched, empty: req.empty, specSchedTab: req.fspecialSched, emptyspecial: req.emptyspecial});
+                        res.render('messages/views/index', { thisUserTab: req.user, messCount: count, messtab: req.mess, messOne: req.mess[0], chattab: req.chat, params: req.params.chatid, transstatus: req.transstatus, transtab: req.ftrans, todayTab: req.ftodaysched, regSchedTab: req.fregularSched, empty: req.empty, specSchedTab: req.fspecialSched, emptyspecial: req.emptyspecial, messServ: req.fmessServ});
                   });
               });
           });
@@ -357,7 +370,7 @@ function messRender(req,res){
 }
 
 router.get('/', flog, messCount, fchat, render);
-router.get('/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, ftodaysched, fregularSched, fspecialSched, messRender);
+router.get('/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, ftodaysched, fregularSched, fspecialSched, fmessServ, messRender);
 
 router.post('/transet/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, ftodaysched, fregularSched, fspecialSched, (req, res) => {
   if(req.transstatus != 'none'){
