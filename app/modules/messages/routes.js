@@ -297,9 +297,9 @@ function fmessServ(req,res,next){
   });
 }
 function ftest(req,res,next){
-  /*Transaction of curent Chat, Match(params);
-  *(tblchat)*(tblservice)*(tbltransaction)*/
-  db.query("SELECT * FROM tblchat INNER JOIN tblservice ON intChatServ= intServID INNER JOIN tbltransaction ON intChatID= intTransChatID WHERE intChatID= ?",[req.params.chatid], (err, results, fields) => {
+  /*Test Function, Match(params);
+  *(tblchat)*/
+  db.query("SELECT * FROM tblchat WHERE intChatID= ?",[req.params.chatid], (err, results, fields) => {
     if (err) console.log(err);
     if(!(!results[0])){
 

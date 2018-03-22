@@ -12,39 +12,42 @@ block main
         .card-deck.ml-1
           .row(style='padding-left: 60px;')
             each search in searchtab
-              if search.intAccNo != 0
-                .col(style='margin-left: -5px;')
-                  span.card(style= 'height: 14.4rem; width: 15rem').border.border-primary.mb-3.box-shadow-mini
-                    table
-                      tbody
-                        tr
-                          td(rowspan='2') 
-                            img(src='/userImages/profile/'+search.strProfilePic, alt='Card image cap', style='height: 8rem; width: 8rem; border-radius: 3px 0px 0px 0px; border-right: 1px solid #007BFF;')
-                          td
-                            img(src='/assets/images/Icons/star.png', alt='star', style='height: 1.5rem; width: 1.5rem; margin-left:20px;')
-                            p(style='float: right; margin-right: 30px; margin-bottom: 0rem') 4.8
-                            p.cenR(style='margin-bottom: 0rem') Rating
-                        tr
-                          td
-                            img(src='/assets/images/Icons/case.png', alt='star', style='height: 1.5rem; width: 1.5rem; margin-left:20px;')
-                            p(style='float: right; margin-right: 30px; margin-bottom: 0rem') 100  
-                            p.cenF(style='margin-bottom: 0rem') Finished
-
-                    //-img.card-img-top(src='/assets/images/Tyler.jpg', alt='Card image cap', style='height: 8rem; width: 8rem; ')
-                    .card-body
-                      .card-text
-                        if search.intStatus == 2
-                          .f(style='text-align:center; border-top: 1px solid #007BFF; color: green;') Verified
-                        else 
-                          .f(style='text-align:center; border-top: 1px solid #007BFF; color: gray;') Unverified
-                        .f(style='text-align:center;') #{search.prepend}
-                        .f(style='text-align:center')
-                          a(href='/profile/'+search.intAccNo) #{search.strName}
-                        .row
-                          .col(style='padding-right:0px; text-align:center; border-right: 1px solid #007BFF;')
-                            .f(style='border:0px !important') #{search.strCity}
-                          .col(style='padding-left:0px; text-align:center;')
-                            .f(style='border:0px !important') #{search.strBarangay}
-                .col          
+              .col(style='margin-left: -5px; margin-bottom: 10px;')
+                span.card(style= 'height: 12.7rem; width: 15rem').border.border-primary.mb-3.box-shadow-mini
+                  table
+                    tbody
+                      tr
+                        td(rowspan='2') 
+                          img(src='/userImages/profile/'+search.strProfilePic, alt='Card image cap', style='height: 8rem; width: 8rem; border-radius: 3px 0px 0px 0px; border-right: 1px solid #007BFF;')
+                        td
+                          img(src='/assets/images/Icons/star.png', alt='star', style='height: 1.5rem; width: 1.5rem; margin-left:20px;')
+                          p(style='float: right; margin-right: 30px; margin-bottom: 0rem') #{search.ave}
+                          p.cenR(style='margin-bottom: 0rem') Rating
+                      tr
+                        td
+                          img(src='/assets/images/Icons/case.png', alt='star', style='height: 1.5rem; width: 1.5rem; margin-left:20px;')
+                          p(style='float: right; margin-right: 30px; margin-bottom: 0rem') #{search.sum}
+                          p.cenF(style='margin-bottom: 0rem') Finished
+    
+                  .card-body
+                    .card-text
+                      .f(style='text-align:center; border-top: 1px solid #007BFF') #{search.prepend}
+                      if search.intStatus == 1
+                        .f.text-white(style='text-align:center; background: #868E96;')
+                          a.link-white(href='/profile/'+search.intAccNo) #{search.strName}
+                      else
+                        .f.text-white(style='text-align:center; background: #2FAF7A;')
+                          a.link-white(href='/profile/'+search.intAccNo) #{search.strName}
+                      .row
+                        .col(style='padding-right:0px; text-align:center; border-right: 1px solid #007BFF;')
+                          if search.cityEllipsis == 0
+                            .f #{search.city}
+                          else
+                            .f(data-toggle="tooltip" data-placement="top" title=search.strCity) #{search.city}
+                        .col(style='padding-left:0px; text-align:center;')
+                          if search.brngyEllipsis == 0
+                            .f #{search.brngy}
+                          else
+                            .f(data-toggle="tooltip" data-placement="top" title=search.strBarangay) #{search.brngy}
 
   
