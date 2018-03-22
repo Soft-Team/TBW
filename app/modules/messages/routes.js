@@ -19,17 +19,21 @@ function fchat(req,res,next){
       if (err) console.log(err);
       if (!(!results[0])){
         for(count=0;count<results.length;count++){
-          if (results[count].strName.length > 8){
-            results[count].name = ellipsis(results[count].strName,0,8);
+          if (results[count].strName.length > 11){
+            results[count].name = ellipsis(results[count].strName,0,9);
+            results[count].ellipsis = 1;
           }
           else{
             results[count].name = results[count].strName;
+            results[count].ellipsis = 0;
           }
           if (results[count].strServName.length > 8){
-            results[count].servname = ellipsis(results[count].strServName,0,8);
+            results[count].servname = ellipsis(results[count].strServName,0,6);
+            results[count].tagEllipsis = 1;
           }
           else{
             results[count].servname = results[count].strServName;
+            results[count].tagEllipsis = 0;
           }
           if (results[count].txtMessage.length > 8){
             results[count].txtMessage = ellipsis(results[count].txtMessage,0,8);
@@ -306,7 +310,6 @@ function ftest(req,res,next){
     return next();
   });
 }
-
 
 function render(req,res){
   switch (req.valid) {

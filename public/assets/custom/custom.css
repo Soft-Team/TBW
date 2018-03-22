@@ -71,6 +71,24 @@ body{
 .link-black:hover  {
     text-decoration: underline !important;
 }
+.no-decoration {
+    text-decoration: none;
+}
+.no-decoration:hover {
+    text-decoration: none;
+}
+.btn-nav {
+    color: white;
+    background: #3498DB;
+    border: 1px solid #3498DB;
+}
+.btn-nav:hover {
+    background: rgba(0, 105, 217, .7);
+    border: 1px solid rgba(0, 105, 217, .7);
+}
+.btn-nav:focus {
+    box-shadow: 0 0 0 0.2rem rgba(52, 152, 219,.5);
+}
 
 /*btn-group btn-block*/
 .btn-group.special {
