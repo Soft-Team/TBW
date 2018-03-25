@@ -369,3 +369,28 @@ thead{
   line-height: 1.5;
   border-radius: 0.2rem;
 }
+
+.portfolio-prev{
+  background-color: #3498DB;
+  border-radius: 10px;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  /* bottom: auto; */
+  height: 30px;
+  width: 40px;
+}
+.portfolio-next{
+  background-color: #3498DB;
+  border-radius: 10px;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  height: 30px;
+  width: 40px;
+}
+.portfolio-indicators {
+  background: #3498DB;
+  padding: 8px;
+  border-radius: 10px;
+}

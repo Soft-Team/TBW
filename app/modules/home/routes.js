@@ -6,6 +6,8 @@ var messCount = require('../welcome/messCount');
 var prepend = require('../welcome/prepend');
 var timeFormat = require('../welcome/timeFormat');
 var dateformat = require('../welcome/dateformat');
+var numberFormat = require('../welcome/numberFormat');
+var ellipsis = require('../welcome/ellipsis');
 
 function unrated(req,res,next){
   /*Unrated Finished Transactions of Current User as Seeker, Match(session);
@@ -39,6 +41,49 @@ function unrated(req,res,next){
       req.unrated= results;
       return next();
     });
+}
+function search(req,res,next){
+  /*Test Function, Match(session,params);
+  *(tblchat)*/
+  var searchquery = "%"+req.params.searchname.toString()+"%"
+  var stringquery = "SELECT * FROM tbluser LEFT JOIN tblservice ON intServAccNo= intAccNo LEFT JOIN (SELECT *,AVG(intRating) AS ave FROM tblrating GROUP BY intRatedAccNo)A ON intAccNo= intRatedAccNo LEFT JOIN (SELECT intServAccNo as servacc, S.sum FROM(SELECT *,SUM(count) AS sum FROM"
+  stringquery = stringquery.concat("(SELECT *,COUNT(intTransID)as count FROM tbltransaction INNER JOIN tblchat ON intChatID= intTransChatID INNER JOIN tblservice ON intChatServ= intServID GROUP BY intServAccNo)C GROUP BY intServAccNo)S)B ON intAccNo= servacc WHERE intAccNo!= ? AND boolIsBanned= 0 AND strName LIKE ? AND ((intType=3 AND intStatus=2) OR intType= 2) GROUP BY intAccNo");
+  db.query(stringquery,[req.session.user, searchquery], (err, results, fields) => {
+    if (err) console.log(err);
+    if(!(!results[0])){
+      for(count=0;count<results.length;count++){
+        results[count].prepend = prepend(results[count].intAccNo);
+        if(!results[count].ave){
+          results[count].ave = 0;
+        }
+        else{
+          results[count].ave = numberFormat(results[count].ave.toFixed(1));
+        }
+        if(!results[count].sum){
+          results[count].sum = 0;
+        }
+        if (results[count].strCity.length > 12){
+          results[count].city = ellipsis(results[count].strCity,0,10);
+          results[count].cityEllipsis = 1;
+        }
+        else{
+          results[count].city = results[count].strCity;
+          results[count].cityEllipsis = 0;
+        }
+        if (results[count].strBarangay.length > 12){
+          results[count].brngy = ellipsis(results[count].strBarangay,0,10);
+          results[count].brngyEllipsis = 1;
+        }
+        else{
+          results[count].brngy = results[count].strBarangay;
+          results[count].brngyEllipsis = 0;
+        }
+      }
+    }
+    console.log(results)
+    req.search= results;
+    return next();
+  });
 }
 
 function render(req,res){
@@ -108,22 +153,10 @@ function searchRender(req,res){
       break;
     case 2:
     case 3:
-      var searchquery = "%"+req.params.searchname.toString()+"%"
-      db.query("SELECT * FROM tbluser WHERE strName LIKE ? AND intStatus!= 3 AND intType!= 1",[searchquery], (err, results, fields) => {
-          if (err) console.log(err);
-          if(!(!results[0])){
-            for(count=0;count<results.length;count++){
-              if (results[count].intType == 3 && results[count].intStatus == 1){
-                results[count].intAccNo = 0;
-              }
-              results[count].prepend = prepend(results[count].intAccNo);
-            }
-            res.render('home/views/search', {thisUserTab: req.user, messCount: req.messCount[0].count, searchtab: results});
-          }
-          else{
-            res.render('home/views/nosearch', {thisUserTab: req.user, messCount: req.messCount[0].count, noresult: req.params.searchname});
-          }
-      });
+      if(!(!req.search[0]))
+        res.render('home/views/search', {thisUserTab: req.user, messCount: req.messCount[0].count, searchtab: req.search});
+      else
+        res.render('home/views/nosearch', {thisUserTab: req.user, messCount: req.messCount[0].count, noresult: req.params.searchname});
       break;
   }
 }
@@ -133,7 +166,7 @@ router.get('/guide', flog, messCount, guideRender);
 router.get('/help', flog, messCount, helpRender);
 router.get('/about', flog, messCount, aboutRender);
 router.get('/team', flog, messCount, teamRender);
-router.get('/search/:searchname', flog, messCount, searchRender);
+router.get('/search/:searchname', flog, messCount, search, searchRender);
 
 router.post('/search', flog, (req, res) => {
   res.redirect('/home/search/'+req.body.search);

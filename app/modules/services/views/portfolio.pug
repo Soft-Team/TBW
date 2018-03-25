@@ -15,32 +15,35 @@ block servtarget
           button.close(type='button', data-dismiss='modal', aria-label='Close')
             span(aria-hidden='true') ×
         .modal-body
-          #carousel-1.carousel.slide(data-ride='carousel')
-            .carousel-inner(role='listbox')
-              - emptyDoc = 1
-              each doc,index in documents
-                - emptyDoc = 0
-                if index == 0
-                  .carousel-item.active
-                    img.w-100.d-block(src='/userImages/documents/'+doc.strDocument, alt='Slide Image')
-                else
-                  .carousel-item
-                    img.w-100.d-block(src='/userImages/documents/'+doc.strDocument, alt='Slide Image')
-              if emptyDoc == 1
-                p
-                  i No documents to display
-                
-            div
-              a.carousel-control-prev(href='#carousel-1', role='button', data-slide='prev')
-                span.carousel-control-prev-icon
+          - emptyDoc = 1
+          each doc,index in documents
+            - emptyDoc = 0
+          if emptyDoc == 1
+            p
+              i No documents to display
+          else
+            
+            #carousel-1.carousel.slide(data-ride='carousel')
+              .carousel-inner(role='listbox' style="height: 80%;")
+                each doc,index in documents
+                  if index == 0
+                    .carousel-item.active
+                      img.w-100.d-block(src='/userImages/documents/'+doc.strDocument, alt='Slide Image')
+                  else
+                    .carousel-item
+                      img.w-100.d-block(src='/userImages/documents/'+doc.strDocument, alt='Slide Image')
+              a.carousel-control-prev.portfolio-prev(href='#carousel-1', role='button', data-slide='prev')
+                span.carousel-control-prev-icon(aria-hidden='true')
                 span.sr-only Previous
-              a.carousel-control-next(href='#carousel-1', role='button', data-slide='next')
-                span.carousel-control-next-icon
-                span.sr-only Next
-            ol.carousel-indicators
-              li.active(data-target='#carousel-1', data-slide-to='0')
-              li(data-target='#carousel-1', data-slide-to='1')
-              li(data-target='#carousel-1', data-slide-to='2')
+              a.carousel-control-next.portfolio-next(href='#carousel-1', role='button', data-slide='next')
+                span.carousel-control-next-icon(aria-hidden='true')
+                    span.sr-only Next
+              ol.carousel-indicators.portfolio-indicators
+                each doc,index in documents
+                  if index == 0
+                    li.active(data-target='#carousel-1', data-slide-to=index)
+                  else
+                    li(data-target='#carousel-1', data-slide-to=index)
         .modal-footer
-          button.btn.btn-light(type='button', data-dismiss='modal') Close      
+          button.btn.btn-secondary(type='button', data-dismiss='modal') Close      
               

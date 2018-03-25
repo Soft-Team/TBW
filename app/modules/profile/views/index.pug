@@ -134,7 +134,14 @@ block main
                     .col
                     .col.mt-4.mb-4
                       if paramsuser.current == 1
-                        button.btn.btn-primary.btn-md.btn(type='button' data-toggle='modal' data-target='#AddDocument' style='padding-top:8px') + Add Document
+                        - maxDocument = 0
+                        each doc,index in documents
+                          if index > 4
+                            - maxDocument = 1
+                        if maxDocument == 0
+                          button.btn.btn-primary.btn-md.btn(type='button' data-toggle='modal' data-target='#AddDocument' style='padding-top:8px') + Add Document
+                        else
+                          p Maximum number of Documents reached.
                     .col
                   .row.mb-4
                     - empty = 0
@@ -341,7 +348,7 @@ block main
               .col-8
                 .form-group.mr-3
                   input#docu.filestyle(type='file' name='document' data-classbutton='btn btn-primary' data-input='false' data-classicon='icon-plus' accept='image/*' required)
-
+                small.text-muted Maximum of 6 Documents
 
           .modal-footer
             button.btn.btn-primary(type='submit') Submit
