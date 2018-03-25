@@ -5,15 +5,15 @@ block main
     center
       h1.text-white Search Results
   .container(style='margin: 10px 0px 10px 10px; max-width: 1260px !important')
+    h4.margin-L(style="display: inline;") Showing Results for&nbsp
+    h4(style="display: inline; color: #2FAF7A;") #{val} 
     p
-      br
-      br
       .container
         .card-deck.ml-1
-          .row(style='padding-left: 60px;')
+          .row(style='padding-left: 45px;')
             each search in searchtab
               .col(style='margin-left: -5px; margin-bottom: 10px;')
-                span.card(style= 'height: 12.7rem; width: 15rem').border.border-primary.mb-3.box-shadow-mini
+                span.card(style= 'height: 15.3rem; width: 15rem').border.border-primary.mb-3.box-shadow-mini
                   table
                     tbody
                       tr
@@ -49,5 +49,6 @@ block main
                             .f #{search.brngy}
                           else
                             .f(data-toggle="tooltip" data-placement="top" title=search.strBarangay) #{search.brngy}
+                      a.button.btn-block.btn-secondary(href='/search/'+varServName+'/'+varCity+'/'+varBrngy+'/'+varPricing+'/'+varSorting+'/portfolio/' style='width: 14.9rem; border-radius: 0px 0px 3px 0px; height:40px; text-align: center; padding-top:5px;') Portfolio
 
-  
+      
