@@ -19,30 +19,32 @@ block main
             #left-pane.col-sm-3
               img(src='/userImages/profile/'+paramsuser.strProfilePic, alt='Card image cap', style='height: 10rem; width: 10rem; border-right: 1px solid; ')
             #center-pane.col-sm-3
-              if paramsuser.intStatus == 1
-                h2.text-headline-profile(style='border-bottom: 1px solid #000000; color:grey;') Unverified 
-              else
-                h2.text-headline-profile(style='border-bottom: 1px solid#000000; color:green;') Verified 
-              h1(style='margin-left:15px') #{paramsuser.strName}
+              h1(style='margin-left:15px; margin-top:40px; margin-bottom:0px !important') #{paramsuser.strName}
                 if paramsuser.current != 1
                   button#report.btn.btn-danger.btn-md.btn(type='button' data-toggle='modal' data-target='#reportModal' style='padding-top:8px')
                     i.fa.fa-exclamation.fa-2x(style='height:35px; width:35px;')
                 else
                   button#report.btn.btn-light.btn-md.btn.ml-2(type='button' data-toggle='modal' data-target='#editModal' title='Edit')
                     img(src='/assets/images/icons/settings.png' style='height:35px; width:35px;')
+              
+              if paramsuser.intStatus == 1
+                span.font3.tag.unverified(style='margin-left:15px; color:grey;') Unverified 
+              else
+                h2.text-headline-profile(style='border-bottom: 1px solid#000000; color:green;') Verified
+              span.font3(style='margin-left:5px;') 000047239
             #right-pane.col-sm-3
               table
                 tbody
                   tr
-                    td(style='padding-top:3px;', title='Seeker and Provider rating')
+                    td(style='padding-top:3px;' data-toggle='tooltip', data-placement='left', title='Seeker and Provider rating')
                       img(src='/assets/images/Icons/star.png', alt='star', style='height: 2rem; width: 2rem; margin-top:5px; margin-left:50px;')
                       h2(style='float: right; margin-right: 50px; margin-bottom: 0rem') #{paramsuser.ave}
                       h4.profileA(style='margin-bottom: 0rem; margin-top:0px; display:inline-block') Rating
                   tr
-                    td(style='padding-top:3px', title='Jobs finished as a Provider')
+                    td(style='padding-top:3px', data-toggle='tooltip', data-placement='left', title='Jobs finished as a Provider')
                       img(src='/assets/images/Icons/case.png', alt='star', style='height: 2rem; width: 2rem; margin-top:5px; margin-left:50px ')
                       h2(style='float: right; margin-right: 50px; margin-bottom: 0rem') #{paramsuser.sum}
-                      h4.profileB(style='margin-bottom: 0rem; margin-top:0px; display:inline-block') Finished
+                      h4.profileB(style='margin-bottom: 0rem; margin-top:0px; display:inline-block') Provided
 
     nav
       .card.text-center(style='width:1286px')

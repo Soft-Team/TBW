@@ -1040,3 +1040,34 @@ tr:hover .spnTooltip{
     display:inline; position:absolute; color:#111;
     border:1px solid #DCA; background:#fffAF0;}
 .callout {z-index:20;position:absolute;top:30px;border:0;left:-12px;}
+
+
+.con-op:after {
+	content: ''; 
+	width:480px; 
+	height: 200px; 
+	background-color: white; 
+	opacity: 0.7; 
+	position: absolute; 
+	top: 0; 
+	left: 0; 
+    z-index: 1;
+    margin:50px;
+    border-radius:3px;
+}
+.con-det {
+    position: relative; z-index: 2;
+    padding:75px 15px 15px 15px !important;
+    height: 100%;
+}
+
+.card-style{
+    border-radius: 3px; 
+    height:600px; 
+    padding:0px !important;
+}
+
+.unverified{
+    border: 2px solid rgb(54, 54, 54);
+    background: rgb(204, 204, 204);
+}
