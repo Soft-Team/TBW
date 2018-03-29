@@ -141,9 +141,11 @@ block main
                         img.img-circle(src='/userImages/profile/'+rev.strProfilePic alt='User Image' height="85" width="85")
                   .col-sm-3
                     if rev.intChatSeeker == rev.intAccNo
-                      h2 #{rev.strName} ( #{rev.strServName} Seeker )
+                      h2 #{rev.strName} 
+                        span.tag.seeker #{rev.strServName}
                     else
-                      h2 #{rev.strName} ( #{rev.strServName} Provider )
+                      h2 #{rev.strName} 
+                        span.tag.provider #{rev.strServName}
                     h3 #{rev.txtRateReview}
                   .col-sm-3
                     img(src='/assets/images/Icons/star.png', alt='star', style='height: 4rem; width: 4rem; margin-top:5px; float:left')
