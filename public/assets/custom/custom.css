@@ -678,19 +678,20 @@ header.heads {
 }
 
 .sector-container-footer {
-    height: 201px;
+    height: auto;
     /*width: 1300px;*/
     margin-right: auto;
     margin-left: auto;
-    padding: 20px;
+    padding: 10px 20px 20px 20px;
 }
 
 .footer-container{
-    height: 110px;
-    /*width: 1300px;*/
+    display:block;
+    overflow:auto;
     margin-right: auto;
     margin-left: auto;
     border-bottom: 1px solid;
+    padding: 10px 10px;
 }
 
 /* Home Box */
@@ -1088,4 +1089,9 @@ tr:hover .spnTooltip{
 .unverified{
     border: 2px solid rgb(54, 54, 54);
     background: rgb(204, 204, 204);
+}
+
+.verified{
+    border: 2px solid rgb(21, 126, 0);
+    background:rgb(105, 202, 86);
 }
