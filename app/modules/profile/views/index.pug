@@ -19,7 +19,7 @@ block main
             #left-pane.col-sm-3
               img(src='/userImages/profile/'+paramsuser.strProfilePic, alt='Card image cap', style='height: 10rem; width: 10rem; border-right: 1px solid; ')
             #center-pane.col-sm-3
-              h1(style='margin-left:15px; margin-top:40px; margin-bottom:0px !important') #{paramsuser.strName}
+              h1(style='margin-left:15px; margin-top:40px; margin-bottom:10px !important') #{paramsuser.strName}
                 if paramsuser.current != 1
                   button#report.btn.btn-danger.btn-md.btn(type='button' data-toggle='modal' data-target='#reportModal' style='padding-top:8px')
                     i.fa.fa-exclamation.fa-2x(style='height:35px; width:35px;')
@@ -30,7 +30,7 @@ block main
               if paramsuser.intStatus == 1
                 span.font3.tag.unverified(style='margin-left:15px; color:grey;') Unverified 
               else
-                h2.text-headline-profile(style='border-bottom: 1px solid#000000; color:green;') Verified
+                span.font3.tag.verified(style='margin-left:15px; color:green;') Verified
               span.font3(style='margin-left:5px;') 000047239
             #right-pane.col-sm-3
               table
@@ -105,7 +105,7 @@ block main
                               td Unavailable
                             else if serv.intServStatus == '2'
                               td Unavailable(Ongoing) 
-          #Reviews.tab-pane.fade(role='tabpanel', aria-labelledby='reviews-tab', style='height: 300px')
+          #Reviews.tab-pane.fade(role='tabpanel', aria-labelledby='reviews-tab', style='height: auto')
             .sector-container-footer
               - emptyRev = 1
               each rev in reviews
