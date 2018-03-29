@@ -28,9 +28,13 @@ block main
                     img(src='/assets/images/icons/settings.png' style='height:35px; width:35px;')
               
               if paramsuser.intStatus == 1
-                span.font3.tag.unverified(style='margin-left:15px; color:grey;') Unverified 
+                span.font3.tag.unverified(style='margin-left:15px; color:#868E96;') Unverified 
               else
+<<<<<<< HEAD
                 span.font3.tag.verified(style='margin-left:15px; color:green;') Verified
+=======
+                span.font3.tag.verified(style='margin-left:15px; color:#2FAF7A;') Verified
+>>>>>>> 352d7179cc47b8ee8748b32904c682531f28bdf0
               span.font3(style='margin-left:5px;') 000047239
             #right-pane.col-sm-3
               table
@@ -353,5 +357,49 @@ block main
           .modal-footer
             button.btn.btn-primary(type='submit') Submit
             button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+
+  #Workers.modal.fade(tabindex='-1' role='dialog' aria-labelledby='WorkersTitle' aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        form(method='POST' action='/profile/document/'+thisuser.intAccNo enctype='multipart/form-data')
+          .modal-header
+            h5#WorkersTitle.modal-title Workers
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+              span(aria-hidden='true') ×
+          .modal-body
+            .row
+              .col
+                ul#pills-tab.nav.nav-pills.mb-3(role='tablist')
+                  li.nav-item
+                    a#pills-manage-tab.nav-link.active(data-toggle='pill', href='#pills-manage', role='tab', aria-controls='pills-manage', aria-selected='true') Manage Workers
+                  li.nav-item
+                    a#pills-add-tab.nav-link(data-toggle='pill', href='#pills-add', role='tab', aria-controls='pills-add', aria-selected='false') Add Workers
+                hr
+                #pills-tabContent.tab-content
+                  #pills-manage.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='pills-manage-tab')
+                    form(method='POST' action='/profile/manage-workers/'+thisuser.intAccNo)
+                      .row
+                        .col
+                          h1 
+                      .row
+                        .col
+                          .btn-group.special(role='group')
+                            button.editbuttons.btn.btn-primary.btn-md(type='submit') Submit
+                            button.editbuttons.btn.btn-secondary.btn-md(type='button' data-dismiss='modal' aria-pressed='true') Cancel
+                  
+                  #pills-add.tab-pane.fade.show(role='tabpanel', aria-labelledby='pills-add-tab')
+                    form(method='POST' action='/profile/add-workers/'+thisuser.intAccNo)
+                      .row
+                        
+                      .row
+                        .col
+                          .btn-group.special(role='group')
+                            button.editbuttons.btn.btn-primary.btn-md(type='submit') Submit
+                            button.editbuttons.btn.btn-secondary.btn-md(type='button' data-dismiss='modal' aria-pressed='true') Cancel
+
+          .modal-footer
+            button.btn.btn-primary(type='submit') Submit
+            button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+
 
   block profile
