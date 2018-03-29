@@ -7,7 +7,28 @@ block main
     script(type='text/javascript', src='/assets/scripts/bootstrap-filestyle.min.js')
     script.
       $(":file").filestyle();
-
+      
+      $('#WorkerEdit').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget)
+        var workername = button.data('workername')
+        var status = button.data('status')
+        var workid = button.data('workid')
+        
+        var modal = $(this)
+        modal.find('.modal-body input').val(workid)
+        modal.find('.modal-body span').text(workername)
+        
+        var sel = document.getElementById('sel');
+        var opts = sel.options;
+        for (var opt, j = 0; opt = opts[j]; j++) {
+          if (opt.value == status) {
+            sel.selectedIndex = j;
+            break;
+          }
+        }
+        
+      })
+        
   .jumbotron-banner(style='height:100px')
     center
   .sector(style='margin-top:0px; padding:0px')
@@ -19,11 +40,14 @@ block main
             #left-pane.col-sm-3
               img(src='/userImages/profile/'+paramsuser.strProfilePic, alt='Card image cap', style='height: 10rem; width: 10rem; border-right: 1px solid; ')
             #center-pane.col-sm-3
-              h1(style='margin-left:15px; margin-top:40px; margin-bottom:0px !important') #{paramsuser.strName}
+              h1(style='margin-left:15px; margin-top:40px; margin-bottom:0px !important') #{paramsuser.strName}    
                 if paramsuser.current != 1
                   button#report.btn.btn-danger.btn-md.btn(type='button' data-toggle='modal' data-target='#reportModal' style='padding-top:8px')
                     i.fa.fa-exclamation.fa-2x(style='height:35px; width:35px;')
                 else
+                  if thisuser.intType == 3
+                    button#report.btn.btn-info.btn-md.btn(type='button' data-toggle='modal' data-target='#Workers')
+                      i.fa.fa-users.fa-2x(style='height:35px; width:35px;')
                   button#report.btn.btn-light.btn-md.btn.ml-2(type='button' data-toggle='modal' data-target='#editModal' title='Edit')
                     img(src='/assets/images/icons/settings.png' style='height:35px; width:35px;')
               
@@ -31,7 +55,7 @@ block main
                 span.font3.tag.unverified(style='margin-left:15px; color:#868E96;') Unverified 
               else
                 span.font3.tag.verified(style='margin-left:15px; color:#2FAF7A;') Verified
-              span.font3(style='margin-left:5px;') 000047239
+              span.font3(style='margin-left:5px;') #{paramsuser.prepend}
             #right-pane.col-sm-3
               table
                 tbody
@@ -156,7 +180,7 @@ block main
                       .col.mt-2
                         i No documents to display
                       .col
-
+              
   #reportModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='reportModalTitle' aria-hidden='true')
     .modal-dialog(role='document')
       .modal-content
@@ -357,41 +381,91 @@ block main
   #Workers.modal.fade(tabindex='-1' role='dialog' aria-labelledby='WorkersTitle' aria-hidden='true')
     .modal-dialog(role='document')
       .modal-content
-        form(method='POST' action='/profile/document/'+thisuser.intAccNo enctype='multipart/form-data')
+        .modal-header
+          h5#WorkersTitle.modal-title Workers
+          button.close(type='button' data-dismiss='modal' aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+          .row
+            .col
+              ul#pills-tab.nav.nav-pills.mb-3(role='tablist')
+                li.nav-item
+                  a#pills-manage-tab.nav-link.active(data-toggle='pill', href='#pills-manage', role='tab', aria-controls='pills-manage', aria-selected='true') Manage Workers
+                li.nav-item
+                  a#pills-add-tab.nav-link(data-toggle='pill', href='#pills-add', role='tab', aria-controls='pills-add', aria-selected='false') Add Workers
+              hr
+              #pills-tabContent.tab-content
+                #pills-manage.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='pills-manage-tab')
+                  form(method='POST' action='/profile/manage-workers/'+thisuser.intAccNo)
+                    .row
+                      .col
+                        table.table.table-striped.box-shadow-mini
+                          thead
+                            tr
+                              th.text-white(scope='col') Name
+                              th.text-white(scope='col') Status
+                              th.text-white(scope='col') Edit
+                          tbody
+                            - emptyworker = 1
+                            each work in workers
+                              - emptyworker = 0
+                              tr
+                                td #{work.strWorker}
+                                
+                                if work.intWorkerStatus == 0
+                                  td Unavailable
+                                  td(style="padding: 7.5px;")
+                                    button.btn.btn-info(type='button' data-toggle='modal' data-target='#WorkerEdit' data-workername=work.strWorker data-status=work.intWorkerStatus data-workid=work.intWorkerID)
+                                      i.fa.fa-cog
+                                else if work.intWorkerStatus == 1
+                                  td Available
+                                  td(style="padding: 7.5px;")
+                                    button.btn.btn-info(type='button' data-toggle='modal' data-target='#WorkerEdit' data-workername=work.strWorker data-status=work.intWorkerStatus data-workid=work.intWorkerID)
+                                      i.fa.fa-cog
+                                else
+                                  td Ongoing
+                                  td &nbsp
+                                  
+                            if emptyworker == 1
+                              tr
+                                td(colspan="4")
+                                  i No Workers Added
+                
+                #pills-add.tab-pane.fade.show(role='tabpanel', aria-labelledby='pills-add-tab')
+                  form(method='POST' action='/profile/add-workers/'+thisuser.intAccNo)
+                    .row
+                      .col
+                        .form-group
+                          label(for='workername')
+                            b Worker's Name
+                          input#workername.form-control(type='text' name='workername' aria-describedby='workernameHelp' required)
+                          small#workernameHelp.form-text.text-muted Inserted Name will be Displayed in Transactions.
+                    .row
+                      .col
+                        .btn-group.special(role='group')
+                          button.editbuttons.btn.btn-primary.btn-md(type='submit') Submit
+                          button.editbuttons.btn.btn-secondary.btn-md(type='button' data-dismiss='modal' aria-pressed='true') Cancel
+
+  #WorkerEdit.modal.fade(tabindex='-1' role='dialog' aria-labelledby='WorkerEditTitle' aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        form(method='POST' action='/profile/manage-workers/'+thisuser.intAccNo)
           .modal-header
-            h5#WorkersTitle.modal-title Workers
+            h5#WorkerEditTitle.modal-title Edit Worker
             button.close(type='button' data-dismiss='modal' aria-label='Close')
               span(aria-hidden='true') ×
           .modal-body
             .row
               .col
-                ul#pills-tab.nav.nav-pills.mb-3(role='tablist')
-                  li.nav-item
-                    a#pills-manage-tab.nav-link.active(data-toggle='pill', href='#pills-manage', role='tab', aria-controls='pills-manage', aria-selected='true') Manage Workers
-                  li.nav-item
-                    a#pills-add-tab.nav-link(data-toggle='pill', href='#pills-add', role='tab', aria-controls='pills-add', aria-selected='false') Add Workers
-                hr
-                #pills-tabContent.tab-content
-                  #pills-manage.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='pills-manage-tab')
-                    form(method='POST' action='/profile/manage-workers/'+thisuser.intAccNo)
-                      .row
-                        .col
-                          h1 
-                      .row
-                        .col
-                          .btn-group.special(role='group')
-                            button.editbuttons.btn.btn-primary.btn-md(type='submit') Submit
-                            button.editbuttons.btn.btn-secondary.btn-md(type='button' data-dismiss='modal' aria-pressed='true') Cancel
-                  
-                  #pills-add.tab-pane.fade.show(role='tabpanel', aria-labelledby='pills-add-tab')
-                    form(method='POST' action='/profile/add-workers/'+thisuser.intAccNo)
-                      .row
-                        
-                      .row
-                        .col
-                          .btn-group.special(role='group')
-                            button.editbuttons.btn.btn-primary.btn-md(type='submit') Submit
-                            button.editbuttons.btn.btn-secondary.btn-md(type='button' data-dismiss='modal' aria-pressed='true') Cancel
+                input(type="number" name="workid" hidden)
+                h6
+                  b Name:&nbsp
+                  span name
+                h6.mt-3
+                  b Status:&nbsp
+                  select#sel.form-control(name='workerstatus' style="width: 40%; display: inline" required)
+                    option(value= '0') Unavailable
+                    option(value= '1') Available
 
           .modal-footer
             button.btn.btn-primary(type='submit') Submit
