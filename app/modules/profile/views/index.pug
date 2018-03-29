@@ -30,23 +30,19 @@ block main
               if paramsuser.intStatus == 1
                 span.font3.tag.unverified(style='margin-left:15px; color:#868E96;') Unverified 
               else
-<<<<<<< HEAD
-                span.font3.tag.verified(style='margin-left:15px; color:green;') Verified
-=======
-                span.font3.tag.verified(style='margin-left:15px; color:#2FAF7A;') Verified
->>>>>>> 352d7179cc47b8ee8748b32904c682531f28bdf0
+                span.font3.tag.verified(style='margin-left:15px; color:#157E00;') Verified
               span.font3(style='margin-left:5px;') 000047239
             #right-pane.col-sm-3
               table
                 tbody
                   tr
-                    td(style='padding-top:3px;' data-toggle='tooltip', data-placement='left', title='Seeker and Provider rating')
+                    td(style='padding-top:3px', data-toggle='tooltip', data-placement='left', title='Seeker and Provider rating')
                       img(src='/assets/images/Icons/star.png', alt='star', style='height: 2rem; width: 2rem; margin-top:5px; margin-left:50px;')
                       h2(style='float: right; margin-right: 50px; margin-bottom: 0rem') #{paramsuser.ave}
                       h4.profileA(style='margin-bottom: 0rem; margin-top:0px; display:inline-block') Rating
                   tr
                     td(style='padding-top:3px', data-toggle='tooltip', data-placement='left', title='Jobs finished as a Provider')
-                      img(src='/assets/images/Icons/case.png', alt='star', style='height: 2rem; width: 2rem; margin-top:5px; margin-left:50px ')
+                      img(src='/assets/images/Icons/case.png', alt='case', style='height: 2rem; width: 2rem; margin-top:5px; margin-left:50px;')
                       h2(style='float: right; margin-right: 50px; margin-bottom: 0rem') #{paramsuser.sum}
                       h4.profileB(style='margin-bottom: 0rem; margin-top:0px; display:inline-block') Provided
 
