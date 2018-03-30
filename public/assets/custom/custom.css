@@ -1086,11 +1086,12 @@ tr:hover .spnTooltip{
 }
 
 .unverified{
-    border: 2px solid rgb(54, 54, 54);
+    border: 2px solid rgba(54, 54, 54, .7);
     background: rgb(204, 204, 204);
+    color: rgba(54, 54, 54, .7) !important;
 }
 
 .verified{
-    border: 2px solid rgb(21, 126, 0);
-    background:rgb(105, 202, 86);
+    border: 2px solid #00BB27;
+    background:#05E177;
 }

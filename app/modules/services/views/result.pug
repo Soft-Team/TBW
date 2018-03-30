@@ -30,7 +30,7 @@ block main
     else if optSorting == 'lprice'
       - optSorting = 'Lowest Price'
     else if optSorting == 'finished'
-      - optSorting = 'Finished Transaction'
+      - optSorting = 'Finished Services'
   
   .jumbotron-banner
     center
@@ -73,7 +73,7 @@ block main
                         select#sorting.form-control(name='sorting')
                           option(value='rating' selected='') Rating
                           option(value='lprice') Lowest Price
-                          option(value='finished') Finished Transaction
+                          option(value='finished') Finished Services
                   .modal-footer
                     button.btn.btn-primary(type='submit') Submit
                     button.btn.btn-secondary(type='button', data-dismiss='modal') Close
@@ -101,7 +101,7 @@ block main
                     td
                       img(src='/assets/images/Icons/case.png', alt='star', style='height: 1.5rem; width: 1.5rem; margin-left:20px;')
                       p(style='float: right; margin-right: 30px; margin-bottom: 0rem') #{serv.sum}
-                      p.cenF(style='margin-bottom: 0rem') Finished
+                      p.cenF(style='margin-bottom: 0rem') Provided
 
               .card-body
                 .card-text

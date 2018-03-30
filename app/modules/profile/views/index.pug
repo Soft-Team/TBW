@@ -7,17 +7,17 @@ block main
     script(type='text/javascript', src='/assets/scripts/bootstrap-filestyle.min.js')
     script.
       $(":file").filestyle();
-      
+
       $('#WorkerEdit').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget)
         var workername = button.data('workername')
         var status = button.data('status')
         var workid = button.data('workid')
-        
+
         var modal = $(this)
         modal.find('.modal-body input').val(workid)
         modal.find('.modal-body span').text(workername)
-        
+
         var sel = document.getElementById('sel');
         var opts = sel.options;
         for (var opt, j = 0; opt = opts[j]; j++) {
@@ -26,9 +26,18 @@ block main
             break;
           }
         }
-        
       })
-        
+      
+      $(document).ready(function () {
+        $('#WorkerEdit').on('show.bs.modal', function () {
+            $('#Workers').css('z-index', 1039);
+        });
+
+        $('#WorkerEdit').on('hidden.bs.modal', function () {
+            $('#Workers').css('z-index', 1041);
+        });
+      });
+
   .jumbotron-banner(style='height:100px')
     center
   .sector(style='margin-top:0px; padding:0px')
@@ -50,11 +59,11 @@ block main
                       i.fa.fa-users.fa-2x(style='height:35px; width:35px;')
                   button#report.btn.btn-light.btn-md.btn.ml-2(type='button' data-toggle='modal' data-target='#editModal' title='Edit')
                     img(src='/assets/images/icons/settings.png' style='height:35px; width:35px;')
-              
+
               if paramsuser.intStatus == 1
-                span.font3.tag.unverified(style='margin-left:15px; color:#868E96;') Unverified 
+                span.font3.tag.unverified(style='margin-left:15px;') Unverified 
               else
-                span.font3.tag.verified.text-white(style='margin-left:15px; color:#157E00;') Verified
+                span.font3.tag.verified.text-white(style='margin-left:15px;') Verified
               span.font3(style='margin-left:5px;') #{paramsuser.prepend}
             #right-pane.col-sm-3
               table
@@ -140,19 +149,19 @@ block main
                       .chat-img(style='height:80px; width:80px')
                         img.img-circle(src='/userImages/profile/'+rev.strProfilePic alt='User Image' height="85" width="85")
                   .col-sm-3
-                    if rev.intChatSeeker == rev.intAccNo
-                      h2 #{rev.strName} 
+                    h5(style="display: inline;")
+                      if rev.intChatSeeker == rev.intAccNo
                         span.tag.seeker #{rev.strServName}
-                    else
-                      h2 #{rev.strName} 
+                      else
                         span.tag.provider #{rev.strServName}
-                    h3 #{rev.txtRateReview}
+                    h2(style="display: inline;") #{rev.strName} 
+                    h3.mt-2 #{rev.txtRateReview}
                   .col-sm-3
                     img(src='/assets/images/Icons/star.png', alt='star', style='height: 4rem; width: 4rem; margin-top:5px; float:left')
                     h1(style='float:right; margin-top: 20px') #{rev.intRating}
               if emptyRev == 1
                 i No reviews to display
-          #Portfolio.tab-pane.fade(role='tabpanel', aria-labelledby='portfolio-tab', style='')
+          #Portfolio.tab-pane.fade(role='tabpanel', aria-labelledby='portfolio-tab')
             .col
               each paramsuser,index in paramsUser
                 if index == 0 
@@ -174,7 +183,8 @@ block main
                     each doc in documents
                       - empty = 1
                       .img-with-text
-                        a.clo(href='/profile/'+paramsuser.intAccNo+'/document/remove/'+doc.intDocID) X
+                        if thisuser.intAccNo == paramsuser.intAccNo
+                          a.clo(href='/profile/'+paramsuser.intAccNo+'/document/remove/'+doc.intDocID) X
                         a(href='/userImages/documents/'+doc.strDocument target="_blank")
                           img.port(src='/userImages/documents/'+doc.strDocument)
                     if empty == 0
@@ -182,7 +192,7 @@ block main
                       .col.mt-2
                         i No documents to display
                       .col
-              
+
   #reportModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='reportModalTitle' aria-hidden='true')
     .modal-dialog(role='document')
       .modal-content
@@ -398,41 +408,44 @@ block main
               hr
               #pills-tabContent.tab-content
                 #pills-manage.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='pills-manage-tab')
-                  form(method='POST' action='/profile/manage-workers/'+thisuser.intAccNo)
-                    .row
-                      .col
-                        table.table.table-striped.box-shadow-mini
-                          thead
+                  .row
+                    .col
+                      table.table.table-striped.box-shadow-mini
+                        thead
+                          tr
+                            th.text-white(scope='col') Name
+                            th.text-white(scope='col') Status
+                            th.text-white(scope='col') Edit
+                        tbody
+                          - emptyworker = 1
+                          each work in workers
+                            - emptyworker = 0
                             tr
-                              th.text-white(scope='col') Name
-                              th.text-white(scope='col') Status
-                              th.text-white(scope='col') Edit
-                          tbody
-                            - emptyworker = 1
-                            each work in workers
-                              - emptyworker = 0
-                              tr
-                                td #{work.strWorker}
-                                
-                                if work.intWorkerStatus == 0
-                                  td Unavailable
-                                  td(style="padding: 7.5px;")
-                                    button.btn.btn-info(type='button' data-toggle='modal' data-target='#WorkerEdit' data-workername=work.strWorker data-status=work.intWorkerStatus data-workid=work.intWorkerID)
-                                      i.fa.fa-cog
-                                else if work.intWorkerStatus == 1
-                                  td Available
-                                  td(style="padding: 7.5px;")
-                                    button.btn.btn-info(type='button' data-toggle='modal' data-target='#WorkerEdit' data-workername=work.strWorker data-status=work.intWorkerStatus data-workid=work.intWorkerID)
-                                      i.fa.fa-cog
-                                else
-                                  td Ongoing
-                                  td &nbsp
-                                  
-                            if emptyworker == 1
-                              tr
-                                td(colspan="4")
-                                  i No Workers Added
-                
+                              td #{work.strWorker}
+
+                              if work.intWorkerStatus == 0
+                                td Unavailable
+                                td(style="padding: 7.5px;")
+                                  button.btn.btn-info(type='button' data-toggle='modal' data-target='#WorkerEdit' data-workername=work.strWorker data-status=work.intWorkerStatus data-workid=work.intWorkerID)
+                                    i.fa.fa-cog
+                              else if work.intWorkerStatus == 1
+                                td Available
+                                td(style="padding: 7.5px;")
+                                  button.btn.btn-info(type='button' data-toggle='modal' data-target='#WorkerEdit' data-workername=work.strWorker data-status=work.intWorkerStatus data-workid=work.intWorkerID)
+                                    i.fa.fa-cog
+                              else
+                                td Ongoing
+                                td &nbsp
+
+                          if emptyworker == 1
+                            tr
+                              td(colspan="4")
+                                i No Workers Added
+                  hr
+                  .row
+                    .col.align-right
+                      button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+
                 #pills-add.tab-pane.fade.show(role='tabpanel', aria-labelledby='pills-add-tab')
                   form(method='POST' action='/profile/add-workers/'+thisuser.intAccNo)
                     .row
@@ -472,6 +485,5 @@ block main
           .modal-footer
             button.btn.btn-primary(type='submit') Submit
             button.btn.btn-secondary(type='button', data-dismiss='modal') Close
-
 
   block profile
