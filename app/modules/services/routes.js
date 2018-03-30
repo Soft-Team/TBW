@@ -476,7 +476,7 @@ function servReqRender(req,res){
       }
       else{
         var stringquery="SELECT * FROM tblservice INNER JOIN tblservicetag ON intServTag= intServTagID INNER JOIN tbluser ON intServAccNo= intAccNo LEFT JOIN (SELECT *,AVG(intRating) AS ave FROM tblrating GROUP BY intRatedAccNo)A ON intAccNo= intRatedAccNo LEFT JOIN (SELECT intServAccNo as servacc, S.sum FROM(SELECT *,SUM(count) AS sum FROM";
-        stringquery= stringquery.concat("(SELECT *,COUNT(intTransID)as count FROM tbltransaction INNER JOIN tblchat ON intChatID= intTransChatID INNER JOIN tblservice ON intChatServ= intServID GROUP BY intServAccNo)C GROUP BY intServAccNo)S)B ON intAccNo= servacc WHERE strServName= ? AND intAccNo!= ? AND tblservice.intServStatus= 1 AND boolIsBanned= 0 ");
+        stringquery= stringquery.concat("(SELECT *,COUNT(intTransID)as count FROM tbltransaction INNER JOIN tblchat ON intChatID= intTransChatID INNER JOIN tblservice ON intChatServ= intServID GROUP BY intServAccNo)C GROUP BY intServAccNo)S)B ON intAccNo= servacc LEFT JOIN (SELECT * FROM tblchat WHERE intChatStatus='1')C ON C.intChatServ= intServID WHERE strServName= ? AND intAccNo!= ? AND intChatID IS NULL AND tblservice.intServStatus= 1 AND boolIsBanned= 0 ");
         var paramsarray= [];
         if(req.params.city!='any'){
           stringquery = stringquery.concat("AND strCity= ? ");
