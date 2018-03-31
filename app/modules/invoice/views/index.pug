@@ -1,78 +1,96 @@
-br
-html(xmlns='http://www.w3.org/1999/xhtml')
-  head
-  body
+extends ../../../templates/master.pug
+
+block content
+  block append stylesheets
     link(rel='stylesheet', type='text/css', href='/assets/custom/voucher.css')
-    #page-wrap
-      div(align="center")
-        h1.title TRABAWHO
-      br
-      br
-      each invoice, index in invoicetab
-        if index == 0
-          #identity
-            #address
-              | Provider Details
-              br
-              | Account No. : #{invoice.prepAccNo}
-              br
-              | Name : #{invoice.strName}
-              br
-              | E-mail : #{invoice.strEmail}
-        else
-          #customer
-            #customer-title
-              | Seeker Details
-              br
-              | Account No. : #{invoice.prepAccNo}
-              br
-              | Name : #{invoice.strName}
-              br
-              | E-mail : #{invoice.strEmail}
-            table#meta
-              tr
-                td.meta-head Transaction #
-                td #{invoice.prepTransID}
-              tr
-                td.meta-head Date Scheduled
-                td #{invoice.date}
-              tr
-                td.meta-head Amount Due
-                if invoice.intTransPriceType == 1
-                  td Php #{invoice.formatPrice}
-                else
-                  td Php #{invoice.formatPrice}/hr
-      div(align="center")
-        Label &nbspSERVICE INVOICE
-      each invoice, index in invoicetab
-        if index == 1
-          table#items
+  #page-wrap
+    div.my-4(align="center")
+      h1.title TRABAWHO
+    each invoice, index in invoicetab
+      if index == 0
+        #identity
+          #address
+            b Provider Details
+            br
+            b Account No. : 
+            | #{invoice.prepAccNo}
+            br
+            b Name : 
+            | #{invoice.strName}
+            br
+            b E-mail : 
+            | #{invoice.strEmail}
+      else
+        #customer
+          #customer-title
+            b Seeker Details
+            br
+            b Account No. : 
+            | #{invoice.prepAccNo}
+            br
+            b Name : 
+            | #{invoice.strName}
+            br
+            b E-mail : 
+            | #{invoice.strEmail}
+          table#meta
             tr
-              th(style="padding-left: 20px; padding-right: 20px;") Service 
-              th(style="padding-left: 20px; padding-right: 20px;") Price
-            tr.item-row
-              td
-                text #{invoice.strServName}
-              td
-                if invoice.intTransPriceType == 1
-                  text Php #{invoice.formatPrice}
-                else
-                  text Php #{invoice.formatPrice}/hr
-                br
-                br
-      br
-      br
-      h8
-        | -
-      h9
-        | -
-      #terms
-        h5 Terms
-        text
-          | Print This Form.
-          br
-          |(Ctrl + p)
-      p &nbsp
-      h1.subtitle ---------------------------------------------------------------------------
-      p
-        sup Cut Here
+              td.meta-head Transaction #
+              td #{invoice.prepTransID}
+            tr
+              td.meta-head Date Scheduled
+              td #{invoice.date}
+            tr
+              td.meta-head Amount Due
+              if invoice.intTransPriceType == 1
+                td Php #{invoice.formatPrice}
+              else
+                td Php #{invoice.formatPrice}/hr
+    
+    .row.mb-3
+      .col
+        each invoice, index in invoicetab
+          if index == 1
+            table.items.mb-3
+              thead
+                tr
+                  th Service
+                  th Price 
+              tbody
+                tr
+                  td(style="height: 40px;")
+                    | #{invoice.strServName}
+                  td(style="height: 40px;")
+                    if invoice.intTransPriceType == 1
+                      | Php #{invoice.formatPrice}
+                    else
+                      | Php #{invoice.formatPrice}/hr            
+      .col
+        table.items
+          thead
+            tr
+              th Workers
+          tbody
+            - emptyWork = 1
+            each work in workers
+              - emptyWork = 0
+              tr.item-row
+                td(style="height: 40px;")
+                  | #{work.strWorker}
+            if emptyWork == 1
+              tr.item-row
+                td(style="height: 40px;")
+                  i Only for Business-type Providers
+    h8
+      | -
+    h9
+      | -
+    #terms
+      h5 Terms
+      text
+        | Print This Form.
+        br
+        |(Ctrl + p)
+    h1.subtitle -------------------------------------------------
+    p
+      sup Cut Here

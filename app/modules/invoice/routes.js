@@ -25,11 +25,21 @@ function finvoice(req,res,next){
       return next();
     });
 }
+function fworkers(req,res,next){
+  /*Workers of Current Transaction, Match(params);
+  *(tblworker)*(tbltransworkers)*(tbltransaction)*/
+  db.query("SELECT * FROM tblworker INNER JOIN tbltransworkers ON intWorkerID= intTWWorkerID INNER JOIN tbltransaction ON intTWTransID= intTransID WHERE intTransID= ?",[req.params.transid], (err, results, fields) => {
+    if (err) console.log(err);
+    req.fworkers= results;
+    return next();
+  });
+}
+
 
 function render(req,res){
   switch(req.valid){
     case 1:
-      res.render('invoice/views/index', {invoicetab: req.finvoice});
+      res.render('invoice/views/index', {invoicetab: req.finvoice, workers: req.fworkers});
       break;
     case 2:
     case 3:
@@ -37,7 +47,7 @@ function render(req,res){
         res.redirect('/noroute');
       }
       else if(req.session.user == req.finvoice[0].intAccNo || req.session.user == req.finvoice[1].intAccNo){
-        res.render('invoice/views/index', {invoicetab: req.finvoice});
+        res.render('invoice/views/index', {invoicetab: req.finvoice, workers: req.fworkers});
         break;
       }
       else{
@@ -46,6 +56,6 @@ function render(req,res){
   }
 }
 
-router.get('/:transid', flog, finvoice, render);
+router.get('/:transid', flog, finvoice, fworkers, render);
 
 exports.invoice = router;

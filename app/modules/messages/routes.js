@@ -588,23 +588,40 @@ router.post('/transet/edit/:chatid', flog, messCount, fmess, fchat, fparams, ftr
   }
 
 });
-router.post('/transet/accept/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, (req, res) => {
+router.post('/transet/accept/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, ftransworkers, (req, res) => {
   if(req.transstatus == 'none'){
     res.redirect('/messages/'+req.fparams[0].intChatID);
   }
   else{
-    var stringquery = "INSERT INTO tblmessage ( intMessChatID, txtMessage, dtmDateSent, intMessSSeen, intSender ) VALUES ( ?, ?, NOW(), 1, 1)";
-    var bodyarray = [req.params.chatid, "-- I have ACCEPTED your offer, transaction is now ONGOING !"];
+    var stringquery1 = "INSERT INTO tblmessage ( intMessChatID, txtMessage, dtmDateSent, intMessSSeen, intSender ) VALUES ( ?, ?, NOW(), 1, 1)";
+    var bodyarray1 = [req.params.chatid, "-- I have ACCEPTED your offer, transaction is now ONGOING !"];
     db.beginTransaction(function(err) {
       if (err) console.log(err);
       db.query("UPDATE tbltransaction SET intTransStatus= 1, dtmTransStarted= NOW() WHERE intTransID= ?", [req.ftrans[0].intTransID], function (err,  resultsCount, fields) {
         if (err) console.log(err);
-        db.query(stringquery, bodyarray, function (err,  resultsCount, fields) {
+        db.query(stringquery1, bodyarray1, function (err,  resultsCount, fields) {
             if (err) console.log(err);
-            db.commit(function(err) {
-                if (err) console.log(err);
-                res.redirect('/messages/'+req.fparams[0].intChatID);
-            });
+            if(req.ftrans[0].intType == 2 || !req.ftransworkers[0]){
+              db.commit(function(err) {
+                  if (err) console.log(err);
+                  res.redirect('/messages/'+req.fparams[0].intChatID);
+              });
+            }
+            else if(req.ftrans[0].intType == 3){
+              var stringquery2 = "", bodyarray2 = []
+              for(count=0;count<req.ftransworkers.length;count++){
+                stringquery2 = stringquery2.concat("INSERT INTO tbltransworkers (intTWTransID, intTWWorkerID) VALUES (?,?); ");
+                bodyarray2.push(req.ftrans[0].intTransID);
+                bodyarray2.push(req.ftransworkers[count].intWorkerID);
+              }
+              db.query(stringquery2, bodyarray2, function (err,  resultsCount, fields) {
+                  if (err) console.log(err);
+                  db.commit(function(err) {
+                      if (err) console.log(err);
+                      res.redirect('/messages/'+req.fparams[0].intChatID);
+                  });
+              });
+            }
         });
       });
     });

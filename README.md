@@ -16,3 +16,18 @@ Starting Pages:
 Dev Notes:
 
 	nodemon -e js,pug
+
+  function ftest(req,res,next){
+    /*Test Function, Match(params);
+    *(tblchat)*/
+    db.query("SELECT * FROM tblchat WHERE intChatID= ?",[req.params.chatid], (err, results, fields) => {
+      if (err) console.log(err);
+      if(!(!results[0])){
+
+      }
+      /*console.log('-------TEST_RESULTS-------');
+      console.log(results);*/
+      req.ftest= results;
+      return next();
+    });
+  }
