@@ -610,7 +610,7 @@ router.post('/transet/accept/:chatid', flog, messCount, fmess, fchat, fparams, f
     });
   }
 });
-router.post('/cancel/:chatid', flog, ftrans, fprovider, (req, res) => {
+router.post('/cancel/:chatid', flog, ftrans, fprovider, ftransworkers, (req, res) => {
   if(req.session.user == req.fprovider[0].intChatSeeker){
     var stringquery = "INSERT INTO tblmessage ( intMessChatID, txtMessage, dtmDateSent, intMessSSeen, intSender ) VALUES ( ?, ?, NOW(), 1, 2)";
   }
@@ -621,22 +621,22 @@ router.post('/cancel/:chatid', flog, ftrans, fprovider, (req, res) => {
   if(!req.ftrans[0]){
     db.beginTransaction(function(err) {
       if (err) console.log(err);
-        db.query(stringquery, bodyarray, function (err,  results, fields) {
-            if (err) console.log(err);
-            db.query("UPDATE tblchat SET intChatStatus= 0 WHERE intChatID= ?",[req.params.chatid], (err, results, fields) => {
-                if (err) console.log(err);
-                db.query("UPDATE tblservice SET intServStatus= 1 WHERE intServAccNo= ? AND intServStatus= 2", [req.fprovider[0].intServAccNo], function (err,  results, fields) {
-                    if (err) console.log(err);
-                    db.query("INSERT INTO tblcancellation (intCancelChatID, dtmCancelDate, txtCancelReason) VALUES (?,NOW(),?)", [req.params.chatid, req.body.desc], function (err,  results, fields) {
-                        if (err) console.log(err);
-                        db.commit(function(err) {
-                            if (err) console.log(err);
-                              res.redirect('/messages');
-                        });
-                    });
-                });
-            });
-        });
+      db.query(stringquery, bodyarray, function (err,  results, fields) {
+          if (err) console.log(err);
+          db.query("UPDATE tblchat SET intChatStatus= 0 WHERE intChatID= ?",[req.params.chatid], (err, results, fields) => {
+              if (err) console.log(err);
+              db.query("UPDATE tblservice SET intServStatus= 1 WHERE intServAccNo= ? AND intServStatus= 2", [req.fprovider[0].intServAccNo], function (err,  results, fields) {
+                  if (err) console.log(err);
+                  db.query("INSERT INTO tblcancellation (intCancelChatID, dtmCancelDate, txtCancelReason) VALUES (?,NOW(),?)", [req.params.chatid, req.body.desc], function (err,  results, fields) {
+                      if (err) console.log(err);
+                      db.commit(function(err) {
+                          if (err) console.log(err);
+                          res.redirect('/messages');
+                      });
+                  });
+              });
+          });
+      });
     });
   }
   else{
@@ -652,10 +652,21 @@ router.post('/cancel/:chatid', flog, ftrans, fprovider, (req, res) => {
                       if (err) console.log(err);
                       db.query("INSERT INTO tblcancellation (intCancelChatID, dtmCancelDate, txtCancelReason) VALUES (?,NOW(),?)", [req.params.chatid, req.body.desc], function (err,  results, fields) {
                           if (err) console.log(err);
-                          db.commit(function(err) {
-                              if (err) console.log(err);
+                          if(req.ftrans[0].intType == 2 || !req.ftransworkers[0]){
+                            db.commit(function(err) {
+                                if (err) console.log(err);
                                 res.redirect('/messages');
-                          });
+                            });
+                          }
+                          else if(req.ftrans[0].intType == 3){
+                            db.query("UPDATE tblworker SET intWorkerTrans= NULL WHERE intWorkerTrans= ?", [req.ftrans[0].intTransID], function (err,  results, fields) {
+                                if (err) console.log(err);
+                                db.commit(function(err) {
+                                    if (err) console.log(err);
+                                    res.redirect('/messages');
+                                });
+                            });
+                          }
                       });
                   });
               });
