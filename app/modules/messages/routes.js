@@ -401,10 +401,40 @@ router.post('/transet/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, 
   if(req.transstatus != 'none'){
     res.redirect('/messages/'+req.fparams[0].intChatID);
   }
+  else if(req.valid == 2){
+    var date = req.body.addYear.toString()+'-'+req.body.addMonth+'-'+req.body.addDay;
+    if (req.body.Sampm == 'AM' && req.body.Shours == '12'){
+        req.body.Shours = '00';
+    }
+    if (req.body.Sampm == 'PM' && req.body.Shours != '12'){
+      req.body.Shours = (parseFloat(req.body.Shours) + 12).toString();
+    }
+    var start = req.body.Shours.concat(':'+req.body.Sminutes);
+    var dtm = date.concat(' '+start);
+    var stringquery1 = "INSERT INTO tbltransaction (intTransChatID, intTransPriceType, fltTransPrice, dtmTransScheduled) VALUES (?,?,?,?)";
+    var bodyarray1 = [req.params.chatid, req.body.pricetype, req.body.price, dtm];
+    var stringquery2 = "INSERT INTO tblmessage ( intMessChatID, txtMessage, dtmDateSent, intMessPSeen, intSender ) VALUES ( ?, ?, NOW(), 1, 1)";
+    var bodyarray2 = [req.params.chatid, "-- I have created an invoice, check it out on the upper right corner!"];
+
+    db.beginTransaction(function(err) {
+      if (err) console.log(err);
+      db.query(stringquery1, bodyarray1, (err, results, fields) => {
+        if (err) res.render('messages/views/invalid/nodate', { thisUserTab: req.user, messCount: req.messCount[0].count, messtab: req.mess, messOne: req.mess[0], chattab: req.chat, params: req.params.chatid, transstatus: req.transstatus, todayTab: req.ftodaysched, regSchedTab: req.fregularSched, empty: req.empty, specSchedTab: req.fspecialSched, emptyspecial: req.emptyspecial, workers: req.fworkers, transworkers: req.ftransworkers});
+        else
+          db.query(stringquery2, bodyarray2, function (err,  resultsCount, fields) {
+              if (err) console.log(err);
+              db.commit(function(err) {
+                  if (err) console.log(err);
+                  res.redirect('/messages/'+req.fparams[0].intChatID);
+              });
+          });
+      });
+    });
+  }
   else if(!req.fworkers[0]){
     res.redirect('/messages/'+req.fparams[0].intChatID);
   }
-  else{
+  else if(req.valid == 3){
     var date = req.body.addYear.toString()+'-'+req.body.addMonth+'-'+req.body.addDay;
     if (req.body.Sampm == 'AM' && req.body.Shours == '12'){
         req.body.Shours = '00';
@@ -456,6 +486,7 @@ router.post('/transet/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, 
       });
     });
   }
+
 });
 router.post('/transet/edit/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, ftodaysched, fregularSched, fspecialSched, fworkers, ftransworkers, (req, res) => {
   var body = req.body;
@@ -466,10 +497,40 @@ router.post('/transet/edit/:chatid', flog, messCount, fmess, fchat, fparams, ftr
   if(req.transstatus == 'none'){
     res.redirect('/messages/'+req.fparams[0].intChatID);
   }
+  else if(req.valid == 2){
+    var date = req.body.addYear.toString()+'-'+req.body.addMonth+'-'+req.body.addDay;
+    if (req.body.Sampm == 'AM' && req.body.Shours == '12'){
+        req.body.Shours = '00';
+    }
+    if (req.body.Sampm == 'PM' && req.body.Shours != '12'){
+      req.body.Shours = (parseFloat(req.body.Shours) + 12).toString();
+    }
+    var start = req.body.Shours.concat(':'+req.body.Sminutes);
+    var dtm = date.concat(' '+start);
+    var stringquery1 = "UPDATE tbltransaction SET intTransPriceType= ?, fltTransPrice= ?, dtmTransScheduled= ? WHERE intTransID= ?";
+    var bodyarray1 = [req.body.pricetype, req.body.price, dtm, req.ftrans[0].intTransID];
+    var stringquery2 = "INSERT INTO tblmessage ( intMessChatID, txtMessage, dtmDateSent, intMessPSeen, intSender ) VALUES ( ?, ?, NOW(), 1, 1)";
+    var bodyarray2 = [req.params.chatid, "-- I have FIXED the invoice, check it out on the upper right corner!"];
+
+    db.beginTransaction(function(err) {
+      if (err) console.log(err);
+      db.query(stringquery1, bodyarray1, (err, results, fields) => {
+        if (err) res.render('messages/views/invalid/nodate', { thisUserTab: req.user, messCount: req.messCount[0].count, messtab: req.mess, messOne: req.mess[0], chattab: req.chat, params: req.params.chatid, transstatus: req.transstatus, transtab: req.ftrans, todayTab: req.ftodaysched, regSchedTab: req.fregularSched, empty: req.empty, specSchedTab: req.fspecialSched, emptyspecial: req.emptyspecial, workers: req.fworkers, transworkers: req.ftransworkers});
+        else
+          db.query(stringquery2, bodyarray2, function (err,  resultsCount, fields) {
+              if (err) console.log(err);
+              db.commit(function(err) {
+                  if (err) console.log(err);
+                  res.redirect('/messages/'+req.fparams[0].intChatID);
+              });
+          });
+      });
+    });
+  }
   else if(!req.fworkers[0]){
     res.redirect('/messages/'+req.fparams[0].intChatID);
   }
-  else{
+  else if(req.valid == 3){
     var date = req.body.addYear.toString()+'-'+req.body.addMonth+'-'+req.body.addDay;
     if (req.body.Sampm == 'AM' && req.body.Shours == '12'){
         req.body.Shours = '00';
@@ -525,6 +586,7 @@ router.post('/transet/edit/:chatid', flog, messCount, fmess, fchat, fparams, ftr
       });
     });
   }
+
 });
 router.post('/transet/accept/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, (req, res) => {
   if(req.transstatus == 'none'){
@@ -549,7 +611,6 @@ router.post('/transet/accept/:chatid', flog, messCount, fmess, fchat, fparams, f
   }
 });
 router.post('/cancel/:chatid', flog, ftrans, fprovider, (req, res) => {
-
   if(req.session.user == req.fprovider[0].intChatSeeker){
     var stringquery = "INSERT INTO tblmessage ( intMessChatID, txtMessage, dtmDateSent, intMessSSeen, intSender ) VALUES ( ?, ?, NOW(), 1, 2)";
   }
