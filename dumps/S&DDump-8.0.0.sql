@@ -31,14 +31,14 @@ CREATE TABLE `tblcancellation` (
   PRIMARY KEY (`intCancelID`),
   KEY `intCancelChatID_idx` (`intCancelChatID`),
   CONSTRAINT `intCancelChatID` FOREIGN KEY (`intCancelChatID`) REFERENCES `tblchat` (`intChatID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `tblcancellation`
 --
 
-INSERT INTO `tblcancellation` VALUES (1,30,'2018-03-02 05:02:47','x',0),(2,30,'2018-03-02 05:09:01','saf',0);
+INSERT INTO `tblcancellation` VALUES (1,30,'2018-03-02 05:02:47','x',0),(2,30,'2018-03-02 05:09:01','saf',0),(3,34,'2018-03-30 23:06:31','nah',0);
 
 --
 -- Table structure for table `tblchat`
@@ -57,14 +57,14 @@ CREATE TABLE `tblchat` (
   KEY `intChatServ_idx` (`intChatServ`),
   CONSTRAINT `intChatServ` FOREIGN KEY (`intChatServ`) REFERENCES `tblservice` (`intServID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `intUser1` FOREIGN KEY (`intChatSeeker`) REFERENCES `tbluser` (`intAccNo`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `tblchat`
 --
 
-INSERT INTO `tblchat` VALUES (26,1,36,0),(27,1,32,0),(28,2,1,0),(29,4,1,0),(30,1,37,0);
+INSERT INTO `tblchat` VALUES (26,1,36,0),(27,1,32,0),(28,2,1,0),(29,4,1,0),(30,1,37,0),(31,1,35,1),(34,7,42,0),(35,7,42,1);
 
 --
 -- Table structure for table `tbldocument`
@@ -80,14 +80,14 @@ CREATE TABLE `tbldocument` (
   PRIMARY KEY (`intDocID`),
   KEY `intDocAccNo_idx` (`intDocAccNo`),
   CONSTRAINT `intDocAccNo` FOREIGN KEY (`intDocAccNo`) REFERENCES `tbluser` (`intAccNo`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `tbldocument`
 --
 
-INSERT INTO `tbldocument` VALUES (6,1,'DOC-000000001PEYBicYW5W8heo1H3khpg8PVIjnExc.jpg'),(9,1,'DOC-000000001u0tGvB7aOpmBAdKUKP4xVtmDEQtNkh.jpg'),(10,8,'DOC-000000008XBuYjSpIvNdx65G5uoOAQHSc1lmCDC.jpg');
+INSERT INTO `tbldocument` VALUES (6,1,'DOC-000000001PEYBicYW5W8heo1H3khpg8PVIjnExc.jpg'),(9,1,'DOC-000000001u0tGvB7aOpmBAdKUKP4xVtmDEQtNkh.jpg'),(10,8,'DOC-000000008XBuYjSpIvNdx65G5uoOAQHSc1lmCDC.jpg'),(11,1,'DOC-000000001S6iY6ur9e7Zw5dN7woaxUmUChahusd.jpg'),(12,1,'DOC-000000001KDPXnseWX0KuRTMznIhEEkhOfbrOZi.jpg'),(13,1,'DOC-000000001rSVMukR7JfudSYBlb7ofPkdVkic2jZ.jpg'),(15,1,'DOC-000000001YTI7vKxfxGhiu15DJ54uYYscioygOC.jpg');
 
 --
 -- Table structure for table `tblmessage`
@@ -107,14 +107,14 @@ CREATE TABLE `tblmessage` (
   PRIMARY KEY (`intMessID`),
   KEY `intMessChatID_idx` (`intMessChatID`),
   CONSTRAINT `intMessChatID` FOREIGN KEY (`intMessChatID`) REFERENCES `tblchat` (`intChatID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=182 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=262 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `tblmessage`
 --
 
-INSERT INTO `tblmessage` VALUES (161,26,'hm cyst\r\n','2018-02-27 15:12:01',1,1,2),(162,26,'pm sent','2018-02-27 15:14:19',1,1,1),(163,26,'-- I have created an invoice, check it out on the upper right corner!','2018-02-27 15:14:50',1,1,1),(164,26,'-- I have ACCEPTED your offer, transaction is now ONGOING !','2018-02-27 15:15:28',1,1,1),(165,27,'xxxx','2018-03-02 01:22:37',1,1,2),(166,26,'a','2018-03-02 01:25:11',1,1,2),(167,27,'-- I have created an invoice, check it out on the upper right corner!','2018-03-02 01:44:22',1,1,1),(168,27,'-- I have ACCEPTED your offer, transaction is now ONGOING !','2018-03-02 01:44:30',0,1,1),(169,28,'sad','2018-03-02 02:43:18',1,1,2),(170,28,'-- I have created an invoice, check it out on the upper right corner!','2018-03-02 02:43:33',1,1,1),(171,28,'-- I have ACCEPTED your offer, transaction is now ONGOING !','2018-03-02 02:43:38',1,1,1),(172,29,'x','2018-03-02 03:01:39',1,1,2),(173,29,'-- I have created an invoice, check it out on the upper right corner!','2018-03-02 03:01:50',1,1,1),(174,29,'-- I have ACCEPTED your offer, transaction is now ONGOING !','2018-03-02 03:01:58',1,1,1),(175,30,'x','2018-03-02 04:56:52',1,1,2),(176,30,'-- has CANCELLED this chat and its transaction.','2018-03-02 05:02:47',1,1,1),(177,30,'-- has CANCELLED this chat and its transaction.','2018-03-02 05:09:01',1,1,2),(178,30,'asd','2018-03-02 05:09:25',1,1,2),(179,30,'-- I have created an invoice, check it out on the upper right corner!','2018-03-02 05:09:55',1,1,1),(180,30,'-- I have ACCEPTED your offer, transaction is now ONGOING !','2018-03-02 05:10:02',1,1,1),(181,30,'-- transaction has FINISHED','2018-03-02 05:10:13',1,1,1);
+INSERT INTO `tblmessage` VALUES (161,26,'hm cyst\r\n','2018-02-27 15:12:01',1,1,2),(162,26,'pm sent','2018-02-27 15:14:19',1,1,1),(163,26,'-- I have created an invoice, check it out on the upper right corner!','2018-02-27 15:14:50',1,1,1),(164,26,'-- I have ACCEPTED your offer, transaction is now ONGOING !','2018-02-27 15:15:28',1,1,1),(165,27,'xxxx','2018-03-02 01:22:37',1,1,2),(166,26,'a','2018-03-02 01:25:11',1,1,2),(167,27,'-- I have created an invoice, check it out on the upper right corner!','2018-03-02 01:44:22',1,1,1),(168,27,'-- I have ACCEPTED your offer, transaction is now ONGOING !','2018-03-02 01:44:30',0,1,1),(169,28,'sad','2018-03-02 02:43:18',1,1,2),(170,28,'-- I have created an invoice, check it out on the upper right corner!','2018-03-02 02:43:33',1,1,1),(171,28,'-- I have ACCEPTED your offer, transaction is now ONGOING !','2018-03-02 02:43:38',1,1,1),(172,29,'x','2018-03-02 03:01:39',1,1,2),(173,29,'-- I have created an invoice, check it out on the upper right corner!','2018-03-02 03:01:50',1,1,1),(174,29,'-- I have ACCEPTED your offer, transaction is now ONGOING !','2018-03-02 03:01:58',1,1,1),(175,30,'x','2018-03-02 04:56:52',1,1,2),(176,30,'-- has CANCELLED this chat and its transaction.','2018-03-02 05:02:47',1,1,1),(177,30,'-- has CANCELLED this chat and its transaction.','2018-03-02 05:09:01',1,1,2),(178,30,'asd','2018-03-02 05:09:25',1,1,2),(179,30,'-- I have created an invoice, check it out on the upper right corner!','2018-03-02 05:09:55',1,1,1),(180,30,'-- I have ACCEPTED your offer, transaction is now ONGOING !','2018-03-02 05:10:02',1,1,1),(181,30,'-- transaction has FINISHED','2018-03-02 05:10:13',1,1,1),(182,31,'slap','2018-03-29 15:18:10',1,1,2),(242,31,'a','2018-03-29 18:58:48',1,1,2),(243,31,'a','2018-03-29 18:59:11',1,1,2),(244,31,'asd','2018-03-29 18:59:56',1,1,2),(248,34,'lesgow','2018-03-30 22:48:40',1,1,2),(249,34,'-- has CANCELLED this chat and its transaction.','2018-03-30 23:06:31',1,1,2),(250,35,'hhh','2018-03-30 23:06:48',1,1,2),(251,35,'-- I have created an invoice, check it out on the upper right corner!','2018-03-31 21:36:50',1,1,1),(252,35,'-- I have created an invoice, check it out on the upper right corner!','2018-03-31 21:39:18',1,1,1),(253,35,'-- I have created an invoice, check it out on the upper right corner!','2018-03-31 21:50:40',1,1,1),(254,35,'-- I have created an invoice, check it out on the upper right corner!','2018-03-31 21:51:53',1,1,1),(255,35,'-- I have created an invoice, check it out on the upper right corner!','2018-03-31 21:53:50',1,1,1),(256,35,'-- I have created an invoice, check it out on the upper right corner!','2018-03-31 21:54:52',1,1,1),(257,35,'-- I have created an invoice, check it out on the upper right corner!','2018-03-31 22:22:25',1,1,1),(258,35,'-- I have created an invoice, check it out on the upper right corner!','2018-03-31 22:24:59',1,1,1),(259,35,'-- I have created an invoice, check it out on the upper right corner!','2018-03-31 22:27:12',1,1,1),(260,35,'-- I have created an invoice, check it out on the upper right corner!','2018-03-31 22:31:22',1,1,1),(261,35,'-- I have created an invoice, check it out on the upper right corner!','2018-03-31 22:33:50',1,1,1);
 
 --
 -- Table structure for table `tblrating`
@@ -219,14 +219,14 @@ CREATE TABLE `tblservice` (
   KEY `intServTag_idx` (`intServTag`),
   CONSTRAINT `intServAccNo` FOREIGN KEY (`intServAccNo`) REFERENCES `tbluser` (`intAccNo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `intServTag` FOREIGN KEY (`intServTag`) REFERENCES `tblservicetag` (`intServTagID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `tblservice`
 --
 
-INSERT INTO `tblservice` VALUES (1,1,1,1,2,72.5),(3,2,1,0,1,32),(5,3,5,1,2,72),(6,3,1,1,2,50),(7,3,2,1,1,60),(29,5,1,1,1,213),(30,4,1,1,2,45),(32,4,2,1,1,1245),(33,2,2,1,2,55),(34,5,2,1,2,120),(35,1,3,1,1,123),(36,1,7,1,1,113),(37,1,4,1,1,200),(38,6,1,1,2,50),(39,3,4,1,1,1231),(40,2,7,1,1,70);
+INSERT INTO `tblservice` VALUES (1,1,1,1,2,72.5),(3,2,1,0,1,32),(5,3,5,1,2,72),(6,3,1,1,2,50),(7,3,2,1,1,60),(29,5,1,1,1,213),(30,4,1,1,2,45),(32,4,2,1,1,1245),(33,2,2,1,2,55),(34,5,2,1,2,120),(35,1,3,2,1,123),(36,1,7,1,1,113),(37,1,4,1,1,200),(38,6,1,1,2,50),(39,3,4,1,1,1231),(40,2,7,1,1,70),(41,12,9,1,1,320),(42,2,12,1,1,150);
 
 --
 -- Table structure for table `tblservicetag`
@@ -246,7 +246,7 @@ CREATE TABLE `tblservicetag` (
 -- Dumping data for table `tblservicetag`
 --
 
-INSERT INTO `tblservicetag` VALUES (1,'Plumber'),(2,'Electrician'),(3,'Technician'),(4,'Laundry'),(5,'Carpenter'),(6,'Tutor'),(7,'Physical Therapist'),(8,'Dentist'),(9,'Manicurist'),(10,'Babysitter'),(11,'Housekeeping'),(12,'Pest Control'),(13,'Gardener'),(14,'Driver'),(15,'Cook'),(16,'Masseuse');
+INSERT INTO `tblservicetag` VALUES (1,'Plumber'),(2,'Electrician'),(3,'Technician'),(4,'Laundry'),(5,'Carpenter'),(6,'Tutor'),(7,'Physical Therapist'),(8,'Dentist'),(9,'Manicurist'),(10,'Babysitter'),(11,'Housekeeper'),(12,'Pest Control'),(13,'Gardener'),(14,'Driver'),(15,'Cook'),(16,'Masseuse');
 
 --
 -- Table structure for table `tblspecialsched`
@@ -271,7 +271,7 @@ CREATE TABLE `tblspecialsched` (
 -- Dumping data for table `tblspecialsched`
 --
 
-INSERT INTO `tblspecialsched` VALUES (2,1,'2018-03-02','02:30:00','14:45:00'),(3,1,'2017-01-01','10:00:00','10:00:00'),(4,1,'2018-01-01','00:00:00','00:00:00'),(9,1,'2018-06-13',NULL,NULL),(11,1,'2018-09-01','13:15:00','00:30:00'),(13,1,'2018-02-23','00:00:00','00:00:00'),(17,1,'2018-02-24','12:00:00','00:00:00'),(19,1,'2018-02-26',NULL,NULL),(20,4,'2018-02-25','12:30:00','20:00:00'),(21,4,'2018-02-27',NULL,NULL);
+INSERT INTO `tblspecialsched` VALUES (2,1,'2018-03-02','02:30:00','14:45:00'),(3,1,'2017-01-01','10:00:00','10:00:00'),(4,1,'2018-01-01','00:00:00','00:00:00'),(9,1,'2018-03-30',NULL,NULL),(11,1,'2018-09-01','13:15:00','00:30:00'),(13,1,'2018-02-23','00:00:00','00:00:00'),(17,1,'2018-02-24','12:00:00','00:00:00'),(19,1,'2018-02-26',NULL,NULL),(20,4,'2018-02-25','12:30:00','20:00:00'),(21,4,'2018-02-27',NULL,NULL);
 
 --
 -- Table structure for table `tblsuspension`
@@ -318,14 +318,38 @@ CREATE TABLE `tbltransaction` (
   PRIMARY KEY (`intTransID`),
   KEY `intTransChatID_idx` (`intTransChatID`),
   CONSTRAINT `intTransChatID` FOREIGN KEY (`intTransChatID`) REFERENCES `tblchat` (`intChatID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `tbltransaction`
 --
 
-INSERT INTO `tbltransaction` VALUES (19,26,2,55,2,'2018-02-27 15:15:28','2018-03-01 00:15:00','2018-03-02 01:45:38',NULL),(20,27,1,1245,2,'2018-03-02 01:44:30','2018-05-27 00:00:00','2018-03-02 01:44:47',NULL),(21,28,2,72.5,2,'2018-03-02 02:43:38','2018-06-01 00:00:00','2018-03-02 02:43:50',NULL),(22,29,2,72.5,2,'2018-03-02 03:01:58','2018-09-01 00:00:00','2018-03-02 03:02:13',NULL),(23,30,1,200,2,'2018-03-02 05:10:02','2018-05-01 00:00:00','2018-03-02 05:10:13',NULL);
+INSERT INTO `tbltransaction` VALUES (19,26,2,55,2,'2018-02-27 15:15:28','2018-03-01 00:15:00','2018-03-02 01:45:38',NULL),(20,27,1,1245,2,'2018-03-02 01:44:30','2018-05-27 00:00:00','2018-03-02 01:44:47',NULL),(21,28,2,72.5,2,'2018-03-02 02:43:38','2018-06-01 00:00:00','2018-03-02 02:43:50',NULL),(22,29,2,72.5,2,'2018-03-02 03:01:58','2018-09-01 00:00:00','2018-03-02 03:02:13',NULL),(23,30,1,200,2,'2018-03-02 05:10:02','2018-05-01 00:00:00','2018-03-02 05:10:13',NULL),(34,35,1,150,0,NULL,'2019-01-01 00:00:00',NULL,NULL);
+
+--
+-- Table structure for table `tbltransworkers`
+--
+
+DROP TABLE IF EXISTS `tbltransworkers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tbltransworkers` (
+  `intTWID` int(11) NOT NULL AUTO_INCREMENT,
+  `intTWTransID` int(11) NOT NULL,
+  `intTWWorkerID` int(11) NOT NULL,
+  PRIMARY KEY (`intTWID`),
+  KEY `intTWTransID_idx` (`intTWTransID`),
+  KEY `intTWWorkerID_idx` (`intTWWorkerID`),
+  CONSTRAINT `intTWTransID` FOREIGN KEY (`intTWTransID`) REFERENCES `tbltransaction` (`intTransID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `intTWWorkerID` FOREIGN KEY (`intTWWorkerID`) REFERENCES `tblworker` (`intWorkerID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbltransworkers`
+--
+
 
 --
 -- Table structure for table `tbluser`
@@ -351,14 +375,14 @@ CREATE TABLE `tbluser` (
   `strValidID` varchar(45) DEFAULT NULL,
   `intAutoFill` int(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`intAccNo`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `tbluser`
 --
 
-INSERT INTO `tbluser` VALUES (1,'Jon Ervin Balmaceda','Jon-Ervin','0424',2,2,'Pasig','Rosario','balmacedajonervin@gmail.com','09236835707',0,NULL,'DP-000000001.jpg','VID-000000001.jpg',0),(2,'Ralf Milan','9Weissss','ralfralf',2,1,'Quezon','Tandang Sora','ralf@milan.com','09234545672',0,NULL,'DP-000000002.jpg',NULL,0),(3,'Piolo Sales','Sno-weak','piolopiolo',2,1,'Manila','Espana','Piolo@mahina.com','0923893482',0,NULL,'unknown.jpg',NULL,1),(4,'Vince Oreta','VinceIRL','vincevince',2,2,'Pasig','San Joaquin','vince@dead.com','09236754551',0,NULL,'DP-000000004.jpg',NULL,1),(5,'Carlo Doronila','CarloDoronichan','carlocarlo',2,1,'Manila','Sta. Mesa','carlo@anime.com','09234545676',1,NULL,'unknown.jpg',NULL,1),(6,'admin','admin','admin',1,1,'Manila','Tondo','admin@admin.com','09236835707',0,NULL,'unknown.jpg',NULL,1),(7,'Homer Cadena','ricknmorty','homerhomer',2,2,'Quezon','Tandang Sora','homer@gmail.com','09235458097',0,NULL,'DP-000000007.jpg',NULL,1),(8,'John Carlos Pagaduan','Elitebuild','pagapaga',2,1,'Manila','Sta. Mesa','jc@gmail.com','09236545346',0,NULL,'DP-000000008.jpg','VID-000000008.jpg',1),(9,'21 Construction','21construction','21construction',3,2,'Manila','Sta. Mesa','jeth@gmail.com','09235645238',0,'Jethro Samson','unknown.jpg','BP-000000000.jpg',1),(10,'Plumbing Corporation','PlumCorp','PlumCorp',3,2,'Quezon','Tandang Sora','lance@gmail.com','09235647389',1,'Lance San Pablo','unknown.jpg','BP-PlumCorp.jpg',1);
+INSERT INTO `tbluser` VALUES (1,'Jon Ervin Balmaceda','Jon-Ervin','0424',2,2,'Pasig','Rosario','balmacedajonervin@gmail.com','09236835707',0,NULL,'DP-000000001.jpg','VID-000000001.jpg',0),(2,'Ralf Milan','9Weissss','ralfralf',2,1,'Quezon','Tandang Sora','ralf@milan.com','09234545672',0,NULL,'DP-000000002.jpg',NULL,0),(3,'Piolo Sales','Sno-weak','piolopiolo',2,1,'Manila','Espana','Piolo@mahina.com','0923893482',0,NULL,'unknown.jpg',NULL,1),(4,'Vince Oreta','VinceIRL','vincevince',2,2,'Pasig','San Joaquin','vince@dead.com','09236754551',0,NULL,'DP-000000004.jpg',NULL,1),(5,'Carlo Doronila','CarloDoronichan','carlocarlo',2,1,'Manila','Sta. Mesa','carlo@anime.com','09234545676',1,NULL,'unknown.jpg',NULL,1),(6,'admin','admin','admin',1,1,'Manila','Tondo','admin@admin.com','09236835707',0,NULL,'unknown.jpg',NULL,1),(7,'Homer Cadena','ricknmorty','homerhomer',2,2,'Quezon','Tandang Sora','homer@gmail.com','09235458097',0,NULL,'DP-000000007.jpg','VID-000000007.jpg',0),(8,'John Carlos Pagaduan','Elitebuild','pagapaga',2,1,'Manila','Sta. Mesa','jc@gmail.com','09236545346',0,NULL,'DP-000000008.jpg','VID-000000008.jpg',1),(9,'21 Construction','21construction','21construction',3,2,'Manila','Sta. Mesa','jeth@gmail.com','09235645238',0,'Jethro Samson','unknown.jpg','BP-000000000.jpg',1),(10,'Plumbing Corporation','PlumCorp','PlumCorp',3,2,'Quezon','Tandang Sora','lance@gmail.com','09235647389',0,'Lance San Pablo','unknown.jpg','BP-PlumCorp.jpg',1),(12,'ComptonCrips','ComptonCrips','ComptonCrips',3,2,'Manila','Tondo','ComptonCrips@gmail.com','09236835707',0,'Kodak White','DP-000000012.jpg','BP-ComptonCrips.jpg',0);
 
 --
 -- Table structure for table `tblworker`
@@ -370,17 +394,21 @@ DROP TABLE IF EXISTS `tblworker`;
 CREATE TABLE `tblworker` (
   `intWorkerID` int(11) NOT NULL AUTO_INCREMENT,
   `intWorkBusID` int(9) NOT NULL,
-  `strWorker` varchar(45) NOT NULL,
+  `intWorkerTrans` int(11) DEFAULT NULL,
+  `strWorker` varchar(100) NOT NULL,
+  `intWorkerStatus` int(1) NOT NULL DEFAULT '1',
+  `strWorkerID` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`intWorkerID`),
   KEY `intWorkBusID_idx` (`intWorkBusID`),
   CONSTRAINT `intWorkBusID` FOREIGN KEY (`intWorkBusID`) REFERENCES `tbluser` (`intAccNo`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `tblworker`
 --
 
+INSERT INTO `tblworker` VALUES (1,12,34,'Homer \"Batang Tanga\"',1,NULL),(2,12,NULL,'Carlong Malungkot',1,NULL),(3,12,34,'Hayup ka Joaquin!',1,NULL);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
