@@ -44,7 +44,6 @@ function fchat(req,res,next){
         }
       }
       req.chat= results;
-      console.log(results);
       return next();
     });
 }
@@ -85,8 +84,8 @@ function fparams(req,res,next){
 }
 function ftrans(req,res,next){
   /*Transaction of curent Chat, Match(params);
-  *(tblchat)*(tblservice)*(tbltransaction)*/
-  db.query("SELECT * FROM tblchat INNER JOIN tblservice ON intChatServ= intServID INNER JOIN tbltransaction ON intChatID= intTransChatID WHERE intChatID= ?",[req.params.chatid], (err, results, fields) => {
+  *(tblchat)*(tblservice)*(tbltransaction)*(tbluser)*/
+  db.query("SELECT * FROM tblchat INNER JOIN tblservice ON intChatServ= intServID INNER JOIN tbltransaction ON intChatID= intTransChatID INNER JOIN tbluser ON intServAccNo= intAccNo WHERE intChatID= ?",[req.params.chatid], (err, results, fields) => {
       if (err) console.log(err);
       if(!(!results[0])){
         req.transstatus = results[0].intTransStatus;
@@ -296,6 +295,24 @@ function fmessServ(req,res,next){
     return next();
   });
 }
+function fworkers(req,res,next){
+  /*Workers of Current User, Match(session);
+  *(tblworker)*/
+  db.query("SELECT * FROM tblworker WHERE intWorkBusID= ?",[req.session.user], (err, results, fields) => {
+      if (err) console.log(err);
+      req.fworkers= results;
+      return next();
+    });
+}
+function ftransworkers(req,res,next){
+  /*Proposed Workers of Current Transaction, Match(params);
+  *(tblworker)*(tbltransaction)*(tblchat)*/
+  db.query("SELECT * FROM tblworker INNER JOIN tbltransaction ON intWorkerTrans= intTransID INNER JOIN tblchat ON intChatID= intTransChatID WHERE intTransChatID= ?",[req.params.chatid], (err, results, fields) => {
+      if (err) console.log(err);
+      req.ftransworkers= results;
+      return next();
+    });
+}
 function ftest(req,res,next){
   /*Test Function, Match(params);
   *(tblchat)*/
@@ -362,7 +379,7 @@ function messRender(req,res){
                         res.redirect('/noroute');
                       }
                       else
-                        res.render('messages/views/index', { thisUserTab: req.user, messCount: count, messtab: req.mess, messOne: req.mess[0], chattab: req.chat, params: req.params.chatid, transstatus: req.transstatus, transtab: req.ftrans, todayTab: req.ftodaysched, regSchedTab: req.fregularSched, empty: req.empty, specSchedTab: req.fspecialSched, emptyspecial: req.emptyspecial, messServ: req.fmessServ});
+                        res.render('messages/views/index', { thisUserTab: req.user, messCount: count, messtab: req.mess, messOne: req.mess[0], chattab: req.chat, params: req.params.chatid, transstatus: req.transstatus, transtab: req.ftrans, todayTab: req.ftodaysched, regSchedTab: req.fregularSched, empty: req.empty, specSchedTab: req.fspecialSched, emptyspecial: req.emptyspecial, messServ: req.fmessServ, workers: req.fworkers, transworkers: req.ftransworkers });
                   });
               });
           });
@@ -373,10 +390,18 @@ function messRender(req,res){
 }
 
 router.get('/', flog, messCount, fchat, render);
-router.get('/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, ftodaysched, fregularSched, fspecialSched, fmessServ, messRender);
+router.get('/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, ftodaysched, fregularSched, fspecialSched, fmessServ, fworkers, ftransworkers, messRender);
 
-router.post('/transet/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, ftodaysched, fregularSched, fspecialSched, (req, res) => {
+router.post('/transet/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, ftodaysched, fregularSched, fspecialSched, fworkers, ftransworkers, (req, res) => {
+  var body = req.body;
+  var elementOne = Object.keys(body)[0];
+  var size = Object.keys(body).length;
+  var paramsarray= [];
+
   if(req.transstatus != 'none'){
+    res.redirect('/messages/'+req.fparams[0].intChatID);
+  }
+  else if(!req.fworkers[0]){
     res.redirect('/messages/'+req.fparams[0].intChatID);
   }
   else{
@@ -393,23 +418,46 @@ router.post('/transet/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, 
     var bodyarray1 = [req.params.chatid, req.body.pricetype, req.body.price, dtm];
     var stringquery2 = "INSERT INTO tblmessage ( intMessChatID, txtMessage, dtmDateSent, intMessPSeen, intSender ) VALUES ( ?, ?, NOW(), 1, 1)";
     var bodyarray2 = [req.params.chatid, "-- I have created an invoice, check it out on the upper right corner!"];
+    var stringquery3= "SELECT @A:=intTransID FROM tbltransaction WHERE intTransChatID= ?";
+    var bodyarray3 = [req.params.chatid];
+    var stringquery4= "UPDATE tblworker SET intWorkerTrans= @A WHERE intWorkerID= ?";
+    var bodyarray4 = [elementOne];
+    for(count=1;count<size-8;count++){
+      var element = Object.keys(body)[count];
+      for(count1=0;count1<req.fworkers.length;count1++){
+        if(element == req.fworkers[count1].intWorkerID){
+          stringquery4 = stringquery4.concat(" OR intWorkerID= ?");
+          paramsarray.push(element);
+        }
+      }
+    }
+    for(count=0;count<paramsarray.length;count++){
+      bodyarray4.push(paramsarray[count]);
+    }
+
     db.beginTransaction(function(err) {
       if (err) console.log(err);
       db.query(stringquery1, bodyarray1, (err, results, fields) => {
-        if (err) res.render('messages/views/invalid/nodate', { thisUserTab: req.user, messCount: req.messCount[0].count, messtab: req.mess, messOne: req.mess[0], chattab: req.chat, params: req.params.chatid, transstatus: req.transstatus, todayTab: req.ftodaysched, regSchedTab: req.fregularSched, empty: req.empty, specSchedTab: req.fspecialSched, emptyspecial: req.emptyspecial});
+        if (err) res.render('messages/views/invalid/nodate', { thisUserTab: req.user, messCount: req.messCount[0].count, messtab: req.mess, messOne: req.mess[0], chattab: req.chat, params: req.params.chatid, transstatus: req.transstatus, todayTab: req.ftodaysched, regSchedTab: req.fregularSched, empty: req.empty, specSchedTab: req.fspecialSched, emptyspecial: req.emptyspecial, workers: req.fworkers, transworkers: req.ftransworkers});
         else
           db.query(stringquery2, bodyarray2, function (err,  resultsCount, fields) {
               if (err) console.log(err);
-              db.commit(function(err) {
+              db.query(stringquery3, bodyarray3, function (err,  resultsCount, fields) {
                   if (err) console.log(err);
-                  res.redirect('/messages/'+req.fparams[0].intChatID);
+                  db.query(stringquery4, bodyarray4, function (err,  resultsCount, fields) {
+                      if (err) console.log(err);
+                      db.commit(function(err) {
+                          if (err) console.log(err);
+                          res.redirect('/messages/'+req.fparams[0].intChatID);
+                      });
+                  });
               });
           });
       });
     });
   }
 });
-router.post('/transet/edit/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, ftodaysched, fregularSched, fspecialSched, (req, res) => {
+router.post('/transet/edit/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, ftodaysched, fregularSched, fspecialSched, fworkers, ftransworkers, (req, res) => {
   if(req.transstatus == 'none'){
     res.redirect('/messages/'+req.fparams[0].intChatID);
   }
@@ -430,7 +478,7 @@ router.post('/transet/edit/:chatid', flog, messCount, fmess, fchat, fparams, ftr
     db.beginTransaction(function(err) {
       if (err) console.log(err);
       db.query(stringquery1, bodyarray1, (err, results, fields) => {
-        if (err) res.render('messages/views/invalid/nodate', { thisUserTab: req.user, messCount: req.messCount[0].count, messtab: req.mess, messOne: req.mess[0], chattab: req.chat, params: req.params.chatid, transstatus: req.transstatus, transtab: req.ftrans, todayTab: req.ftodaysched, regSchedTab: req.fregularSched, empty: req.empty, specSchedTab: req.fspecialSched, emptyspecial: req.emptyspecial});
+        if (err) res.render('messages/views/invalid/nodate', { thisUserTab: req.user, messCount: req.messCount[0].count, messtab: req.mess, messOne: req.mess[0], chattab: req.chat, params: req.params.chatid, transstatus: req.transstatus, transtab: req.ftrans, todayTab: req.ftodaysched, regSchedTab: req.fregularSched, empty: req.empty, specSchedTab: req.fspecialSched, emptyspecial: req.emptyspecial, workers: req.fworkers, transworkers: req.ftransworkers});
         else
           db.query(stringquery2, bodyarray2, function (err,  resultsCount, fields) {
               if (err) console.log(err);

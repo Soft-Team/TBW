@@ -1,6 +1,39 @@
 extends ../../../templates/dash.pug
 
 block main
+  block append scripts
+    script.
+      $(document).ready(function () {
+        $('#TOWorkers').on('show.bs.modal', function () {
+          $('#TOModal').css('z-index', 1039);
+        });
+
+        $('#TOWorkers').on('hidden.bs.modal', function () {
+          $('#TOModal').css('z-index', 1041);
+        });
+        
+        $('#viewTOWorkers').on('show.bs.modal', function () {
+          $('#viewTOModal').css('z-index', 1039);
+        });
+
+        $('#viewTOWorkers').on('hidden.bs.modal', function () {
+          $('#viewTOModal').css('z-index', 1041);
+        });
+      });
+
+      $('#checkBtn').click(function() {
+        checked = $("input[type=checkbox]:checked").length;
+
+        if(!checked) {
+          $('#checkError').css('display', 'block');
+          return false;
+        }
+        else {
+          $('#checkError').css('display', 'none');
+        }
+
+      });
+
   mixin hsel
     each hour in ['12','01','02','03','04','05','06','07','08','09','10','11']
       option(value=hour) #{hour}
@@ -62,7 +95,7 @@ block main
       tr
         th(scope="row") #{daystr}
         td #{start} - #{end}
-        
+
   mixin providertag(tagEllipsis, strServName, servname)
     if tagEllipsis == 1
       span.tag.provider(data-toggle="tooltip" data-placement="top" title=strServName) ##{servname}
@@ -106,7 +139,7 @@ block main
                                 +providertag(chat.tagEllipsis, chat.strServName, chat.servname)
                               else 
                                 +seekertag(chat.tagEllipsis, chat.strServName, chat.servname)
-                                
+
                               if chat.ellipsis == 1
                                 span(data-toggle="tooltip" data-placement="top" title=chat.strName style='color: black;') #{chat.name}
                               else
@@ -136,7 +169,7 @@ block main
                                 +providertag(chat.tagEllipsis, chat.strServName, chat.servname)
                               else 
                                 +seekertag(chat.tagEllipsis, chat.strServName, chat.servname)
-                                
+
                               if chat.ellipsis == 1
                                 span(data-toggle="tooltip" data-placement="top" title=chat.strName style='color: black;') #{chat.name}
                               else
@@ -219,10 +252,11 @@ block main
                     | Send 
                     i.fa.fa-send
 
-  #TOModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='TOModalTitle' aria-hidden='true')
-    .modal-dialog(role='document')
-      .modal-content
-        form(method='POST' action='/messages/transet/'+messOne.intChatID)
+
+  form(method='POST' action='/messages/transet/'+messOne.intChatID)
+    #TOModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='TOModalTitle' aria-hidden='true')
+      .modal-dialog(role='document')
+        .modal-content
           .modal-header
             h5#TOModalTitle.modal-title Create Transaction Offer
             button.close(type='button' data-dismiss='modal' aria-label='Close')
@@ -272,7 +306,34 @@ block main
                   option(value='PM') PM
 
           .modal-footer
-            button.btn.btn-primary(type='submit') Submit
+            if thisuser.intType == 2
+              button.btn.btn-primary(type='submit') Submit
+            else
+              button.btn.btn-primary(type='button' data-toggle='modal' data-target='#TOWorkers') Submit & Select Workers                      
+            button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+
+    #TOWorkers.modal.fade(tabindex='-1' role='dialog' aria-labelledby='TOWorkersTitle' aria-hidden='true')
+      .modal-dialog(role='document')
+        .modal-content
+          .modal-header
+            h5#TOWorkersTitle.modal-title Select Workers
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+              span(aria-hidden='true') ×
+          .modal-body
+            .row
+              .col
+                small.text-muted Select Atleast One
+                #checkError.alert.alert-danger.mt-2(role='alert' style='display:none')
+                  | Select Atleast One Worker
+
+                .mt-2.pt-3(style="border-top: 1px solid #007BFF;")
+                  each work,index in workers
+                    .form-check.mx-2
+                      input.form-check-input(type='checkbox' name=work.intWorkerID style="height: 20px; width: 20px;")
+                      label.form-check-label(style="margin-left: 15px; font-size: 18px;") #{work.strWorker}
+                    hr
+          .modal-footer
+            button#checkBtn.btn.btn-primary(type='submit') Submit
             button.btn.btn-secondary(type='button', data-dismiss='modal') Close
 
   #editTOModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='editTOModalTitle' aria-hidden='true')
@@ -354,11 +415,32 @@ block main
                   p
                     b Date Scheduled: 
                     | #{trans.date}
-
+                  
+                  if trans.intType == 3  
+                    button.btn.btn-primary(type='button' data-toggle='modal' data-target='#viewTOWorkers') View Workers                      
 
           .modal-footer
             button.btn.btn-primary.btn-block(type='submit') Accept Offer
             button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+
+  #viewTOWorkers.modal.fade(tabindex='-1' role='dialog' aria-labelledby='viewTOWorkersTitle' aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+          h5#viewTOWorkersTitle.modal-title View Workers
+          button.close(type='button' data-dismiss='modal' aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+          .row
+            .col
+              .mt-2.pt-3(style="border-top: 1px solid #007BFF;")
+                each transwork in transworkers
+                  h5 #{transwork.strWorker}
+                  hr
+        .modal-footer
+          button.btn.btn-primary(type='submit') Submit
+          button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+
 
   #PSModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='PSModalTitle' aria-hidden='true')
     .modal-dialog(role='document')
@@ -472,10 +554,8 @@ block main
             .row.mb-3
               .col
                 h4(style="display: inline; color: #2FAF7A;") #{serv.strServName}
-              
+
         .modal-footer
           button.btn.btn-secondary(type='button', data-dismiss='modal') Close
-
-
 
   block chatmess
