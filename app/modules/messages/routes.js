@@ -458,7 +458,15 @@ router.post('/transet/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, 
   }
 });
 router.post('/transet/edit/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, ftodaysched, fregularSched, fspecialSched, fworkers, ftransworkers, (req, res) => {
+  var body = req.body;
+  var elementOne = Object.keys(body)[0];
+  var size = Object.keys(body).length;
+  var paramsarray= [];
+
   if(req.transstatus == 'none'){
+    res.redirect('/messages/'+req.fparams[0].intChatID);
+  }
+  else if(!req.fworkers[0]){
     res.redirect('/messages/'+req.fparams[0].intChatID);
   }
   else{
@@ -475,6 +483,24 @@ router.post('/transet/edit/:chatid', flog, messCount, fmess, fchat, fparams, ftr
     var bodyarray1 = [req.body.pricetype, req.body.price, dtm, req.ftrans[0].intTransID];
     var stringquery2 = "INSERT INTO tblmessage ( intMessChatID, txtMessage, dtmDateSent, intMessPSeen, intSender ) VALUES ( ?, ?, NOW(), 1, 1)";
     var bodyarray2 = [req.params.chatid, "-- I have FIXED the invoice, check it out on the upper right corner!"];
+    var stringquery3= "SELECT @A:=intTransID FROM tbltransaction WHERE intTransChatID= ?";
+    var bodyarray3 = [req.params.chatid];
+    var stringquery4= "UPDATE tblworker SET intWorkerTrans= NULL WHERE intWorkerTrans= @A";
+    var stringquery5= "UPDATE tblworker SET intWorkerTrans= @A WHERE intWorkerID= ?";
+    var bodyarray5 = [elementOne];
+    for(count=1;count<size-8;count++){
+      var element = Object.keys(body)[count];
+      for(count1=0;count1<req.fworkers.length;count1++){
+        if(element == req.fworkers[count1].intWorkerID){
+          stringquery5 = stringquery5.concat(" OR intWorkerID= ?");
+          paramsarray.push(element);
+        }
+      }
+    }
+    for(count=0;count<paramsarray.length;count++){
+      bodyarray5.push(paramsarray[count]);
+    }
+
     db.beginTransaction(function(err) {
       if (err) console.log(err);
       db.query(stringquery1, bodyarray1, (err, results, fields) => {
@@ -482,9 +508,18 @@ router.post('/transet/edit/:chatid', flog, messCount, fmess, fchat, fparams, ftr
         else
           db.query(stringquery2, bodyarray2, function (err,  resultsCount, fields) {
               if (err) console.log(err);
-              db.commit(function(err) {
+              db.query(stringquery3, bodyarray3, function (err,  resultsCount, fields) {
                   if (err) console.log(err);
-                  res.redirect('/messages/'+req.fparams[0].intChatID);
+                  db.query(stringquery4, function (err,  resultsCount, fields) {
+                      if (err) console.log(err);
+                      db.query(stringquery5, bodyarray5, function (err,  resultsCount, fields) {
+                          if (err) console.log(err);
+                          db.commit(function(err) {
+                              if (err) console.log(err);
+                              res.redirect('/messages/'+req.fparams[0].intChatID);
+                          });
+                      });
+                  });
               });
           });
       });

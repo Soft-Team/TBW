@@ -19,6 +19,14 @@ block main
         $('#viewTOWorkers').on('hidden.bs.modal', function () {
           $('#viewTOModal').css('z-index', 1041);
         });
+        
+        $('#editTOWorkers').on('show.bs.modal', function () {
+          $('#editTOModal').css('z-index', 1039);
+        });
+
+        $('#editTOWorkers').on('hidden.bs.modal', function () {
+          $('#editTOModal').css('z-index', 1041);
+        });
       });
 
       $('#checkBtn').click(function() {
@@ -31,7 +39,18 @@ block main
         else {
           $('#checkError').css('display', 'none');
         }
+      });
+      
+      $('#checkBtnEdit').click(function() {
+        checked = $("input[type=checkbox]:checked").length;
 
+        if(!checked) {
+          $('#checkErrorEdit').css('display', 'block');
+          return false;
+        }
+        else {
+          $('#checkErrorEdit').css('display', 'none');
+        }
       });
 
   mixin hsel
@@ -309,7 +328,7 @@ block main
             if thisuser.intType == 2
               button.btn.btn-primary(type='submit') Submit
             else
-              button.btn.btn-primary(type='button' data-toggle='modal' data-target='#TOWorkers') Submit & Select Workers                      
+              button.btn.btn-primary(type='button' data-toggle='modal' data-target='#TOWorkers') Proceed to Workers                      
             button.btn.btn-secondary(type='button', data-dismiss='modal') Close
 
     #TOWorkers.modal.fade(tabindex='-1' role='dialog' aria-labelledby='TOWorkersTitle' aria-hidden='true')
@@ -335,62 +354,96 @@ block main
           .modal-footer
             button#checkBtn.btn.btn-primary(type='submit') Submit
             button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+            
+  form(method='POST' action='/messages/transet/edit/'+messOne.intChatID)
+    #editTOModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='editTOModalTitle' aria-hidden='true')
+      .modal-dialog(role='document')
+        .modal-content
+            each trans in transtab
+              .modal-header
+                h5#editTOModalTitle.modal-title Edit Transaction Offer
+                button.close(type='button' data-dismiss='modal' aria-label='Close')
+                  span(aria-hidden='true') ×
+              .modal-body
+                .row
+                  .col
+                    label(for='priceType') Price Type
+                    select#priceType.form-control(name='pricetype')
+                      if trans.intTransPriceType == 1
+                        option(value='1' selected='') Fixed
+                        option(value='2') Rate per Hour
+                      else
+                        option(value='1') Fixed
+                        option(value='2' selected='') Rate per Hour
 
-  #editTOModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='editTOModalTitle' aria-hidden='true')
-    .modal-dialog(role='document')
-      .modal-content
-        form(method='POST' action='/messages/transet/edit/'+messOne.intChatID)
-          each trans in transtab
-            .modal-header
-              h5#editTOModalTitle.modal-title Edit Transaction Offer
-              button.close(type='button' data-dismiss='modal' aria-label='Close')
-                span(aria-hidden='true') ×
-            .modal-body
-              .row
-                .col
-                  label(for='priceType') Price Type
-                  select#priceType.form-control(name='pricetype')
-                    if trans.intTransPriceType == 1
-                      option(value='1' selected='') Fixed
-                      option(value='2') Rate per Hour
-                    else
-                      option(value='1') Fixed
-                      option(value='2' selected='') Rate per Hour
+                  .col
+                    label(for='price') Price
+                    #price.input-group.mb-3
+                      .input-group-prepend
+                        span.input-group-text Php
+                      input.form-control(type='text' name='price' value=trans.fltTransPrice placeholder='00.00' required)
+                center
+                  label Schedule
+                .row
+                  .col
+                    select#S-addMonth.form-control(name='addMonth')
+                      +monthsel(trans.month)
+                  .col
+                    select#S-addDay.form-control(name='addDay')
+                      +daysel(trans.day)
+                  .col
+                    input.form-control(type='number' name='addYear' placeholder='Year(eg.2018)' max='9999' value=trans.year required)
+                br
+                .row
+                  .col
+                    p.mt-1.text-center Start
+                  .col
+                    select#S-Shours.form-control(name='Shours')    
+                      +hoursel(trans.Hstart)
+                  .col
+                    select#S-Sminutes.form-control(name='Sminutes')
+                      +minsel(trans.Mstart)
+                  .col
+                    select#S-Sampm.form-control(name='Sampm')
+                      +ampmsel(trans.Sampm)
 
-                .col
-                  label(for='price') Price
-                  #price.input-group.mb-3
-                    .input-group-prepend
-                      span.input-group-text Php
-                    input.form-control(type='text' name='price' value=trans.fltTransPrice placeholder='00.00' required)
-              center
-                label Schedule
-              .row
-                .col
-                  select#S-addMonth.form-control(name='addMonth')
-                    +monthsel(trans.month)
-                .col
-                  select#S-addDay.form-control(name='addDay')
-                    +daysel(trans.day)
-                .col
-                  input.form-control(type='number' name='addYear' placeholder='Year(eg.2018)' max='9999' value=trans.year required)
-              br
-              .row
-                .col
-                  p.mt-1.text-center Start
-                .col
-                  select#S-Shours.form-control(name='Shours')    
-                    +hoursel(trans.Hstart)
-                .col
-                  select#S-Sminutes.form-control(name='Sminutes')
-                    +minsel(trans.Mstart)
-                .col
-                  select#S-Sampm.form-control(name='Sampm')
-                    +ampmsel(trans.Sampm)
+              .modal-footer
+                if thisuser.intType == 2
+                  button.btn.btn-primary(type='submit') Submit
+                else
+                  button.btn.btn-primary(type='button' data-toggle='modal' data-target='#editTOWorkers') Proceed to Workers                      
+                button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+    
+    #editTOWorkers.modal.fade(tabindex='-1' role='dialog' aria-labelledby='editTOWorkersTitle' aria-hidden='true')
+      .modal-dialog(role='document')
+        .modal-content
+          .modal-header
+            h5#editTOWorkersTitle.modal-title Edit Selected Workers
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+              span(aria-hidden='true') ×
+          .modal-body
+            .row
+              .col
+                small.text-muted Select Atleast One
+                #checkErrorEdit.alert.alert-danger.mt-2(role='alert' style='display:none')
+                  | Select Atleast One Worker
 
-            .modal-footer
-              button.btn.btn-primary(type='submit') Submit
-              button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+                .mt-2.pt-3(style="border-top: 1px solid #007BFF;")
+                  each transwork,index in transworkers
+                    if index == 0
+                      - transID = transwork.intTransID
+                  each work,index in workers
+                    .form-check.mx-2
+                      if work.intWorkerTrans == transID
+                        input.form-check-input(type='checkbox' name=work.intWorkerID style="height: 20px; width: 20px;" checked)
+                      else
+                        input.form-check-input(type='checkbox' name=work.intWorkerID style="height: 20px; width: 20px;")
+                      label.form-check-label(style="margin-left: 15px; font-size: 18px;") #{work.strWorker}
+                    hr
+          .modal-footer
+            button#checkBtnEdit.btn.btn-primary(type='submit') Submit
+            button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+
 
   #viewTOModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='viewTOModalTitle' aria-hidden='true')
     .modal-dialog(role='document')
