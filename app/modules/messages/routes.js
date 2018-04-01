@@ -298,7 +298,7 @@ function fmessServ(req,res,next){
 function fworkers(req,res,next){
   /*Workers of Current User, Match(session);
   *(tblworker)*/
-  db.query("SELECT * FROM tblworker WHERE intWorkBusID= ?",[req.session.user], (err, results, fields) => {
+  db.query("SELECT * FROM tblworker WHERE intWorkBusID= ? AND intWorkerStatus= 1",[req.session.user], (err, results, fields) => {
       if (err) console.log(err);
       req.fworkers= results;
       return next();
@@ -616,9 +616,12 @@ router.post('/transet/accept/:chatid', flog, messCount, fmess, fchat, fparams, f
               }
               db.query(stringquery2, bodyarray2, function (err,  resultsCount, fields) {
                   if (err) console.log(err);
-                  db.commit(function(err) {
+                  db.query("UPDATE tblworker SET intWorkerStatus= 2 WHERE intWorkerTrans= ?", [req.ftrans[0].intTransID], function (err,  resultsCount, fields) {
                       if (err) console.log(err);
-                      res.redirect('/messages/'+req.fparams[0].intChatID);
+                      db.commit(function(err) {
+                          if (err) console.log(err);
+                          res.redirect('/messages/'+req.fparams[0].intChatID);
+                      });
                   });
               });
             }

@@ -143,7 +143,7 @@ html, body {
 /* Message Time */
 .time
 {
-    color:#bfbfbf;
+    color: rgba(0, 0, 0,.6) !important;
     font-size: small;
     margin-top: 10px;
 }
