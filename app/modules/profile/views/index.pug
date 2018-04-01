@@ -263,6 +263,14 @@ block main
                         .col-8
                           .form-group.mr-3
                             input#dp.filestyle(type='file' name='profilepic' data-classbutton='btn btn-primary' data-input='false' data-classicon='icon-plus' accept='image/*')
+                      if thisuser.intType == 3
+                        .row
+                          .col
+                            .form-group
+                              label(for='owner')
+                                b Owner
+                              input#owner.form-control(type='text' name='owner' value= thisuser.strOwner aria-describedby='ownerHelp' maxlength='100' required)
+                              small#ownerHelp.form-text.text-muted Owner Name will be displayed publicly.
                       .row
                         .col
                           .form-group
