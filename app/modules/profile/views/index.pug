@@ -422,17 +422,23 @@ block main
                             - emptyworker = 0
                             tr
                               td #{work.strWorker}
-
+                              
                               if work.intWorkerStatus == 0
                                 td Unavailable
-                                td(style="padding: 7.5px;")
-                                  button.btn.btn-info(type='button' data-toggle='modal' data-target='#WorkerEdit' data-workername=work.strWorker data-status=work.intWorkerStatus data-workid=work.intWorkerID)
-                                    i.fa.fa-cog
+                                if !work.intWorkerTrans
+                                  td(style="padding: 7.5px;")
+                                    button.btn.btn-info(type='button' data-toggle='modal' data-target='#WorkerEdit' data-workername=work.strWorker data-status=work.intWorkerStatus data-workid=work.intWorkerID)
+                                      i.fa.fa-cog
+                                else
+                                  td &nbsp
                               else if work.intWorkerStatus == 1
                                 td Available
-                                td(style="padding: 7.5px;")
-                                  button.btn.btn-info(type='button' data-toggle='modal' data-target='#WorkerEdit' data-workername=work.strWorker data-status=work.intWorkerStatus data-workid=work.intWorkerID)
-                                    i.fa.fa-cog
+                                if !work.intWorkerTrans
+                                  td(style="padding: 7.5px;")
+                                    button.btn.btn-info(type='button' data-toggle='modal' data-target='#WorkerEdit' data-workername=work.strWorker data-status=work.intWorkerStatus data-workid=work.intWorkerID)
+                                      i.fa.fa-cog
+                                else
+                                  td &nbsp
                               else
                                 td Ongoing
                                 td &nbsp

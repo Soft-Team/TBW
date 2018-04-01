@@ -296,9 +296,9 @@ function fmessServ(req,res,next){
   });
 }
 function fworkers(req,res,next){
-  /*Workers of Current User, Match(session);
+  /*Available Workers of Current User, Match(session,params);
   *(tblworker)*/
-  db.query("SELECT * FROM tblworker WHERE intWorkBusID= ? AND intWorkerStatus= 1",[req.session.user], (err, results, fields) => {
+  db.query("SELECT * FROM tblworker LEFT JOIN tbltransaction ON intWorkerTrans= intTransID LEFT JOIN tblchat ON intTransChatID= intChatID WHERE intWorkBusID= ? AND intWorkerStatus= 1 AND (intChatID= ? OR intChatID IS NULL)",[req.session.user, req.params.chatid], (err, results, fields) => {
       if (err) console.log(err);
       req.fworkers= results;
       return next();
@@ -590,11 +590,17 @@ router.post('/transet/accept/:chatid', flog, messCount, fmess, fchat, fparams, f
 
     var stringquery6 = "UPDATE tblservice SET intServStatus= 2 WHERE intServAccNo= ?";
     var bodyarray6 = [req.ftrans[0].intAccNo];
-    var stringquery7 = "SELECT * FROM tblchat INNER JOIN tblservice ON intChatServ= intServID WHERE intServAccNo= ? AND intChatStatus= 1 AND intChatID!= ?;";
+    var stringquery7 = "SELECT * FROM tblchat INNER JOIN tblservice ON intChatServ= intServID LEFT JOIN tbltransaction ON intChatID= intTransChatID WHERE intServAccNo= ? AND intChatStatus= 1 AND intChatID!= ?;";
     var bodyarray7 = [req.ftrans[0].intAccNo, req.params.chatid];
 
     var stringquery8 = "INSERT INTO tblmessage ( intMessChatID, txtMessage, dtmDateSent, intMessPSeen, intSender ) VALUES ";
     var bodyarray8 = [];
+    var stringquery9 = "UPDATE tblchat SET intChatStatus= 0 WHERE ";//
+    var bodyarray9 = [];
+    var stringquery10 = "INSERT INTO tblcancellation (intCancelChatID, dtmCancelDate, txtCancelReason) VALUES ";//
+    var bodyarray10 = [];
+    var stringquery11 = "UPDATE tbltransaction SET intTransStatus= 3 WHERE ";//
+    var bodyarray11 = [];
 
     db.beginTransaction(function(err) {
       if (err) console.log(err);
@@ -623,17 +629,49 @@ router.post('/transet/accept/:chatid', flog, messCount, fmess, fchat, fparams, f
                                     if(!(!results[0])){
                                       for(count=0;count<results.length;count++){
                                         stringquery8 = stringquery8.concat("( ?, ?, NOW(), 1, 1)");
+                                        stringquery9 = stringquery9.concat("intChatID= ?");
+                                        stringquery10 = stringquery10.concat("(?,NOW(),?)");
+                                        if(!(!results[count].intTransID)){
+                                          stringquery11 = stringquery11.concat("intTransID= ?");
+                                          bodyarray11.push(results[count].intTransID);
+                                        }
                                         if(count < results.length-1){
                                           stringquery8 = stringquery8.concat(",");
+                                          stringquery9 = stringquery9.concat(" AND ");
+                                          stringquery10 = stringquery10.concat(",");
+                                          if(!(!results[count].intTransID)){
+                                            stringquery11 = stringquery11.concat(" AND ");
+                                          }
                                         }
                                         bodyarray8.push(results[count].intChatID);
                                         bodyarray8.push("-- Our Workers are Busy at the moment, please come back once we are available!");
+                                        bodyarray9.push(results[count].intChatID);
+                                        bodyarray10.push(results[count].intChatID);
+                                        bodyarray10.push("-- Our Workers are Busy at the moment");
+
                                       }
                                       db.query(stringquery8, bodyarray8, function (err,  results, fields) {
                                           if (err) console.log(err);
-                                          db.commit(function(err) {
+                                          db.query(stringquery9, bodyarray9, function (err,  results, fields) {
                                               if (err) console.log(err);
-                                              res.redirect('/messages/'+req.fparams[0].intChatID);
+                                              db.query(stringquery10, bodyarray10, function (err,  results, fields) {
+                                                  if (err) console.log(err);
+                                                  if(!bodyarray11[0]){
+                                                    db.commit(function(err) {
+                                                        if (err) console.log(err);
+                                                        res.redirect('/messages/'+req.fparams[0].intChatID);
+                                                    });
+                                                  }
+                                                  else{
+                                                    db.query(stringquery11, bodyarray11, function (err,  results, fields) {
+                                                        if (err) console.log(err);
+                                                        db.commit(function(err) {
+                                                            if (err) console.log(err);
+                                                            res.redirect('/messages/'+req.fparams[0].intChatID);
+                                                        });
+                                                    });
+                                                  }
+                                              });
                                           });
                                       });
                                     }
@@ -667,15 +705,19 @@ router.post('/cancel/:chatid', flog, ftrans, fprovider, ftransworkers, (req, res
   else
     var stringquery1 = "INSERT INTO tblmessage ( intMessChatID, txtMessage, dtmDateSent, intMessPSeen, intSender ) VALUES ( ?, ?, NOW(), 1, 1)";
   var bodyarray1 = [req.params.chatid, "-- has CANCELLED this chat and its transaction."];
-  var stringquery2 = "UPDATE tblchat SET intChatStatus= 0 WHERE intChatID= ?";
+  var stringquery2 = "UPDATE tblchat SET intChatStatus= 0 WHERE intChatID= ?";//
   var bodyarray2 = [req.params.chatid];
-  var stringquery3 = "UPDATE tblservice SET intServStatus= 1 WHERE intServAccNo= ? AND intServStatus= 2";
+  if(req.fprovider[0].intServStatus != 0)
+    var stringquery3 = "UPDATE tblservice SET intServStatus= 1 WHERE intServAccNo= ? AND intServStatus= 2";
+  else
+    var stringquery3 = "SELECT * FROM tblservice WHERE intServAccNo= ?"; /*Filler Query*/
   var bodyarray3 = [req.fprovider[0].intServAccNo];
-  var stringquery4 = "INSERT INTO tblcancellation (intCancelChatID, dtmCancelDate, txtCancelReason) VALUES (?,NOW(),?)";
+  var stringquery4 = "INSERT INTO tblcancellation (intCancelChatID, dtmCancelDate, txtCancelReason) VALUES (?,NOW(),?)";//
   var bodyarray4 = [req.params.chatid, req.body.desc];
 
-  var stringquery5 = "UPDATE tbltransaction SET intTransStatus= 3 WHERE intTransID= ?";
+  var stringquery5 = "UPDATE tbltransaction SET intTransStatus= 3 WHERE intTransID= ?";//
   var bodyarray5 = [req.ftrans[0].intTransID];
+
   var stringquery6 = "UPDATE tblworker SET intWorkerTrans= NULL, intWorkerStatus= 1 WHERE intWorkerTrans= ?";
   var bodyarray6 = [req.ftrans[0].intTransID];
 
