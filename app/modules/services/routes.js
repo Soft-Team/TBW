@@ -13,7 +13,7 @@ var timeFormat = require('../welcome/timeFormat');
 function servTags(req, res, next){
   /*All Service Tags
   strServName(tblservicetag)*/
-  db.query("SELECT *, COUNT(intServID)CNT FROM tblservicetag LEFT JOIN tblservice ON intServTagID= intServTag GROUP BY strServName ORDER BY CNT DESC", function (err, results, fields) {
+  db.query("SELECT *, COUNT(intServID)CNT FROM tblservicetag LEFT JOIN tblservice ON intServTagID= intServTag GROUP BY strServName ORDER BY CNT DESC, intServTagID", function (err, results, fields) {
       if (err) return res.send(err);
       if(!(!results[0])){
         for(count=0;count<results.length;count++){
