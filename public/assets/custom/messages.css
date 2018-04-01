@@ -29,11 +29,11 @@ html, body {
 /******************** MAIN WRAPPERS *******************/
 /* Main Window - Boxed style */
 .chat-wrap {
-    height: 732px;
+    height: 748px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     background-color: white;
     overflow: hidden;
-    width: 1285px;
+    width: 1269px;
     margin: .5px;
 }
 /* Panel Wrapper: Side Menu - Content Window */
@@ -131,6 +131,8 @@ html, body {
 {
     padding: 8px 10px 5px;
     border-bottom: 1px solid #ddd;
+    word-wrap: break-word;
+    width:57em;
 }
 /* Message Sender */
 .message-wrap .media-heading
@@ -161,7 +163,7 @@ html, body {
 /* Message Text */
 .message-text
 {
-    padding: 2px;
+    padding: 10px;
     display: table-cell;
     vertical-align: middle;
 }
@@ -171,22 +173,21 @@ html, body {
     display: table-cell;
     vertical-align: middle;
     text-align: center;
-
     width: 10%;
 }
 /* Send Message Properties */
 
 #send{
-    border-radius: 10px;
+    border-radius: 15px;
     background: #3498DB;
     color: white;
-    border: 5px solid #F5F5F5
+    border: 10px solid #F5F5F5
 }
 
 .no-resize-bar
 {
     resize: none;
-    height: 100% !important;
+    height: 100%;
 }
 .send-button a {
     padding: 0;
