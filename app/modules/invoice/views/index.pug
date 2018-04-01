@@ -75,11 +75,11 @@ block content
             each work in workers
               - emptyWork = 0
               tr.item-row
-                td(style="height: 40px;")
+                td.worker
                   | #{work.strWorker}
             if emptyWork == 1
               tr.item-row
-                td(style="height: 40px;")
+                td.worker
                   i Only for Business-type Providers
     h8
       | -

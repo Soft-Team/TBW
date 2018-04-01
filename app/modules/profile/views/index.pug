@@ -27,14 +27,14 @@ block main
           }
         }
       })
-      
+
       $(document).ready(function () {
         $('#WorkerEdit').on('show.bs.modal', function () {
-            $('#Workers').css('z-index', 1039);
+          $('#Workers').css('z-index', 1039);
         });
 
         $('#WorkerEdit').on('hidden.bs.modal', function () {
-            $('#Workers').css('z-index', 1041);
+          $('#Workers').css('z-index', 1041);
         });
       });
 
@@ -80,7 +80,7 @@ block main
                       h4.profileB(style='margin-bottom: 0rem; margin-top:0px; display:inline-block') Provided
 
     nav
-      .card.text-center(style='width:1286px')
+      .card.text-center(style='min-height: 450px; width:1286px')
         .card-header(style='padding-bottom:0rem')
           each paramsuser, index in paramsUser
             if index == 0
@@ -91,24 +91,28 @@ block main
                 a#portfolio-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Portfolio', role='tab', aria-controls='Portfolio', aria-selected='false') Portfolio
         #nav-tabContent.tab-content
           #Personal-Info.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='personal-info-tab')
-            .col-sm-3
-              each paramsuser, index in paramsUser
-                if index == 0
-                  i.fa.fa-building.fa-2x
+            each paramsuser, index in paramsUser
+              if index == 0
+                .col-sm-3
+                  if paramsuser.intType == 3
+                    i.fa.fa-user-circle.fa-2x.mb-4
+                    span.font2 Owner: #{paramsuser.strOwner}
+                    br
+                  i.fa.fa-building.fa-2x.mb-4
                   span.font2 City: #{paramsuser.strCity}
-                  hr
-                  i.fa.fa-address-book.fa-2x
+                  br
+                  i.fa.fa-address-book.fa-2x.mb-4
                   span.font2 Contact: #{paramsuser.strContactNo}
-                  hr
-            .col-sm-3
-              each paramsuser, index in paramsUser
-                if index == 0
-                  i.fa.fa-home.fa-2x
+                .col-sm-3
+                  if paramsuser.intType == 3
+                    i.fa.fa-building.fa-2x.mb-4(style="visibility: hidden")
+                    span.font2(style="visibility: hidden") Blank
+                    br
+                  i.fa.fa-home.fa-2x.mb-4
                   span.font2 Barangay: #{paramsuser.strBarangay}
-                  hr
-                  i.fa.fa-envelope.fa-2x
+                  br
+                  i.fa.fa-envelope.fa-2x.mb-4
                   span.font2 Email: #{paramsuser.strEmail}
-                  hr
           #Services.tab-pane.fade(role='tabpanel', aria-labelledby='services-tab')
             center
               .container(style='padding-top: 20px; padding-bottom: 20px')
@@ -425,14 +429,20 @@ block main
 
                               if work.intWorkerStatus == 0
                                 td Unavailable
-                                td(style="padding: 7.5px;")
-                                  button.btn.btn-info(type='button' data-toggle='modal' data-target='#WorkerEdit' data-workername=work.strWorker data-status=work.intWorkerStatus data-workid=work.intWorkerID)
-                                    i.fa.fa-cog
+                                if !work.intWorkerTrans
+                                  td(style="padding: 7.5px;")
+                                    button.btn.btn-info(type='button' data-toggle='modal' data-target='#WorkerEdit' data-workername=work.strWorker data-status=work.intWorkerStatus data-workid=work.intWorkerID)
+                                      i.fa.fa-cog
+                                else
+                                  td &nbsp
                               else if work.intWorkerStatus == 1
                                 td Available
-                                td(style="padding: 7.5px;")
-                                  button.btn.btn-info(type='button' data-toggle='modal' data-target='#WorkerEdit' data-workername=work.strWorker data-status=work.intWorkerStatus data-workid=work.intWorkerID)
-                                    i.fa.fa-cog
+                                if !work.intWorkerTrans
+                                  td(style="padding: 7.5px;")
+                                    button.btn.btn-info(type='button' data-toggle='modal' data-target='#WorkerEdit' data-workername=work.strWorker data-status=work.intWorkerStatus data-workid=work.intWorkerID)
+                                      i.fa.fa-cog
+                                else
+                                  td &nbsp
                               else
                                 td Ongoing
                                 td &nbsp
