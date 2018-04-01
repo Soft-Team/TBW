@@ -16,7 +16,6 @@ function ongoing(req,res,next){
       if(!(!results[0])){
         for(count=0;count<results.length;count++){
           var date = results[count].dtmTransScheduled;
-          var formatDate = dateformat(date);
           results[count].time = timeFormat(date);
           results[count].date = date.toDateString("en-US").slice(4, 15);
 
@@ -39,7 +38,6 @@ function ongoingParams(req,res,next){
       if(!(!results[0])){
         for(count=0;count<results.length;count++){
           var date = results[count].dtmTransScheduled;
-          var formatDate = dateformat(date);
           results[count].time = timeFormat(date);
           results[count].date = date.toDateString("en-US").slice(4, 15);
         }
@@ -59,12 +57,10 @@ function finished(req,res,next){
       if(!(!results[0])){
         for(count=0;count<results.length;count++){
           var date = results[count].dtmTransScheduled;
-          var formatDate = dateformat(date);
           results[count].time = timeFormat(date);
           results[count].date = date.toDateString("en-US").slice(4, 15);
 
           var dateEnd = results[count].dtmTransEnded;
-          var formatDateEnd = dateformat(dateEnd);
           results[count].timeEnd = timeFormat(dateEnd);
           results[count].dateEnd = dateEnd.toDateString("en-US").slice(4, 15);
 
@@ -88,7 +84,6 @@ function finishedParams(req,res,next){
       if(!(!results[0])){
         for(count=0;count<results.length;count++){
           var date = results[count].dtmTransScheduled;
-          var formatDate = dateformat(date);
           results[count].time = timeFormat(date);
           results[count].date = date.toDateString("en-US").slice(4, 15);
         }
