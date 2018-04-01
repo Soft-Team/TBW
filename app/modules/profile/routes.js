@@ -254,4 +254,8 @@ router.post('/manage-workers/:userid', flog, messCount, paramsUser, (req, res) =
 
 });
 
+router.post('reported/:userid', flog, messCount, paramsUser, (req,res) =>{
+  db.query("INSERT INTO tblreport VALUES(")
+})
+
 exports.profile = router;
