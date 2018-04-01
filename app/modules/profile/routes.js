@@ -240,44 +240,19 @@ router.post('/more/:userid', flog, messCount, paramsUser, documents, (req, res) 
 
 });
 router.post('/add-workers/:userid', flog, messCount, paramsUser, (req, res) =>{
-  db.beginTransaction(function(err) {
+  db.query("INSERT INTO tblworker (intWorkBusID, strWorker) VALUES (?,?)",[req.session.user, req.body.workername], function (err,  results, fields) {
     if (err) console.log(err);
-    db.query("INSERT INTO tblworker (intWorkBusID, strWorker) VALUES (?,?)",[req.session.user, req.body.workername], function (err,  results, fields) {
-      if (err) console.log(err);
-      db.query("UPDATE tblservice SET intServStatus= 1 WHERE intServAccNo= ?",[req.session.user], function (err,  results, fields) {
-        if (err) console.log(err);
-        db.commit(function(err) {
-          if (err) console.log(err);
-          res.redirect('/profile/'+req.session.user);
-        });
-      });
-    });
+    res.redirect('/profile/'+req.session.user);
   });
+
 });
 router.post('/manage-workers/:userid', flog, messCount, paramsUser, (req, res) =>{
-  db.beginTransaction(function(err) {
+  db.query("UPDATE tblworker SET intWorkerStatus= ? WHERE intWorkerID= ?",[req.body.workerstatus, req.body.workid], function (err,  results, fields) {
     if (err) console.log(err);
-    db.query("UPDATE tblworker SET intWorkerStatus= ? WHERE intWorkerID= ?",[req.body.workerstatus, req.body.workid], function (err,  results, fields) {
-      if (err) console.log(err);
-      db.query("SELECT * FROM tblworker WHERE intWorkBusID= ? AND intWorkerStatus= 1",[req.session.user], function (err,  results, fields) {
-        if (err) console.log(err);
-        if(!results[0]){
-          db.query("UPDATE tblservice SET intServStatus= 0 WHERE intServAccNo= ?",[req.session.user], function (err,  results, fields) {
-            if (err) console.log(err);
-            db.commit(function(err) {
-              if (err) console.log(err);
-              res.redirect('/profile/'+req.session.user);
-            });
-          });
-        }
-      });
-    });
+    res.redirect('/profile/'+req.session.user);
   });
 
 });
 
-router.post('reported/:userid', flog, messCount, paramsUser, (req,res) =>{
-  db.query("INSERT INTO tblreport VALUES(")
-})
 
 exports.profile = router;
