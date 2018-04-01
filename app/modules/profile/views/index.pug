@@ -292,12 +292,12 @@ block main
                           .form-group
                             label(for='inputCity')
                               b City
-                            input#inputCity.form-control(type='text' name='city' value= thisuser.strCity placeholder='Quezon City' required='')
+                            input#inputCity.form-control(type='text' name='city' value= thisuser.strCity placeholder='Quezon City' maxlength="45" required='')
                         .col
                           .form-group
                             label(for='inputState')
                               b Barangay
-                            input#inputBarangay.form-control(type='text' name='barangay' value= thisuser.strBarangay placeholder='Tatalon' required='')                
+                            input#inputBarangay.form-control(type='text' name='barangay' value= thisuser.strBarangay placeholder='Tatalon' maxlength="45" required='')                
                       hr
                       .row
                         .col
@@ -471,7 +471,7 @@ block main
                         .form-group
                           label(for='workername')
                             b Worker's Name
-                          input#workername.form-control(type='text' name='workername' aria-describedby='workernameHelp' required)
+                          input#workername.form-control(type='text' name='workername' aria-describedby='workernameHelp' maxlength="100" required)
                           small#workernameHelp.form-text.text-muted Inserted Name will be Displayed in Transactions.
                     .row
                       .col

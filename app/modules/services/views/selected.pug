@@ -22,14 +22,14 @@ block service
               .row
                 if thisuser.intAutoFill == 1
                   .col
-                    input.form-control(type='text' name='city' value=user.strCity placeholder='City')
+                    input.form-control(type='text' name='city' value=user.strCity placeholder='City' maxlength="45")
                   .col
-                    input.form-control(type='text' name='brngy' value=user.strBarangay placeholder='Barangay')
+                    input.form-control(type='text' name='brngy' value=user.strBarangay placeholder='Barangay' maxlength="45")
                 else
                   .col
-                    input.form-control(type='text' name='city' placeholder='City')
+                    input.form-control(type='text' name='city' placeholder='City' maxlength="45")
                   .col
-                    input.form-control(type='text' name='brngy' placeholder='Barangay')
+                    input.form-control(type='text' name='brngy' placeholder='Barangay' maxlength="45")
               br
               .row
                 .col

@@ -266,7 +266,7 @@ block main
                     input#sender(type='text', name='handle', value= messOne.sendType, hidden)
                     each thisuser in thisUserTab
                       input#thisuser(type='text', name='handle', value=thisuser.intAccNo , hidden)
-                    textarea#message.no-resize-bar.form-control(rows='2', name='message', placeholder='Write a message...')
+                    textarea#message.no-resize-bar.form-control(rows='2', name='message', placeholder='Write a message...' maxlength="65500")
                   a#send.btn.send-button
                     | Send 
                     i.fa.fa-send
@@ -296,7 +296,7 @@ block main
                 #price.input-group.mb-3
                   .input-group-prepend
                     span.input-group-text Php
-                  input.form-control(type='text' name='price' value=messOne.fltPrice placeholder='00.00' required)
+                  input.form-control(type='number' name='price' value=messOne.fltPrice placeholder='00.00' required)
             center
               label Schedule
             .row
@@ -380,7 +380,7 @@ block main
                     #price.input-group.mb-3
                       .input-group-prepend
                         span.input-group-text Php
-                      input.form-control(type='text' name='price' value=trans.fltTransPrice placeholder='00.00' required)
+                      input.form-control(type='number' name='price' value=trans.fltTransPrice placeholder='00.00' required)
                 center
                   label Schedule
                 .row
@@ -505,7 +505,7 @@ block main
                 h5(style="display:inline;") #{day.strName}
                 br
                 h7(style="display:inline;") #{day.strCity}
-                h7(style="display:inline;") &nbsp- #{day.strBarangay}
+                h7(style="display:inline;") &nbsp- #{day.strBarangay} (#{day.strContactNo})
                 br
                 br
                 table.table.table-striped.box-shadow-mini
@@ -585,7 +585,7 @@ block main
                   span(style='color: red;') Cancel&nbsp
                   | this Chat and it's transaction
                 label(for='desc') Cancel Description:
-                textarea.form-control(rows='5' name='desc' required)
+                textarea.form-control(rows='5' name='desc' maxlength="65500" required)
 
           .modal-footer
             button.btn.btn-danger(type='submit') Submit

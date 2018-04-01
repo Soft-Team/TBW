@@ -107,9 +107,9 @@ block servtarget
               label(for='comment') Request Description:
               if emptyUnrated == 0
                 i
-                  textarea.form-control(rows='5' name='message' disabled) Text Area is Disabled.
+                  textarea.form-control(rows='5' name='message' maxlength="65500" disabled) Text Area is Disabled.
               else
-                textarea.form-control(rows='5' name='message' required)
+                textarea.form-control(rows='5' name='message' maxlength="65500" required)
                 
             .modal-footer
               if emptyUnrated == 0
