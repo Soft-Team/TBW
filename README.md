@@ -23,7 +23,7 @@ Dev Notes:
     db.query("SELECT * FROM tblchat WHERE intChatID= ?",[req.params.chatid], (err, results, fields) => {
     if (err) console.log(err);
     if(!(!results[0])){
-    
+
     }
     /*console.log('-------TEST_RESULTS-------');
     console.log(results);*/

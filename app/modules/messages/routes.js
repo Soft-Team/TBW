@@ -401,40 +401,7 @@ router.post('/transet/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, 
   if(req.transstatus != 'none'){
     res.redirect('/messages/'+req.fparams[0].intChatID);
   }
-  else if(req.valid == 2){
-    var date = req.body.addYear.toString()+'-'+req.body.addMonth+'-'+req.body.addDay;
-    if (req.body.Sampm == 'AM' && req.body.Shours == '12'){
-        req.body.Shours = '00';
-    }
-    if (req.body.Sampm == 'PM' && req.body.Shours != '12'){
-      req.body.Shours = (parseFloat(req.body.Shours) + 12).toString();
-    }
-    var start = req.body.Shours.concat(':'+req.body.Sminutes);
-    var dtm = date.concat(' '+start);
-    var stringquery1 = "INSERT INTO tbltransaction (intTransChatID, intTransPriceType, fltTransPrice, dtmTransScheduled) VALUES (?,?,?,?)";
-    var bodyarray1 = [req.params.chatid, req.body.pricetype, req.body.price, dtm];
-    var stringquery2 = "INSERT INTO tblmessage ( intMessChatID, txtMessage, dtmDateSent, intMessPSeen, intSender ) VALUES ( ?, ?, NOW(), 1, 1)";
-    var bodyarray2 = [req.params.chatid, "-- I have created an invoice, check it out on the upper right corner!"];
-
-    db.beginTransaction(function(err) {
-      if (err) console.log(err);
-      db.query(stringquery1, bodyarray1, (err, results, fields) => {
-        if (err) res.render('messages/views/invalid/nodate', { thisUserTab: req.user, messCount: req.messCount[0].count, messtab: req.mess, messOne: req.mess[0], chattab: req.chat, params: req.params.chatid, transstatus: req.transstatus, todayTab: req.ftodaysched, regSchedTab: req.fregularSched, empty: req.empty, specSchedTab: req.fspecialSched, emptyspecial: req.emptyspecial, workers: req.fworkers, transworkers: req.ftransworkers});
-        else
-          db.query(stringquery2, bodyarray2, function (err,  resultsCount, fields) {
-              if (err) console.log(err);
-              db.commit(function(err) {
-                  if (err) console.log(err);
-                  res.redirect('/messages/'+req.fparams[0].intChatID);
-              });
-          });
-      });
-    });
-  }
-  else if(!req.fworkers[0]){
-    res.redirect('/messages/'+req.fparams[0].intChatID);
-  }
-  else if(req.valid == 3){
+  else{
     var date = req.body.addYear.toString()+'-'+req.body.addMonth+'-'+req.body.addDay;
     if (req.body.Sampm == 'AM' && req.body.Shours == '12'){
         req.body.Shours = '00';
@@ -472,16 +439,24 @@ router.post('/transet/:chatid', flog, messCount, fmess, fchat, fparams, ftrans, 
         else
           db.query(stringquery2, bodyarray2, function (err,  resultsCount, fields) {
               if (err) console.log(err);
-              db.query(stringquery3, bodyarray3, function (err,  resultsCount, fields) {
-                  if (err) console.log(err);
-                  db.query(stringquery4, bodyarray4, function (err,  resultsCount, fields) {
-                      if (err) console.log(err);
-                      db.commit(function(err) {
-                          if (err) console.log(err);
-                          res.redirect('/messages/'+req.fparams[0].intChatID);
-                      });
-                  });
-              });
+              if(req.valid == 2 || !req.fworkers[0]){
+                db.commit(function(err) {
+                    if (err) console.log(err);
+                    res.redirect('/messages/'+req.fparams[0].intChatID);
+                });
+              }
+              else if(req.valid == 3){
+                db.query(stringquery3, bodyarray3, function (err,  resultsCount, fields) {
+                    if (err) console.log(err);
+                    db.query(stringquery4, bodyarray4, function (err,  resultsCount, fields) {
+                        if (err) console.log(err);
+                        db.commit(function(err) {
+                            if (err) console.log(err);
+                            res.redirect('/messages/'+req.fparams[0].intChatID);
+                        });
+                    });
+                });
+              }
           });
       });
     });
@@ -593,13 +568,39 @@ router.post('/transet/accept/:chatid', flog, messCount, fmess, fchat, fparams, f
     res.redirect('/messages/'+req.fparams[0].intChatID);
   }
   else{
-    var stringquery1 = "INSERT INTO tblmessage ( intMessChatID, txtMessage, dtmDateSent, intMessSSeen, intSender ) VALUES ( ?, ?, NOW(), 1, 1)";
-    var bodyarray1 = [req.params.chatid, "-- I have ACCEPTED your offer, transaction is now ONGOING !"];
+    var stringquery1 = "UPDATE tbltransaction SET intTransStatus= 1, dtmTransStarted= NOW() WHERE intTransID= ?";
+    var bodyarray1 = [req.ftrans[0].intTransID];
+    var stringquery2 = "INSERT INTO tblmessage ( intMessChatID, txtMessage, dtmDateSent, intMessSSeen, intSender ) VALUES ( ?, ?, NOW(), 1, 1)";
+    var bodyarray2 = [req.params.chatid, "-- I have ACCEPTED your offer, transaction is now ONGOING !"];
+
+    var stringquery3 = "INSERT INTO tbltransworkers (intTWTransID, intTWWorkerID) VALUES ", bodyarray3 = []
+    for(count=0;count<req.ftransworkers.length;count++){
+      stringquery3 = stringquery3.concat("(?,?)");
+      if(count < req.ftransworkers.length-1){
+        stringquery3 = stringquery3.concat(",");
+      }
+      bodyarray3.push(req.ftrans[0].intTransID);
+      bodyarray3.push(req.ftransworkers[count].intWorkerID);
+    }
+
+    var stringquery4 = "UPDATE tblworker SET intWorkerStatus= 2 WHERE intWorkerTrans= ?";
+    var bodyarray4 = [req.ftrans[0].intTransID];
+    var stringquery5 = "SELECT * FROM tblworker WHERE intWorkerStatus!= 2 AND intWorkBusID= ?";
+    var bodyarray5 = [req.ftrans[0].intAccNo];
+
+    var stringquery6 = "UPDATE tblservice SET intServStatus= 2 WHERE intServAccNo= ?";
+    var bodyarray6 = [req.ftrans[0].intAccNo];
+    var stringquery7 = "SELECT * FROM tblchat INNER JOIN tblservice ON intChatServ= intServID WHERE intServAccNo= ? AND intChatStatus= 1 AND intChatID!= ?;";
+    var bodyarray7 = [req.ftrans[0].intAccNo, req.params.chatid];
+
+    var stringquery8 = "INSERT INTO tblmessage ( intMessChatID, txtMessage, dtmDateSent, intMessPSeen, intSender ) VALUES ";
+    var bodyarray8 = [];
+
     db.beginTransaction(function(err) {
       if (err) console.log(err);
-      db.query("UPDATE tbltransaction SET intTransStatus= 1, dtmTransStarted= NOW() WHERE intTransID= ?", [req.ftrans[0].intTransID], function (err,  resultsCount, fields) {
+      db.query(stringquery1, bodyarray1, function (err,  resultsCount, fields) {
         if (err) console.log(err);
-        db.query(stringquery1, bodyarray1, function (err,  resultsCount, fields) {
+        db.query(stringquery2, bodyarray2, function (err,  results, fields) {
             if (err) console.log(err);
             if(req.ftrans[0].intType == 2 || !req.ftransworkers[0]){
               db.commit(function(err) {
@@ -608,19 +609,49 @@ router.post('/transet/accept/:chatid', flog, messCount, fmess, fchat, fparams, f
               });
             }
             else if(req.ftrans[0].intType == 3){
-              var stringquery2 = "", bodyarray2 = []
-              for(count=0;count<req.ftransworkers.length;count++){
-                stringquery2 = stringquery2.concat("INSERT INTO tbltransworkers (intTWTransID, intTWWorkerID) VALUES (?,?); ");
-                bodyarray2.push(req.ftrans[0].intTransID);
-                bodyarray2.push(req.ftransworkers[count].intWorkerID);
-              }
-              db.query(stringquery2, bodyarray2, function (err,  resultsCount, fields) {
+              db.query(stringquery3, bodyarray3, function (err,  results, fields) {
                   if (err) console.log(err);
-                  db.query("UPDATE tblworker SET intWorkerStatus= 2 WHERE intWorkerTrans= ?", [req.ftrans[0].intTransID], function (err,  resultsCount, fields) {
+                  db.query(stringquery4, bodyarray4, function (err,  results, fields) {
                       if (err) console.log(err);
-                      db.commit(function(err) {
+                      db.query(stringquery5, bodyarray5, function (err,  results, fields) {
                           if (err) console.log(err);
-                          res.redirect('/messages/'+req.fparams[0].intChatID);
+                          if(!results[0]){
+                            db.query(stringquery6, bodyarray6, function (err,  results, fields) {
+                                if (err) console.log(err);
+                                db.query(stringquery7, bodyarray7, function (err,  results, fields) {
+                                    if (err) console.log(err);
+                                    if(!(!results[0])){
+                                      for(count=0;count<results.length;count++){
+                                        stringquery8 = stringquery8.concat("( ?, ?, NOW(), 1, 1)");
+                                        if(count < results.length-1){
+                                          stringquery8 = stringquery8.concat(",");
+                                        }
+                                        bodyarray8.push(results[count].intChatID);
+                                        bodyarray8.push("-- Our Workers are Busy at the moment, please come back once we are available!");
+                                      }
+                                      db.query(stringquery8, bodyarray8, function (err,  results, fields) {
+                                          if (err) console.log(err);
+                                          db.commit(function(err) {
+                                              if (err) console.log(err);
+                                              res.redirect('/messages/'+req.fparams[0].intChatID);
+                                          });
+                                      });
+                                    }
+                                    else{
+                                      db.commit(function(err) {
+                                          if (err) console.log(err);
+                                          res.redirect('/messages/'+req.fparams[0].intChatID);
+                                      });
+                                    }
+                                });
+                            });
+                          }
+                          else{
+                            db.commit(function(err) {
+                                if (err) console.log(err);
+                                res.redirect('/messages/'+req.fparams[0].intChatID);
+                            });
+                          }
                       });
                   });
               });
@@ -631,46 +662,41 @@ router.post('/transet/accept/:chatid', flog, messCount, fmess, fchat, fparams, f
   }
 });
 router.post('/cancel/:chatid', flog, ftrans, fprovider, ftransworkers, (req, res) => {
-  if(req.session.user == req.fprovider[0].intChatSeeker){
-    var stringquery = "INSERT INTO tblmessage ( intMessChatID, txtMessage, dtmDateSent, intMessSSeen, intSender ) VALUES ( ?, ?, NOW(), 1, 2)";
-  }
-  else{
-    var stringquery = "INSERT INTO tblmessage ( intMessChatID, txtMessage, dtmDateSent, intMessPSeen, intSender ) VALUES ( ?, ?, NOW(), 1, 1)";
-  }
-  var bodyarray = [req.params.chatid, "-- has CANCELLED this chat and its transaction."];
-  if(!req.ftrans[0]){
-    db.beginTransaction(function(err) {
-      if (err) console.log(err);
-      db.query(stringquery, bodyarray, function (err,  results, fields) {
-          if (err) console.log(err);
-          db.query("UPDATE tblchat SET intChatStatus= 0 WHERE intChatID= ?",[req.params.chatid], (err, results, fields) => {
-              if (err) console.log(err);
-              db.query("UPDATE tblservice SET intServStatus= 1 WHERE intServAccNo= ? AND intServStatus= 2", [req.fprovider[0].intServAccNo], function (err,  results, fields) {
-                  if (err) console.log(err);
-                  db.query("INSERT INTO tblcancellation (intCancelChatID, dtmCancelDate, txtCancelReason) VALUES (?,NOW(),?)", [req.params.chatid, req.body.desc], function (err,  results, fields) {
-                      if (err) console.log(err);
+  if(req.session.user == req.fprovider[0].intChatSeeker)
+    var stringquery1 = "INSERT INTO tblmessage ( intMessChatID, txtMessage, dtmDateSent, intMessSSeen, intSender ) VALUES ( ?, ?, NOW(), 1, 2)";
+  else
+    var stringquery1 = "INSERT INTO tblmessage ( intMessChatID, txtMessage, dtmDateSent, intMessPSeen, intSender ) VALUES ( ?, ?, NOW(), 1, 1)";
+  var bodyarray1 = [req.params.chatid, "-- has CANCELLED this chat and its transaction."];
+  var stringquery2 = "UPDATE tblchat SET intChatStatus= 0 WHERE intChatID= ?";
+  var bodyarray2 = [req.params.chatid];
+  var stringquery3 = "UPDATE tblservice SET intServStatus= 1 WHERE intServAccNo= ? AND intServStatus= 2";
+  var bodyarray3 = [req.fprovider[0].intServAccNo];
+  var stringquery4 = "INSERT INTO tblcancellation (intCancelChatID, dtmCancelDate, txtCancelReason) VALUES (?,NOW(),?)";
+  var bodyarray4 = [req.params.chatid, req.body.desc];
+
+  var stringquery5 = "UPDATE tbltransaction SET intTransStatus= 3 WHERE intTransID= ?";
+  var bodyarray5 = [req.ftrans[0].intTransID];
+  var stringquery6 = "UPDATE tblworker SET intWorkerTrans= NULL, intWorkerStatus= 1 WHERE intWorkerTrans= ?";
+  var bodyarray6 = [req.ftrans[0].intTransID];
+
+  db.beginTransaction(function(err) {
+    if (err) console.log(err);
+    db.query(stringquery1, bodyarray1, function (err,  results, fields) {
+        if (err) console.log(err);
+        db.query(stringquery2, bodyarray2, (err, results, fields) => {
+            if (err) console.log(err);
+            db.query(stringquery3, bodyarray3, function (err,  results, fields) {
+                if (err) console.log(err);
+                db.query(stringquery4, bodyarray4, function (err,  results, fields) {
+                    if (err) console.log(err);
+                    if(!req.ftrans[0]){
                       db.commit(function(err) {
                           if (err) console.log(err);
                           res.redirect('/messages');
                       });
-                  });
-              });
-          });
-      });
-    });
-  }
-  else{
-    db.beginTransaction(function(err) {
-      if (err) console.log(err);
-      db.query(stringquery, bodyarray, function (err,  results, fields) {
-          if (err) console.log(err);
-          db.query("UPDATE tbltransaction SET intTransStatus= 3 WHERE intTransID= ?",[req.ftrans[0].intTransID], function (err,  results, fields) {
-              if (err) console.log(err);
-              db.query("UPDATE tblchat SET intChatStatus= 0 WHERE intChatID= ?",[req.params.chatid], function (err,  results, fields) {
-                  if (err) console.log(err);
-                  db.query("UPDATE tblservice SET intServStatus= 1 WHERE intServAccNo= ? AND intServStatus= 2", [req.ftrans[0].intServAccNo], function (err,  results, fields) {
-                      if (err) console.log(err);
-                      db.query("INSERT INTO tblcancellation (intCancelChatID, dtmCancelDate, txtCancelReason) VALUES (?,NOW(),?)", [req.params.chatid, req.body.desc], function (err,  results, fields) {
+                    }
+                    else{
+                      db.query(stringquery5, bodyarray5, function (err,  results, fields) {
                           if (err) console.log(err);
                           if(req.ftrans[0].intType == 2 || !req.ftransworkers[0]){
                             db.commit(function(err) {
@@ -679,7 +705,7 @@ router.post('/cancel/:chatid', flog, ftrans, fprovider, ftransworkers, (req, res
                             });
                           }
                           else if(req.ftrans[0].intType == 3){
-                            db.query("UPDATE tblworker SET intWorkerTrans= NULL WHERE intWorkerTrans= ?", [req.ftrans[0].intTransID], function (err,  results, fields) {
+                            db.query(stringquery6, bodyarray6, function (err,  results, fields) {
                                 if (err) console.log(err);
                                 db.commit(function(err) {
                                     if (err) console.log(err);
@@ -688,13 +714,13 @@ router.post('/cancel/:chatid', flog, ftrans, fprovider, ftransworkers, (req, res
                             });
                           }
                       });
-                  });
-              });
-          });
-      });
+                    }
+                });
+            });
+        });
     });
+  });
 
-  }
 });
 
 exports.messages = router;
