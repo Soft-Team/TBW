@@ -12,7 +12,26 @@ block main
                 thead
                     tr  
                         th(scope='col') #
-                        th(scope='col') Username
-                        th(scope='col') Name
-                        th(scope='col') Reason
+                        th(scope='col') Reported User
+                        th(scope='col') Name of Reporter
+                        th(scope='col') Report Category
+                        th(scope='col') Date
                 tbody         
+                tbody
+                each user in resultspug
+                    tr
+                        td(style="padding-right: 20px; padding-bottom: 10px;") #{user.intRepID}
+                        td 
+                            a(href=`/profile/${user.intRepedAccNo}`) #{user.ReportedName}
+                        td #{user.ReporterName}
+                        if user.intRepCategory == '1'
+                            td Communication Abuse
+                        else if user.intRepCategory == '2'
+                            td Scammer/Hacker
+                        else if user.intRepCategory == '3'
+                            td Spammer
+                        td #{user.formatDate}
+                          
+                        td 
+                            a.btn.btn-outline-danger(href=`/admin/Banned/${user.strUserName}`) Ban  
+                            
