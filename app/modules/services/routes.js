@@ -206,7 +206,7 @@ function servStatus(req, res, next){
 }
 function documents(req,res,next){
   /*Documents of Params Service User, Match(params);
-  *(tbldocument)*/
+  *(tbldocument)*(tbluser)*(tblservice)*/
   db.query("SELECT * FROM tbldocument INNER JOIN tbluser ON intDocAccNo= intAccNo INNER JOIN tblservice ON intAccNo= intServAccNo WHERE intServID= ?",[req.params.servid], (err, results, fields) => {
       if (err) console.log(err);
       req.documents= results;
