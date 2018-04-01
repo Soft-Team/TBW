@@ -152,18 +152,37 @@ router.get('/:userid/document/remove/:docid', flog, paramsUser, documents, param
 router.post('/personal/:userid', flog, messCount, paramsUser, documents, paramsReviews, workers, (req, res) => {
   var contact = '0'+req.body.contact.toString();
   if(!req.files.profilepic){
-    db.query("UPDATE tbluser SET strEmail= ?, strContactNo= ?, strCity= ?, strBarangay= ? WHERE intAccNo= ?",[req.body.email, contact, req.body.city, req.body.brngy, req.session.user], function (err,  results, fields) {
+    if(req.valid == 2){
+      var stringquery1 = "UPDATE tbluser SET strEmail= ?, strContactNo= ?, strCity= ?, strBarangay= ? WHERE intAccNo= ?";
+      var bodyarray1 = [req.body.email, contact, req.body.city, req.body.barangay, req.session.user];
+    }
+    else{
+      var stringquery1 = "UPDATE tbluser SET strEmail= ?, strContactNo= ?, strCity= ?, strBarangay= ?, strOwner= ? WHERE intAccNo= ?";
+      var bodyarray1 = [req.body.email, contact, req.body.city, req.body.barangay, req.body.owner, req.session.user]
+    }
+    db.query(stringquery1, bodyarray1, function (err,  results, fields) {
       if (err) console.log(err);
       res.redirect('/profile/'+req.session.user);
     });
+
   }
   else if(req.files.profilepic.mimetype != 'image/jpeg' && req.files.profilepic.mimetype != 'image/png'){
-
     res.render('profile/views/invalid/imgerror',{thisUserTab: req.user, messCount: req.messCount[0].count, paramsUser: req.paramsUser, servempty: req.servempty, documents: req.documents, reviews: req.paramsReviews, workers: req.workers});
   }
   else{
     var newAccNo= prepend(req.session.user);
     var jpeg = 'DP-'+newAccNo.toString().concat('.jpg');
+    if(req.valid == 2){
+      var stringquery1 = "UPDATE tbluser SET strEmail= ?, strContactNo= ?, strCity= ?, strBarangay= ?, strProfilePic= ? WHERE intAccNo= ?";
+      var bodyarray1 = [req.body.email, contact, req.body.city, req.body.barangay, jpeg, req.session.user];
+      console.log('x');
+    }
+    else{
+      var stringquery1 = "UPDATE tbluser SET strEmail= ?, strContactNo= ?, strCity= ?, strBarangay= ?, strOwner= ?, strProfilePic= ? WHERE intAccNo= ?";
+      var bodyarray1 = [req.body.email, contact, req.body.city, req.body.barangay, req.body.owner, jpeg, req.session.user];
+      console.log('y');
+    }
+
     db.beginTransaction(function(err) {
       if (err) console.log(err);
       if(req.user[0].strProfilePic!= 'unknown.jpg'){
@@ -172,7 +191,7 @@ router.post('/personal/:userid', flog, messCount, paramsUser, documents, paramsR
       db.query("SELECT * FROM tbluser WHERE intAccNo= ?",[req.session.user], function (err,  results, fields) {
           if (err) console.log(err);
           req.files.profilepic.mv('public/userImages/profile/'+jpeg, function(err){
-              db.query("UPDATE tbluser SET strEmail= ?, strContactNo= ?, strCity= ?, strBarangay= ?, strProfilePic= ? WHERE intAccNo= ?", [req.body.email, contact, req.body.city, req.body.barangay, jpeg, req.session.user] , (err,results,fields)=>{
+              db.query(stringquery1, bodyarray1, (err,results,fields)=>{
                   if (err) console.log(err);
                   db.commit(function(err) {
                       if (err) console.log(err);
