@@ -87,7 +87,7 @@ function paramsReviews(req,res,next){
 function workers(req,res,next){
   /*Workers of Params User, Match(params);
   *(tbldocument)*/
-  db.query("SELECT * FROM tblworker WHERE intWorkBusID= ?",[req.params.userid], (err, results, fields) => {
+  db.query("SELECT * FROM tblworker WHERE intWorkBusID= ? ORDER BY intWorkerStatus DESC, intWorkerID",[req.params.userid], (err, results, fields) => {
       if (err) console.log(err);
       req.workers= results;
       return next();
@@ -281,4 +281,3 @@ router.post('/reported/:userid', flog, messCount, paramsUser, (req,res) =>{
 })
 
 exports.profile = router;
-  
