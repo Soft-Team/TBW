@@ -88,7 +88,7 @@ block main
                 a#personal-info-tab.nav-item.nav-link.active.selected.text-b(data-toggle='tab', href='#Personal-Info', role='tab', aria-controls='Personal-Info', aria-selected='false' selected='') Personal Info
                 a#services-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Services', role='tab', aria-controls='Services', aria-selected='false') Services
                 a#reviews-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Reviews', role='tab', aria-controls='Reviews', aria-selected='false') Reviews
-                a#portfolio-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Portfolio', role='tab', aria-controls='Portfolio', aria-selected='false') Portfolio
+                
         #nav-tabContent.tab-content
           #Personal-Info.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='personal-info-tab')
             each paramsuser, index in paramsUser
@@ -113,12 +113,12 @@ block main
                   br
                   i.fa.fa-envelope.fa-2x.mb-4
                   span.font2 Email: #{paramsuser.strEmail}
-                .col
+                .col-sm-4
                   each paramsuser,index in paramsUser
                     if index == 0 
                       .row
                         .col
-                        .col.mt-4.mb-4
+                        .col.mt-4.mb-4(style="display: flex;justify-content: center;")
                           if paramsuser.current == 1
                             - maxDocument = 0
                             each doc,index in documents
@@ -195,37 +195,6 @@ block main
                     h1(style='float:right; margin-top: 20px') #{rev.intRating}
               if emptyRev == 1
                 i No reviews to display
-          #Portfolio.tab-pane.fade(role='tabpanel', aria-labelledby='portfolio-tab')
-            .col
-              each paramsuser,index in paramsUser
-                if index == 0 
-                  .row
-                    .col
-                    .col.mt-4.mb-4
-                      if paramsuser.current == 1
-                        - maxDocument = 0
-                        each doc,index in documents
-                          if index > 4
-                            - maxDocument = 1
-                        if maxDocument == 0
-                          button.btn.btn-primary.btn-md.btn(type='button' data-toggle='modal' data-target='#AddDocument' style='padding-top:8px') + Add Document
-                        else
-                          p Maximum number of Documents reached.
-                    .col
-                  .row.mb-4
-                    - empty = 0
-                    each doc in documents
-                      - empty = 1
-                      .img-with-text
-                        if thisuser.intAccNo == paramsuser.intAccNo
-                          a.clo(href='/profile/'+paramsuser.intAccNo+'/document/remove/'+doc.intDocID) X
-                        a(href='/userImages/documents/'+doc.strDocument target="_blank")
-                          img.port(src='/userImages/documents/'+doc.strDocument)
-                    if empty == 0
-                      .col
-                      .col.mt-2
-                        i No documents to display
-                      .col
 
   #reportModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='reportModalTitle' aria-hidden='true')
     .modal-dialog(role='document')

@@ -1095,3 +1095,12 @@ tr:hover .spnTooltip{
     border: 2px solid #00BB27;
     background:#05E177;
 }
+
+#Personal-Info > .col-sm-4 {
+    display: inline-block;
+    width: 1290px !important;
+    padding-top: 10px;
+    padding-left: 20px;
+    text-align: left;
+    max-width:100% !important;
+}
