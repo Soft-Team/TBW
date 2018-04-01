@@ -16,7 +16,6 @@ function ongoing(req,res,next){
       if(!(!results[0])){
         for(count=0;count<results.length;count++){
           var date = results[count].dtmTransScheduled;
-          var formatDate = dateformat(date);
           results[count].time = timeFormat(date);
           results[count].date = date.toDateString("en-US").slice(4, 15);
 
@@ -39,7 +38,6 @@ function ongoingParams(req,res,next){
       if(!(!results[0])){
         for(count=0;count<results.length;count++){
           var date = results[count].dtmTransScheduled;
-          var formatDate = dateformat(date);
           results[count].time = timeFormat(date);
           results[count].date = date.toDateString("en-US").slice(4, 15);
         }
@@ -59,12 +57,10 @@ function finished(req,res,next){
       if(!(!results[0])){
         for(count=0;count<results.length;count++){
           var date = results[count].dtmTransScheduled;
-          var formatDate = dateformat(date);
           results[count].time = timeFormat(date);
           results[count].date = date.toDateString("en-US").slice(4, 15);
 
           var dateEnd = results[count].dtmTransEnded;
-          var formatDateEnd = dateformat(dateEnd);
           results[count].timeEnd = timeFormat(dateEnd);
           results[count].dateEnd = dateEnd.toDateString("en-US").slice(4, 15);
 
@@ -88,7 +84,6 @@ function finishedParams(req,res,next){
       if(!(!results[0])){
         for(count=0;count<results.length;count++){
           var date = results[count].dtmTransScheduled;
-          var formatDate = dateformat(date);
           results[count].time = timeFormat(date);
           results[count].date = date.toDateString("en-US").slice(4, 15);
         }
@@ -169,25 +164,48 @@ router.post('/ongoing/finish/:transid', flog, ongoingParams,  (req, res) => {
       res.redirect('/transactions/ongoing');
     }
     else{
-      var stringquery = "INSERT INTO tblmessage ( intMessChatID, txtMessage, dtmDateSent, intMessPSeen, intSender ) VALUES ( ?, ?, NOW(), 1, 1)";
-      var bodyarray = [req.ongoingParams[0].intChatID, "-- transaction has FINISHED"];
+      var stringquery1 = "INSERT INTO tblmessage ( intMessChatID, txtMessage, dtmDateSent, intMessPSeen, intSender ) VALUES ( ?, ?, NOW(), 1, 1)";
+      var bodyarray1 = [req.ongoingParams[0].intChatID, "-- transaction has FINISHED"];
+      var stringquery2 = "UPDATE tblchat SET intChatStatus= 0 WHERE intChatID= ?";
+      var bodyarray2 = [req.ongoingParams[0].intChatID];
+      var stringquery3 = "UPDATE tblservice SET intServStatus= 1 WHERE intServAccNo= ? AND intServStatus= 2";
+      var bodyarray3 = [req.ongoingParams[0].intServAccNo];
+      var stringquery4 = "UPDATE tbltransaction SET intTransStatus= 2, dtmTransEnded= NOW() WHERE intTransID= ?";
+      var bodyarray4 = [req.params.transid];
+      var stringquery5 = "INSERT INTO tblrating (intRatedAccNo, intRateTransID, intRating, datRateDate, txtRateReview) VALUES (?,?,?,CURDATE(),?)";
+      var bodyarray5 = [req.ongoingParams[0].intChatSeeker, req.ongoingParams[0].intTransID, req.body.rating, req.body.review];
+
+      var stringquery6 = "UPDATE tblworker SET intWorkerTrans= NULL, intWorkerStatus= 1 WHERE intWorkerTrans= ?";
+      var bodyarray6 = [req.params.transid];
+
       db.beginTransaction(function(err) {
           if (err) console.log(err);
-          db.query(stringquery, bodyarray, function (err,  results, fields) {
+          db.query(stringquery1, bodyarray1, function (err,  results, fields) {
               if (err) console.log(err);
-              db.query("UPDATE tblchat SET intChatStatus= 0 WHERE intChatID= ?",[req.ongoingParams[0].intChatID], function (err,  results, fields) {
+              db.query(stringquery2, bodyarray2, function (err,  results, fields) {
                   if (err) console.log(err);
-                  db.query("UPDATE tblservice SET intServStatus= 1 WHERE intServAccNo= ? AND intServStatus= 2", [req.ongoingParams[0].intServAccNo], function (err,  results, fields) {
+                  db.query(stringquery3, bodyarray3, function (err,  results, fields) {
                       if (err) console.log(err);
-                    db.query("UPDATE tbltransaction SET intTransStatus= 2, dtmTransEnded= NOW() WHERE intTransID= ?",[req.params.transid], (err, results, fields) => {
+                    db.query(stringquery4, bodyarray4, (err, results, fields) => {
                         if (err) console.log(err);
-                          db.query("INSERT INTO tblrating (intRatedAccNo, intRateTransID, intRating, datRateDate, txtRateReview) VALUES (?,?,?,CURDATE(),?)", [req.ongoingParams[0].intChatSeeker, req.ongoingParams[0].intTransID, req.body.rating, req.body.review], function (err,  results, fields) {
-                              if (err) console.log(err);
+                        db.query(stringquery5, bodyarray5, function (err,  results, fields) {
+                            if (err) console.log(err);
+                            if(req.valid == 2){
                               db.commit(function(err) {
                                   if (err) console.log(err);
                                   res.redirect('/transactions/finished');
                               });
-                          });
+                            }
+                            else{
+                              db.query(stringquery6, bodyarray6, function (err,  results, fields) {
+                                  if (err) console.log(err);
+                                  db.commit(function(err) {
+                                      if (err) console.log(err);
+                                      res.redirect('/transactions/finished');
+                                  });
+                              });
+                            }
+                        });
                       });
                   });
               });

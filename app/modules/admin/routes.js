@@ -3,6 +3,7 @@ var adminRouter = express.Router();
 var db = require('../../lib/database')();
 var flog = require('../welcome/loggedin');
 var fs = require('fs');
+var dateformat = require('../welcome/dateformat');
 
 function selectedUser(req,res,next){
   /*Selected User, Match(params);
@@ -157,8 +158,17 @@ adminRouter.get('/Declined', flog, (req, res) => {
 adminRouter.get('/ReportedUsers', flog, (req,res) => {
   switch (req.valid) {
     case 1:
-      res.render('admin/views/ReportedUsers');
-      break;
+    db.query(`SELECT tblreport.*, (Reped.strName)AS ReportedName, (Reporter.strName)AS ReporterName FROM dbtrabawho.tblreport INNER JOIN(SELECT * FROM tbluser)Reped ON intRepedAccNo= Reped.intAccNo INNER JOIN(SELECT * FROM tbluser)Reporter ON intReporterAccNo= Reporter.intAccNo;`, (err, results, fields) => {
+      if(err) return console.log(err)
+      console.log(results);
+      if(!(!results[0])){
+        for(count=0;count<results.length;count++){
+          results[count].formatDate = (results[count].datRepDate).toDateString("en-US").slice(4, 15);
+        }
+      }
+      return res.render('admin/views/ReportedUsers', {resultspug: results});
+    });
+    break;
     case 2:
     case 3:
       res.render('welcome/views/invalid/restrict');
