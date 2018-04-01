@@ -113,6 +113,36 @@ block main
                   br
                   i.fa.fa-envelope.fa-2x.mb-4
                   span.font2 Email: #{paramsuser.strEmail}
+                .col
+                  each paramsuser,index in paramsUser
+                    if index == 0 
+                      .row
+                        .col
+                        .col.mt-4.mb-4
+                          if paramsuser.current == 1
+                            - maxDocument = 0
+                            each doc,index in documents
+                              if index > 4
+                                - maxDocument = 1
+                            if maxDocument == 0
+                              button.btn.btn-primary.btn-md.btn(type='button' data-toggle='modal' data-target='#AddDocument' style='padding-top:8px') + Add Document
+                            else
+                              p Maximum number of Documents reached.
+                        .col
+                      .row.mb-4
+                        - empty = 0
+                        each doc in documents
+                          - empty = 1
+                          .img-with-text
+                            if thisuser.intAccNo == paramsuser.intAccNo
+                              a.clo(href='/profile/'+paramsuser.intAccNo+'/document/remove/'+doc.intDocID) X
+                            a(href='/userImages/documents/'+doc.strDocument target="_blank")
+                              img.port(src='/userImages/documents/'+doc.strDocument)
+                        if empty == 0
+                          .col
+                          .col.mt-2
+                            i No documents to display
+                          .col
           #Services.tab-pane.fade(role='tabpanel', aria-labelledby='services-tab')
             center
               .container(style='padding-top: 20px; padding-bottom: 20px')

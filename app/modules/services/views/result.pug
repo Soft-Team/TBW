@@ -87,7 +87,7 @@ block main
       .row(style='padding-left: 45px;')
         each serv in searchServ
           .col(style='margin-left: -5px; margin-bottom: 10px;')
-            span.card(style= 'height: 16.7rem; width: 15rem').border.border-primary.mb-3.box-shadow-mini
+            span.card(style= 'height: auto; width: 15.2rem').border.border-primary.mb-3.box-shadow-mini
               table
                 tbody
                   tr
@@ -103,7 +103,7 @@ block main
                       p(style='float: right; margin-right: 30px; margin-bottom: 0rem') #{serv.sum}
                       p.cenF(style='margin-bottom: 0rem') Provided
 
-              .card-body
+              .card-body(style="margin: 0 auto; width: 241px;")
                 .card-text
                   .f(style='text-align:center; border-top: 1px solid #007BFF') #{serv.prepend}
                   if serv.intStatus == 1
