@@ -52,6 +52,8 @@ html, body {
 /* Content Wrapper */
 .content-wrap {
     overflow: auto;
+    max-height: 674px;
+    min-height: 374px;
 }
 /* Messages Wrapper */
 .content-wrap.messages {
