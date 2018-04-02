@@ -43,7 +43,7 @@ html, body {
 }
 /* Section Wrapper: Conversations - Contacts - Messages - Details */
 .section-wrap {
-    height: 90%;
+    height: 92%;
 }
 /* Header Wrapper */
 .header-wrap {
@@ -51,6 +51,8 @@ html, body {
 }
 /* Content Wrapper */
 .content-wrap {
+  overflow: auto;
+  height: 674px;
 }
 /* Messages Wrapper */
 .content-wrap.messages {
