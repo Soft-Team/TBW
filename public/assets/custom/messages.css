@@ -279,7 +279,7 @@ a.chat-part{
 }
 .chat-is-inactive + .conversation{
   background: #EBEEF1;
-  border-left: 4px solid rgba(0, 0, 0,0);
+  border-left: 4px solid rgba(0, 0, 0,.4);
 }
 
 .chat-has-new + .conversation{
