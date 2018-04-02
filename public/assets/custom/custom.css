@@ -490,10 +490,8 @@ input#contact{
 
 /*Header*/
 .main-head {
-    background: url('/assets/images/jumbo-login.jpg') fixed;
     box-shadow: 0px 0px 10px black;
     position: relative;
-    padding: 50px 0px 190px;
     height: 590px;
     background-position: 50% 0;
     background-size: auto, auto 100%;
@@ -522,10 +520,7 @@ input#contact{
 }
 
 .wrapper-calloums {
-    width: 860px;
     margin: 0 auto;
-    padding-left: 40px;
-    padding-right: 40px;
     overflow: hidden;
 }
 
@@ -588,11 +583,15 @@ header.heads {
     background: url('/assets/images/tbw-small.ico');
 }
 /* Main Welcome Page*/
-.sector{
+.sector-w{
     background-color: #ffffff;
     padding-top: 5em;
-    padding-bottom: 6em;
+}
+
+.sector-b{
+    background-color: #282B30;
     margin-top: 8em;
+    height: 520px;
 }
 
 .sector-container {

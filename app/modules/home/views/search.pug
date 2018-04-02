@@ -4,51 +4,52 @@ block main
   .jumbotron-banner
     center
       h1.text-white Search Results
-  .container(style='margin: 10px 0px 10px 10px; max-width: 1260px !important')
-    h4.margin-L(style="display: inline;") Showing Results for&nbsp
-    h4(style="display: inline; color: #2FAF7A;") #{val} 
-    p
-      .container
-        .card-deck.ml-1
-          .row(style='padding-left: 45px;')
-            each search in searchtab
-              .col(style='margin-left: -5px; margin-bottom: 10px;')
-                span.card(style= 'height: 15.3rem; width: 15rem').border.border-primary.mb-3.box-shadow-mini
-                  table
-                    tbody
-                      tr
-                        td(rowspan='2') 
-                          img(src='/userImages/profile/'+search.strProfilePic, alt='Card image cap', style='height: 8rem; width: 8rem; border-radius: 3px 0px 0px 0px; border-right: 1px solid #007BFF;')
-                        td
-                          img(src='/assets/images/Icons/star.png', alt='star', style='height: 1.5rem; width: 1.5rem; margin-left:20px;')
-                          p(style='float: right; margin-right: 30px; margin-bottom: 0rem') #{search.ave}
-                          p.cenR(style='margin-bottom: 0rem') Rating
-                      tr
-                        td
-                          img(src='/assets/images/Icons/case.png', alt='star', style='height: 1.5rem; width: 1.5rem; margin-left:20px;')
-                          p(style='float: right; margin-right: 30px; margin-bottom: 0rem') #{search.sum}
-                          p.cenF(style='margin-bottom: 0rem') Finished
-    
-                  .card-body
-                    .card-text
-                      .f(style='text-align:center; border-top: 1px solid #007BFF') #{search.prepend}
-                      if search.intStatus == 1
-                        .f.text-white(style='text-align:center; background: #868E96;')
-                          a.link-white(href='/profile/'+search.intAccNo) #{search.strName}
-                      else
-                        .f.text-white(style='text-align:center; background: #2FAF7A;')
-                          a.link-white(href='/profile/'+search.intAccNo) #{search.strName}
-                      .row
-                        .col(style='padding-right:0px; text-align:center; border-right: 1px solid #007BFF;')
-                          if search.cityEllipsis == 0
-                            .f #{search.city}
-                          else
-                            .f(data-toggle="tooltip" data-placement="top" title=search.strCity) #{search.city}
-                        .col(style='padding-left:0px; text-align:center;')
-                          if search.brngyEllipsis == 0
-                            .f #{search.brngy}
-                          else
-                            .f(data-toggle="tooltip" data-placement="top" title=search.strBarangay) #{search.brngy}
-                      a.button.btn-block.btn-secondary(href='/search/'+varServName+'/'+varCity+'/'+varBrngy+'/'+varPricing+'/'+varSorting+'/portfolio/' style='width: 14.9rem; border-radius: 0px 0px 3px 0px; height:40px; text-align: center; padding-top:5px;') Portfolio
+  p
+  h4.margin-L(style="display: inline;") Showing Results for&nbsp
+  h4(style="display: inline; color: #2FAF7A;") #{val}
+  br
+  br
+  .container(style='max-width: 1300px !important')
+    .card-deck.ml-1
+      .row(style='padding-left: 45px;')
+        each search in searchtab
+          .col(style='margin-left: -5px; margin-bottom: 10px;')
+            span.card(style= 'height: 15rem; width: 15rem').border.border-primary.mb-3.box-shadow-mini
+              table
+                tbody
+                  tr
+                    td(rowspan='2') 
+                      img(src='/userImages/profile/'+search.strProfilePic, alt='Card image cap', style='height: 8rem; width: 8rem; border-radius: 3px 0px 0px 0px; border-right: 1px solid #007BFF;')
+                    td
+                      img(src='/assets/images/Icons/star.png', alt='star', style='height: 1.5rem; width: 1.5rem; margin-left:20px;')
+                      p(style='float: right; margin-right: 30px; margin-bottom: 0rem') #{search.ave}
+                      p.cenR(style='margin-bottom: 0rem') Rating
+                  tr
+                    td
+                      img(src='/assets/images/Icons/case.png', alt='star', style='height: 1.5rem; width: 1.5rem; margin-left:20px;')
+                      p(style='float: right; margin-right: 30px; margin-bottom: 0rem') #{search.sum}
+                      p.cenF(style='margin-bottom: 0rem') Finished
 
-      
+              .card-body
+                .card-text
+                  .f(style='text-align:center; border-top: 1px solid #007BFF') #{search.prepend}
+                  if search.intStatus == 1
+                    .f.text-white(style='text-align:center; background: #868E96;')
+                      a.link-white(href='/profile/'+search.intAccNo) #{search.strName}
+                  else
+                    .f.text-white(style='text-align:center; background: #2FAF7A;')
+                      a.link-white(href='/profile/'+search.intAccNo) #{search.strName}
+                  .row
+                    .col(style='padding-right:0px; text-align:center; border-right: 1px solid #007BFF;')
+                      if search.cityEllipsis == 0
+                        .f #{search.city}
+                      else
+                        .f(data-toggle="tooltip" data-placement="top" title=search.strCity) #{search.city}
+                    .col(style='padding-left:0px; text-align:center;')
+                      if search.brngyEllipsis == 0
+                        .f #{search.brngy}
+                      else
+                        .f(data-toggle="tooltip" data-placement="top" title=search.strBarangay) #{search.brngy}
+                  a.button.btn-block.btn-primary(href='/search/'+varServName+'/'+varCity+'/'+varBrngy+'/'+varPricing+'/'+varSorting+'/portfolio/' style='width: 14.9rem; border-radius: 0px 0px 3px 0px; height:35px; text-align: center; padding-top:5px;') Portfolio
+
+  
