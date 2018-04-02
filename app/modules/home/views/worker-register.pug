@@ -1,0 +1,37 @@
+extends ../../../templates/master.pug
+
+block content
+    .container-fluid
+    .row.mh-100vh
+        #bg-block.col-lg-6.d-flex.align-items-end(style='background-image:url("assets/img/Img3.png");background-size:cover;background-position:center center;')
+        p.ml-auto.small.text-dark.mb-2
+            br
+        #login-block.col-10.col-sm-8.col-md-6.col-lg-6.offset-1.offset-sm-2.offset-md-3.offset-lg-0.align-self-center.d-lg-flex.align-items-lg-center.align-self-lg-stretch.bg-white.p-5.rounded.rounded-lg-0.my-5.my-lg-0
+        .m-auto.w-lg-75.w-xl-55
+            h2.font-weight-light.mb-5
+            img(src='assets/img/usg-green.png')
+            |  Ultra Super Green
+            form
+            .form-group
+                label.text-secondary Email
+                input.form-control(type='text', required='', pattern='[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,15}$', inputmode='email')
+            .form-group
+                label.text-secondary Password
+                input.form-control(type='password', required='')
+            .form-group
+                label.text-secondary Confirm Password
+                input.form-control(type='password', required='')
+            .form-group
+                label.text-secondary Username
+                input.form-control(type='text', required='', pattern='[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,15}$', inputmode='email')
+            .form-group
+                label.text-secondary Date of Birth
+                input.form-control(type='date', placeholder='yyyy-mm-d')
+            .form-check
+                label.text-secondary
+                input.form-check-input(type='checkbox')
+                | I agree to the terms and conditions
+            button.btn.btn-usg.mt-2(type='submit') Sign Up
+            p.mt-3.mb-0.small
+            | Already have an account?&nbsp
+            a.text-usg(href='#') Log In
