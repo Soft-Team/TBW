@@ -274,7 +274,7 @@ router.post('/manage-workers/:userid', flog, messCount, paramsUser, (req, res) =
 });
 
 router.post('/reported/:userid', flog, messCount, paramsUser, (req,res) =>{
-  db.query("INSERT INTO tblreport (intRepedAccNo, intReporterAccNo, intRepCategory, txtRepDesc, datRepDate) VALUES (?,?,?,?,CURDATE())",[req.params.userid, req.session.user, req.body.customRadio, req.body.customTextArea], function (err, results, fields){
+  db.query("INSERT INTO tblreport (intRepedAccNo, intReporterAccNo, intRepCategory, txtRepDesc, datRepDate, intRepStatus) VALUES (?,?,?,?,CURDATE(),1)",[req.params.userid, req.session.user, req.body.customRadio, req.body.customTextArea], function (err, results, fields){
     if (err) console.log(err);
     res.redirect('/profile/'+req.session.user);
   })

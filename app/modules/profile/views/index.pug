@@ -225,7 +225,7 @@ block main
                   .col
                     .form-group
                       label(for='exampleFormControlTextarea1') Others Specify Here..
-                      textarea#exampleFormControlTextarea1.form-control(rows='3', name='customTextArea', value = 'Others')
+                      textarea#exampleFormControlTextarea1.form-control(rows='3', name='customTextArea', value = 'Others' required='')
 
               .modal-footer
                 button.btn.btn-primary(type='submit') Submit
@@ -343,7 +343,7 @@ block main
                         else
                           form(method='POST' action='/profile/validid/'+thisuser.intAccNo enctype='multipart/form-data')
                             .row
-                              .col-4
+                              .col-4 
                                 p.mt-1.ml-3
                                   b Valid ID
                               .col-8

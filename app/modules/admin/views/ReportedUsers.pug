@@ -15,8 +15,9 @@ block main
                         th(scope='col') Reported User
                         th(scope='col') Name of Reporter
                         th(scope='col') Report Category
-                        th(scope='col') Date
-                        th(scope='col') Actions
+                        th(scope='col') Report Date
+                        th(scope='col') &nbsp
+                        th(scope='col') &nbsp
                 tbody         
                 tbody
                 each user in resultspug
@@ -31,8 +32,27 @@ block main
                             td Scammer/Hacker
                         else if user.intRepCategory == '3'
                             td Spammer
+                        else if user.intRepCategory == '4'
+                            td Others(View Report Description)
                         td #{user.formatDate}
                           
                         td 
-                            a.btn.btn-outline-danger(href=`/admin/Banned/${user.strUserName}`) Ban  
+                            a.btn.btn-outline-danger(href=`/admin/Banned/${user.ReportedUserName}`) Ban  
+                        td
+                            a.btn.btn-outline-primary(data-toggle='modal', data-target='#reportdescription') View Description
+
+                            #reportdescription.modal.fade(tabindex='-1', role='dialog', aria-labelledby='repdesc', aria-hidden='true')
+                                each user in resultspug
+                                    .modal-dialog.modal-dialog-centered(role='document')
+                                        .modal-content
+                                            .modal-header
+                                                h5#exampleModalLongTitle.modal-title Report Description
+                                                button.close(type='button', data-dismiss='modal', aria-label='Close')
+                                                span(aria-hidden='true') ×
+                                            .modal-body
+                                                center  #{user.txtRepDesc}
+                                            .modal-footer
+                                                button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+                        
+
                             
