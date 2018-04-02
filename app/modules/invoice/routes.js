@@ -38,6 +38,9 @@ function fworkers(req,res,next){
 
 function render(req,res){
   switch(req.valid){
+    case 0:
+      res.render('home/views/worker');
+      break;
     case 1:
       res.render('invoice/views/index', {invoicetab: req.finvoice, workers: req.fworkers});
       break;
