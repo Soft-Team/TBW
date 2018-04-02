@@ -131,7 +131,7 @@ block main
       // Contacts & Conversations
       .col-sm-3.panel-wrap(style="border-right: 1px solid #DDDDDD")
         // Left Menu / Conversation List
-        .col-sm-12.section-wrap
+        .col-sm-12.section-wrap(style="width: 316px;")
           // Header
           .row.header-wrap
             .chat-header.col-sm-12
@@ -145,11 +145,18 @@ block main
                 .chat-is-active
               else
                 .chat-is-inactive
-              if chat.intChatID != messOne.intChatID
+                  
+              if chat.intChatID == messOne.intChatID
+                if chat.intChatStatus == 1
+                  .chat-is-selected-active
+                else
+                  .chat-is-selected-inactive
+              else
                 if thisuser.intAccNo == chat.intServAccNo && chat.intMessPSeen == 0
                   .chat-has-new
                 if thisuser.intAccNo == chat.intChatSeeker && chat.intMessSSeen == 0
                   .chat-has-new
+                    
               .conversation.btn.pt-3.pb-1
                   .media-body
                     .display.chat-part.mb-4(role="gridcell")
