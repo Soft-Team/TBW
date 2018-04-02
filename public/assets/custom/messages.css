@@ -43,7 +43,7 @@ html, body {
 }
 /* Section Wrapper: Conversations - Contacts - Messages - Details */
 .section-wrap {
-    height: 100%;
+    height: 90%;
 }
 /* Header Wrapper */
 .header-wrap {
@@ -51,7 +51,6 @@ html, body {
 }
 /* Content Wrapper */
 .content-wrap {
-    overflow: auto;
 }
 /* Messages Wrapper */
 .content-wrap.messages {
@@ -284,5 +283,5 @@ a.chat-part{
 
 .chat-has-new + .conversation{
   /*background: rgba(5, 225, 119,.7);*/
-  border-left: 4px solid rgba(5, 225, 119,.7);
+  border-left: 4px solid #05E177;
 }
