@@ -76,7 +76,7 @@
 				return this.options.buttonBefore;
 			}
 		},
-		
+
 		input : function(value) {
 			if (value === true) {
 				if (!this.options.input) {
@@ -117,7 +117,7 @@
 				return this.options.size;
 			}
 		},
-		
+
 		placeholder : function(value) {
 			if (value !== undefined) {
 				this.options.placeholder = value;
@@ -125,7 +125,7 @@
 			} else {
 				return this.options.placeholder;
 			}
-		},		
+		},
 
 		text : function(value) {
 			if (value !== undefined) {
@@ -135,7 +135,7 @@
 				return this.options.text;
 			}
 		},
-		
+
 		btnClass : function(value) {
 			if (value !== undefined) {
 				this.options.btnClass = value;
@@ -208,16 +208,16 @@
 			} else {
 				this.$elementFilestyle.find(':text').val('');
 			}
-			
+
 			return files;
 		},
 
 		constructor : function() {
-			var _self = this, 
-				html = '', 
-				id = _self.$element.attr('id'), 
-				files = [], 
-				btn = '', 
+			var _self = this,
+				html = '',
+				id = _self.$element.attr('id'),
+				files = [],
+				btn = '',
 				$label;
 
 			if (id === '' || !id) {
@@ -228,14 +228,14 @@
                 nextId++;
 			}
 
-			btn = '<span class="group-span-filestyle ' + (_self.options.input ? 'input-group-btn' : '') + '">' + 
+			btn = '<span class="group-span-filestyle ' + (_self.options.input ? 'input-group-btn' : '') + '">' +
 			  '<label for="' + id + '" style="margin-bottom: 0;" class="btn ' + _self.options.btnClass + ' ' +
-			(_self.options.size == 'nr' ? '' : 'btn-' + _self.options.size) + '" ' + 
-			(_self.options.disabled || _self.$element.attr('disabled') ? ' disabled="true"' : '') + '>' + 
-			_self.htmlIcon() + '<span class="buttonText">' + _self.options.text + '</span>' + 
-			  '</label>' + 
+			(_self.options.size == 'nr' ? '' : 'btn-' + _self.options.size) + '" ' +
+			(_self.options.disabled || _self.$element.attr('disabled') ? ' disabled="true"' : '') + '>' +
+			_self.htmlIcon() + '<span class="buttonText">' + _self.options.text + '</span>' +
+			  '</label>' +
 			  '</span>';
-			
+
 			html = _self.options.buttonBefore ? btn + _self.htmlInput() : _self.htmlInput() + btn;
 			_self.$elementFilestyle = $('<div class="bootstrap-filestyle input-group"><div name="filedrag"></div>' + html + '</div>');
 			_self.$elementFilestyle.find('.group-span-filestyle').attr('tabindex', "0").keypress(function(e) {
@@ -349,7 +349,7 @@
 								}
 
 				        		$('[name="filedrag"]').css('z-index', '-1');
-				            }   
+				            }
 				        }
 				    }
 				);
@@ -384,7 +384,7 @@
 	$.fn.filestyle.defaults = {
 		'text' : 'Choose file',
 		'htmlIcon' : '',
-		'btnClass' : 'btn-secondary',
+		'btnClass' : 'btn-primary',
 		'size' : 'nr',
 		'input' : true,
 		'badge' : false,

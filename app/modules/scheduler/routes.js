@@ -334,6 +334,9 @@ function ongoingtrans(req, res, next){
 
 function render(req,res){
   switch (req.valid) {
+    case 0:
+      res.render('home/views/worker');
+      break;
     case 1:
       res.render('welcome/views/invalid/adm-restrict');
       break;
@@ -356,6 +359,9 @@ function render(req,res){
 }
 function editRWHRender(req,res){
   switch (req.valid) {
+    case 0:
+      res.render('home/views/worker');
+      break;
     case 1:
       res.render('welcome/views/invalid/adm-restrict');
       break;
@@ -383,6 +389,9 @@ function editRWHRender(req,res){
 }
 function delRWHRender(req,res){
   switch (req.valid) {
+    case 0:
+      res.render('home/views/worker');
+      break;
     case 1:
       res.render('welcome/views/invalid/adm-restrict');
       break;
@@ -401,6 +410,9 @@ function delRWHRender(req,res){
 }
 function editSWHRender(req,res){
   switch (req.valid) {
+    case 0:
+      res.render('home/views/worker');
+      break;
     case 1:
       res.render('welcome/views/invalid/adm-restrict');
       break;
@@ -428,6 +440,9 @@ function editSWHRender(req,res){
 }
 function delSWHRender(req,res){
   switch (req.valid) {
+    case 0:
+      res.render('home/views/worker');
+      break;
     case 1:
       res.render('welcome/views/invalid/adm-restrict');
       break;

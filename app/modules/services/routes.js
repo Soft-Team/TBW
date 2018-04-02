@@ -249,6 +249,9 @@ function unrated(req,res,next){
 
 function render(req,res){
   switch (req.valid) {
+    case 0:
+      res.render('home/views/worker');
+      break;
     case 1:
       res.render('welcome/views/invalid/adm-restrict');
       break;
@@ -260,6 +263,9 @@ function render(req,res){
 }
 function servNameRender(req,res){
   switch (req.valid) {
+    case 0:
+      res.render('home/views/worker');
+      break;
     case 1:
       res.render('welcome/views/invalid/adm-restrict');
       break;
@@ -272,6 +278,9 @@ function servNameRender(req,res){
 function servRender(req,res){
   var searchparams = [req.params.servName, req.params.city, req.params.brngy, req.params.pricing, req.params.sorting];
   switch (req.valid) {
+    case 0:
+      res.render('home/views/worker');
+      break;
     case 1:
       res.render('welcome/views/invalid/adm-restrict');
       break;
@@ -355,6 +364,9 @@ function servRender(req,res){
 function servReqRender(req,res){
   var searchparams = [req.params.servName, req.params.city, req.params.brngy, req.params.pricing, req.params.sorting];
   switch (req.valid) {
+    case 0:
+      res.render('home/views/worker');
+      break;
     case 1:
       res.render('welcome/views/invalid/adm-restrict');
       break;
@@ -443,6 +455,9 @@ function servReqRender(req,res){
 function portfolioRender(req,res){
   var searchparams = [req.params.servName, req.params.city, req.params.brngy, req.params.pricing, req.params.sorting];
   switch (req.valid) {
+    case 0:
+      res.render('home/views/worker');
+      break;
     case 1:
       res.render('welcome/views/invalid/adm-restrict');
       break;

@@ -8,6 +8,7 @@ var timeFormat = require('../welcome/timeFormat');
 var dateformat = require('../welcome/dateformat');
 var numberFormat = require('../welcome/numberFormat');
 var ellipsis = require('../welcome/ellipsis');
+var makeid = require('../welcome/makeid');
 
 function unrated(req,res,next){
   /*Unrated Finished Transactions of Current User as Seeker, Match(session);
@@ -97,6 +98,9 @@ function documents(req,res,next){
 
 function render(req,res){
   switch (req.valid) {
+    case 0:
+      res.render('home/views/worker');
+      break;
     case 1:
       res.render('welcome/views/invalid/adm-restrict');
       break;
@@ -113,6 +117,9 @@ function render(req,res){
 }
 function guideRender(req,res){
   switch (req.valid) {
+    case 0:
+      res.render('home/views/worker');
+      break;
     case 1:
       res.render('welcome/views/invalid/adm-restrict');
       break;
@@ -124,6 +131,9 @@ function guideRender(req,res){
 }
 function helpRender(req,res){
   switch (req.valid) {
+    case 0:
+      res.render('home/views/worker');
+      break;
     case 1:
       res.render('welcome/views/invalid/adm-restrict');
       break;
@@ -135,6 +145,9 @@ function helpRender(req,res){
 }
 function aboutRender(req,res){
   switch (req.valid) {
+    case 0:
+      res.render('home/views/worker');
+      break;
     case 1:
       res.render('welcome/views/invalid/adm-restrict');
       break;
@@ -146,6 +159,9 @@ function aboutRender(req,res){
 }
 function teamRender(req,res){
   switch (req.valid) {
+    case 0:
+      res.render('home/views/worker');
+      break;
     case 1:
       res.render('welcome/views/invalid/adm-restrict');
       break;
@@ -157,6 +173,9 @@ function teamRender(req,res){
 }
 function searchRender(req,res){
   switch (req.valid) {
+    case 0:
+      res.render('home/views/worker');
+      break;
     case 1:
       res.render('welcome/views/invalid/adm-restrict');
       break;
@@ -171,6 +190,9 @@ function searchRender(req,res){
 }
 function portRender(req,res){
   switch (req.valid) {
+    case 0:
+      res.render('home/views/worker');
+      break;
     case 1:
       res.render('welcome/views/invalid/adm-restrict');
       break;
@@ -194,6 +216,28 @@ router.get('/search/:searchname/:userid', flog, messCount, search, documents, po
 
 router.post('/search', flog, (req, res) => {
   res.redirect('/home/search/'+req.body.search);
+});
+router.post('/worker', flog, (req, res) => {
+  if(req.files.workid1.mimetype != 'image/jpeg' && req.files.workid1.mimetype != 'image/png'){
+    res.render('home/views/worker');
+  }
+  if(req.files.workid2.mimetype != 'image/jpeg' && req.files.workid2.mimetype != 'image/png'){
+    res.render('home/views/worker');
+  }
+
+  var newAccNo= prepend(req.session.user);
+  var id1 = makeid(25);
+  var id2 = makeid(25);
+  jpeg1 = 'WID-'+newAccNo.toString()+'-'+id1.concat('.jpg');
+  jpeg2 = 'WID-'+newAccNo.toString()+'-'+id2.concat('.jpg');
+  req.files.workid1.mv('public/userImages/workerids/'+jpeg1, function(err) {
+    req.files.workid2.mv('public/userImages/workerids/'+jpeg2, function(err) {
+      db.query("INSERT INTO tblworker (intWorkBusID, strWorker, strWorkerID) VALUES (?,?,?), (?,?,?)",[req.session.user, req.body.worker1, jpeg1, req.session.user, req.body.worker2, jpeg2], (err, results, fields) => {
+        if (err) console.log(err);
+        res.redirect('/home');
+      });
+    });
+  });
 });
 
 exports.home = router;

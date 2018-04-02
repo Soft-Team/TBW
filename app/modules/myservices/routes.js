@@ -67,6 +67,9 @@ function servOngoing(req, res, next){
 
 function render(req,res){
   switch (req.valid) {
+    case 0:
+      res.render('home/views/worker');
+      break;
     case 1:
       res.render('welcome/views/invalid/adm-restrict');
       break;
@@ -81,6 +84,9 @@ function render(req,res){
 }
 function successRender(req,res){
   switch (req.valid) {
+    case 0:
+      res.render('home/views/worker');
+      break;
     case 1:
       res.render('welcome/views/invalid/adm-restrict');
       break;
@@ -96,6 +102,9 @@ function successRender(req,res){
 }
 function editRender(req,res){
   switch (req.valid) {
+    case 0:
+      res.render('home/views/worker');
+      break;
     case 1:
       res.render('welcome/views/invalid/adm-restrict');
       break;

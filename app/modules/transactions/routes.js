@@ -95,6 +95,9 @@ function finishedParams(req,res,next){
 
 function ongoingRender(req,res){
   switch (req.valid) {
+    case 0:
+      res.render('home/views/worker');
+      break;
     case 1:
       res.render('welcome/views/invalid/adm-restrict');
       break;
@@ -106,6 +109,9 @@ function ongoingRender(req,res){
 }
 function finishedRender(req,res){
   switch (req.valid) {
+    case 0:
+      res.render('home/views/worker');
+      break;
     case 1:
       res.render('welcome/views/invalid/adm-restrict');
       break;
@@ -117,6 +123,9 @@ function finishedRender(req,res){
 }
 function logRender(req,res){
   switch (req.valid) {
+    case 0:
+      res.render('home/views/worker');
+      break;
     case 1:
       res.render('welcome/views/invalid/adm-restrict');
       break;
@@ -128,6 +137,9 @@ function logRender(req,res){
 }
 function finRender(req,res){
   switch (req.valid) {
+    case 0:
+      res.render('home/views/worker');
+      break;
     case 1:
       res.render('welcome/views/invalid/adm-restrict');
       break;
@@ -139,6 +151,9 @@ function finRender(req,res){
 }
 function raterevRender(req,res){
   switch (req.valid) {
+    case 0:
+      res.render('home/views/worker');
+      break;
     case 1:
       res.render('welcome/views/invalid/adm-restrict');
       break;
