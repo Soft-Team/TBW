@@ -264,3 +264,25 @@ a.chat-part{
 #mess > span{
   color: black;
 }
+
+.chat-is-selected-active + .conversation{
+  background: rgba(113, 193, 255,0.4);
+  border-left: 4px solid #3498DB;
+}
+.chat-is-selected-inactive + .conversation{
+  background: rgba(113, 193, 255,0.4);
+  border-left: 4px solid rgba(0, 0, 0,.4);
+}
+
+.chat-is-active + .conversation{
+  border-left: 4px solid #3498DB;
+}
+.chat-is-inactive + .conversation{
+  background: #EBEEF1;
+  border-left: 4px solid rgba(0, 0, 0,0);
+}
+
+.chat-has-new + .conversation{
+  /*background: rgba(5, 225, 119,.7);*/
+  border-left: 4px solid rgba(5, 225, 119,.7);
+}

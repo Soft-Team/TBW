@@ -49,7 +49,18 @@ block main
                       if search.brngyEllipsis == 0
                         .f #{search.brngy}
                       else
-                        .f(data-toggle="tooltip" data-placement="top" title=search.strBarangay) #{search.brngy}
-                  a.button.btn-block.btn-primary(href='/search/'+varServName+'/'+varCity+'/'+varBrngy+'/'+varPricing+'/'+varSorting+'/portfolio/' style='width: 14.9rem; border-radius: 0px 0px 3px 0px; height:35px; text-align: center; padding-top:5px;') Portfolio
-
-  
+                        .f.text-white(style='text-align:center; background: #2FAF7A;')
+                          a.link-white(href='/profile/'+search.intAccNo) #{search.strName}
+                      .row
+                        .col(style='padding-right:0px; text-align:center; border-right: 1px solid #007BFF;')
+                          if search.cityEllipsis == 0
+                            .f #{search.city}
+                          else
+                            .f(data-toggle="tooltip" data-placement="top" title=search.strCity) #{search.city}
+                        .col(style='padding-left:0px; text-align:center;')
+                          if search.brngyEllipsis == 0
+                            .f #{search.brngy}
+                          else
+                            .f(data-toggle="tooltip" data-placement="top" title=search.strBarangay) #{search.brngy}
+                      a.button.btn-block.btn-primary(href='/home/search/'+paramsSearch+'/'+search.intAccNo style='width: 14.9rem; border-radius: 0px 0px 3px 0px; height:40px; text-align: center; padding-top:5px;') Portfolio
+  block search
