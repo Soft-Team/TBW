@@ -597,7 +597,7 @@ router.post('/transet/accept/:chatid', flog, messCount, fmess, fchat, fparams, f
     var bodyarray8 = [];
     var stringquery9 = "UPDATE tblchat SET intChatStatus= 0 WHERE ";//
     var bodyarray9 = [];
-    var stringquery10 = "INSERT INTO tblcancellation (intCancelChatID, dtmCancelDate, txtCancelReason) VALUES ";//
+    var stringquery10 = "INSERT INTO tblcancellation (intCancelChatID, intCancelAccNo, dtmCancelDate, txtCancelReason) VALUES ";//
     var bodyarray10 = [];
     var stringquery11 = "UPDATE tbltransaction SET intTransStatus= 3 WHERE ";//
     var bodyarray11 = [];
@@ -630,7 +630,7 @@ router.post('/transet/accept/:chatid', flog, messCount, fmess, fchat, fparams, f
                                       for(count=0;count<results.length;count++){
                                         stringquery8 = stringquery8.concat("( ?, ?, NOW(), 1, 1)");
                                         stringquery9 = stringquery9.concat("intChatID= ?");
-                                        stringquery10 = stringquery10.concat("(?,NOW(),?)");
+                                        stringquery10 = stringquery10.concat("(?,?,NOW(),?)");
                                         if(!(!results[count].intTransID)){
                                           stringquery11 = stringquery11.concat("intTransID= ?");
                                           bodyarray11.push(results[count].intTransID);
@@ -647,6 +647,7 @@ router.post('/transet/accept/:chatid', flog, messCount, fmess, fchat, fparams, f
                                         bodyarray8.push("-- Our Workers are Busy at the moment, please come back once we are available!");
                                         bodyarray9.push(results[count].intChatID);
                                         bodyarray10.push(results[count].intChatID);
+                                        bodyarray10.push(req.session.user);
                                         bodyarray10.push("-- Our Workers are Busy at the moment");
 
                                       }
@@ -712,14 +713,16 @@ router.post('/cancel/:chatid', flog, ftrans, fprovider, ftransworkers, (req, res
   else
     var stringquery3 = "SELECT * FROM tblservice WHERE intServAccNo= ?"; /*Filler Query*/
   var bodyarray3 = [req.fprovider[0].intServAccNo];
-  var stringquery4 = "INSERT INTO tblcancellation (intCancelChatID, dtmCancelDate, txtCancelReason) VALUES (?,NOW(),?)";//
-  var bodyarray4 = [req.params.chatid, req.body.desc];
+  var stringquery4 = "INSERT INTO tblcancellation (intCancelChatID, intCancelAccNo, dtmCancelDate, txtCancelReason) VALUES (?,?,NOW(),?)";//
+  var bodyarray4 = [req.params.chatid, req.session.user, req.body.desc];
 
-  var stringquery5 = "UPDATE tbltransaction SET intTransStatus= 3 WHERE intTransID= ?";//
-  var bodyarray5 = [req.ftrans[0].intTransID];
+  if(!(!req.ftrans[0])){
+    var stringquery5 = "UPDATE tbltransaction SET intTransStatus= 3 WHERE intTransID= ?";//
+    var bodyarray5 = [req.ftrans[0].intTransID];
 
-  var stringquery6 = "UPDATE tblworker SET intWorkerTrans= NULL, intWorkerStatus= 1 WHERE intWorkerTrans= ?";
-  var bodyarray6 = [req.ftrans[0].intTransID];
+    var stringquery6 = "UPDATE tblworker SET intWorkerTrans= NULL, intWorkerStatus= 1 WHERE intWorkerTrans= ?";
+    var bodyarray6 = [req.ftrans[0].intTransID];
+  }
 
   db.beginTransaction(function(err) {
     if (err) console.log(err);
