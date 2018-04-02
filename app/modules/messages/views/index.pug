@@ -131,13 +131,13 @@ block main
       // Contacts & Conversations
       .col-sm-3.panel-wrap(style="border-right: 1px solid #DDDDDD")
         // Left Menu / Conversation List
-        .col-sm-12.section-wrap(style="width: 316px;")
+        .row.header-wrap(style="width: 316px; margin: 0px; height: 67px;")
+          .chat-header.col-sm-12
+            .input-group
+              button.btn.btn-nav.btn-block(type='button' data-toggle='modal' data-target='#ServTag') View Services
+                i.fa(aria-hidden='true')
+        .col-sm-12.section-wrap(style="width: 316px; overflow: auto")
           // Header
-          .row.header-wrap
-            .chat-header.col-sm-12
-              .input-group
-                button.btn.btn-nav.btn-block(type='button' data-toggle='modal' data-target='#ServTag') View Services
-                  i.fa(aria-hidden='true')
           // Conversations
           .row.content-wrap
             each chat in chattab
@@ -190,13 +190,13 @@ block main
       // Messages & Info
       .col-sm-9.panel-wrap
         // Main Content / Message List
-        #Messages.col-sm-9.section-wrap
+        #Messages.col-sm-9.section-wrap(style="height: 100%;")
           // Header
           each user in thisUserTab
             .row.header-wrap
-              .chat-header.col-sm-12
-                .row.mt-3.pt-2
-                  .col
+              .chat-header.col-sm-12(style="height: 67px;")
+                .row.pt-2(style="margin-top: 10px !important;")
+                  .col(style="padding-top: 3px;")
                     h4(style='color:#374850') ##{messOne.strServName}
                       if messOne.sendType == 1
                         span(style='color: white;') &nbsp#{messOne.Seeker}
@@ -222,9 +222,9 @@ block main
                     if transstatus != 2 && transstatus != 3 && messOne.intChatStatus != 0
                       button.btn.btn-danger.btn-md.btn.ml-2(type='button' data-toggle='modal' data-target='#Cancel') Cancel
             // Messages
-            .row.content-wrap.messages
+            .row.content-wrap.messages(style="overflow: auto;")
               .col
-                #output
+                #output(style="height: 100%;")
                   each mess in messtab
                     .msg
                       .media-body
