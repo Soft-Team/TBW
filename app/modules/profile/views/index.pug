@@ -15,9 +15,9 @@ block main
         var workid = button.data('workid')
 
         var modal = $(this)
-        modal.find('.modal-body input').val(workid)
-        modal.find('.modal-body span').text(workername)
-
+        modal.find('.modal-body #wid').val(workid)
+        modal.find('.modal-body #wname').text(workername)
+        
         var sel = document.getElementById('sel');
         var opts = sel.options;
         for (var opt, j = 0; opt = opts[j]; j++) {
@@ -26,6 +26,18 @@ block main
             break;
           }
         }
+      })
+      
+      $('#WorkerPic').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget)
+        var workername = button.data('workername')
+        var pic = button.data('pic')
+        var workid = button.data('workid')
+        
+        var modal = $(this)
+        modal.find('.modal-header h5').text(workername)
+        $(".modal-body #workerImage").attr("src", pic);
+
       })
 
       $(document).ready(function () {
@@ -225,7 +237,7 @@ block main
                   .col
                     .form-group
                       label(for='exampleFormControlTextarea1') Others Specify Here..
-                      textarea#exampleFormControlTextarea1.form-control(rows='3', name='customTextArea', value = 'Others')
+                      textarea#exampleFormControlTextarea1.form-control(rows='3', name='customTextArea', value = 'Others' required='')
 
               .modal-footer
                 button.btn.btn-primary(type='submit') Submit
@@ -343,7 +355,7 @@ block main
                         else
                           form(method='POST' action='/profile/validid/'+thisuser.intAccNo enctype='multipart/form-data')
                             .row
-                              .col-4
+                              .col-4 
                                 p.mt-1.ml-3
                                   b Valid ID
                               .col-8
@@ -427,33 +439,44 @@ block main
                           tr
                             th.text-white(scope='col') Name
                             th.text-white(scope='col') Status
-                            th.text-white(scope='col') Edit
+                            th.text-white(scope='col') Actions
                         tbody
                           - emptyworker = 1
                           each work in workers
                             - emptyworker = 0
                             tr
                               td #{work.strWorker}
-
+                              - WorkPic = '/userImages/workerids/'+work.strWorkerID
+                              - NameID = work.strWorker+"'s ID"
                               if work.intWorkerStatus == 0
                                 td Unavailable
                                 if !work.intWorkerTrans
                                   td(style="padding: 7.5px;")
+                                    button.btn.btn-info.mr-2(type='button' data-toggle='modal' data-target='#WorkerPic' data-workername=NameID data-pic=WorkPic data-workid=work.intWorkerID)
+                                      i.fa.fa-id-card
                                     button.btn.btn-info(type='button' data-toggle='modal' data-target='#WorkerEdit' data-workername=work.strWorker data-status=work.intWorkerStatus data-workid=work.intWorkerID)
                                       i.fa.fa-cog
                                 else
-                                  td &nbsp
+                                  td
+                                    button.btn.btn-info(type='button' data-toggle='modal' data-target='#WorkerPic' data-workername=NameID data-pic=WorkPic data-workid=work.intWorkerID style="margin-right: 47.5px !important;")
+                                      i.fa.fa-id-card
                               else if work.intWorkerStatus == 1
                                 td Available
                                 if !work.intWorkerTrans
                                   td(style="padding: 7.5px;")
+                                    button.btn.btn-info.mr-2(type='button' data-toggle='modal' data-target='#WorkerPic' data-workername=NameID data-pic=WorkPic data-workid=work.intWorkerID)
+                                      i.fa.fa-id-card
                                     button.btn.btn-info(type='button' data-toggle='modal' data-target='#WorkerEdit' data-workername=work.strWorker data-status=work.intWorkerStatus data-workid=work.intWorkerID)
                                       i.fa.fa-cog
                                 else
-                                  td &nbsp
+                                  td 
+                                    button.btn.btn-info(type='button' data-toggle='modal' data-target='#WorkerPic' data-workername=NameID data-pic=WorkPic data-workid=work.intWorkerID style="margin-right: 47.5px !important;")
+                                      i.fa.fa-id-card
                               else
                                 td Ongoing
-                                td &nbsp
+                                td 
+                                  button.btn.btn-info(type='button' data-toggle='modal' data-target='#WorkerPic' data-workername=NameID data-pic=WorkPic data-workid=work.intWorkerID style="margin-right: 47.5px !important;")
+                                    i.fa.fa-id-card
 
                           if emptyworker == 1
                             tr
@@ -473,16 +496,38 @@ block main
                             b Worker's Name
                           input#workername.form-control(type='text' name='workername' aria-describedby='workernameHelp' maxlength="100" required)
                           small#workernameHelp.form-text.text-muted Inserted Name will be Displayed in Transactions.
+                        .form-group
+                          label(for='workername')
+                            b Worker's ID
+                          input#workersID.filestyle(type='file' name='workid' aria-describedby='workerIDHelp' data-classbutton='btn btn-primary' data-input='false' data-classicon='icon-plus' accept='image/*')
+                          small#workerIDHelp.form-text.text-muted Worker ID of first worker will be display publicly.
+                        
                     .row
                       .col
                         .btn-group.special(role='group')
                           button.editbuttons.btn.btn-primary.btn-md(type='submit') Submit
                           button.editbuttons.btn.btn-secondary.btn-md(type='button' data-dismiss='modal' aria-pressed='true') Cancel
 
-  #WorkerEdit.modal.fade(tabindex='-1' role='dialog' aria-labelledby='WorkerEditTitle' aria-hidden='true')
+  #WorkerPic.modal.fade(tabindex='-1' role='dialog' aria-labelledby='WorkerPicTitle' aria-hidden='true')
     .modal-dialog(role='document')
       .modal-content
         form(method='POST' action='/profile/manage-workers/'+thisuser.intAccNo)
+          .modal-header
+            h5#WorkerPicTitle.modal-title 
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+              span(aria-hidden='true') ×
+          .modal-body
+            .row
+              .col
+                img#workerImage(src="" alt='WorkerID' height="400" width="465")
+
+          .modal-footer
+            button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+
+  #WorkerEdit.modal.fade(tabindex='-1' role='dialog' aria-labelledby='WorkerEditTitle' aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        form(method='POST' action='/profile/manage-workers/'+thisuser.intAccNo enctype='multipart/form-data')
           .modal-header
             h5#WorkerEditTitle.modal-title Edit Worker
             button.close(type='button' data-dismiss='modal' aria-label='Close')
@@ -490,16 +535,32 @@ block main
           .modal-body
             .row
               .col
-                input(type="number" name="workid" hidden)
-                h6
-                  b Name:&nbsp
-                  span name
-                h6.mt-3
-                  b Status:&nbsp
-                  select#sel.form-control(name='workerstatus' style="width: 40%; display: inline" required)
-                    option(value= '0') Unavailable
-                    option(value= '1') Available
-
+                
+                input#wid(type="number" name="workid" hidden)
+                .row
+                  .col-4
+                    p.mt-1.ml-3
+                      b Name
+                  .col-8
+                    .form-group.mr-3
+                      span#wname name
+                .row
+                  .col-4
+                    p.mt-1.ml-3
+                      b Status
+                  .col-8
+                    .form-group.mr-3
+                      select#sel.form-control(name='workerstatus' style="display: inline;" required)
+                        option(value= '0') Unavailable
+                        option(value= '1') Available
+                .row
+                  .col-4
+                    p.mt-1.ml-3
+                      b Worker's ID
+                  .col-8
+                    .form-group.mr-3
+                      input.filestyle(type='file' name='workid' data-classbutton='btn btn-primary' data-input='false' data-classicon='icon-plus' accept='image/*')
+                
           .modal-footer
             button.btn.btn-primary(type='submit') Submit
             button.btn.btn-secondary(type='button', data-dismiss='modal') Close

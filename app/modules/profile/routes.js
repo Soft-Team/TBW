@@ -96,6 +96,9 @@ function workers(req,res,next){
 
 function render(req,res){
   switch (req.valid) {
+    case 0:
+      res.render('home/views/worker');
+      break;
     case 1:
       res.render('welcome/views/invalid/adm-restrict');
       break;
@@ -107,6 +110,9 @@ function render(req,res){
 }
 function profRender(req,res){
   switch (req.valid) {
+    case 0:
+      res.render('home/views/worker');
+      break;
     case 1:
       res.render('welcome/views/invalid/adm-restrict');
       break;
@@ -123,6 +129,9 @@ function profRender(req,res){
 }
 function delDocRender(req,res){
   switch (req.valid) {
+    case 0:
+      res.render('home/views/worker');
+      break;
     case 1:
       res.render('welcome/views/invalid/adm-restrict');
       break;
@@ -274,7 +283,7 @@ router.post('/manage-workers/:userid', flog, messCount, paramsUser, (req, res) =
 });
 
 router.post('/reported/:userid', flog, messCount, paramsUser, (req,res) =>{
-  db.query("INSERT INTO tblreport (intRepedAccNo, intReporterAccNo, intRepCategory, txtRepDesc, datRepDate) VALUES (?,?,?,?,CURDATE())",[req.params.userid, req.session.user, req.body.customRadio, req.body.customTextArea], function (err, results, fields){
+  db.query("INSERT INTO tblreport (intRepedAccNo, intReporterAccNo, intRepCategory, txtRepDesc, datRepDate, intRepStatus) VALUES (?,?,?,?,CURDATE(),1)",[req.params.userid, req.session.user, req.body.customRadio, req.body.customTextArea], function (err, results, fields){
     if (err) console.log(err);
     res.redirect('/profile/'+req.session.user);
   })

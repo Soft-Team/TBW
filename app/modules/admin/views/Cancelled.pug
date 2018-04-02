@@ -1,0 +1,44 @@
+extends ../../../templates/dash-admin.pug
+
+block main
+    .jumbotron-admin
+        center
+            h1 Cancelled Transactions
+    p  
+    center
+    .container
+        p.font
+            table.table.table-striped.table-hover.box-shadow-mini
+                thead
+                    tr  
+                        th(scope='col') #
+                        th(scope='col') Cancelled By
+                        th(scope='col') ChatID
+                        th(scope='col') &nbsp
+                        th(scope='col') &nbsp
+
+
+                tbody
+                each user in resultspug
+                    tr
+                        td(style="padding-right: 20px; padding-bottom: 10px;") #{user.intCancelID}
+                        td #{user.CancelName}
+                        td #{user.intCancelChatID}
+                        td 
+                            a.btn.btn-outline-danger() Invoice  
+                        td
+                            a.btn.btn-outline-primary(data-toggle='modal', data-target='#cancelreason') Cancellation Reason
+
+                            #cancelreason.modal.fade(tabindex='-1', role='dialog', aria-labelledby='cancelreason', aria-hidden='true')
+                                .modal-dialog.modal-dialog-centered(role='document')
+                                    .modal-content
+                                        .modal-header
+                                            h5#exampleModalLongTitle.modal-title Reason for Cancellation
+                                            button.close(type='button', data-dismiss='modal', aria-label='Close')
+                                            span(aria-hidden='true') ×
+                                        .modal-body
+                                            center  #{user.txtCancelReason}
+                                        .modal-footer
+                                            button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+                    
+                    

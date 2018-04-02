@@ -1,0 +1,30 @@
+extends ../../../templates/master-worker.pug
+
+block content
+  block append scripts
+    script(type='text/javascript', src='/assets/scripts/bootstrap-filestyle.min.js')
+    script.
+      $(":file").filestyle();
+  .container.container-errorpage
+    .row
+      .col
+      .col-sm-8.col-md-7.col-lg-5.col-errorpage
+        h2.mb-3.text-center Your First Workers
+        .col-sm-12
+          form(method='POST' action='/home/worker' enctype='multipart/form-data')
+            .form-group
+              input#worker1.form-control(type='text' name='worker1' aria-describedby='workerHelp' placeholder="First Worker" required)
+            .form-group
+              input#workid1.filestyle(type='file' name='workid1' aria-describedby='workerid1Help' data-classbutton='btn btn-primary' data-input='false' data-classicon='icon-plus' accept='image/*' required)
+              small#workerid1.form-text.text-muted Worker ID of first worker will be display publicly.
+            hr
+            .form-group
+              input#worker2.form-control(type='text' name='worker2' placeholder="Second Worker" required)
+            .form-group
+              input#workid2.filestyle(type='file' name='workid2' aria-describedby='workerid2Help' data-classbutton='btn btn-primary' data-input='false' data-classicon='icon-plus' accept='image/*' required)
+              small#workerid2.form-text.text-muted Worker ID of second worker will be display publicly.
+            button.btn.btn-primary.btn-md.btn-block.mb-2(type='submit') Submit
+            p
+              small
+                b Support E-mail: trabawho.sup@gmail.com
+      .col
