@@ -1128,6 +1128,7 @@ tr:hover .spnTooltip{
 
   @media (max-width: 991.98px) {
     #bg-block {
+      background-image: url('/assets/images/jumbo-login.jpg') fixed;
       position:fixed;
       top:0;
       left:0;
