@@ -13,7 +13,7 @@ var ellipsis = require('../welcome/ellipsis');
 function fchat(req,res,next){
   /*All Chats of Current User, Match(session);
   *(tblservice)*(tblchat)*/
-  var stringquery = "SELECT * FROM(SELECT C.*, txtMessage, dtmDateSent FROM(SELECT B.*, MAX(intMessID) as MX FROM(SELECT A.* , strName, intAccNo FROM(SELECT * FROM tblservice INNER JOIN tblchat ON intServID= intChatServ INNER JOIN tblservicetag ON intServTagID= intServTag WHERE intServAccNo= ? OR intChatSeeker= ?)A INNER JOIN tbluser ON intAccNo= intServAccNo OR intAccNo= intChatSeeker WHERE intAccNo!= ?)";
+  var stringquery = "SELECT * FROM(SELECT C.*, txtMessage, intMessPSeen, intMessSSeen, dtmDateSent FROM(SELECT B.*, MAX(intMessID) as MX FROM(SELECT A.* , strName, intAccNo FROM(SELECT * FROM tblservice INNER JOIN tblchat ON intServID= intChatServ INNER JOIN tblservicetag ON intServTagID= intServTag WHERE intServAccNo= ? OR intChatSeeker= ?)A INNER JOIN tbluser ON intAccNo= intServAccNo OR intAccNo= intChatSeeker WHERE intAccNo!= ?)";
   stringquery = stringquery.concat("B INNER JOIN tblmessage ON intChatID= intMessChatID GROUP BY intChatID)C INNER JOIN tblmessage ON intMessID= C.MX)D INNER JOIN tbluser ON tbluser.intAccNo = D.intAccNo ORDER BY dtmDateSent DESC");
   db.query(stringquery,[req.session.user, req.session.user, req.session.user], (err, results, fields) => {
       if (err) console.log(err);

@@ -140,40 +140,17 @@ block main
                   i.fa(aria-hidden='true')
           // Conversations
           .row.content-wrap
-
             each chat in chattab
               if chat.intChatStatus == 1
-                .conversation.btn.pt-3.pb-1(style="background: rgba(113, 193, 255,0.4);")
-                  .media-body
-                    .display.chat-part.mb-4(role="gridcell")
-                      a.chat-part.display(href="/messages/"+chat.intChatID)
-                        .chat-pick.display(data-tooltip-content='Soft', data-hover='tooltip', data-tooltip-position='right', data-tooltip-alignh='center', data-tooltip-root-class='_33g_', aria-hidden='true', style=' margin-right:9px')
-                          .chat-pad(style="height: 50px, width: 50px")
-                            .chat-img(style="height: 50px, width: 50px")
-                              img(src='/userImages/profile/'+chat.strProfilePic alt='' height="50" width="50")
-                        chat4.chatL-m(style="width: 100%;")
-                          .chat5.chatL-3 
-                            h5
-                              if chat.intAccNo == chat.intServAccNo
-                                +providertag(chat.tagEllipsis, chat.strServName, chat.servname)
-                              else 
-                                +seekertag(chat.tagEllipsis, chat.strServName, chat.servname)
-
-                              if chat.ellipsis == 1
-                                span(data-toggle="tooltip" data-placement="top" title=chat.strName style='color: black;') #{chat.name}
-                              else
-                                span(style='color: black;') #{chat.name}
-                          .chat5.chatL-3 
-                            if chat.intChatID == params
-                              #mess
-                                span #{chat.txtMessage}
-                              .time-cont
-                                small.pull-right.time #{chat.date}
-                            else
-                              span #{chat.txtMessage}
-                              small.pull-right.time #{chat.date}
+                .chat-is-active
               else
-                .conversation.btn.pt-3.pb-1(style="background: #EBEEF1;")
+                .chat-is-inactive
+              if chat.intChatID != messOne.intChatID
+                if thisuser.intAccNo == chat.intServAccNo && chat.intMessPSeen == 0
+                  .chat-has-new
+                if thisuser.intAccNo == chat.intChatSeeker && chat.intMessSSeen == 0
+                  .chat-has-new
+              .conversation.btn.pt-3.pb-1
                   .media-body
                     .display.chat-part.mb-4(role="gridcell")
                       a.chat-part.display(href="/messages/"+chat.intChatID)

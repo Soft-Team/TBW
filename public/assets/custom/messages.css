@@ -264,3 +264,13 @@ a.chat-part{
 #mess > span{
   color: black;
 }
+
+.chat-is-active + .conversation{
+  background: rgba(113, 193, 255,0.4);
+}
+.chat-is-inactive + .conversation{
+  background: #EBEEF1;
+}
+.chat-has-new + .conversation{
+  background: rgba(5, 225, 119,.7);
+}
