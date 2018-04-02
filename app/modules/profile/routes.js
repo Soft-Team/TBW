@@ -93,6 +93,15 @@ function workers(req,res,next){
       return next();
     });
 }
+function editWorker(req,res,next){
+  /*Worker Selected to Edit of Params User, Match(body);
+  *(tbldocument)*/
+  db.query("SELECT * FROM tblworker WHERE intWorkerID= ?",[req.body.workid], (err, results, fields) => {
+      if (err) console.log(err);
+      req.editWorker= results;
+      return next();
+    });
+}
 
 function render(req,res){
   switch (req.valid) {
@@ -267,19 +276,44 @@ router.post('/more/:userid', flog, messCount, paramsUser, documents, (req, res) 
   });
 
 });
-router.post('/add-workers/:userid', flog, messCount, paramsUser, (req, res) =>{
-  db.query("INSERT INTO tblworker (intWorkBusID, strWorker) VALUES (?,?)",[req.session.user, req.body.workername], function (err,  results, fields) {
-    if (err) console.log(err);
-    res.redirect('/profile/'+req.session.user);
-  });
-
+router.post('/add-workers/:userid', flog, messCount, paramsUser, documents, paramsReviews, workers, (req, res) =>{
+  if(req.files.workpic.mimetype != 'image/jpeg' && req.files.workpic.mimetype != 'image/png'){
+    res.render('profile/views/invalid/imgerror',{thisUserTab: req.user, messCount: req.messCount[0].count, paramsUser: req.paramsUser, servempty: req.servempty, documents: req.documents, reviews: req.paramsReviews, workers: req.workers});
+  }
+  else{
+    var newAccNo= prepend(req.session.user);
+    var id = makeid(25);
+    jpeg = 'WID-'+newAccNo.toString()+'-'+id.concat('.jpg');
+    req.files.workpic.mv('public/userImages/workerids/'+jpeg, function(err) {
+      db.query("INSERT INTO tblworker (intWorkBusID, strWorker, strWorkerID) VALUES (?,?,?)",[req.session.user, req.body.workername, jpeg], function (err,  results, fields) {
+        if (err) console.log(err);
+        res.redirect('/profile/'+req.session.user);
+      });
+    });
+  }
 });
-router.post('/manage-workers/:userid', flog, messCount, paramsUser, (req, res) =>{
-  db.query("UPDATE tblworker SET intWorkerStatus= ? WHERE intWorkerID= ?",[req.body.workerstatus, req.body.workid], function (err,  results, fields) {
-    if (err) console.log(err);
-    res.redirect('/profile/'+req.session.user);
-  });
-
+router.post('/manage-workers/:userid', flog, messCount, paramsUser, documents, paramsReviews, workers, editWorker, (req, res) =>{
+  if(!req.files.workpic){
+    db.query("UPDATE tblworker SET intWorkerStatus= ? WHERE intWorkerID= ?",[req.body.workerstatus, req.body.workid], function (err,  results, fields) {
+      if (err) console.log(err);
+      res.redirect('/profile/'+req.session.user);
+    });
+  }
+  else if(req.files.workpic.mimetype != 'image/jpeg' && req.files.workpic.mimetype != 'image/png'){
+    res.render('profile/views/invalid/imgerror',{thisUserTab: req.user, messCount: req.messCount[0].count, paramsUser: req.paramsUser, servempty: req.servempty, documents: req.documents, reviews: req.paramsReviews, workers: req.workers});
+  }
+  else{
+    var newAccNo= prepend(req.session.user);
+    var id = makeid(25);
+    jpeg = 'WID-'+newAccNo.toString()+'-'+id.concat('.jpg');
+    fs.unlink('public/userImages/workerids/'+req.editWorker[0].strWorkerID);
+    req.files.workpic.mv('public/userImages/workerids/'+jpeg, function(err) {
+      db.query("UPDATE tblworker SET intWorkerStatus= ?, strWorkerID= ? WHERE intWorkerID= ?",[req.body.workerstatus, jpeg, req.body.workid], function (err,  results, fields) {
+        if (err) console.log(err);
+        res.redirect('/profile/'+req.session.user);
+      });
+    });
+  }
 });
 
 router.post('/reported/:userid', flog, messCount, paramsUser, (req,res) =>{

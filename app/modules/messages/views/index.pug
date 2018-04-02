@@ -7,15 +7,24 @@ block main
         $('#TOWorkers').on('show.bs.modal', function () {
           $('#TOModal').css('z-index', 1039);
         });
-
         $('#TOWorkers').on('hidden.bs.modal', function () {
           $('#TOModal').css('z-index', 1041);
+        });
+        
+        $('#WorkerPic').on('show.bs.modal', function () {
+          $('#TOWorkers').css('z-index', 1039);
+          $('#editTOWorkers').css('z-index', 1039);
+          $('#viewTOWorkers').css('z-index', 1039);
+        });
+        $('#WorkerPic').on('hidden.bs.modal', function () {
+          $('#TOWorkers').css('z-index', 1041);
+          $('#editTOWorkers').css('z-index', 1041);
+          $('#viewTOWorkers').css('z-index', 1041);
         });
         
         $('#viewTOWorkers').on('show.bs.modal', function () {
           $('#viewTOModal').css('z-index', 1039);
         });
-
         $('#viewTOWorkers').on('hidden.bs.modal', function () {
           $('#viewTOModal').css('z-index', 1041);
         });
@@ -23,10 +32,10 @@ block main
         $('#editTOWorkers').on('show.bs.modal', function () {
           $('#editTOModal').css('z-index', 1039);
         });
-
         $('#editTOWorkers').on('hidden.bs.modal', function () {
           $('#editTOModal').css('z-index', 1041);
         });
+        
       });
 
       $('#checkBtn').click(function() {
@@ -53,6 +62,18 @@ block main
         }
       });
 
+      $('#WorkerPic').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget)
+        var workername = button.data('workername')
+        var pic = button.data('pic')
+        var workid = button.data('workid')
+        
+        var modal = $(this)
+        modal.find('.modal-header h5').text(workername)
+        $(".modal-body #workerImage").attr("src", pic);
+
+      })
+      
   mixin hsel
     each hour in ['12','01','02','03','04','05','06','07','08','09','10','11']
       option(value=hour) #{hour}
@@ -330,9 +351,14 @@ block main
 
                 .mt-2.pt-3(style="border-top: 1px solid #007BFF;")
                   each work,index in workers
+                    - WorkPic = '/userImages/workerids/'+work.strWorkerID
+                    - NameID = work.strWorker+"'s ID"
                     .form-check.mx-2
                       input.form-check-input(type='checkbox' name=work.intWorkerID style="height: 20px; width: 20px;")
-                      label.form-check-label(style="margin-left: 15px; font-size: 18px;") #{work.strWorker}
+                      label.form-check-label(style="margin-left: 15px; font-size: 18px;")
+                        button.btn.btn-info.mr-2(type='button' data-toggle='modal' data-target='#WorkerPic' data-workername=NameID data-pic=WorkPic data-workid=work.intWorkerID)
+                          i.fa.fa-id-card
+                        | #{work.strWorker}
                     hr
           .modal-footer
             button#checkBtn.btn.btn-primary(type='submit') Submit
@@ -416,12 +442,17 @@ block main
                     if index == 0
                       - transID = transwork.intTransID
                   each work,index in workers
+                    - WorkPic = '/userImages/workerids/'+work.strWorkerID
+                    - NameID = work.strWorker+"'s ID"
                     .form-check.mx-2
                       if work.intWorkerTrans == transID
                         input.form-check-input(type='checkbox' name=work.intWorkerID style="height: 20px; width: 20px;" checked)
                       else
                         input.form-check-input(type='checkbox' name=work.intWorkerID style="height: 20px; width: 20px;")
-                      label.form-check-label(style="margin-left: 15px; font-size: 18px;") #{work.strWorker}
+                      label.form-check-label(style="margin-left: 15px; font-size: 18px;")
+                        button.btn.btn-info.mr-2(type='button' data-toggle='modal' data-target='#WorkerPic' data-workername=NameID data-pic=WorkPic data-workid=work.intWorkerID)
+                          i.fa.fa-id-card
+                        | #{work.strWorker}
                     hr
           .modal-footer
             button#checkBtnEdit.btn.btn-primary(type='submit') Submit
@@ -470,7 +501,12 @@ block main
             .col
               .mt-2.pt-3(style="border-top: 1px solid #007BFF;")
                 each transwork in transworkers
-                  h5 #{transwork.strWorker}
+                  - WorkPic = '/userImages/workerids/'+transwork.strWorkerID
+                  - NameID = transwork.strWorker+"'s ID"
+                  h5 
+                    button.btn.btn-info.mr-2(type='button' data-toggle='modal' data-target='#WorkerPic' data-workername=NameID data-pic=WorkPic data-workid=transwork.intWorkerID)
+                      i.fa.fa-id-card
+                    | #{transwork.strWorker}
                   hr
         .modal-footer
           button.btn.btn-secondary(type='button', data-dismiss='modal') Close
@@ -590,5 +626,21 @@ block main
 
         .modal-footer
           button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+
+  #WorkerPic.modal.fade(tabindex='-1' role='dialog' aria-labelledby='WorkerPicTitle' aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        form(method='POST' action='/profile/manage-workers/'+thisuser.intAccNo)
+          .modal-header
+            h5#WorkerPicTitle.modal-title 
+            button.close(type='button' data-dismiss='modal' aria-label='Close')
+              span(aria-hidden='true') ×
+          .modal-body
+            .row
+              .col
+                img#workerImage(src="" alt='WorkerID' height="400" width="465")
+
+          .modal-footer
+            button.btn.btn-secondary(type='button', data-dismiss='modal') Close
 
   block chatmess

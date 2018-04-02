@@ -221,23 +221,24 @@ router.post('/worker', flog, (req, res) => {
   if(req.files.workid1.mimetype != 'image/jpeg' && req.files.workid1.mimetype != 'image/png'){
     res.render('home/views/worker');
   }
-  if(req.files.workid2.mimetype != 'image/jpeg' && req.files.workid2.mimetype != 'image/png'){
+  else if(req.files.workid2.mimetype != 'image/jpeg' && req.files.workid2.mimetype != 'image/png'){
     res.render('home/views/worker');
   }
-
-  var newAccNo= prepend(req.session.user);
-  var id1 = makeid(25);
-  var id2 = makeid(25);
-  jpeg1 = 'WID-'+newAccNo.toString()+'-'+id1.concat('.jpg');
-  jpeg2 = 'WID-'+newAccNo.toString()+'-'+id2.concat('.jpg');
-  req.files.workid1.mv('public/userImages/workerids/'+jpeg1, function(err) {
-    req.files.workid2.mv('public/userImages/workerids/'+jpeg2, function(err) {
-      db.query("INSERT INTO tblworker (intWorkBusID, strWorker, strWorkerID) VALUES (?,?,?), (?,?,?)",[req.session.user, req.body.worker1, jpeg1, req.session.user, req.body.worker2, jpeg2], (err, results, fields) => {
-        if (err) console.log(err);
-        res.redirect('/home');
+  else{
+    var newAccNo= prepend(req.session.user);
+    var id1 = makeid(25);
+    var id2 = makeid(25);
+    jpeg1 = 'WID-'+newAccNo.toString()+'-'+id1.concat('.jpg');
+    jpeg2 = 'WID-'+newAccNo.toString()+'-'+id2.concat('.jpg');
+    req.files.workid1.mv('public/userImages/workerids/'+jpeg1, function(err) {
+      req.files.workid2.mv('public/userImages/workerids/'+jpeg2, function(err) {
+        db.query("INSERT INTO tblworker (intWorkBusID, strWorker, strWorkerID) VALUES (?,?,?), (?,?,?)",[req.session.user, req.body.worker1, jpeg1, req.session.user, req.body.worker2, jpeg2], (err, results, fields) => {
+          if (err) console.log(err);
+          res.redirect('/home');
+        });
       });
     });
-  });
+  }
 });
 
 exports.home = router;

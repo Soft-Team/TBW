@@ -48,6 +48,15 @@ block main
         $('#WorkerEdit').on('hidden.bs.modal', function () {
           $('#Workers').css('z-index', 1041);
         });
+        
+        $('#WorkerPic').on('show.bs.modal', function () {
+          $('#Workers').css('z-index', 1039);
+        });
+
+        $('#WorkerPic').on('hidden.bs.modal', function () {
+          $('#Workers').css('z-index', 1041);
+        });
+        
       });
 
   .jumbotron-banner(style='height:100px')
@@ -488,7 +497,7 @@ block main
                       button.btn.btn-secondary(type='button', data-dismiss='modal') Close
 
                 #pills-add.tab-pane.fade.show(role='tabpanel', aria-labelledby='pills-add-tab')
-                  form(method='POST' action='/profile/add-workers/'+thisuser.intAccNo)
+                  form(method='POST' action='/profile/add-workers/'+thisuser.intAccNo enctype='multipart/form-data')
                     .row
                       .col
                         .form-group
@@ -499,7 +508,7 @@ block main
                         .form-group
                           label(for='workername')
                             b Worker's ID
-                          input#workersID.filestyle(type='file' name='workid' aria-describedby='workerIDHelp' data-classbutton='btn btn-primary' data-input='false' data-classicon='icon-plus' accept='image/*')
+                          input#workersID.filestyle(type='file' name='workpic' aria-describedby='workerIDHelp' data-classbutton='btn btn-primary' data-input='false' data-classicon='icon-plus' accept='image/*' required)
                           small#workerIDHelp.form-text.text-muted Worker ID of first worker will be display publicly.
                         
                     .row
@@ -559,7 +568,7 @@ block main
                       b Worker's ID
                   .col-8
                     .form-group.mr-3
-                      input.filestyle(type='file' name='workid' data-classbutton='btn btn-primary' data-input='false' data-classicon='icon-plus' accept='image/*')
+                      input.filestyle(type='file' name='workpic' data-classbutton='btn btn-primary' data-input='false' data-classicon='icon-plus' accept='image/*')
                 
           .modal-footer
             button.btn.btn-primary(type='submit') Submit
