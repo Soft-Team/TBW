@@ -34,7 +34,7 @@ block main
           tr
             td(style="padding-right: 20px; padding-bottom: 10px;") #{user.intAccNo}
             td 
-              a(href=`/profile/${user.intAccNo}`) #{user.strUserName}
+              a(href=`/profile/${user.intAccNo}` onClick='showPopup(this.href);return(false);') #{user.strUserName}
             td #{user.strName}
             td #{user.strBarangay}
             td #{user.strCity}

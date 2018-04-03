@@ -42,8 +42,9 @@ block main
           tr
             td(style="padding-right: 20px; padding-bottom: 10px;") #{user.intRepID}
             td 
-              a(href=`/profile/${user.intRepedAccNo}`) #{user.ReportedName}
-            td #{user.ReporterName}
+              a(href=`/profile/${user.intRepedAccNo}` onClick='showPopup(this.href);return(false);') #{user.ReportedName}
+            td 
+              a(href=`/profile/${user.intReporterAccNo}` onClick='showPopup(this.href);return(false);') #{user.ReporterName}
             if user.intRepCategory == '1'
               - category = 'Communication Abuse'
               td Communication Abuse
