@@ -3,7 +3,7 @@ var adminRouter = express.Router();
 var db = require('../../lib/database')();
 var flog = require('../welcome/loggedin');
 var fs = require('fs');
-var dateformat = require('../welcome/dateformat');
+var timeFormat = require('../welcome/timeFormat');
 
 function selectedUser(req,res,next){
   /*Selected User, Match(params);
@@ -277,9 +277,15 @@ adminRouter.get('/Cancelled', flog, (req,res) => {
     INNER JOIN(SELECT (intAccNo)CanceledNo, (strName)CanceledName FROM  tbluser)Canceled ON
     (intChatSeeker= Canceled.CanceledNo OR intServAccNo= Canceled.CanceledNo) AND (Canceled.CanceledNo!= intCancelAccNo)
     INNER JOIN tblservicetag ON intServTag= intServTagID
-    LEFT JOIN tbltransaction ON intChatID= intTransChatID`, (err, results, fields) => {
+    LEFT JOIN tbltransaction ON intChatID= intTransChatID ORDER BY intCancelID DESC`, (err, results, fields) => {
       if(err) return console.log(err)
-      console.log(results);
+      if(!(!results[0])){
+        for(count=0;count<results.length;count++){
+          date = results[count].dtmCancelDate;
+          date = date.toDateString("en-US").slice(4, 15)+' - '+timeFormat(date);
+          results[count].formatDate = date;
+        }
+      }
       return res.render('admin/views/Cancelled', {resultspug: results});
     });
       break;
@@ -289,4 +295,5 @@ adminRouter.get('/Cancelled', flog, (req,res) => {
       break;
   }
 });
+
 exports.admin = adminRouter;
