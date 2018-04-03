@@ -31,17 +31,20 @@ block main
             thead
               tr  
                 th(scope='col') #
-                th(scope='col') Cancelled By
                 th(scope='col') ChatID
-                th(scope='col' style="width: 240px;") Actions
+                th(scope='col') Cancelled By
+                th(scope='col') Cancelled Date
+                th(scope='col' style="width: 300px;") Actions
+                th(scope='col') &nbsp
 
             tbody
             each user in resultspug
               tr
                 td(style="padding-right: 20px; padding-bottom: 10px;") #{user.intCancelID}
-                td 
-                    a(href=`/profile/${user.intCancelAccNo}` onClick='showPopup(this.href);return(false);') #{user.CancelName}
                 td #{user.intCancelChatID}
+                td 
+                    a(href=`/profile/${user.intCancelAccNo}` onClick='showPopup(this.href);return(false);') #{user.CancelName}  
+                td #{user.formatDate}
                 td(style="width: 240px;")
                   a.btn.btn-outline-danger.mr-2() Invoice   
                   a.btn.btn-outline-primary(data-toggle='modal', data-name=user.CancelName, data-reason=user.txtCancelReason data-target='#cancelreason') View Reason
