@@ -192,8 +192,15 @@ adminRouter.get('/ReportLog', flog, (req,res) => {
 adminRouter.get('/ReportedUsers', flog, (req,res) => {
   switch (req.valid) {
     case 1:
-      res.render('admin/views/ReportedUsers');
-      break;
+    db.query(`SELECT Total.*, IFNULL(CurrentCNT,0)CurrentCNT
+    FROM (SELECT intAccNo, strUserName, boolIsBanned, COUNT(intAccNo)TotalCNT FROM tbluser INNER JOIN tblreport ON intAccNo= intRepedAccNo WHERE boolIsBanned= 0 GROUP BY intAccNo)Total
+    LEFT JOIN (SELECT COUNT(intAccNo)CurrentCNT, intAccNo FROM tbluser INNER JOIN tblreport ON intAccNo= intRepedAccNo WHERE intRepStatus= 1 AND boolIsBanned= 0 GROUP BY intAccNo)Current
+    ON Total.intAccNo= Current.intAccNo ORDER BY CurrentCNT DESC`, (err, results, fields) => {
+      if(err) return console.log(err)
+      console.log(results);
+      return res.render('admin/views/ReportedUsers', {resultspug: results});
+    });
+    break;
     case 2:
     case 3:
       res.render('welcome/views/invalid/restrict');
@@ -279,6 +286,7 @@ adminRouter.get('/Cancelled', flog, (req,res) => {
     INNER JOIN tblservicetag ON intServTag= intServTagID
     LEFT JOIN tbltransaction ON intChatID= intTransChatID ORDER BY intCancelID DESC`, (err, results, fields) => {
       if(err) return console.log(err)
+      console.log(results);
       if(!(!results[0])){
         for(count=0;count<results.length;count++){
           date = results[count].dtmCancelDate;

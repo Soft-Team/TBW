@@ -40,8 +40,10 @@ block main
             each user in resultspug
               tr
                 td(style="padding-right: 20px; padding-bottom: 10px;") #{user.intCancelID}
-                td #{user.intCancelChatID}
-                td #{user.CancelName}
+                td 
+                  a(href=`/messages/${user.intCancelChatID}` onClick='showPopup(this.href);return(false);') #{user.intCancelChatID}
+                td 
+                  a(href=`/profile/${user.intCancelAccNo}` onClick='showPopup(this.href);return(false);') #{user.CancelName}
                 td #{user.formatDate}
                 td(style="width: 240px;")
                   a.btn.btn-outline-danger.mr-2() Invoice   
