@@ -520,18 +520,17 @@ block main
   #WorkerPic.modal.fade(tabindex='-1' role='dialog' aria-labelledby='WorkerPicTitle' aria-hidden='true')
     .modal-dialog(role='document')
       .modal-content
-        form(method='POST' action='/profile/manage-workers/'+thisuser.intAccNo)
-          .modal-header
-            h5#WorkerPicTitle.modal-title 
-            button.close(type='button' data-dismiss='modal' aria-label='Close')
-              span(aria-hidden='true') ×
-          .modal-body
-            .row
-              .col
-                img#workerImage(src="" alt='WorkerID' height="400" width="465")
+        .modal-header
+          h5#WorkerPicTitle.modal-title 
+          button.close(type='button' data-dismiss='modal' aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+          .row
+            .col
+              img#workerImage(src="" alt='WorkerID' height="400" width="465")
 
-          .modal-footer
-            button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+        .modal-footer
+          button.btn.btn-secondary(type='button', data-dismiss='modal') Close
 
   #WorkerEdit.modal.fade(tabindex='-1' role='dialog' aria-labelledby='WorkerEditTitle' aria-hidden='true')
     .modal-dialog(role='document')

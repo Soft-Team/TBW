@@ -1,0 +1,263 @@
+extends ../../../templates/master.pug
+
+block content
+  block append stylesheets
+    link(rel='stylesheet', type='text/css', href='/assets/custom/switch.css')
+  block append scripts
+    script(type='text/javascript', src='/assets/scripts/bootstrap-filestyle.min.js')
+    script.
+      $(":file").filestyle();
+
+      $('#WorkerEdit').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget)
+        var workername = button.data('workername')
+        var status = button.data('status')
+        var workid = button.data('workid')
+
+        var modal = $(this)
+        modal.find('.modal-body #wid').val(workid)
+        modal.find('.modal-body #wname').text(workername)
+
+        var sel = document.getElementById('sel');
+        var opts = sel.options;
+        for (var opt, j = 0; opt = opts[j]; j++) {
+          if (opt.value == status) {
+            sel.selectedIndex = j;
+            break;
+          }
+        }
+      })
+
+      $('#WorkerPic').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget)
+        var workername = button.data('workername')
+        var pic = button.data('pic')
+        var workid = button.data('workid')
+
+        var modal = $(this)
+        modal.find('.modal-header h5').text(workername)
+        $(".modal-body #workerImage").attr("src", pic);
+
+      })
+
+      $(document).ready(function () {
+        $('#WorkerEdit').on('show.bs.modal', function () {
+          $('#Workers').css('z-index', 1039);
+        });
+
+        $('#WorkerEdit').on('hidden.bs.modal', function () {
+          $('#Workers').css('z-index', 1041);
+        });
+
+        $('#WorkerPic').on('show.bs.modal', function () {
+          $('#Workers').css('z-index', 1039);
+        });
+
+        $('#WorkerPic').on('hidden.bs.modal', function () {
+          $('#Workers').css('z-index', 1041);
+        });
+
+      });
+    
+  .jumbotron-banner(style='height:100px')
+    center
+  .sector(style='margin-top:0px; padding:0px')
+  each thisuser in thisUserTab
+    each paramsuser,index in paramsUser
+      if index == 0
+        .sector-container-profile
+          .profile-container
+            #left-pane.col-sm-3
+              img(src='/userImages/profile/'+paramsuser.strProfilePic, alt='Card image cap', style='height: 10rem; width: 10rem; border-right: 1px solid; ')
+            #center-pane.col-sm-3
+              h1(style='margin-left:15px; margin-top:40px; margin-bottom:10px !important') #{paramsuser.strName}
+              if paramsUser.intType == 3
+                button#report.btn.btn-info.btn-md.btn(type='button' data-toggle='modal' data-target='#Workers')
+                  i.fa.fa-users.fa-2x(style='height:35px; width:35px;')
+              if paramsuser.intStatus == 1
+                span.font3.tag.unverified(style='margin-left:15px;') Unverified 
+              else
+                span.font3.tag.verified.text-white(style='margin-left:15px;') Verified
+              span.font3(style='margin-left:5px;') #{paramsuser.prepend}
+            #right-pane.col-sm-3
+              table
+                tbody
+                  tr
+                    td(style='padding-top:3px', data-toggle='tooltip', data-placement='left', title='Seeker and Provider rating')
+                      img(src='/assets/images/Icons/star.png', alt='star', style='height: 2rem; width: 2rem; margin-top:5px; margin-left:50px;')
+                      h2(style='float: right; margin-right: 50px; margin-bottom: 0rem') #{paramsuser.ave}
+                      h4.profileA(style='margin-bottom: 0rem; margin-top:0px; display:inline-block') Rating
+                  tr
+                    td(style='padding-top:3px', data-toggle='tooltip', data-placement='left', title='Jobs finished as a Provider')
+                      img(src='/assets/images/Icons/case.png', alt='case', style='height: 2rem; width: 2rem; margin-top:5px; margin-left:50px;')
+                      h2(style='float: right; margin-right: 50px; margin-bottom: 0rem') #{paramsuser.sum}
+                      h4.profileB(style='margin-bottom: 0rem; margin-top:0px; display:inline-block') Provided
+
+    nav
+      .card.text-center(style='min-height: 450px; width:1286px')
+        .card-header(style='padding-bottom:0rem')
+          each paramsuser, index in paramsUser
+            if index == 0
+              #nav-tab.nav.nav-tabs(role='tablist', style='border:0px')
+                a#personal-info-tab.nav-item.nav-link.active.selected.text-b(data-toggle='tab', href='#Personal-Info', role='tab', aria-controls='Personal-Info', aria-selected='false' selected='') Personal Info
+                a#services-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Services', role='tab', aria-controls='Services', aria-selected='false') Services
+                a#reviews-tab.nav-item.nav-link.text-b(data-toggle='tab', href='#Reviews', role='tab', aria-controls='Reviews', aria-selected='false') Reviews
+
+        #nav-tabContent.tab-content
+          #Personal-Info.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='personal-info-tab')
+            each paramsuser, index in paramsUser
+              if index == 0
+                .col-sm-3
+                  if paramsuser.intType == 3
+                    i.fa.fa-user-circle.fa-2x.mb-4
+                    span.font2 Owner: #{paramsuser.strOwner}
+                    br
+                  i.fa.fa-building.fa-2x.mb-4
+                  span.font2 City: #{paramsuser.strCity}
+                  br
+                  i.fa.fa-address-book.fa-2x.mb-4
+                  span.font2 Contact: #{paramsuser.strContactNo}
+                .col-sm-3
+                  if paramsuser.intType == 3
+                    i.fa.fa-building.fa-2x.mb-4(style="visibility: hidden")
+                    span.font2(style="visibility: hidden") Blank
+                    br
+                  i.fa.fa-home.fa-2x.mb-4
+                  span.font2 Barangay: #{paramsuser.strBarangay}
+                  br
+                  i.fa.fa-envelope.fa-2x.mb-4
+                  span.font2 Email: #{paramsuser.strEmail}
+                .col-sm-4
+                  each paramsuser,index in paramsUser
+                    if index == 0 
+                      .row.mb-4
+                        - empty = 0
+                        each doc in documents
+                          - empty = 1
+                          .img-with-text
+                            a(href='/userImages/documents/'+doc.strDocument target="_blank")
+                              img.port(src='/userImages/documents/'+doc.strDocument)
+                        if empty == 0
+                          .col
+                          .col.mt-2(style="display: flex;justify-content: center;")
+                            i No documents to display
+                          .col
+          #Services.tab-pane.fade(role='tabpanel', aria-labelledby='services-tab')
+            center
+              .container(style='padding-top: 20px; padding-bottom: 20px')
+                p.font
+                  table.table.table-striped.font1.box-shadow-mini
+                    thead
+                      tr.text-white
+                        th(scope='col') Service
+                        th(scope='col') Price
+                        th(scope='col') Status
+                    tbody
+                      each serv,index in paramsUser
+                        if !serv.intServID
+                          tr
+                            td(colspan='3')
+                              i None
+                        else
+                          tr
+                            td #{serv.strServName}
+                            if serv.intPriceType == '1'
+                              td Php #{serv.formatPrice}
+                            else 
+                              td Php #{serv.formatPrice} / hr
+                            if serv.intServStatus == '1'
+                              td Available
+                            else if serv.intServStatus == '0'
+                              td Unavailable
+                            else if serv.intServStatus == '2'
+                              td Unavailable(Ongoing) 
+          #Reviews.tab-pane.fade(role='tabpanel', aria-labelledby='reviews-tab', style='height: auto')
+            .sector-container-footer
+              - emptyRev = 1
+              each rev in reviews
+                - emptyRev = 0
+                .footer-container
+                  .col-sm-3
+                    .pull-left.image
+                      .chat-img(style='height:80px; width:80px')
+                        img.img-circle(src='/userImages/profile/'+rev.strProfilePic alt='User Image' height="85" width="85")
+                  .col-sm-3
+                    h5(style="display: inline;")
+                      if rev.intChatSeeker == rev.intAccNo
+                        span.tag.seeker #{rev.strServName}
+                      else
+                        span.tag.provider #{rev.strServName}
+                    h2(style="display: inline;") #{rev.strName} 
+                    h3.mt-2 #{rev.txtRateReview}
+                  .col-sm-3
+                    img(src='/assets/images/Icons/star.png', alt='star', style='height: 4rem; width: 4rem; margin-top:5px; float:left')
+                    h1(style='float:right; margin-top: 20px') #{rev.intRating}
+              if emptyRev == 1
+                br
+                i No reviews to display
+
+  #Workers.modal.fade(tabindex='-1' role='dialog' aria-labelledby='WorkersTitle' aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+          h5#WorkersTitle.modal-title Workers
+          button.close(type='button' data-dismiss='modal' aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+          .row
+            .col
+              table.table.table-striped.box-shadow-mini
+                thead
+                  tr
+                    th.text-white(scope='col') Name
+                    th.text-white(scope='col') Status
+                    th.text-white(scope='col') Actions
+                tbody
+                  - emptyworker = 1
+                  each work in workers
+                    - emptyworker = 0
+                    tr
+                      td #{work.strWorker}
+                      - WorkPic = '/userImages/workerids/'+work.strWorkerID
+                      - NameID = work.strWorker+"'s ID"
+                      if work.intWorkerStatus == 0
+                        td Unavailable
+                        td
+                          button.btn.btn-info(type='button' data-toggle='modal' data-target='#WorkerPic' data-workername=NameID data-pic=WorkPic data-workid=work.intWorkerID)
+                            i.fa.fa-id-card
+                      else if work.intWorkerStatus == 1
+                        td Available
+                        td 
+                          button.btn.btn-info(type='button' data-toggle='modal' data-target='#WorkerPic' data-workername=NameID data-pic=WorkPic data-workid=work.intWorkerID)
+                            i.fa.fa-id-card
+                      else
+                        td Ongoing
+                        td 
+                          button.btn.btn-info(type='button' data-toggle='modal' data-target='#WorkerPic' data-workername=NameID data-pic=WorkPic data-workid=work.intWorkerID)
+                            i.fa.fa-id-card
+
+                  if emptyworker == 1
+                    tr
+                      td(colspan="4")
+                        i No Workers Added
+          hr
+          .row
+            .col.align-right
+              button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+
+  #WorkerPic.modal.fade(tabindex='-1' role='dialog' aria-labelledby='WorkerPicTitle' aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+          h5#WorkerPicTitle.modal-title 
+          button.close(type='button' data-dismiss='modal' aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+          .row
+            .col
+              img#workerImage(src="" alt='WorkerID' height="400" width="465")
+
+        .modal-footer
+          button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+
+  block profile

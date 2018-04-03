@@ -123,11 +123,14 @@ function profRender(req,res){
       res.render('home/views/worker');
       break;
     case 1:
-      res.render('welcome/views/invalid/adm-restrict');
+      res.render('profile/views/admin-view', {thisUserTab: req.user, messCount: req.messCount[0].count, paramsUser: req.paramsUser, servempty: req.servempty, documents: req.documents, reviews: req.paramsReviews, workers: req.workers});
       break;
     case 2:
     case 3:
       if(!req.paramsUser[0]){
+        res.redirect('/noroute');
+      }
+      else if(req.paramsUser[0].boolIsBanned == 1){
         res.redirect('/noroute');
       }
       else{
@@ -315,8 +318,13 @@ router.post('/manage-workers/:userid', flog, messCount, paramsUser, documents, p
     });
   }
 });
-
 router.post('/reported/:userid', flog, messCount, paramsUser, (req,res) =>{
+  if(!req.paramsUser[0]){
+    res.redirect('/noroute');
+  }
+  else if(req.paramsUser[0].boolIsBanned == 1){
+    res.redirect('/noroute');
+  }
   db.query("INSERT INTO tblreport (intRepedAccNo, intReporterAccNo, intRepCategory, txtRepDesc, datRepDate, intRepStatus) VALUES (?,?,?,?,CURDATE(),1)",[req.params.userid, req.session.user, req.body.customRadio, req.body.customTextArea], function (err, results, fields){
     if (err) console.log(err);
     res.redirect('/profile/'+req.session.user);
