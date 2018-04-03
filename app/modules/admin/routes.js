@@ -286,6 +286,7 @@ adminRouter.get('/Cancelled', flog, (req,res) => {
     INNER JOIN tblservicetag ON intServTag= intServTagID
     LEFT JOIN tbltransaction ON intChatID= intTransChatID ORDER BY intCancelID DESC`, (err, results, fields) => {
       if(err) return console.log(err)
+      console.log(results);
       if(!(!results[0])){
         for(count=0;count<results.length;count++){
           date = results[count].dtmCancelDate;
