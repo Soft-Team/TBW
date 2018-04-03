@@ -45,14 +45,15 @@ adminRouter.get('/Active', flog, (req,res)=>{
   }
 });
 
-adminRouter.get('/Banned/:username', flog, (req,res)=>{
+adminRouter.get('/Banned/:userid', flog, (req,res)=>{
   switch (req.valid) {
     case 1:
       db.beginTransaction(function(err) {
         if (err) console.log(err);
-        db.query(`UPDATE tbluser SET boolIsBanned = 1 WHERE strUserName = ?`, [req.params.username], function (err,  results, fields) {
+        db.query(`UPDATE tbluser SET boolIsBanned = 1 WHERE intAccNo = ?`, [req.params.userid], function (err,  results, fields) {
             if (err) console.log(err);
-            db.query(`UPDATE tblreport SET intRepStatus = 0 WHERE strUserName = ?`, [req.params.username], (err,results,fields)=>{
+            console.log(req.params.userid);
+            db.query(`UPDATE tblreport SET intRepStatus = 0 WHERE intRepedAccNo = ?`, [req.params.userid], (err,results,fields)=>{
                 if (err) console.log(err);
                 db.commit(function(err) {
                     if (err) console.log(err);
