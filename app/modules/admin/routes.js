@@ -165,13 +165,13 @@ adminRouter.get('/Declined', flog, (req, res) => {
 });
 
 
-adminRouter.get('/ReportedUsers', flog, (req,res) => {
+adminRouter.get('/ReportLog', flog, (req,res) => {
   switch (req.valid) {
     case 1:
-    db.query(`SELECT tblreport.*, (Reped.strName)AS ReportedName, (Reped.strUserName)AS ReportedUserName, (Reped.boolIsBanned)AS ReportedisBanned , 
-    (Reporter.strName)AS ReporterName, (Reporter.strUserName)AS ReporterUserName FROM dbtrabawho.tblreport 
-    INNER JOIN(SELECT * FROM tbluser WHERE boolIsBanned= 0)Reped ON intRepedAccNo= Reped.intAccNo 
-    INNER JOIN(SELECT * FROM tbluser)Reporter ON intReporterAccNo= Reporter.intAccNo WHERE intRepStatus = 1;  `, (err, results, fields) => {
+    db.query(`SELECT tblreport.*, (Reped.strName)AS ReportedName, (Reped.strUserName)AS ReportedUserName, (Reped.boolIsBanned)AS ReportedisBanned ,
+    (Reporter.strName)AS ReporterName, (Reporter.strUserName)AS ReporterUserName FROM dbtrabawho.tblreport
+    INNER JOIN(SELECT * FROM tbluser WHERE boolIsBanned= 0)Reped ON intRepedAccNo= Reped.intAccNo
+    INNER JOIN(SELECT * FROM tbluser)Reporter ON intReporterAccNo= Reporter.intAccNo WHERE intRepStatus = 1 ORDER BY intRepID DESC;  `, (err, results, fields) => {
       if(err) return console.log(err)
       console.log(results);
       if(!(!results[0])){
@@ -179,7 +179,7 @@ adminRouter.get('/ReportedUsers', flog, (req,res) => {
           results[count].formatDate = (results[count].datRepDate).toDateString("en-US").slice(4, 15);
         }
       }
-      return res.render('admin/views/ReportedUsers', {resultspug: results});
+      return res.render('admin/views/ReportLog', {resultspug: results});
     });
     break;
     case 2:
@@ -189,10 +189,10 @@ adminRouter.get('/ReportedUsers', flog, (req,res) => {
   }
 });
 
-adminRouter.get('/ReportLog', flog, (req,res) => {
+adminRouter.get('/ReportedUsers', flog, (req,res) => {
   switch (req.valid) {
     case 1:
-      res.render('admin/views/ReportLog');
+      res.render('admin/views/ReportedUsers');
       break;
     case 2:
     case 3:
@@ -272,9 +272,9 @@ adminRouter.get('/TransactionLog', flog, (req,res) => {
 adminRouter.get('/Cancelled', flog, (req,res) => {
   switch (req.valid) {
     case 1:
-    db.query(`SELECT tblcancellation.*, Cancel.*, Canceled.*, tblservicetag.strServName, tbltransaction.* FROM dbtrabawho.tblcancellation INNER JOIN tblchat ON intCancelChatID= intChatID INNER JOIN tblservice ON intServID= intChatServ 
-    INNER JOIN(SELECT (intAccNo)CancelNo, (strName)CancelName FROM  tbluser)Cancel ON intCancelAccNo= Cancel.CancelNo 
-    INNER JOIN(SELECT (intAccNo)CanceledNo, (strName)CanceledName FROM  tbluser)Canceled ON 
+    db.query(`SELECT tblcancellation.*, Cancel.*, Canceled.*, tblservicetag.strServName, tbltransaction.* FROM dbtrabawho.tblcancellation INNER JOIN tblchat ON intCancelChatID= intChatID INNER JOIN tblservice ON intServID= intChatServ
+    INNER JOIN(SELECT (intAccNo)CancelNo, (strName)CancelName FROM  tbluser)Cancel ON intCancelAccNo= Cancel.CancelNo
+    INNER JOIN(SELECT (intAccNo)CanceledNo, (strName)CanceledName FROM  tbluser)Canceled ON
     (intChatSeeker= Canceled.CanceledNo OR intServAccNo= Canceled.CanceledNo) AND (Canceled.CanceledNo!= intCancelAccNo)
     INNER JOIN tblservicetag ON intServTag= intServTagID
     LEFT JOIN tbltransaction ON intChatID= intTransChatID`, (err, results, fields) => {
