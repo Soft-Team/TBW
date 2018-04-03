@@ -1,10 +1,16 @@
 extends ../../../templates/dash-admin.pug
 
 block main
+  block append scripts
+    script.
+      function showPopup(url) {
+        newwindow=window.open(url,'name','resizable=no,height=600,width=1174,top=60,left=140');
+        if (window.focus) {newwindow.focus()}
+      }
   .jumbotron-admin
-        center
-            h1 Hello Admin!
-  
+    center
+      h1 Hello Admin!
+
   #page-wrapper(style='min-height: 246px;')
     .row
       .col-lg-12
@@ -12,106 +18,106 @@ block main
         h1.page-header Dashboard
         br
       // /.col-lg-12
-    // /.row
-    .row
-      .col-lg-4.col-md-6
-        .panel.panel-primary
-          .panel-heading
-            .row
-              .col-xs-3
-                i.fa.fa-users.fa-5x
-              .col-xs-9.text-right
-                .huge 26
-                div User Accounts
-          a(href='#' style='color: #337ab7;')
-            .panel-footer
-              span.pull-left View Details
-              span.pull-right(style='margin:0px !important;')
-                i.fa.fa-arrow-circle-right
-              .clearfix
-      .col-lg-4.col-md-6
-        .panel.panel-green
-          .panel-heading
-            .row
-              .col-xs-3
-                i.fa.fa-american-sign-language-interpreting.fa-5x
-              .col-xs-9.text-right
-                .huge 12
-                div Transactions
-          a(href='#' style='color: #5cb85c;')
-            .panel-footer
-              span.pull-left View Details
-              span.pull-right(style='margin:0px !important;')
-                i.fa.fa-arrow-circle-right
-              .clearfix
-      .col-lg-4.col-md-6
-        .panel.panel-yellow
-          .panel-heading
-            .row
-              .col-xs-3
-                i.fa.fa-file-text.fa-5x
-              .col-xs-9.text-right
-                .huge 124
-                div Reports
-          a(href='#' style='color: #F0AD4E;')
-            .panel-footer
-              span.pull-left View Details
-              span.pull-right(style='margin:0px !important;')
-                i.fa.fa-arrow-circle-right
-              .clearfix
-    .row
-      .col-lg-4.col-md-6
-        .panel.panel-red
-          .panel-heading
-            .row
-              .col-xs-3
-                i.fa.fa-tag.fa-5x
-              .col-xs-9.text-right
-                .huge 13
-                div Service Tags
-          a(href='#' style='color: #D9534F')
-            .panel-footer
-              span.pull-left View Details
-              span.pull-right(style='margin:0px !important;')
-                i.fa.fa-arrow-circle-right
-              .clearfix
-      .col-lg-4.col-md-6
-        .panel.panel-pink
-          .panel-heading
-            .row
-              .col-xs-3
-                i.fa.fa-address-card.fa-5x
-              .col-xs-9.text-right
-                .huge 13
-                div Service Tag Details
-          a(href='#' style='color: #ff66cc;')
-            .panel-footer
-              span.pull-left View Details
-              span.pull-right(style='margin:0px !important;')
-                i.fa.fa-arrow-circle-right
-              .clearfix
-      .col-lg-4.col-md-6
-        .panel.panel-violet
-          .panel-heading
-            .row
-              .col-xs-3
-                i.fa.fa-suitcase.fa-5x
-              .col-xs-9.text-right
-                .huge 13
-                div Services
-          a(href='#' style='color: #9900cc;')
-            .panel-footer
-              span.pull-left View Details
-              span.pull-right(style='margin:0px !important;')
-                i.fa.fa-arrow-circle-right
-              .clearfix
-    br          
-    .row
-      .col-lg-4
-        .panel.panel-primary
-          .panel-heading
-            h3 Today
-          .panel-body
+      // /.row
+      .row
+        .col-lg-4.col-md-6
+          .panel.panel-primary
+            .panel-heading
+              .row
+                .col-xs-3
+                  i.fa.fa-users.fa-5x
+                .col-xs-9.text-right
+                  .huge 26
+                  div User Accounts
+            a(href='#' style='color: #337ab7;')
+              .panel-footer
+                span.pull-left View Details
+                span.pull-right(style='margin:0px !important;')
+                  i.fa.fa-arrow-circle-right
+                .clearfix
+        .col-lg-4.col-md-6
+          .panel.panel-green
+            .panel-heading
+              .row
+                .col-xs-3
+                  i.fa.fa-american-sign-language-interpreting.fa-5x
+                .col-xs-9.text-right
+                  .huge 12
+                  div Transactions
+            a(href='#' style='color: #5cb85c;')
+              .panel-footer
+                span.pull-left View Details
+                span.pull-right(style='margin:0px !important;')
+                  i.fa.fa-arrow-circle-right
+                .clearfix
+        .col-lg-4.col-md-6
+          .panel.panel-yellow
+            .panel-heading
+              .row
+                .col-xs-3
+                  i.fa.fa-file-text.fa-5x
+                .col-xs-9.text-right
+                  .huge 124
+                  div Reports
+            a(href='#' style='color: #F0AD4E;')
+              .panel-footer
+                span.pull-left View Details
+                span.pull-right(style='margin:0px !important;')
+                  i.fa.fa-arrow-circle-right
+                .clearfix
+      .row
+        .col-lg-4.col-md-6
+          .panel.panel-red
+            .panel-heading
+              .row
+                .col-xs-3
+                  i.fa.fa-tag.fa-5x
+                .col-xs-9.text-right
+                  .huge 13
+                  div Service Tags
+            a(href='#' style='color: #D9534F')
+              .panel-footer
+                span.pull-left View Details
+                span.pull-right(style='margin:0px !important;')
+                  i.fa.fa-arrow-circle-right
+                .clearfix
+        .col-lg-4.col-md-6
+          .panel.panel-pink
+            .panel-heading
+              .row
+                .col-xs-3
+                  i.fa.fa-address-card.fa-5x
+                .col-xs-9.text-right
+                  .huge 13
+                  div Service Tag Details
+            a(href='#' style='color: #ff66cc;')
+              .panel-footer
+                span.pull-left View Details
+                span.pull-right(style='margin:0px !important;')
+                  i.fa.fa-arrow-circle-right
+                .clearfix
+        .col-lg-4.col-md-6
+          .panel.panel-violet
+            .panel-heading
+              .row
+                .col-xs-3
+                  i.fa.fa-suitcase.fa-5x
+                .col-xs-9.text-right
+                  .huge 13
+                  div Services
+            a(href='#' style='color: #9900cc;')
+              .panel-footer
+                span.pull-left View Details
+                span.pull-right(style='margin:0px !important;')
+                  i.fa.fa-arrow-circle-right
+                .clearfix
+      br          
+      .row
+        .col-lg-4
+          .panel.panel-primary
+            .panel-heading
+              h3 Today
+            .panel-body
               span.text-h Transaction
               span.text-r 10
               hr
@@ -123,12 +129,12 @@ block main
               hr
               span.text-tab Cancelled
               span.text-r 10
-      // /.col-lg-4
-      .col-lg-4
-        .panel.panel-default
-          .panel-heading
-            h3 This Month
-          .panel-body
+        // /.col-lg-4
+        .col-lg-4
+          .panel.panel-default
+            .panel-heading
+              h3 This Month
+            .panel-body
               span.text-h Transaction
               span.text-r 10
               hr
@@ -140,12 +146,12 @@ block main
               hr
               span.text-tab Cancelled
               span.text-r 10
-      // /.col-lg-4
-      .col-lg-4
-        .panel.panel-green
-          .panel-heading
-            h3 This Year
-          .panel-body
+        // /.col-lg-4
+        .col-lg-4
+          .panel.panel-green
+            .panel-heading
+              h3 This Year
+            .panel-body
               span.text-h Transaction
               span.text-r 10
               hr
@@ -157,5 +163,3 @@ block main
               hr
               span.text-tab Cancelled
               span.text-r 10
-
-

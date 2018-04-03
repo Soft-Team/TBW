@@ -123,7 +123,12 @@ function profRender(req,res){
       res.render('home/views/worker');
       break;
     case 1:
-      res.render('profile/views/admin-view', {thisUserTab: req.user, messCount: req.messCount[0].count, paramsUser: req.paramsUser, servempty: req.servempty, documents: req.documents, reviews: req.paramsReviews, workers: req.workers});
+      if(!req.paramsUser[0]){
+        res.redirect('/noroute');
+      }
+      else{
+        res.render('profile/views/admin-view', {thisUserTab: req.user, messCount: req.messCount[0].count, paramsUser: req.paramsUser, servempty: req.servempty, documents: req.documents, reviews: req.paramsReviews, workers: req.workers});
+      }
       break;
     case 2:
     case 3:

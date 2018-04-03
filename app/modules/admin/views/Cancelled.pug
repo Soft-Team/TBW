@@ -1,55 +1,62 @@
 extends ../../../templates/dash-admin.pug
 
 block main
-    block append scripts
-        script.
-            $('#cancelreason').on('show.bs.modal', function (event){
-                var button = $(event.relatedTarget)
-                var name = button.data('name')
-                var reason = button.data('reason')
+  block append scripts
+    script.
+      $('#cancelreason').on('show.bs.modal', function (event){
+        var button = $(event.relatedTarget)
+        var name = button.data('name')
+        var reason = button.data('reason')
 
-                var modal = $(this)
-                modal.find('.modal-header h5').text(name)
-                modal.find('.modal-body #reas').text(reason)
-            })
-    .jumbotron-admin
-        center
-            h1 Cancelled Transactions
-    p  
+        var modal = $(this)
+        modal.find('.modal-header h5').text(name)
+        modal.find('.modal-body #reas').text(reason)
+      })
+      
+      function showPopup(url) {
+        newwindow=window.open(url,'name','resizable=no,height=600,width=1174,top=60,left=140');
+        if (window.focus) {newwindow.focus()}
+      }
+  .jumbotron-admin
     center
-    .container
-        p.font
-            table.table.table-striped.table-hover.box-shadow-mini
-                thead
-                    tr  
-                        th(scope='col') #
-                        th(scope='col') Cancelled By
-                        th(scope='col') ChatID
-                        th(scope='col') &nbsp
+      h1 Cancelled Transactions
+  p  
+  center
+  .container
+    p.font
+      .row
+        .col
+        .col-10
+          table.table.table-striped.table-hover.box-shadow-mini
+            thead
+              tr  
+                th(scope='col') #
+                th(scope='col') Cancelled By
+                th(scope='col') ChatID
+                th(scope='col' style="width: 240px;") Actions
 
+            tbody
+            each user in resultspug
+              tr
+                td(style="padding-right: 20px; padding-bottom: 10px;") #{user.intCancelID}
+                td #{user.CancelName}
+                td #{user.intCancelChatID}
+                td(style="width: 240px;")
+                  a.btn.btn-outline-danger.mr-2() Invoice   
+                  a.btn.btn-outline-primary(data-toggle='modal', data-name=user.CancelName, data-reason=user.txtCancelReason data-target='#cancelreason') View Reason
 
-                tbody
-                each user in resultspug
-                    tr
-                        td(style="padding-right: 20px; padding-bottom: 10px;") #{user.intCancelID}
-                        td #{user.CancelName}
-                        td #{user.intCancelChatID}
-                        td 
-                            a.btn.btn-outline-danger.mr-2() Invoice   
-                            a.btn.btn-outline-primary(data-toggle='modal', data-name=user.CancelName, data-reason=user.txtCancelReason data-target='#cancelreason') View Reason
+            #cancelreason.modal.fade(tabindex='-1', role='dialog', aria-labelledby='cancelreason', aria-hidden='true')
+              each user in resultspug
+                .modal-dialog.modal-dialog-centered(role='document')
+                  .modal-content
+                    .modal-header
+                      h5
+                      button.close(type='button', data-dismiss='modal', aria-label='Close')
+                      span(aria-hidden='true') 
+                    .modal-body
+                      h6.text-danger Reason for Cancellation:
+                      p#reas
+                    .modal-footer
+                      button.btn.btn-secondary(type='button', data-dismiss='modal') Close
 
-                #cancelreason.modal.fade(tabindex='-1', role='dialog', aria-labelledby='cancelreason', aria-hidden='true')
-                    each user in resultspug
-                        .modal-dialog.modal-dialog-centered(role='document')
-                            .modal-content
-                                .modal-header
-                                    h5
-                                    button.close(type='button', data-dismiss='modal', aria-label='Close')
-                                    span(aria-hidden='true') 
-                                .modal-body
-                                    h6.text-danger Reason for Cancellation:
-                                    p#reas
-                                .modal-footer
-                                    button.btn.btn-secondary(type='button', data-dismiss='modal') Close
-                    
-                    
+        .col

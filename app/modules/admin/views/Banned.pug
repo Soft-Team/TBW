@@ -1,30 +1,36 @@
 extends ../../../templates/dash-admin.pug
 
 block main
-    .jumbotron-admin
-        center
-            h1 Banned Users
-    p  
+  block append scripts
+    script.
+      function showPopup(url) {
+        newwindow=window.open(url,'name','resizable=no,height=600,width=1174,top=60,left=140');
+        if (window.focus) {newwindow.focus()}
+      }
+  .jumbotron-admin
     center
-    .container
-        p.font
-            table.table.table-striped.table-hover.box-shadow-mini
-                thead
-                    tr  
-                        th(scope='col') #
-                        th(scope='col') Name
-                        th(scope='col') Username
-                        th(scope='col') Email
-                        th(scope='col') Contact No.
-                        th(scope='col') &nbsp
-                tbody
-                each user in resultspug
-                    tr
-                        td(style="padding-right: 20px; padding-bottom: 10px;") #{user.intAccNo}
-                        td 
-                            a(href=`/profile/${user.intAccNo}`) #{user.strUserName}
-                        td #{user.strName}
-                        td #{user.strEmail}
-                        td #{user.strContactNo}
-                        td 
-                            a.btn.btn-outline-info(href=`/admin/Unbanned/${user.strUserName}`) Unban      
+      h1 Banned Users
+  p  
+  center
+  .container
+    p.font
+      table.table.table-striped.table-hover.box-shadow-mini
+        thead
+          tr  
+            th(scope='col') #
+            th(scope='col') Name
+            th(scope='col') Username
+            th(scope='col') Email
+            th(scope='col') Contact No.
+            th(scope='col') &nbsp
+        tbody
+        each user in resultspug
+          tr
+            td(style="padding-right: 20px; padding-bottom: 10px;") #{user.intAccNo}
+            td 
+              a(href=`/profile/${user.intAccNo}`) #{user.strUserName}
+            td #{user.strName}
+            td #{user.strEmail}
+            td #{user.strContactNo}
+            td 
+              a.btn.btn-outline-info(href=`/admin/Unbanned/${user.strUserName}`) Unban      

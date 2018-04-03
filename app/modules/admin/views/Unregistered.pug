@@ -1,41 +1,47 @@
 extends ../../../templates/dash-admin.pug
 
 block main
-    .jumbotron-admin
-        center
-            h1 Unregistered Business Accounts
-    p  
+  block append scripts
+    script.
+      function showPopup(url) {
+        newwindow=window.open(url,'name','resizable=no,height=600,width=1174,top=60,left=140');
+        if (window.focus) {newwindow.focus()}
+      }
+  .jumbotron-admin
     center
-    .container
-        p.font
-            table.table.table-striped.table-hover.box-shadow-mini
-                thead
-                    tr  
-                        th(scope='col') #
-                        th(scope='col') Business Name
-                        th(scope='col') Username
-                        th(scope='col') Owner Name
-                        th(scope='col') City
-                        th(scope='col') Email
-                        th(scope='col') Contact No.
-                        th(scope='col') &nbsp
-                        th(scope='col') &nbsp
-                        th(scope='col') &nbsp
+      h1 Unregistered Business Accounts
+  p  
+  center
+  .container
+    p.font
+      table.table.table-striped.table-hover.box-shadow-mini
+        thead
+          tr  
+            th(scope='col') #
+            th(scope='col') Business Name
+            th(scope='col') Username
+            th(scope='col') Owner Name
+            th(scope='col') City
+            th(scope='col') Email
+            th(scope='col') Contact No.
+            th(scope='col') &nbsp
+            th(scope='col') &nbsp
+            th(scope='col') &nbsp
 
-                tbody
-                each user in resultspug
-                    tr
-                        td(style="padding-right: 20px; padding-bottom: 10px;") #{user.intAccNo}
-                        td #{user.strName}
-                        td 
-                            a(href=`/profile/${user.intAccNo}`) #{user.strUserName}
-                        td #{user.strOwner}
-                        td #{user.strCity}
-                        td #{user.strEmail}
-                        td #{user.strContactNo}
-                        td 
-                            a.btn.btn-outline-success(href=`/admin/Unregistered/Accept/${user.strUserName}`) Accept
-                        td  
-                            a.btn.btn-outline-danger(href=`/admin/Unregistered/Decline/${user.strUserName}`) Decline
-                        td 
-                            a.btn.btn-outline-dark(onClick=`window.open("/userImages/permits/${user.strValidID}");` href='#' alt='sample') Business Permit
+        tbody
+        each user in resultspug
+          tr
+            td(style="padding-right: 20px; padding-bottom: 10px;") #{user.intAccNo}
+            td #{user.strName}
+            td 
+              a(href=`/profile/${user.intAccNo}`) #{user.strUserName}
+            td #{user.strOwner}
+            td #{user.strCity}
+            td #{user.strEmail}
+            td #{user.strContactNo}
+            td 
+              a.btn.btn-outline-success(href=`/admin/Unregistered/Accept/${user.strUserName}`) Accept
+            td  
+              a.btn.btn-outline-danger(href=`/admin/Unregistered/Decline/${user.strUserName}`) Decline
+            td 
+              a.btn.btn-outline-dark(onClick=`window.open("/userImages/permits/${user.strValidID}");` href='#' alt='sample') Business Permit
