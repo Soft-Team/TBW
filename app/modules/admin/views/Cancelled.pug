@@ -46,8 +46,20 @@ block main
                   a(href=`/profile/${user.intCancelAccNo}` onClick='showPopup(this.href);return(false);') #{user.CancelName}
                 td #{user.formatDate}
                 td(style="width: 240px;")
-                  a.btn.btn-outline-danger.mr-2() Invoice   
-                  a.btn.btn-outline-primary(data-toggle='modal', data-name=user.CancelName, data-reason=user.txtCancelReason data-target='#cancelreason') View Reason
+                  - if (!(!user.intTransID)){
+                    button.btn.btn-outline-primary.mr-2(data-toggle='modal', data-name=user.CancelName, data-reason=user.txtCancelReason data-target='#cancelreason') Reason
+                    - if (!user.dtmTransStarted){
+                      a(href=`/invoice/${user.intTransID}` onClick='showPopup(this.href);return(false);')
+                        button.btn.btn-outline-secondary Offered
+                    - }
+                    - else {
+                      a(href=`/invoice/${user.intTransID}` onClick='showPopup(this.href);return(false);')
+                        button.btn.btn-outline-info Invoice   
+                    - }
+                  - }
+                  - else{
+                    button.btn.btn-outline-primary(data-toggle='modal', data-name=user.CancelName, data-reason=user.txtCancelReason data-target='#cancelreason' style="margin-right: 87px;") Reason
+                  - }
 
             #cancelreason.modal.fade(tabindex='-1', role='dialog', aria-labelledby='cancelreason', aria-hidden='true')
               each user in resultspug

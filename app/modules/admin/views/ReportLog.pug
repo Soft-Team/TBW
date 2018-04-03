@@ -62,7 +62,7 @@ block main
             td 
               a.btn.btn-outline-danger(href=`/admin/Banned/${user.intRepedAccNo}`) Ban  
             td
-              a.btn.btn-outline-primary(data-toggle='modal', data-target='#reportdescription', data-name=user.ReportedName, data-category= category, data-description=user.txtRepDesc) View Description
+              button.btn.btn-outline-primary(data-toggle='modal', data-target='#reportdescription', data-name=user.ReportedName, data-category= category, data-description=user.txtRepDesc) Description
 
     #reportdescription.modal.fade(tabindex='-1', role='dialog', aria-labelledby='repdesc', aria-hidden='true')
       each user in resultspug

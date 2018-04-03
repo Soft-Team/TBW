@@ -14,22 +14,26 @@ block main
   center
   .container
     p.font
-      table.table.table-striped.table-hover.box-shadow-mini
-        thead
-          tr  
-            th(scope='col') #
-            th(scope='col') Username
-            th(scope='col') Current Reports
-            th(scope='col') Total Reports
-            th(scope='col') Actions
+      .row
+        .col
+        .col-10
+          table.table.table-striped.table-hover.box-shadow-mini
+            thead
+              tr  
+                th(scope='col') #
+                th(scope='col') Username
+                th(scope='col') Current Reports
+                th(scope='col') Total Reports
+                th(scope='col') Actions
 
-        tbody
-        each user in resultspug
-          tr
-            td(style="padding-right: 20px; padding-bottom: 10px;") #{user.intAccNo}
-            td 
-              a(href=`/profile/${user.intAccNo}` onClick='showPopup(this.href);return(false);') #{user.strUserName}
-            td #{user.CurrentCNT}
-            td #{user.TotalCNT}
-            td 
-              a.btn.btn-outline-danger(href=`/admin/Banned/${user.intAccNo}`) Ban  
+            tbody
+            each user in resultspug
+              tr
+                td(style="padding-right: 20px; padding-bottom: 10px;") #{user.intAccNo}
+                td 
+                  a(href=`/profile/${user.intAccNo}` onClick='showPopup(this.href);return(false);') #{user.strUserName}
+                td #{user.CurrentCNT}
+                td #{user.TotalCNT}
+                td 
+                  a.btn.btn-outline-danger(href=`/admin/Banned/${user.intAccNo}`) Ban  
+        .col
