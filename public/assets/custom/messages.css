@@ -319,3 +319,11 @@ a.chat-part{
   /*background: rgba(5, 225, 119,.7);*/
   border-left: 4px solid #05E177;
 }
+
+.mlist {
+  opacity: 1 !important;
+}
+.mlist:hover {
+  background: #3498DB;
+  border: 1px solid #3498DB;
+}
