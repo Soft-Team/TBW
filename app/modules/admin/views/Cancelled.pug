@@ -17,6 +17,11 @@ block main
         newwindow=window.open(url,'name','resizable=no,height=600,width=1174,top=60,left=140');
         if (window.focus) {newwindow.focus()}
       }
+      function chatPopup(url) {
+        newwindow=window.open(url,'name','resizable=no,height=600,width=600,top=60,left=450');
+        if (window.focus) {newwindow.focus()}
+      }
+      
   .jumbotron-admin
     center
       h1 Cancelled Transactions
@@ -41,7 +46,7 @@ block main
               tr
                 td(style="padding-right: 20px; padding-bottom: 10px;") #{user.intCancelID}
                 td 
-                  a(href=`/messages/${user.intCancelChatID}` onClick='showPopup(this.href);return(false);') #{user.intCancelChatID}
+                  a(href=`/messages/${user.intCancelChatID}` onClick='chatPopup(this.href);return(false);') #{user.intCancelChatID}
                 td 
                   a(href=`/profile/${user.intCancelAccNo}` onClick='showPopup(this.href);return(false);') #{user.CancelName}
                 td #{user.formatDate}
