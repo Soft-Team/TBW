@@ -19,22 +19,22 @@ block content
   #AddServiceTag.modal.fade(tabindex='-1', role='dialog', aria-labelledby='AddServiceTagTitle', aria-hidden='true')
     .modal-dialog(role='document')
       .modal-content
-        .modal-header
-          h5#AddServiceTagTitle Add Service Tag
-          button.close(type='button', data-dismiss='modal', aria-label='Close')
-            span(aria-hidden='true') 
-        form(method='POST' action='/add')
+        form(method='POST' action='/admin/add' style="margin-bottom:0px !important")
+          .modal-header
+            h5#AddServiceTagTitle Add Service Tag
+            button.close(type='button', data-dismiss='modal', aria-label='Close')
+              span(aria-hidden='true') 
           .modal-body
             .row
               .col
                 .form-group
-                  label(for='workername')
+                  label(for='servtag')
                     b Service Tag
-                  input#workername.form-control(type='text' name='workername' aria-describedby='workernameHelp' maxlength="100" required)
-                  small#workernameHelp.form-text.text-muted Service Tag will be Permanent
-        .modal-footer
-          button.editbuttons.btn.btn-primary.btn-md(type='submit') Submit
-          button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+                  input#servtag.form-control(type='text' name='tag' aria-describedby='servtagHelp' maxlength="45" required)
+                  small#servtagHelp.form-text.text-muted Service Tag will be Permanent
+          .modal-footer
+            button.editbuttons.btn.btn-primary.btn-md(type='submit') Submit
+            button.btn.btn-secondary(type='button', data-dismiss='modal') Close
 
   .dash
     block dash
