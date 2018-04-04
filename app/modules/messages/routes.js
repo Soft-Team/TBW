@@ -50,7 +50,11 @@ function fchat(req,res,next){
 function fmess(req,res,next){
   /*Messages of Current Chat, Match(params);
   *(tbluser)*(tblchat)*(tblmessage)*(tblservice)*(tblservicetag)*/
-  db.query("SELECT A.* , (tbluser.strName)Seeker, (tbluser.intAccNo)SAccNo FROM (SELECT * FROM tblchat INNER JOIN tblmessage ON intChatID= intMessChatID INNER JOIN tblservice ON intChatServ= intServID INNER JOIN tbluser ON intAccNo= intServAccNo INNER JOIN tblservicetag ON intServTagID= intServTag)AS A INNER JOIN tbluser ON tbluser.intAccNo= A.intChatSeeker WHERE A.intChatID= ?",[req.params.chatid], (err, results, fields) => {
+  db.query(`SELECT A.* , (tbluser.strName)Seeker, (tbluser.intAccNo)SAccNo, (Provider.strName)Provider FROM (SELECT * FROM tblchat INNER JOIN tblmessage ON intChatID= intMessChatID
+    INNER JOIN tblservice ON intChatServ= intServID INNER JOIN tbluser ON intAccNo= intServAccNo
+    INNER JOIN tblservicetag ON intServTagID= intServTag)AS A INNER JOIN tbluser ON tbluser.intAccNo= A.intChatSeeker
+    INNER JOIN(SELECT * FROM tbluser)Provider ON intServAccNo= Provider.intAccNo
+    WHERE A.intChatID= ?`,[req.params.chatid], (err, results, fields) => {
       if (err) console.log(err);
       if(!(!results[0])){
         for(count=0;count<results.length;count++){
@@ -354,7 +358,12 @@ function messRender(req,res){
       res.render('home/views/worker');
       break;
     case 1:
-      res.render('welcome/views/invalid/adm-restrict');
+      if(!req.mess[0]){
+        res.redirect('/noroute');
+      }
+      else{
+        res.render('messages/views/admin-view', { thisUserTab: req.user, messtab: req.mess, messOne: req.mess[0]});
+      }
       break;
     case 2:
     case 3:

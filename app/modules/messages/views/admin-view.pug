@@ -1,0 +1,31 @@
+extends ../../../templates/master.pug
+
+block content
+  .container.fill(style='padding:0px')
+    .row.chat-wrap
+      .col.panel-wrap
+        #Messages.col-sm-9.section-wrap(style="height: 100%;")
+          .row.header-wrap
+            .chat-header.col-sm-12(style="height: 67px;")
+              .row.pt-2(style="margin-top: 10px !important;")
+                .col(style="padding-top: 3px;")
+                  h4(style='color:#374850; display: inline') ##{messOne.strServName}
+                    b(style="display: inline; color: #71C1FF") &nbspPROVIDER
+                    span(style='color: white;display: inline') &nbsp#{messOne.strName} -
+                    b(style="display: inline; color: #05E177") &nbspSEEKER
+                    span(style='color: white;display: inline') &nbsp#{messOne.Seeker}
+            // Messages
+            .row.content-wrap.messages(style="overflow: auto;")
+              .col
+                each mess in messtab
+                  .msg
+                    .media-body
+                      small.pull-right.time
+                        i.fa.fa-clock-o
+                        | &nbsp#{mess.formatdate}
+                      if mess.intSender == 1
+                        h5.right.media-heading #{mess.Provider}
+                      else
+                        h5.left.media-heading #{mess.Seeker}
+                      small.col-sm-11
+                        |  #{mess.txtMessage}

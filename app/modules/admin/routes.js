@@ -34,7 +34,6 @@ adminRouter.get('/Active', flog, (req,res)=>{
       db.query(`SELECT * FROM tbluser WHERE boolIsBanned= 0 AND (((intStatus= 1 OR intStatus= 2) AND intType!= 3) OR (intStatus= 2 AND intType= 3))`,  (err, results, fields) => {
         if(err) return console.log(err)
         results= results.filter(function(record) {return record.intType !== 1});
-        console.log(results.length);
         return res.render('admin/views/Active', {resultspug: results});
       });
       break;
@@ -52,7 +51,6 @@ adminRouter.get('/Banned/:userid', flog, (req,res)=>{
         if (err) console.log(err);
         db.query(`UPDATE tbluser SET boolIsBanned = 1 WHERE intAccNo = ?`, [req.params.userid], function (err,  results, fields) {
             if (err) console.log(err);
-            console.log(req.params.userid);
             db.query(`UPDATE tblreport SET intRepStatus = 0 WHERE intRepedAccNo = ?`, [req.params.userid], (err,results,fields)=>{
                 if (err) console.log(err);
                 db.commit(function(err) {
@@ -106,7 +104,6 @@ adminRouter.get('/Unregistered', flog, (req, res)=>{
       db.query(`SELECT * FROM tbluser WHERE boolIsBanned=0 AND (intType = 3 AND intStatus = 1)`,  (err, results, fields) => {
         if(err) return console.log(err)
         results= results.filter(function(record) {return record.intType !== 1});
-        console.log(results.length);
         return res.render('admin/views/Unregistered', {resultspug: results});
       });
       break;
@@ -153,7 +150,6 @@ adminRouter.get('/Declined', flog, (req, res) => {
       db.query(`SELECT * FROM tbluser WHERE intStatus = 3`,  (err, results, fields) => {
         if(err) return console.log(err)
         results= results.filter(function(record) {return record.intType !== 1});
-        console.log(results.length);
         return res.render('admin/views/Declined', {resultspug: results});
       });
       break;
@@ -173,7 +169,6 @@ adminRouter.get('/ReportLog', flog, (req,res) => {
     INNER JOIN(SELECT * FROM tbluser WHERE boolIsBanned= 0)Reped ON intRepedAccNo= Reped.intAccNo
     INNER JOIN(SELECT * FROM tbluser)Reporter ON intReporterAccNo= Reporter.intAccNo WHERE intRepStatus = 1 ORDER BY intRepID DESC;  `, (err, results, fields) => {
       if(err) return console.log(err)
-      console.log(results);
       if(!(!results[0])){
         for(count=0;count<results.length;count++){
           results[count].formatDate = (results[count].datRepDate).toDateString("en-US").slice(4, 15);
@@ -197,7 +192,6 @@ adminRouter.get('/ReportedUsers', flog, (req,res) => {
     LEFT JOIN (SELECT COUNT(intAccNo)CurrentCNT, intAccNo FROM tbluser INNER JOIN tblreport ON intAccNo= intRepedAccNo WHERE intRepStatus= 1 AND boolIsBanned= 0 GROUP BY intAccNo)Current
     ON Total.intAccNo= Current.intAccNo ORDER BY CurrentCNT DESC, TotalCNT DESC`, (err, results, fields) => {
       if(err) return console.log(err)
-      console.log(results);
       return res.render('admin/views/ReportedUsers', {resultspug: results});
     });
     break;
@@ -213,7 +207,6 @@ adminRouter.get('/IDVerification', flog, (req,res) => {
     case 1:
       db.query(`SELECT * FROM tbluser WHERE boolIsBanned=0 AND intType = 2 AND intStatus = 1 AND strValidID IS NOT NULL`,  (err, results, fields) => {
         if(err) return console.log(err)
-        console.log(results.length);
         return res.render('admin/views/IDVerification', {resultspug: results});
       });
       break;
@@ -285,8 +278,7 @@ adminRouter.get('/Cancelled', flog, (req,res) => {
     (intChatSeeker= Canceled.CanceledNo OR intServAccNo= Canceled.CanceledNo) AND (Canceled.CanceledNo!= intCancelAccNo)
     INNER JOIN tblservicetag ON intServTag= intServTagID
     LEFT JOIN tbltransaction ON intChatID= intTransChatID ORDER BY intCancelID DESC`, (err, results, fields) => {
-      if(err) return console.log(err)
-      console.log(results);
+      if(err) return console.log(err);
       if(!(!results[0])){
         for(count=0;count<results.length;count++){
           date = results[count].dtmCancelDate;
