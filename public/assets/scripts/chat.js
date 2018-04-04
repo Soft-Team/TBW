@@ -12,13 +12,15 @@ var message = document.getElementById('message'),
 
 // Emit events
 btn.addEventListener('click', function(){
-    socket.emit('chat', {
-        message: message.value,
-        handle: handle.value,
-        chatid: chatid.value,
-        sender: sender.value,
-        user: user.value,
-    });
+    if (message.value != ''){
+      socket.emit('chat', {
+          message: message.value,
+          handle: handle.value,
+          chatid: chatid.value,
+          sender: sender.value,
+          user: user.value,
+      });
+    }
     message.value = "";
 });
 

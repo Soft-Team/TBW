@@ -271,7 +271,7 @@ block main
                     input#sender(type='text', name='handle', value= messOne.sendType, hidden)
                     each thisuser in thisUserTab
                       input#thisuser(type='text', name='handle', value=thisuser.intAccNo , hidden)
-                    textarea#message.no-resize-bar.form-control(rows='2', name='message', placeholder='Write a message...' maxlength="65500")
+                    textarea#message.no-resize-bar.form-control(rows='2', name='message', placeholder='Write a message...', maxlength="65500")
                   a#send.btn.send-button
                     | Send 
                     i.fa.fa-send
