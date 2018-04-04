@@ -1,6 +1,13 @@
 extends ../../../templates/dash.pug
 
 block main
+  block append script
+    script.
+      function invoicePopup(url) {
+        newwindow=window.open(url,'name','resizable=no,height=600,width=800,top=60,left=360');
+        if (window.focus) {newwindow.focus()}
+      }
+      
   .jumbotron-banner
     center
       h1.text-white View Previous Transaction
@@ -33,7 +40,7 @@ block main
                   td
                     | #{trans.dateEnd}
                   td
-                    a.mx-2(href='/invoice/'+trans.intTransID, target='_blank', data-toggle='tooltip', data-placement='bottom', title='Invoice')
+                    a.mx-2(href='/invoice/'+trans.intTransID, onClick='invoicePopup(this.href);return(false);', data-toggle='tooltip', data-placement='bottom', title='Invoice')
                       img.size(src='/assets/images/icons/Invoice2.png', alt='Invoice', style='height:40px; width:40px;')
                     if trans.intServAccNo != thisuser.intAccNo && trans.rate == 0 
                       a.mx-2(href='/transactions/ratereview/'+trans.intTransID, data-toggle='tooltip', data-placement='bottom', title='Rating')

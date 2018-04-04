@@ -296,4 +296,11 @@ adminRouter.get('/Cancelled', flog, (req,res) => {
   }
 });
 
+adminRouter.post('/add', flog, (req,res) => {
+  db.query(`INSERT INTO tblservicetag (strServName) VALUES (?)`, [req.body.tag], function (err,  results, fields) {
+    if (err) console.log(err);
+      res.redirect('/admin/Active');
+  });
+});
+
 exports.admin = adminRouter;

@@ -21,6 +21,10 @@ block main
         newwindow=window.open(url,'name','resizable=no,height=600,width=600,top=60,left=450');
         if (window.focus) {newwindow.focus()}
       }
+      function invoicePopup(url) {
+        newwindow=window.open(url,'name','resizable=no,height=600,width=800,top=60,left=360');
+        if (window.focus) {newwindow.focus()}
+      }
       
   .jumbotron-admin
     center
@@ -54,11 +58,11 @@ block main
                   - if (!(!user.intTransID)){
                     button.btn.btn-outline-primary.mr-2(data-toggle='modal', data-name=user.CancelName, data-reason=user.txtCancelReason data-target='#cancelreason') Reason
                     - if (!user.dtmTransStarted){
-                      a(href=`/invoice/${user.intTransID}` onClick='showPopup(this.href);return(false);')
+                      a(href=`/invoice/${user.intTransID}` onClick='invoicePopup(this.href);return(false);')
                         button.btn.btn-outline-secondary Offered
                     - }
                     - else {
-                      a(href=`/invoice/${user.intTransID}` onClick='showPopup(this.href);return(false);')
+                      a(href=`/invoice/${user.intTransID}` onClick='invoicePopup(this.href);return(false);')
                         button.btn.btn-outline-info Invoice   
                     - }
                   - }
@@ -73,7 +77,7 @@ block main
                     .modal-header
                       h5
                       button.close(type='button', data-dismiss='modal', aria-label='Close')
-                      span(aria-hidden='true') 
+                        span(aria-hidden='true') 
                     .modal-body
                       h6.text-danger Reason for Cancellation:
                       p#reas

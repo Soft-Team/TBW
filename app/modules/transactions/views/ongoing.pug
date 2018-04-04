@@ -1,6 +1,13 @@
 extends ../../../templates/dash.pug
 
 block main
+  block append script
+    script.
+      function invoicePopup(url) {
+        newwindow=window.open(url,'name','resizable=no,height=600,width=800,top=60,left=360');
+        if (window.focus) {newwindow.focus()}
+      }
+  
   .jumbotron-banner
     center
       h1.text-white Manage Your Ongoing Transactions
@@ -36,7 +43,7 @@ block main
                   td
                     a.mx-2(href='/messages/'+trans.intChatID, data-toggle='tooltip', data-placement='bottom', title='Message')
                       img.size(src='/assets/images/icons/Message2.png', alt='Message', style='height:40px; width:40px;')
-                    a.mx-2(href='/invoice/'+trans.intTransID, target='_blank', data-toggle='tooltip', data-placement='bottom', title='Invoice')
+                    a.mx-2(href='/invoice/'+trans.intTransID, onClick='invoicePopup(this.href);return(false);', data-toggle='tooltip', data-placement='bottom', title='Invoice')
                       img.size(src='/assets/images/icons/Invoice2.png', alt='Invoice', style='height:38px; width:40px;')
                     if trans.intServAccNo == thisuser.intAccNo 
                       a.mx-2.button.btn.btn-success(href='/transactions/ongoing/finish/'+trans.intTransID, style='margin: 0px 5px 0px 5px;')
