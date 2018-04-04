@@ -15,6 +15,22 @@
     box-shadow: 0px 0px 10px black;
 }
 
+.jumbotron-banner-admin{
+    background: url('/assets/images/jumbo-login.jpg') fixed;
+    background-size: 100% 200%;
+    padding: 2rem 2rem 1rem;
+    box-shadow: 0px 0px 10px black;
+    max-width: 1550px;
+    min-width: 1300px;
+}
+
+@media only screen and (max-width:620px) {
+    /* For mobile phones: */
+    .jumbotron-banner-admin {
+      width: 1500px;
+    }
+  }
+
 .margin-L{
     margin-left: 2rem;
 }

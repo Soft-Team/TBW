@@ -3,6 +3,10 @@ extends ../../../templates/master.pug
 block content
   block append stylesheets
     link(rel='stylesheet', type='text/css', href='/assets/custom/switch.css')
+    link(rel='stylesheet', type='text/css', href='/assets/custom/contentstyles.css')
+    link(rel='stylesheet', type='text/css', href='/assets/custom/messages.css')
+    link(rel='stylesheet', type='text/css', href='https://fonts.googleapis.com/css?family=Open+Sans')
+    link(rel="stylesheet" href="/assets/font-awesome-premium-4.7.0/css/font-awesome.min.css")
   block append scripts
     script(type='text/javascript', src='/assets/scripts/bootstrap-filestyle.min.js')
     script.
@@ -59,21 +63,21 @@ block content
 
       });
     
-  .jumbotron-banner(style='height:100px')
+  .jumbotron-banner-admin(style='height:100px')
     center
   .sector(style='margin-top:0px; padding:0px')
   each thisuser in thisUserTab
     each paramsuser,index in paramsUser
       if index == 0
-        .sector-container-profile
+        .sector-container-profile(style='width: 1300px;')
           .profile-container
             #left-pane.col-sm-3
               img(src='/userImages/profile/'+paramsuser.strProfilePic, alt='Card image cap', style='height: 10rem; width: 10rem; border-right: 1px solid; ')
             #center-pane.col-sm-3
               h1(style='margin-left:15px; margin-top:40px; margin-bottom:10px !important') #{paramsuser.strName}
-              if paramsUser.intType == 3
-                button#report.btn.btn-info.btn-md.btn(type='button' data-toggle='modal' data-target='#Workers')
-                  i.fa.fa-users.fa-2x(style='height:35px; width:35px;')
+                if paramsUser.intType == 3
+                  button#report.btn.btn-info.btn-md.btn(type='button' data-toggle='modal' data-target='#Workers')
+                    i.fa.fa-users.fa-2x(style='height:35px; width:35px;')
               if paramsuser.intStatus == 1
                 span.font3.tag.unverified(style='margin-left:15px;') Unverified 
               else
@@ -94,7 +98,7 @@ block content
                       h4.profileB(style='margin-bottom: 0rem; margin-top:0px; display:inline-block') Provided
 
     nav
-      .card.text-center(style='min-height: 450px; width:1286px')
+      .card.text-center(style='min-height: 450px; width:1286px; margin: 0 auto;')
         .card-header(style='padding-bottom:0rem')
           each paramsuser, index in paramsUser
             if index == 0
