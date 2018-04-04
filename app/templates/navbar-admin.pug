@@ -12,6 +12,29 @@ block content
       #navbarNav.collapse.navbar-collapse.navbarNavDropdown.justify-content-end
         ul.navbar-nav
           li.nav-item.active
+            a.nav-link.nav-text(data-toggle='modal' data-target='#AddServiceTag') Add Service Tag &nbsp&nbsp
+          li.nav-item.active
             a.nav-link.nav-text(href='/login') Sign-out &nbsp&nbsp
+            
+  #AddServiceTag.modal.fade(tabindex='-1', role='dialog', aria-labelledby='AddServiceTagTitle', aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+          h5#AddServiceTagTitle Add Service Tag
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') 
+        form(method='POST' action='/add')
+          .modal-body
+            .row
+              .col
+                .form-group
+                  label(for='workername')
+                    b Service Tag
+                  input#workername.form-control(type='text' name='workername' aria-describedby='workernameHelp' maxlength="100" required)
+                  small#workernameHelp.form-text.text-muted Service Tag will be Permanent
+        .modal-footer
+          button.editbuttons.btn.btn-primary.btn-md(type='submit') Submit
+          button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+
   .dash
     block dash
