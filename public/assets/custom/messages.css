@@ -136,6 +136,29 @@ html, body {
     word-wrap: break-word;
     width:57em;
 }
+
+@media only screen and (max-width:620px) {
+    /* For mobile phones: */
+    .msg {
+      width: 34em;
+    }
+  }
+
+.chat-header-admin {
+    height: 100px;
+    width: 100%;
+    background: url('/assets/images/jumbo-login.jpg') fixed;
+    box-shadow: 0 1px 1px;
+    display: table;
+}
+
+@media only screen and (max-width:620px) {
+    /* For mobile phones: */
+    .chat-header-admin {
+      height: 110px;
+    }
+  }
+
 /* Message Sender */
 .message-wrap .media-heading
 {
@@ -228,6 +251,14 @@ html, body {
     color: white;
     padding: 2px 2px 2px 4px;
     margin-right: 3px;
+}
+
+.tag-admin {
+    border-radius: 10px;
+    color: white;
+    padding: 2px 2px 2px 4px;
+    margin-right: 3px;
+    margin-left: 3px;
 }
 .provider{
     border: 2px solid #00BB27;

@@ -1,22 +1,30 @@
 extends ../../../templates/master.pug
 
 block content
-  .container.fill(style='padding:0px')
-    .row.chat-wrap
+  block append stylesheets
+    link(rel='stylesheet', type='text/css', href='/assets/custom/switch.css')
+    link(rel='stylesheet', type='text/css', href='/assets/custom/contentstyles.css')
+    link(rel='stylesheet', type='text/css', href='/assets/custom/messages.css')
+    link(rel='stylesheet', type='text/css', href='https://fonts.googleapis.com/css?family=Open+Sans')
+    link(rel="stylesheet" href="/assets/font-awesome-premium-4.7.0/css/font-awesome.min.css")
+  .container.fill(style='padding:0px; margin:0 auto; width: 910px;')
+    .row.chat-wrap(style='width:100%')
       .col.panel-wrap
-        #Messages.col-sm-9.section-wrap(style="height: 100%;")
+        #Messages.col-sm-9.section-wrap(style="height: 100%; padding-right: 0px;")
           .row.header-wrap
-            .chat-header.col-sm-12(style="height: 67px;")
+            .chat-header-admin.col-sm-12
               .row.pt-2(style="margin-top: 10px !important;")
                 .col(style="padding-top: 3px;")
-                  h4(style='color:#374850; display: inline') ##{messOne.strServName}
-                    b(style="display: inline; color: #71C1FF") &nbspPROVIDER
-                    span(style='color: white;display: inline') &nbsp#{messOne.strName} -
-                    b(style="display: inline; color: #05E177") &nbspSEEKER
-                    span(style='color: white;display: inline') &nbsp#{messOne.Seeker}
+                  h4(style='color:#374850; display: inline;')
+                    .col(style='padding-left: 0px; margin-bottom:10px; text-align:center;')
+                      b.tag-admin.provider(style="display: inline; color: white; font-size: .8em; margin-left:6px;") #{messOne.strServName}
+                      span(style='color: white;display: inline') &nbsp#{messOne.strName}
+                    .col(style='padding-left: 0px; margin-bottom:10px; text-align:center;')
+                      b.tag-admin.seeker(style="display: inline; color: white; font-size: .8em") Seeker
+                      span(style='color: white;display: inline') &nbsp#{messOne.Seeker}
             // Messages
-            .row.content-wrap.messages(style="overflow: auto;")
-              .col
+            .row.content-wrap.messages(style="overflow: auto; height: 674px; margin: 0px;")
+              .col(style='padding:0px;')
                 each mess in messtab
                   .msg
                     .media-body
