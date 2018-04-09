@@ -585,7 +585,7 @@ router.post('/transet/accept/:chatid', flog, messCount, fmess, fchat, fparams, f
   else{
     var stringquery1 = "UPDATE tbltransaction SET intTransStatus= 1, dtmTransStarted= NOW() WHERE intTransID= ?";
     var bodyarray1 = [req.ftrans[0].intTransID];
-    var stringquery2 = "INSERT INTO tblmessage ( intMessChatID, txtMessage, dtmDateSent, intMessSSeen, intSender ) VALUES ( ?, ?, NOW(), 1, 1)";
+    var stringquery2 = "INSERT INTO tblmessage ( intMessChatID, txtMessage, dtmDateSent, intMessSSeen, intSender ) VALUES ( ?, ?, NOW(), 1, 2)";
     var bodyarray2 = [req.params.chatid, "-- I have ACCEPTED your offer, transaction is now ONGOING !"];
 
     var stringquery3 = "INSERT INTO tbltransworkers (intTWTransID, intTWWorkerID) VALUES ", bodyarray3 = []

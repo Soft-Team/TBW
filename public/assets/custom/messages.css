@@ -55,6 +55,10 @@ html, body {
     max-height: 674px;
     min-height: 374px;
 }
+
+.content-wrap-msg {
+    overflow: auto;
+}
 /* Messages Wrapper */
 .content-wrap.messages {
     height: 75%;
